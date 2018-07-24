@@ -1,0 +1,140 @@
+<?php
+
+namespace Bonnier\Willow\Base\Transformers\Pagination;
+
+use League\Fractal\Pagination\PaginatorInterface;
+
+class NumberedPagination implements PaginatorInterface
+{
+    protected $currentPage;
+    protected $perPage;
+    protected $total;
+    protected $count;
+    protected $lastPage;
+
+    /**
+     * NumberedPagination constructor.
+     *
+     * @param $currentPage
+     * @param $perPage
+     * @param $total
+     * @param $count
+     * @param $lastPage
+     */
+    public function __construct($currentPage = null, $perPage = null, $total = null, $count = null, $lastPage = null)
+    {
+        $this->currentPage = $currentPage;
+        $this->perPage = $perPage;
+        $this->total = $total;
+        $this->count = $count;
+        $this->lastPage = $lastPage;
+    }
+
+    /**
+     * @param mixed $currentPage
+     *
+     * @return NumberedPagination
+     */
+    public function setCurrentPage($currentPage)
+    {
+        $this->currentPage = $currentPage;
+        return $this;
+    }
+
+    /**
+     * @param mixed $lastPage
+     *
+     * @return NumberedPagination
+     */
+    public function setLastPage($lastPage)
+    {
+        $this->lastPage = $lastPage;
+        return $this;
+    }
+
+    /**
+     * @param mixed $total
+     *
+     * @return NumberedPagination
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+        return $this;
+    }
+
+    /**
+     * @param mixed $count
+     *
+     * @return NumberedPagination
+     */
+    public function setCount($count)
+    {
+        $this->count = $count;
+        return $this;
+    }
+
+    /**
+     * @param mixed $perPage
+     *
+     * @return NumberedPagination
+     */
+    public function setPerPage($perPage)
+    {
+        $this->perPage = $perPage;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCurrentPage()
+    {
+        return $this->currentPage;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastPage()
+    {
+        return $this->lastPage;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCount()
+    {
+        return $this->count;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPerPage()
+    {
+        return $this->perPage;
+    }
+
+
+    /**
+     * Get the url for the given page.
+     *
+     * @param int $page
+     *
+     * @return string
+     */
+    public function getUrl($page)
+    {
+        return '';
+    }
+}

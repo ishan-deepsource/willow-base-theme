@@ -1,0 +1,162 @@
+<?php
+
+namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Categories;
+
+use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
+use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\Partials\CategoryImageAdapter;
+use Bonnier\Willow\Base\Models\Base\Composites\Composite;
+use Bonnier\Willow\Base\Models\Base\Root\Image;
+use Bonnier\Willow\Base\Models\Base\Root\Teaser;
+use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
+use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
+use Bonnier\Willow\Base\Traits\UrlTrait;
+use Illuminate\Support\Collection;
+use WpSiteManager\Plugin;
+
+/**
+ * Class CategoryAdapter
+ *
+ * @property \WP_Term $wpModel
+ *
+ * @package \Bonnier\Willow\Base\Adapters\Wp\Terms
+ */
+class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
+{
+    use UrlTrait;
+
+    protected $meta;
+
+    public function __construct($wpModel)
+    {
+        parent::__construct($wpModel);
+        $this->meta = $this->getMeta();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->wpModel->term_id ?? null;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->wpModel->name ?? null;
+    }
+
+    public function getChildren(): ?Collection
+    {
+        return collect(get_categories('hide_empty=0&parent=' . $this->getId()))->transform(function ($categoryChild) {
+            return new self(get_category($categoryChild));
+        });
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->meta->title->{pll_current_language()} ?? null;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->meta->description->{pll_current_language()} ?? null;
+    }
+
+    public function getBody(): ?string
+    {
+        return $this->meta->body->{pll_current_language()} ?? null;
+    }
+
+    public function getMetaDescription(): ?string
+    {
+        return $this->meta->meta_description->{pll_current_language()} ?? null;
+    }
+
+    public function getImage(): ?ImageContract
+    {
+        return new Image(new CategoryImageAdapter($this->meta));
+    }
+
+    public function getUrl(): ?string
+    {
+        $link = get_term_link($this->getId(), 'category');
+        return is_wp_error($link) ? null : $link;
+    }
+
+    public function getLanguage(): ?string
+    {
+        return pll_get_term_language($this->getId());
+    }
+    
+    public function getContentTeasers($page = 1, $perPage = 10, $orderBy = 'date', $order = 'DESC', $offset = 0): Collection
+    {
+        $offset = $offset ?: ($perPage * ($page - 1));
+        return collect(get_posts([
+            'post_type' => WpComposite::POST_TYPE,
+            'post_status' => 'publish',
+            'posts_per_page' => $perPage,
+            'offset' => $offset,
+            'orderby' => $orderBy,
+            'order'  => $order,
+            'tax_query' => [
+                [
+                    'taxonomy' => 'category',
+                    'field' => 'term_id',
+                    'terms' => $this->getId(),
+                    'include_children' => false,
+                ]
+            ]
+        ]))->map(function (\WP_Post $post) {
+            return new Composite(new CompositeAdapter($post));
+        });
+    }
+
+    public function getCount(): ?int
+    {
+        return $this->wpModel->count ?? null;
+    }
+
+    public function getTeaser(string $type): ?TeaserContract
+    {
+        return new Teaser(new CategoryTeaserAdapter($this->meta, $type));
+    }
+
+    public function getTeasers(): ?Collection
+    {
+        return collect([
+            $this->getTeaser('default'),
+            $this->getTeaser('seo'),
+            $this->getTeaser('facebook'),
+            $this->getTeaser('twitter'),
+        ]);
+    }
+
+    private function getMeta()
+    {
+        $contentHubId = get_term_meta($this->getId(), 'content_hub_id', true);
+        $siteManager = Plugin::instance();
+        if ($contentHubId) {
+            try {
+                $category = $siteManager->categories()->findByContentHubId($contentHubId) ?? null;
+                return $category->data;
+            } catch (\Exception $exception) {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    public function getParent(): ?CategoryContract
+    {
+        if (!$this->wpModel) {
+            return null;
+        }
+        $parent = intval($this->wpModel->parent);
+        return $parent ? new static(get_category($parent)) : null;
+    }
+
+    public function getCanonicalUrl(): ?string
+    {
+        return $this->getFullUrl(get_category_link($this->getId()));
+    }
+}
