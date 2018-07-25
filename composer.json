@@ -4,8 +4,7 @@
     "type": "wordpress-theme",
     "require": {
         "league/fractal": "^0.17.0",
-        "illuminate/support": "^5.6",
-        "bonnier/contenthub-editor": "^2.0.0"
+        "illuminate/support": "^5.6"
     },
     "autoload": {
         "psr-4": {
