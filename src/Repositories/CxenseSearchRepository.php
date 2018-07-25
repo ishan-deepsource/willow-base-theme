@@ -2,6 +2,8 @@
 
 namespace Bonnier\Willow\Base\Repositories;
 
+use Bonnier\WP\Cxense\WpCxense;
+
 class CxenseSearchRepository
 {
     /**
@@ -12,7 +14,7 @@ class CxenseSearchRepository
 
     public function __construct()
     {
-        $this->orgPrefix = wp_cxense()->settings->get_setting_value('organisation_prefix', get_locale());
+        $this->orgPrefix = WpCxense::instance()->settings->get_setting_value('organisation_prefix', get_locale());
     }
 
     /**
@@ -64,7 +66,7 @@ class CxenseSearchRepository
             $arguments['sorting'] = $customSorting;
         }
 
-        $result = wp_cxense()->search_documents($arguments);
+        $result = WpCxense::instance()->search_documents($arguments);
         $result->facets = $this->formatFacets($result->facets, $arguments);
         $result->matches = $this->formatSearchResults($result->matches);
 
@@ -155,7 +157,7 @@ class CxenseSearchRepository
     private function getSearchableTaxonomies()
     {
         $recsTags = [];
-        $searchableTaxonomies = wp_cxense()->settings->get_searchable_taxonomies(get_locale());
+        $searchableTaxonomies = WpCxense::instance()->settings->get_searchable_taxonomies(get_locale());
         foreach ($searchableTaxonomies as $taxonomy) {
             if ($taxonomy === 'category') {
                 $taxonomy = 'cat-top';
