@@ -2,10 +2,45 @@
     "name": "bonnier/willow-base-theme",
     "description": "Base Willow theme for WordPress",
     "type": "wordpress-theme",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://wpackagist.org"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/BenjaminMedia/willow-mu-plugins"
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "advanced-custom-fields/advanced-custom-fields-pro",
+                "version": "5.7.1",
+                "type": "wordpress-plugin",
+                "dist": {
+                    "type": "zip",
+                    "url": "https://connect.advancedcustomfields.com/index.php?p=pro&a=download"
+                },
+                "require": {
+                    "philippbaschke/acf-pro-installer": "^1.0",
+                    "composer/installers": "^1.0"
+                }
+            }
+        }
+    ],
     "require": {
         "php": ">=7.1",
+        "johnpbloch/wordpress": "4.9.7",
+        "philippbaschke/acf-pro-installer": "^1.0",
+        "advanced-custom-fields/advanced-custom-fields-pro": "*",
         "league/fractal": "^0.17.0",
-        "illuminate/support": "^5.6"
+        "illuminate/support": "^5.6",
+        "bonnier/willow-base-theme": "dev-master",
+        "bonnier/contenthub-editor": "dev-IVD",
+        "benjaminmedia/wp-cxense": "dev-IVD",
+        "wpackagist-plugin/amazon-s3-and-cloudfront": "^1.4",
+        "bonnier/willow-mu-plugins": "dev-master",
+        "benjaminmedia/wp-site-manager": "dev-IVD"
     },
     "autoload": {
         "psr-4": {
