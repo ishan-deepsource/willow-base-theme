@@ -5,9 +5,9 @@ namespace Bonnier\Willow\Base\Controllers\App;
 use Bonnier\Willow\Base\Helpers\Cache;
 use Bonnier\Willow\Base\Repositories\TranslationManagerRepository;
 use Bonnier\Willow\Base\Repositories\TranslationRepositoryContract;
+use Bonnier\WP\SiteManager\WpSiteManager;
 use WP_REST_Controller;
 use WP_REST_Response;
-use WpSiteManager\Plugin;
 
 class TranslationController extends WP_REST_Controller
 {
@@ -42,11 +42,11 @@ class TranslationController extends WP_REST_Controller
      */
     private function getRepository() : ?TranslationRepositoryContract
     {
-        if ($site = Plugin::instance()->settings()->getSite(pll_current_language('locale'))) {
-            $translationManagerHost = getenv('TRANSLATION_MANAGER_HOST');
-            $serviceId = getenv('SERVICE_ID');
+        if ($site = WpSiteManager::instance()->settings()->getSite(pll_current_language('locale'))) {
+            $tmHost = env('TRANSLATION_MANAGER_HOST');
+            $serviceId = env('SERVICE_ID');
             return new TranslationManagerRepository(
-                $translationManagerHost,
+                $tmHost,
                 $serviceId,
                 $site->brand->id
             );

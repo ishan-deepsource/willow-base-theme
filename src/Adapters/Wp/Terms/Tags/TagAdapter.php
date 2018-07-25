@@ -7,12 +7,11 @@ use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Contracts\Terms\TagContract;
-use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagTeaserAdapter;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Models\Base\Root\Teaser;
 use Bonnier\Willow\Base\Traits\UrlTrait;
+use Bonnier\WP\SiteManager\WpSiteManager;
 use Illuminate\Support\Collection;
-use WpSiteManager\Plugin;
 use WP_Query;
 use WP_Term;
 
@@ -127,10 +126,9 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
     private function getMeta()
     {
         $contentHubId = get_term_meta($this->getId(), 'content_hub_id', true);
-        $siteManager = Plugin::instance();
         if ($contentHubId) {
             try {
-                $tag = $siteManager->tags()->findByContentHubId($contentHubId) ?? null;
+                $tag = WpSiteManager::instance()->tags()->findByContentHubId($contentHubId) ?? null;
 
                 return $tag;
             } catch (\Exception $exception) {

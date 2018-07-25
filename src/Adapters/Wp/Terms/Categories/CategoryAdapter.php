@@ -13,8 +13,8 @@ use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
+use Bonnier\WP\SiteManager\WpSiteManager;
 use Illuminate\Support\Collection;
-use WpSiteManager\Plugin;
 
 /**
  * Class CategoryAdapter
@@ -134,10 +134,9 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
     private function getMeta()
     {
         $contentHubId = get_term_meta($this->getId(), 'content_hub_id', true);
-        $siteManager = Plugin::instance();
         if ($contentHubId) {
             try {
-                $category = $siteManager->categories()->findByContentHubId($contentHubId) ?? null;
+                $category = WpSiteManager::instance()->categories()->findByContentHubId($contentHubId) ?? null;
                 return $category->data;
             } catch (\Exception $exception) {
                 return null;
