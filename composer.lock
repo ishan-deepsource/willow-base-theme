@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0619aab2acd78008fce1bba1cab00d6b",
+    "content-hash": "55a4d485c9fe6c2bd54e938ab2021d0a",
     "packages": [
         {
             "name": "advanced-custom-fields/advanced-custom-fields-pro",
@@ -2828,7 +2828,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "bonnier/willow-base-theme": 20,
         "bonnier/contenthub-editor": 20,
         "benjaminmedia/wp-cxense": 20,
         "bonnier/willow-mu-plugins": 20,

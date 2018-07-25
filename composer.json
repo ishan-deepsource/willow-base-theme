@@ -35,7 +35,6 @@
         "advanced-custom-fields/advanced-custom-fields-pro": "*",
         "league/fractal": "^0.17.0",
         "illuminate/support": "^5.6",
-        "bonnier/willow-base-theme": "dev-master",
         "bonnier/contenthub-editor": "dev-IVD",
         "benjaminmedia/wp-cxense": "dev-IVD",
         "wpackagist-plugin/amazon-s3-and-cloudfront": "^1.4",
