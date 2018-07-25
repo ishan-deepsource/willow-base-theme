@@ -5,7 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
-use WillowUserProfile\UserProfile;
+use Bonnier\WP\ContentHub\Editor\Models\WpUserProfile;
 use WP_User;
 
 /**
@@ -44,7 +44,7 @@ class AuthorAdapter implements AuthorContract
 
     public function getAvatar(): ?ImageContract
     {
-        $avatar = UserProfile::instance()->getAvatarFromUser($this->getId());
+        $avatar = WpUserProfile::getAvatarFromUser($this->getId());
         return $avatar ? new Image(new ImageAdapter($avatar)) : null;
     }
 
@@ -55,6 +55,6 @@ class AuthorAdapter implements AuthorContract
 
     public function getTitle(): ?string
     {
-        return UserProfile::instance()->getTitle($this->getId());
+        return WpUserProfile::getTitle($this->getId());
     }
 }
