@@ -211,16 +211,18 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:BenjaminMedia/willow-mu-plugins.git",
-                "reference": "9be10751b5d16a9d34f4f1b59f0a93486f9b0987"
+                "reference": "ec22d47d611ecc6176d44210eb6bd994faef70db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/9be10751b5d16a9d34f4f1b59f0a93486f9b0987",
-                "reference": "9be10751b5d16a9d34f4f1b59f0a93486f9b0987",
+                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/ec22d47d611ecc6176d44210eb6bd994faef70db",
+                "reference": "ec22d47d611ecc6176d44210eb6bd994faef70db",
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": "^5.6"
+                "illuminate/support": "^5.6",
+                "johnpbloch/wordpress": "4.9.7",
+                "php": ">=7.1"
             },
             "type": "wordpress-muplugin",
             "autoload": {
@@ -242,7 +244,7 @@
                 "source": "https://github.com/BenjaminMedia/willow-mu-plugins/tree/master",
                 "issues": "https://github.com/BenjaminMedia/willow-mu-plugins/issues"
             },
-            "time": "2018-07-25T12:23:26+00:00"
+            "time": "2018-07-25T15:59:59+00:00"
         },
         {
             "name": "composer/installers",
