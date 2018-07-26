@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Bonnier\WpVue\Unit\Adapters\Wp;
+namespace Tests\Bonnier\Willow\Base\Unit\Adapters\Wp;
 
-use Tests\Bonnier\WpVue\Unit\ClassTestCase;
+use Tests\Bonnier\Willow\Base\Unit\ClassTestCase;
 
 class WpAdaptersTest extends ClassTestCase
 {

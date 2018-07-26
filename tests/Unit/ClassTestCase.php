@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Bonnier\WpVue\Unit;
+namespace Tests\Bonnier\Willow\Base\Unit;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
