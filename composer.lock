@@ -71,18 +71,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-site-manager.git",
-                "reference": "cf248c0354ba99dfee89107bbe0c24a0b9e7ea1e"
+                "reference": "e88b4c26e137e6c75bca5031c7269eeaa195aeae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-site-manager/zipball/cf248c0354ba99dfee89107bbe0c24a0b9e7ea1e",
-                "reference": "cf248c0354ba99dfee89107bbe0c24a0b9e7ea1e",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-site-manager/zipball/e88b4c26e137e6c75bca5031c7269eeaa195aeae",
+                "reference": "e88b4c26e137e6c75bca5031c7269eeaa195aeae",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "~1.0",
                 "guzzlehttp/guzzle": "^6.3",
                 "illuminate/support": "^5.6",
+                "johnpbloch/wordpress": "4.9.7",
                 "php": ">=7.1"
             },
             "type": "wordpress-plugin",
@@ -105,7 +106,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-07-25T13:45:32+00:00"
+            "time": "2018-07-26T08:17:00+00:00"
         },
         {
             "name": "bonnier/contenthub-editor",
