@@ -38,7 +38,9 @@
         "bonnier/willow-mu-plugins": "dev-master",
         "bonnier/contenthub-editor": "dev-IVD",
         "benjaminmedia/wp-cxense": "dev-IVD",
-        "benjaminmedia/wp-site-manager": "dev-IVD"
+        "benjaminmedia/wp-site-manager": "dev-IVD",
+        "bonnier/wp-bonnier-cache": "dev-IVD",
+        "bonnier/wp-bonnier-redirect": "dev-IVD"
     },
     "autoload": {
         "psr-4": {
@@ -52,5 +54,7 @@
     },
     "scripts": {
         "unit": "vendor/bin/codecept run unit"
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
