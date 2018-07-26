@@ -40,7 +40,8 @@
         "benjaminmedia/wp-cxense": "dev-IVD",
         "benjaminmedia/wp-site-manager": "dev-IVD",
         "bonnier/wp-bonnier-cache": "dev-IVD",
-        "bonnier/wp-bonnier-redirect": "dev-IVD"
+        "bonnier/wp-bonnier-redirect": "dev-IVD",
+        "bonnier/wp-bonnier-some": "dev-IVD"
     },
     "autoload": {
         "psr-4": {
