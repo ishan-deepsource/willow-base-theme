@@ -212,12 +212,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:BenjaminMedia/willow-mu-plugins.git",
-                "reference": "7d27dbd7f0a93bcab1fd49794d78b81de5420408"
+                "reference": "4ff2c11297cdadd7bcd4023dc74b8980387b7fe4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/7d27dbd7f0a93bcab1fd49794d78b81de5420408",
-                "reference": "7d27dbd7f0a93bcab1fd49794d78b81de5420408",
+                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/4ff2c11297cdadd7bcd4023dc74b8980387b7fe4",
+                "reference": "4ff2c11297cdadd7bcd4023dc74b8980387b7fe4",
                 "shasum": ""
             },
             "require": {
@@ -245,7 +245,7 @@
                 "source": "https://github.com/BenjaminMedia/willow-mu-plugins/tree/master",
                 "issues": "https://github.com/BenjaminMedia/willow-mu-plugins/issues"
             },
-            "time": "2018-07-25T17:02:22+00:00"
+            "time": "2018-07-27T07:08:53+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-cache",
@@ -721,7 +721,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.6.28",
+            "version": "v5.6.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -765,16 +765,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v5.6.28",
+            "version": "v5.6.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "97ca44c95392ce0a41749fa47b953734d88b94b1"
+                "reference": "c684cb5e77e213020f7a4ed213d94b2b384c2951"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/97ca44c95392ce0a41749fa47b953734d88b94b1",
-                "reference": "97ca44c95392ce0a41749fa47b953734d88b94b1",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/c684cb5e77e213020f7a4ed213d94b2b384c2951",
+                "reference": "c684cb5e77e213020f7a4ed213d94b2b384c2951",
                 "shasum": ""
             },
             "require": {
@@ -819,7 +819,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2018-07-04T01:23:57+00:00"
+            "time": "2018-07-26T15:32:11+00:00"
         },
         {
             "name": "johnpbloch/wordpress",
