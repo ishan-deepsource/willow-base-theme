@@ -30,7 +30,7 @@ class TranslationController extends WP_REST_Controller
             'willow_translation_strings_' . $locale,
             4 * HOUR_IN_SECONDS,
             function () use ($locale) {
-                return $this->getRepository()->getTranslations($locale) ?? [];
+                return optional($this->getRepository())->getTranslations($locale) ?? [];
             }
         );
         
@@ -45,11 +45,13 @@ class TranslationController extends WP_REST_Controller
         if ($site = WpSiteManager::instance()->settings()->getSite(pll_current_language('locale'))) {
             $tmHost = env('TRANSLATION_MANAGER_HOST');
             $serviceId = env('SERVICE_ID');
-            return new TranslationManagerRepository(
-                $tmHost,
-                $serviceId,
-                $site->brand->id
-            );
+            if ($tmHost && $serviceId) {
+                return new TranslationManagerRepository(
+                    $tmHost,
+                    $serviceId,
+                    $site->brand->id
+                );
+            }
         }
         
         return null;
