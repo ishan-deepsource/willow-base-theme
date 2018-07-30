@@ -32,6 +32,7 @@ use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
 use Bonnier\Willow\Base\Traits\DateTimeZoneTrait;
 use Bonnier\Willow\Base\Traits\UrlTrait;
+use Bonnier\Willow\MuPlugins\LanguageProvider;
 use DateTime;
 use Illuminate\Support\Collection;
 
@@ -103,7 +104,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getLocale(): ?string
     {
-        return pll_get_post_language($this->getId());
+        return LanguageProvider::getPostLanguage($this->getId());
     }
 
     public function getContents(): ?Collection

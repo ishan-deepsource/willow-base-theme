@@ -2,6 +2,8 @@
 
 namespace Bonnier\Willow\Base\Helpers;
 
+use Bonnier\Willow\MuPlugins\LanguageProvider;
+
 class TrackingHelper
 {
     public static function tnsScripts()
@@ -32,7 +34,15 @@ class TrackingHelper
                 })();
                 </script>", true);
 
-                self::addRawScript("<noscript><img src=\"http://" . self::tnsSettings('da_DK')->sitename . ".tns-gallup.dk/j0=,,,;+,cp=" . self::tnsSettings('da_DK')->contentpath . "+url=" . pll_home_url(pll_current_language('slug')) . ";;;\" alt=\"\"></noscript>", true);
+                $tag = "<noscript><img src='http://%s.tns-gallup.dk/j0=,,,;+,cp=%s+url=%s;;;' alt=''></noscript>";
+                $script = sprintf(
+                    $tag,
+                    self::tnsSettings('da_DK')->sitename,
+                    self::tnsSettings('da_DK')->contentpath,
+                    LanguageProvider::getHomeUrl()
+                );
+
+                self::addRawScript($script, true);
                 break;
 
             case "nb_NO":
@@ -69,8 +79,15 @@ class TrackingHelper
                 })();
                 </script>", true);
 
-                self::addRawScript("<noscript><img src=\"http://" . self::tnsSettings('nb_NO')->sitename . ".tns-cs.net/j0=,,,;+,cp=" . self::tnsSettings('nb_NO')->contentpath . "+url=" . pll_home_url(pll_current_language('slug')) . ";;;\"></noscript>",
-                    false);
+                $tag = "<noscript><img src='http://%s.tns-cs.net/j0=,,,;+,cp=%s+url=%s;;;'></noscript>";
+                $script = sprintf(
+                    $tag,
+                    self::tnsSettings('nb_NO')->sitename,
+                    self::tnsSettings('nb_NO')->contentpath,
+                    LanguageProvider::getHomeUrl()
+                );
+
+                self::addRawScript($script,false);
                 break;
 
             case "fi":
@@ -98,8 +115,15 @@ class TrackingHelper
                 })();
                 </script>", true);
 
-                self::addRawScript("<noscript><img src=\"http://" . self::tnsSettings('fi')->sitename . ".spring-tns.net/j0=,,,;+,,cp=" . self::tnsSettings('fi')->contentpath . "+url=" . pll_home_url(pll_current_language('slug')) . ";;;\" alt=\"\"></noscript>",
-                    false);
+                $tag = "<noscript><img src='http://%s.spring-tns.net/j0=,,,;+,,cp=%s+url=%s;;;' alt=''></noscript>";
+                $script = sprintf(
+                    $tag,
+                    self::tnsSettings('fi')->sitename,
+                    self::tnsSettings('fi')->contentpath,
+                    LanguageProvider::getHomeUrl()
+                );
+
+                self::addRawScript($script, false);
                 break;
 
             default:

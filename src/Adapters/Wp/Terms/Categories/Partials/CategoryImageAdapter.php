@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\Partials;
 
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
+use Bonnier\Willow\MuPlugins\LanguageProvider;
 
 /**
  * Class CategoryImageAdapter
@@ -25,7 +26,7 @@ class CategoryImageAdapter implements ImageContract
 
     public function getUrl(): ?string
     {
-        return $this->meta->image_url->{pll_current_language()} ?? null;
+        return $this->meta->image_url->{LanguageProvider::getCurrentLanguage()} ?? null;
     }
 
     public function getTitle(): ?string

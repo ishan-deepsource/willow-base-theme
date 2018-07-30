@@ -2,6 +2,8 @@
 
 namespace Bonnier\Willow\Base\Traits;
 
+use Bonnier\Willow\MuPlugins\LanguageProvider;
+
 trait UrlTrait
 {
     protected function getPath($url)
@@ -10,9 +12,7 @@ trait UrlTrait
             parse_url(home_url(), PHP_URL_HOST),
             $_SERVER['HTTP_HOST'],
         ];
-        if (function_exists('pll_home_url')) {
-            $hosts[] = parse_url(pll_home_url(), PHP_URL_HOST);
-        }
+        $hosts[] = parse_url(LanguageProvider::getHomeUrl(), PHP_URL_HOST);
         if ($url && in_array(parse_url($url, PHP_URL_HOST), $hosts)) {
             $path = parse_url($url, PHP_URL_PATH);
             if ($query = parse_url($url, PHP_URL_QUERY)) {
@@ -27,9 +27,7 @@ trait UrlTrait
     protected function getFullUrl($url)
     {
         $path = parse_url($url, PHP_URL_PATH);
-        if (function_exists('pll_home_url')) {
-            $url = preg_replace('#/$#', $path, pll_home_url());
-        }
+        $url = preg_replace('#/$#', $path, LanguageProvider::getHomeUrl());
         return preg_replace('#://api\.#', '://', $url);
     }
 }

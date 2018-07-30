@@ -5,6 +5,7 @@ namespace Bonnier\Willow\Base\Controllers\App;
 use Bonnier\Willow\Base\Helpers\Cache;
 use Bonnier\Willow\Base\Repositories\TranslationManagerRepository;
 use Bonnier\Willow\Base\Repositories\TranslationRepositoryContract;
+use Bonnier\Willow\MuPlugins\LanguageProvider;
 use Bonnier\WP\SiteManager\WpSiteManager;
 use WP_REST_Controller;
 use WP_REST_Response;
@@ -24,7 +25,7 @@ class TranslationController extends WP_REST_Controller
      */
     public function translationStrings(\WP_REST_Request $request)
     {
-        $locale = $request->get_param('locale') ?? pll_current_language();
+        $locale = $request->get_param('locale') ?? LanguageProvider::getCurrentLanguage();
         
         $translations = Cache::remember(
             'willow_translation_strings_' . $locale,
@@ -42,7 +43,7 @@ class TranslationController extends WP_REST_Controller
      */
     private function getRepository() : ?TranslationRepositoryContract
     {
-        if ($site = WpSiteManager::instance()->settings()->getSite(pll_current_language('locale'))) {
+        if ($site = WpSiteManager::instance()->settings()->getSite(LanguageProvider::getCurrentLanguage('locale'))) {
             $tmHost = env('TRANSLATION_MANAGER_HOST');
             $serviceId = env('SERVICE_ID');
             if ($tmHost && $serviceId) {

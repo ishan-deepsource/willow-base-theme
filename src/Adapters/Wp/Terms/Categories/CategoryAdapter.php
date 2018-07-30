@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Categories;
 
+use Bonnier\Willow\MuPlugins\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
@@ -54,22 +55,22 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     public function getTitle(): ?string
     {
-        return $this->meta->title->{pll_current_language()} ?? null;
+        return $this->meta->title->{LanguageProvider::getCurrentLanguage()} ?? null;
     }
 
     public function getDescription(): ?string
     {
-        return $this->meta->description->{pll_current_language()} ?? null;
+        return $this->meta->description->{LanguageProvider::getCurrentLanguage()} ?? null;
     }
 
     public function getBody(): ?string
     {
-        return $this->meta->body->{pll_current_language()} ?? null;
+        return $this->meta->body->{LanguageProvider::getCurrentLanguage()} ?? null;
     }
 
     public function getMetaDescription(): ?string
     {
-        return $this->meta->meta_description->{pll_current_language()} ?? null;
+        return $this->meta->meta_description->{LanguageProvider::getCurrentLanguage()} ?? null;
     }
 
     public function getImage(): ?ImageContract
@@ -85,7 +86,7 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     public function getLanguage(): ?string
     {
-        return pll_get_term_language($this->getId());
+        return LanguageProvider::getTermLanguage($this->getId());
     }
     
     public function getContentTeasers($page = 1, $perPage = 10, $orderBy = 'date', $order = 'DESC', $offset = 0): Collection

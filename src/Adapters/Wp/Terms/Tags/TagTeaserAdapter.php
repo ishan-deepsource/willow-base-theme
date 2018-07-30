@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Tags;
 
 use Bonnier\Willow\Base\Adapters\Wp\Root\AbstractTeaserAdapter;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
+use Bonnier\Willow\MuPlugins\LanguageProvider;
 
 class TagTeaserAdapter extends AbstractTeaserAdapter
 {
@@ -17,7 +18,7 @@ class TagTeaserAdapter extends AbstractTeaserAdapter
 
     public function getTitle(): string
     {
-        return $this->meta->meta_title->{pll_current_language()} ?? '';
+        return $this->meta->meta_title->{LanguageProvider::getCurrentLanguage()} ?? '';
     }
 
     public function getImage(): ?ImageContract
@@ -27,6 +28,6 @@ class TagTeaserAdapter extends AbstractTeaserAdapter
 
     public function getDescription(): string
     {
-        return $this->meta->meta_description->{pll_current_language()} ?? '';
+        return $this->meta->meta_description->{LanguageProvider::getCurrentLanguage()} ?? '';
     }
 }

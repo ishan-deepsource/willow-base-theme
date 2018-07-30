@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Tags;
 
+use Bonnier\Willow\MuPlugins\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
@@ -37,12 +38,12 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
 
     public function getTitle(): ?string
     {
-        return $this->meta->title->{pll_current_language()} ?? null;
+        return $this->meta->title->{LanguageProvider::getCurrentLanguage()} ?? null;
     }
 
     public function getDescription(): ?string
     {
-        return $this->meta->description->{pll_current_language()} ?? null;
+        return $this->meta->description->{LanguageProvider::getCurrentLanguage()} ?? null;
     }
 
     public function getSlug(): ?string
@@ -58,7 +59,7 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
 
     public function getLanguage(): ?string
     {
-        return pll_get_term_language($this->getId());
+        return LanguageProvider::getTermLanguage($this->getId());
     }
 
     public function getContentTeasers($page, $perPage, $orderBy, $order): Collection

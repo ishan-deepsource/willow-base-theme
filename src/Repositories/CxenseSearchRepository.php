@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Repositories;
 
+use Bonnier\Willow\MuPlugins\LanguageProvider;
 use Bonnier\WP\Cxense\WpCxense;
 
 class CxenseSearchRepository
@@ -25,8 +26,13 @@ class CxenseSearchRepository
      * @param array $customSorting
      * @return array
      */
-    public function getSearchResults($searchQuery = '', $page, $perPage = 10, $customFilters = [], $customSorting = [])
-    {
+    public function getSearchResults(
+        $searchQuery = '',
+        $page = 1,
+        $perPage = 10,
+        $customFilters = [],
+        $customSorting = []
+    ) {
         $searchQuery = $searchQuery ?: '*';
 
         if (isset($this->queryResults[$searchQuery])) {
@@ -125,13 +131,15 @@ class CxenseSearchRepository
     {
         return collect($facets)->map(function ($facetCollection, $key) use ($searchArgs) {
             $facetCollection->field = $searchArgs['facets'][$key]['field'];
-            $facetCollection->label = pll__(
+            $facetCollection->label = LanguageProvider::translate(
                 'taxonomy_' . $this->getVocabularyMachineName($searchArgs['facets'][$key]['field'])
             );
-            $facetCollection->buckets = collect($facetCollection->buckets)->map(function ($facet) use ($searchArgs, $facetCollection) {
-                $facet->active = collect($searchArgs['filter'][$facetCollection->field] ?? [])->contains($facet->label);
-                return $facet;
-            });
+            $facetCollection->buckets = collect($facetCollection->buckets)
+                ->map(function ($facet) use ($searchArgs, $facetCollection) {
+                    $facet->active = collect($searchArgs['filter'][$facetCollection->field] ?? [])
+                    ->contains($facet->label);
+                    return $facet;
+                });
             return $facetCollection;
         });
     }

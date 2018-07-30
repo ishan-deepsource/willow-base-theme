@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Actions\Universal;
 
+use Bonnier\Willow\MuPlugins\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpTaxonomy;
 use Bonnier\Willow\Base\Helpers\Translation;
 
@@ -33,9 +34,11 @@ class PolylangTranslations
 
     public function registerPolylangString($translationString)
     {
-        if (function_exists('pll_register_string')) {
-            pll_register_string($translationString, $translationString, 'Theme: '. $this->getThemeBase());
-        }
+        LanguageProvider::registerStringTranslation(
+            $translationString,
+            $translationString,
+            'Theme: ' . $this->getThemeBase()
+        );
     }
 
     private function setTranslations(array $translations)

@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Controllers\App;
 
+use Bonnier\Willow\MuPlugins\LanguageProvider;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\Willow\Base\Adapters\Cxense\Search\DocumentAdapter;
 use Bonnier\Willow\Base\Adapters\Cxense\Search\FacetCollectionAdapter;
@@ -40,7 +41,7 @@ class SearchController extends WP_REST_Controller
      */
     public function getSearchResults(WP_REST_Request $request)
     {
-        $locale = pll_current_language();
+        $locale = LanguageProvider::getCurrentLanguage();
 
         $filters = json_decode($request->get_body());
 

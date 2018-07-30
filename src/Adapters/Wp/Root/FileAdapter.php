@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
 use Bonnier\Willow\Base\Models\Contracts\Root\FileContract;
+use Bonnier\Willow\MuPlugins\LanguageProvider;
 use WP_Post;
 
 /**
@@ -50,6 +51,6 @@ class FileAdapter implements FileContract
 
     public function getLanguage(): ?string
     {
-        return pll_get_post_language($this->getId()) ?: null;
+        return LanguageProvider::getPostLanguage($this->getId()) ?: null;
     }
 }

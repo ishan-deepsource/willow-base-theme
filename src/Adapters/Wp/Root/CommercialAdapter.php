@@ -5,6 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
+use Bonnier\Willow\MuPlugins\LanguageProvider;
 
 class CommercialAdapter implements CommercialContract
 {
@@ -24,7 +25,7 @@ class CommercialAdapter implements CommercialContract
     public function getLabel(): ?string
     {
         $commercialType = $this->getType();
-        $translation = pll__($commercialType);
+        $translation = LanguageProvider::translate($commercialType);
         if ($commercialType && ! empty($translation)) {
             return $translation;
         }
