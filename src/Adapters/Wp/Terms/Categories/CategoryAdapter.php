@@ -86,11 +86,20 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     public function getLanguage(): ?string
     {
-        return LanguageProvider::getTermLanguage($this->getId());
+        if ($categoryId = $this->getId()) {
+            return LanguageProvider::getTermLanguage($categoryId);
+        }
+
+        return null;
     }
     
-    public function getContentTeasers($page = 1, $perPage = 10, $orderBy = 'date', $order = 'DESC', $offset = 0): Collection
-    {
+    public function getContentTeasers(
+        $page = 1,
+        $perPage = 10,
+        $orderBy = 'date',
+        $order = 'DESC',
+        $offset = 0
+    ): Collection {
         $offset = $offset ?: ($perPage * ($page - 1));
         return collect(get_posts([
             'post_type' => WpComposite::POST_TYPE,

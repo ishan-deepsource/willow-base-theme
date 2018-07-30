@@ -24,10 +24,8 @@ class CommercialAdapter implements CommercialContract
 
     public function getLabel(): ?string
     {
-        $commercialType = $this->getType();
-        $translation = LanguageProvider::translate($commercialType);
-        if ($commercialType && ! empty($translation)) {
-            return $translation;
+        if ($commercialType = $this->getType()) {
+            return LanguageProvider::translate($commercialType);
         }
         return null;
     }

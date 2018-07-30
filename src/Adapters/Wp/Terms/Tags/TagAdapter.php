@@ -20,6 +20,8 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
 {
     use UrlTrait;
 
+    protected $meta;
+
     public function __construct(WP_Term $wpModel)
     {
         parent::__construct($wpModel);
@@ -59,7 +61,9 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
 
     public function getLanguage(): ?string
     {
-        return LanguageProvider::getTermLanguage($this->getId());
+        if ($tagId = $this->getId()) {
+            return LanguageProvider::getTermLanguage($tagId);
+        }
     }
 
     public function getContentTeasers($page, $perPage, $orderBy, $order): Collection
