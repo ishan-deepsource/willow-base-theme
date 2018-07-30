@@ -27,12 +27,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-cxense.git",
-                "reference": "b5e0e9457ae2fc017d1ae7a538ddf113916b7342"
+                "reference": "3ff05701903fb22e0330b8bc95c26ac3d1e5f1e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/b5e0e9457ae2fc017d1ae7a538ddf113916b7342",
-                "reference": "b5e0e9457ae2fc017d1ae7a538ddf113916b7342",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/3ff05701903fb22e0330b8bc95c26ac3d1e5f1e1",
+                "reference": "3ff05701903fb22e0330b8bc95c26ac3d1e5f1e1",
                 "shasum": ""
             },
             "require": {
@@ -63,7 +63,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-07-25T06:53:04+00:00"
+            "time": "2018-07-30T08:58:53+00:00"
         },
         {
             "name": "benjaminmedia/wp-site-manager",
@@ -71,12 +71,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-site-manager.git",
-                "reference": "ab6150ba0ff447ca031f036daf85b01fd590fa77"
+                "reference": "3641289542fe082c9b55fd12190d2f9f2f29c9ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-site-manager/zipball/ab6150ba0ff447ca031f036daf85b01fd590fa77",
-                "reference": "ab6150ba0ff447ca031f036daf85b01fd590fa77",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-site-manager/zipball/3641289542fe082c9b55fd12190d2f9f2f29c9ac",
+                "reference": "3641289542fe082c9b55fd12190d2f9f2f29c9ac",
                 "shasum": ""
             },
             "require": {
@@ -106,7 +106,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-07-27T06:45:56+00:00"
+            "time": "2018-07-30T08:58:38+00:00"
         },
         {
             "name": "bonnier/contenthub-editor",
@@ -255,12 +255,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/WP-Bonnier-Cache.git",
-                "reference": "75cc224ed7a2c6c23d535fb8501c5b8c683f9494"
+                "reference": "97490827154ce085e13d184ba149daaf757234e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/WP-Bonnier-Cache/zipball/75cc224ed7a2c6c23d535fb8501c5b8c683f9494",
-                "reference": "75cc224ed7a2c6c23d535fb8501c5b8c683f9494",
+                "url": "https://api.github.com/repos/BenjaminMedia/WP-Bonnier-Cache/zipball/97490827154ce085e13d184ba149daaf757234e6",
+                "reference": "97490827154ce085e13d184ba149daaf757234e6",
                 "shasum": ""
             },
             "require": {
@@ -282,7 +282,7 @@
                 }
             ],
             "description": "Integrates Bonnier Caching into WordPress",
-            "time": "2018-07-26T13:07:36+00:00"
+            "time": "2018-07-30T08:58:03+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-redirect",
@@ -290,12 +290,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-bonnier-redirect.git",
-                "reference": "376c8bb3d20860a9fafaf4caa88b61e4526b62c9"
+                "reference": "96d5aa7e6ef80214afaaacf0051a9fa1bba73844"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-redirect/zipball/376c8bb3d20860a9fafaf4caa88b61e4526b62c9",
-                "reference": "376c8bb3d20860a9fafaf4caa88b61e4526b62c9",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-redirect/zipball/96d5aa7e6ef80214afaaacf0051a9fa1bba73844",
+                "reference": "96d5aa7e6ef80214afaaacf0051a9fa1bba73844",
                 "shasum": ""
             },
             "require": {
@@ -321,7 +321,7 @@
                 }
             ],
             "description": "Redirect for Bonnier integration with Custom Permalink and Polylang",
-            "time": "2018-07-26T13:11:04+00:00"
+            "time": "2018-07-30T08:58:15+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-some",
@@ -329,12 +329,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-bonnier-socialmedia.git",
-                "reference": "86a1fafb561adbbde522138e727dab712aa5d3ac"
+                "reference": "fb320967fe00f39aef0e3cd9ba1d1cbe7942ac45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-socialmedia/zipball/86a1fafb561adbbde522138e727dab712aa5d3ac",
-                "reference": "86a1fafb561adbbde522138e727dab712aa5d3ac",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-socialmedia/zipball/fb320967fe00f39aef0e3cd9ba1d1cbe7942ac45",
+                "reference": "fb320967fe00f39aef0e3cd9ba1d1cbe7942ac45",
                 "shasum": ""
             },
             "require": {
@@ -351,7 +351,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Plugin for integrating social media into the application.",
-            "time": "2018-07-26T13:55:22+00:00"
+            "time": "2018-07-30T08:58:26+00:00"
         },
         {
             "name": "composer/installers",
