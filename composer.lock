@@ -114,16 +114,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-contenthub-editor.git",
-                "reference": "8219f261e42bede5152f1d67f92943ff960f8fb8"
+                "reference": "7ab5b833811bc73a8bcfabe190f81f17db6b36d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/8219f261e42bede5152f1d67f92943ff960f8fb8",
-                "reference": "8219f261e42bede5152f1d67f92943ff960f8fb8",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/7ab5b833811bc73a8bcfabe190f81f17db6b36d3",
+                "reference": "7ab5b833811bc73a8bcfabe190f81f17db6b36d3",
                 "shasum": ""
             },
             "require": {
                 "bonnier/php-video-helper": "1.0.*",
+                "bonnier/willow-mu-plugins": "dev-master",
                 "composer/installers": "~1.0",
                 "guzzlehttp/guzzle": "^6.3",
                 "illuminate/support": "^5.6",
@@ -158,7 +159,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-07-27T10:53:31+00:00"
+            "time": "2018-07-30T08:27:03+00:00"
         },
         {
             "name": "bonnier/php-video-helper",
@@ -213,12 +214,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:BenjaminMedia/willow-mu-plugins.git",
-                "reference": "0cde8557520e2a981037120c4763f14e37369dbb"
+                "reference": "69fa3f09259d83fa1df7892646fe3abf9b895ef6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/0cde8557520e2a981037120c4763f14e37369dbb",
-                "reference": "0cde8557520e2a981037120c4763f14e37369dbb",
+                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/69fa3f09259d83fa1df7892646fe3abf9b895ef6",
+                "reference": "69fa3f09259d83fa1df7892646fe3abf9b895ef6",
                 "shasum": ""
             },
             "require": {
@@ -246,7 +247,7 @@
                 "source": "https://github.com/BenjaminMedia/willow-mu-plugins/tree/master",
                 "issues": "https://github.com/BenjaminMedia/willow-mu-plugins/issues"
             },
-            "time": "2018-07-30T07:13:57+00:00"
+            "time": "2018-07-30T08:24:22+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-cache",
