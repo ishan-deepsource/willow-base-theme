@@ -64,6 +64,8 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
         if ($tagId = $this->getId()) {
             return LanguageProvider::getTermLanguage($tagId);
         }
+
+        return null;
     }
 
     public function getContentTeasers($page, $perPage, $orderBy, $order): Collection

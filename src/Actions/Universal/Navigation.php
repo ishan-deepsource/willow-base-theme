@@ -74,8 +74,7 @@ class Navigation
     {
         $locations = get_theme_mod('nav_menu_locations');
         collect(wp_get_nav_menus())->each(function ($menu) use (&$locations) {
-            $location = static::DEFAULT_MENU_MAPPING[$menu->name]['location'] ?? null;
-            if ($location) {
+            if ($location = static::DEFAULT_MENU_MAPPING[$menu->name]['location'] ?? null) {
                 $locations[$location] = $menu->term_id;
             }
         });

@@ -19,8 +19,9 @@ class TranslationController extends WP_REST_Controller
             'callback' => [$this, 'translationStrings']
         ]);
     }
-    
+
     /**
+     * @param \WP_REST_Request $request
      * @return WP_REST_Response
      */
     public function translationStrings(\WP_REST_Request $request)

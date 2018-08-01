@@ -224,6 +224,8 @@ class RouteController extends WP_REST_Controller
             );
             return $redirect;
         }
+
+        return null;
     }
 
     private function findWaRedirect($path)
@@ -239,6 +241,8 @@ class RouteController extends WP_REST_Controller
                 'code' => 301
             ];
         }
+
+        return null;
     }
 
     private function recursiveRedirectResolve($url)

@@ -130,7 +130,7 @@ class CompositeTransformer extends TransformerAbstract
 
     private function relatedFromTags(string $tag)
     {
-        $cacheKey = 'related_composites_by_tag_' . $tag;
+        $cacheKey = sprintf('related_composites_by_tag_%s', $tag);
         $expiresIn = 10 * HOUR_IN_SECONDS;
         $content = Cache::remember($cacheKey, $expiresIn, function () use ($tag) {
             $query = new \WP_Query([
