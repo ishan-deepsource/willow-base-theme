@@ -46,7 +46,7 @@
     "autoload": {
         "psr-4": {
             "Bonnier\\Willow\\Base\\": "src",
-            "Tests\\Bonnier\\Willow\\Base\\": "tests"
+            "Tests\\": "tests"
         }
     },
     "require-dev": {

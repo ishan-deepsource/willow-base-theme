@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Bonnier\Willow\Base\Unit\Models\Base;
+namespace Tests\Unit\Models\Base;
 
-use Tests\Bonnier\Willow\Base\Unit\ClassTestCase;
+use Tests\Unit\ClassTestCase;
 
 class BaseModelsTest extends ClassTestCase
 {
