@@ -221,12 +221,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:BenjaminMedia/willow-mu-plugins.git",
-                "reference": "d97a4fde3cc7186961f835a9d7d1e88853e6725a"
+                "reference": "f7c9d310fd63c8581aa3b19b4868b28903dae454"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/d97a4fde3cc7186961f835a9d7d1e88853e6725a",
-                "reference": "d97a4fde3cc7186961f835a9d7d1e88853e6725a",
+                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/f7c9d310fd63c8581aa3b19b4868b28903dae454",
+                "reference": "f7c9d310fd63c8581aa3b19b4868b28903dae454",
                 "shasum": ""
             },
             "require": {
@@ -254,7 +254,7 @@
                 "source": "https://github.com/BenjaminMedia/willow-mu-plugins/tree/master",
                 "issues": "https://github.com/BenjaminMedia/willow-mu-plugins/issues"
             },
-            "time": "2018-08-01T07:30:49+00:00"
+            "time": "2018-08-01T07:39:56+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-cache",
