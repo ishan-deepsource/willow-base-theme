@@ -6,7 +6,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Root\AbstractTeaserAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\Partials\CategoryImageAdapter;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
-use Bonnier\Willow\MuPlugins\LanguageProvider;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 
 class CategoryTeaserAdapter extends AbstractTeaserAdapter
 {

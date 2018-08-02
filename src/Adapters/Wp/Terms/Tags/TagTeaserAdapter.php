@@ -4,7 +4,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Tags;
 
 use Bonnier\Willow\Base\Adapters\Wp\Root\AbstractTeaserAdapter;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
-use Bonnier\Willow\MuPlugins\LanguageProvider;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 
 class TagTeaserAdapter extends AbstractTeaserAdapter
 {

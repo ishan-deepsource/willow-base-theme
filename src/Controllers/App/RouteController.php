@@ -2,7 +2,7 @@
 
 namespace Bonnier\Willow\Base\Controllers\App;
 
-use Bonnier\Willow\MuPlugins\LanguageProvider;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\WP\Redirect\Http\BonnierRedirect;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;

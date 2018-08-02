@@ -6,7 +6,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Root\MenuItemAdapter;
 use Bonnier\Willow\Base\Helpers\Cache;
 use Bonnier\Willow\Base\Models\Base\Root\MenuItem;
 use Bonnier\Willow\Base\Transformers\Api\Root\MenuItemTransformer;
-use Bonnier\Willow\MuPlugins\LanguageProvider;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use League\Fractal\TransformerAbstract;

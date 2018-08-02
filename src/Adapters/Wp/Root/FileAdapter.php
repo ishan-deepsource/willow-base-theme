@@ -3,7 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
 use Bonnier\Willow\Base\Models\Contracts\Root\FileContract;
-use Bonnier\Willow\MuPlugins\LanguageProvider;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use WP_Post;
 
 /**

@@ -5,7 +5,7 @@ namespace Bonnier\Willow\Base\Controllers\App;
 use Bonnier\Willow\Base\Helpers\Cache;
 use Bonnier\Willow\Base\Repositories\TranslationManagerRepository;
 use Bonnier\Willow\Base\Repositories\TranslationRepositoryContract;
-use Bonnier\Willow\MuPlugins\LanguageProvider;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\SiteManager\WpSiteManager;
 use WP_REST_Controller;
 use WP_REST_Response;

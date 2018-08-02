@@ -2,7 +2,7 @@
 
 namespace Bonnier\Willow\Base\Repositories;
 
-use Bonnier\Willow\MuPlugins\LanguageProvider;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\Cxense\WpCxense;
 
 class CxenseSearchRepository
@@ -165,7 +165,7 @@ class CxenseSearchRepository
     private function getSearchableTaxonomies()
     {
         $recsTags = [];
-        $searchableTaxonomies = WpCxense::instance()->settings->get_searchable_taxonomies(get_locale());
+        $searchableTaxonomies = WpCxense::instance()->settings->getSearchableTaxonomies(get_locale());
         foreach ($searchableTaxonomies as $taxonomy) {
             if ($taxonomy === 'category') {
                 $taxonomy = 'cat-top';

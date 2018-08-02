@@ -2,7 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Categories;
 
-use Bonnier\Willow\MuPlugins\LanguageProvider;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;

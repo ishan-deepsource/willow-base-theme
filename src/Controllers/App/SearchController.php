@@ -2,7 +2,7 @@
 
 namespace Bonnier\Willow\Base\Controllers\App;
 
-use Bonnier\Willow\MuPlugins\LanguageProvider;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\Willow\Base\Adapters\Cxense\Search\DocumentAdapter;
 use Bonnier\Willow\Base\Adapters\Cxense\Search\FacetCollectionAdapter;

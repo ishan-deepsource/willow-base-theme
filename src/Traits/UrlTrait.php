@@ -2,7 +2,7 @@
 
 namespace Bonnier\Willow\Base\Traits;
 
-use Bonnier\Willow\MuPlugins\LanguageProvider;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 
 trait UrlTrait
 {

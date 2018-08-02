@@ -3,7 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\Partials;
 
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
-use Bonnier\Willow\MuPlugins\LanguageProvider;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 
 /**
  * Class CategoryImageAdapter

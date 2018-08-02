@@ -5,7 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
-use Bonnier\Willow\MuPlugins\LanguageProvider;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 
 class CommercialAdapter implements CommercialContract
 {
