@@ -27,16 +27,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-cxense.git",
-                "reference": "51d023cbcbde215e33e21bd82123c37631450f5b"
+                "reference": "6c38d30a4a239e700d2bd8c89a35610f415b386d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/51d023cbcbde215e33e21bd82123c37631450f5b",
-                "reference": "51d023cbcbde215e33e21bd82123c37631450f5b",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/6c38d30a4a239e700d2bd8c89a35610f415b386d",
+                "reference": "6c38d30a4a239e700d2bd8c89a35610f415b386d",
                 "shasum": ""
             },
             "require": {
+                "bonnier/willow-mu-plugins": "dev-master",
                 "illuminate/support": "^5.6",
+                "johnpbloch/wordpress": "4.9.7",
                 "php": ">=7.1"
             },
             "type": "wordpress-plugin",
@@ -51,10 +53,6 @@
                     "name": "Bonnier Publications",
                     "email": "interactive@bonnier.dk",
                     "homepage": "http://bonnierpublications.com"
-                },
-                {
-                    "name": "Alf Henderson",
-                    "email": "alf.henderson@bonnier.dk"
                 }
             ],
             "description": "This plugin integrates your site with cXense by adding meta tags and calling the cXense api",
@@ -63,7 +61,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-08-02T12:51:51+00:00"
+            "time": "2018-08-02T13:10:29+00:00"
         },
         {
             "name": "benjaminmedia/wp-site-manager",
@@ -71,15 +69,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-site-manager.git",
-                "reference": "8b8a5e298d9ca817efc4e22ca218e2dde62cba50"
+                "reference": "6db1a70dae7a1e3326b0194c6c7a30ee3d9f3b9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-site-manager/zipball/8b8a5e298d9ca817efc4e22ca218e2dde62cba50",
-                "reference": "8b8a5e298d9ca817efc4e22ca218e2dde62cba50",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-site-manager/zipball/6db1a70dae7a1e3326b0194c6c7a30ee3d9f3b9f",
+                "reference": "6db1a70dae7a1e3326b0194c6c7a30ee3d9f3b9f",
                 "shasum": ""
             },
             "require": {
+                "bonnier/willow-mu-plugins": "dev-master",
                 "composer/installers": "~1.0",
                 "guzzlehttp/guzzle": "^6.3",
                 "illuminate/support": "^5.6",
@@ -106,7 +105,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-08-02T12:52:25+00:00"
+            "time": "2018-08-02T13:10:50+00:00"
         },
         {
             "name": "bonnier/contenthub-editor",
@@ -272,16 +271,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/WP-Bonnier-Cache.git",
-                "reference": "97490827154ce085e13d184ba149daaf757234e6"
+                "reference": "10d5b9a7a3a0eba84964e51be120aa18477eac23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/WP-Bonnier-Cache/zipball/97490827154ce085e13d184ba149daaf757234e6",
-                "reference": "97490827154ce085e13d184ba149daaf757234e6",
+                "url": "https://api.github.com/repos/BenjaminMedia/WP-Bonnier-Cache/zipball/10d5b9a7a3a0eba84964e51be120aa18477eac23",
+                "reference": "10d5b9a7a3a0eba84964e51be120aa18477eac23",
                 "shasum": ""
             },
             "require": {
                 "bonnier/contenthub-editor": "dev-IVD",
+                "bonnier/willow-mu-plugins": "dev-master",
                 "guzzlehttp/guzzle": "^6.3",
                 "johnpbloch/wordpress": "4.9.7"
             },
@@ -299,7 +299,7 @@
                 }
             ],
             "description": "Integrates Bonnier Caching into WordPress",
-            "time": "2018-07-30T08:58:03+00:00"
+            "time": "2018-08-02T13:05:57+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-redirect",
