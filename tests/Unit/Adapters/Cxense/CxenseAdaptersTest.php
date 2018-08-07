@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Unit\Adapters\Cxense;
+namespace Bonnier\Willow\Base\Tests\Unit\Adapters\Cxense;
 
-use Tests\Unit\ClassTestCase;
+use Bonnier\Willow\Base\Tests\Unit\ClassTestCase;
 
 class CxenseAdaptersTest extends ClassTestCase
 {

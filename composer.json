@@ -15,7 +15,7 @@
             "type": "package",
             "package": {
                 "name": "advanced-custom-fields/advanced-custom-fields-pro",
-                "version": "5.7.1",
+                "version": "5.7.2",
                 "type": "wordpress-plugin",
                 "dist": {
                     "type": "zip",
@@ -30,7 +30,6 @@
     ],
     "require": {
         "php": ">=7.1",
-        "johnpbloch/wordpress": "4.9.7",
         "philippbaschke/acf-pro-installer": "^1.0",
         "advanced-custom-fields/advanced-custom-fields-pro": "*",
         "league/fractal": "^0.17.0",
@@ -46,12 +45,13 @@
     "autoload": {
         "psr-4": {
             "Bonnier\\Willow\\Base\\": "src",
-            "Tests\\": "tests"
+            "Bonnier\\Willow\\Base\\Tests\\": "tests"
         }
     },
     "require-dev": {
         "phpunit/phpunit": "7.1.*",
-        "lucatume/wp-browser": "^2.1"
+        "lucatume/wp-browser": "^2.1",
+        "johnpbloch/wordpress": "^4.9"
     },
     "scripts": {
         "unit": "vendor/bin/codecept run unit"

@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Unit\Models\Gds;
+namespace Bonnier\Willow\Base\Tests\Unit\Models\Gds;
 
-use Tests\Unit\ClassTestCase;
+use Bonnier\Willow\Base\Tests\Unit\ClassTestCase;
 
 class GdsModelsTest extends ClassTestCase
 {
