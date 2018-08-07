@@ -4,39 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "67b1be919986d36808e675bcfd8a4906",
+    "content-hash": "4c1b7a8c3f37bdf786b8be3352c8df63",
     "packages": [
-        {
-            "name": "advanced-custom-fields/advanced-custom-fields-pro",
-            "version": "5.7.2",
-            "dist": {
-                "type": "zip",
-                "url": "https://connect.advancedcustomfields.com/index.php?p=pro&a=download&t=5.7.2",
-                "reference": null,
-                "shasum": null
-            },
-            "require": {
-                "composer/installers": "^1.0",
-                "philippbaschke/acf-pro-installer": "^1.0"
-            },
-            "type": "wordpress-plugin"
-        },
         {
             "name": "benjaminmedia/wp-cxense",
             "version": "dev-IVD",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-cxense.git",
-                "reference": "2801afb63b42b277f32224565bba1ce9e21cbc25"
+                "reference": "dd60894607b39c33e95088154599dfad66448908"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/2801afb63b42b277f32224565bba1ce9e21cbc25",
-                "reference": "2801afb63b42b277f32224565bba1ce9e21cbc25",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/dd60894607b39c33e95088154599dfad66448908",
+                "reference": "dd60894607b39c33e95088154599dfad66448908",
                 "shasum": ""
             },
             "require": {
-                "bonnier/willow-mu-plugins": "dev-master",
+                "bonnier/willow-mu-plugins": "^1.0.0",
                 "illuminate/support": "^5.6",
                 "php": ">=7.1"
             },
@@ -63,7 +48,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-08-07T10:30:07+00:00"
+            "time": "2018-08-07T13:46:36+00:00"
         },
         {
             "name": "benjaminmedia/wp-site-manager",
@@ -71,16 +56,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-site-manager.git",
-                "reference": "c0dbf15d9786019a0ef655a9aaea64e4abac6836"
+                "reference": "eb15e77bf1cd3adf112ddfbcfc91d4dd12931397"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-site-manager/zipball/c0dbf15d9786019a0ef655a9aaea64e4abac6836",
-                "reference": "c0dbf15d9786019a0ef655a9aaea64e4abac6836",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-site-manager/zipball/eb15e77bf1cd3adf112ddfbcfc91d4dd12931397",
+                "reference": "eb15e77bf1cd3adf112ddfbcfc91d4dd12931397",
                 "shasum": ""
             },
             "require": {
-                "bonnier/willow-mu-plugins": "dev-master",
+                "bonnier/willow-mu-plugins": "^1.0.0",
                 "composer/installers": "~1.0",
                 "guzzlehttp/guzzle": "^6.3",
                 "illuminate/support": "^5.6",
@@ -109,7 +94,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-08-07T10:30:34+00:00"
+            "time": "2018-08-07T13:54:31+00:00"
         },
         {
             "name": "bonnier/contenthub-editor",
@@ -117,23 +102,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-contenthub-editor.git",
-                "reference": "6ed1f95f75146f618548b2346743a0a37b166607"
+                "reference": "67a31fca8f4d76376a59b40d87423f1a07ff0a68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/6ed1f95f75146f618548b2346743a0a37b166607",
-                "reference": "6ed1f95f75146f618548b2346743a0a37b166607",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/67a31fca8f4d76376a59b40d87423f1a07ff0a68",
+                "reference": "67a31fca8f4d76376a59b40d87423f1a07ff0a68",
                 "shasum": ""
             },
             "require": {
-                "advanced-custom-fields/advanced-custom-fields-pro": "*",
                 "bonnier/php-video-helper": "1.0.*",
-                "bonnier/willow-mu-plugins": "dev-master",
-                "bonnier/wp-bonnier-cache": "dev-IVD",
-                "bonnier/wp-bonnier-redirect": "dev-IVD",
+                "bonnier/willow-mu-plugins": "1.0.0",
                 "composer/installers": "~1.0",
                 "guzzlehttp/guzzle": "^6.3",
                 "illuminate/support": "^5.6",
+                "junaidbhura/advanced-custom-fields-pro": "*",
                 "php": ">=7.1",
                 "wpackagist-plugin/amazon-s3-and-cloudfront": "^1.4"
             },
@@ -167,7 +150,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-08-07T10:41:25+00:00"
+            "time": "2018-08-07T13:26:29+00:00"
         },
         {
             "name": "bonnier/php-video-helper",
@@ -218,16 +201,16 @@
         },
         {
             "name": "bonnier/willow-mu-plugins",
-            "version": "dev-master",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:BenjaminMedia/willow-mu-plugins.git",
-                "reference": "2442a1b027305db79fe2609d648970896a31a287"
+                "reference": "c12da365f108bafdd08b8445e7552b3eb7dba409"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/2442a1b027305db79fe2609d648970896a31a287",
-                "reference": "2442a1b027305db79fe2609d648970896a31a287",
+                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/c12da365f108bafdd08b8445e7552b3eb7dba409",
+                "reference": "c12da365f108bafdd08b8445e7552b3eb7dba409",
                 "shasum": ""
             },
             "require": {
@@ -262,10 +245,10 @@
             ],
             "description": "A collection of Must Use WordPress Plugins for Willow",
             "support": {
-                "source": "https://github.com/BenjaminMedia/willow-mu-plugins/tree/master",
+                "source": "https://github.com/BenjaminMedia/willow-mu-plugins/tree/v1.0.0",
                 "issues": "https://github.com/BenjaminMedia/willow-mu-plugins/issues"
             },
-            "time": "2018-08-07T10:01:35+00:00"
+            "time": "2018-08-07T12:50:49+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-cache",
@@ -273,17 +256,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/WP-Bonnier-Cache.git",
-                "reference": "48bc1c377e6577e30d5f6f4ee429d62b49a559e9"
+                "reference": "9d6550aa7591ac6c586aa5ef48ebb9b5015929a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/WP-Bonnier-Cache/zipball/48bc1c377e6577e30d5f6f4ee429d62b49a559e9",
-                "reference": "48bc1c377e6577e30d5f6f4ee429d62b49a559e9",
+                "url": "https://api.github.com/repos/BenjaminMedia/WP-Bonnier-Cache/zipball/9d6550aa7591ac6c586aa5ef48ebb9b5015929a3",
+                "reference": "9d6550aa7591ac6c586aa5ef48ebb9b5015929a3",
                 "shasum": ""
             },
             "require": {
                 "bonnier/contenthub-editor": "dev-IVD",
-                "bonnier/willow-mu-plugins": "dev-master",
+                "bonnier/willow-mu-plugins": "^1.0.0",
                 "guzzlehttp/guzzle": "^6.3"
             },
             "require-dev": {
@@ -303,7 +286,7 @@
                 }
             ],
             "description": "Integrates Bonnier Caching into WordPress",
-            "time": "2018-08-07T10:40:03+00:00"
+            "time": "2018-08-07T13:34:49+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-redirect",
@@ -311,16 +294,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-bonnier-redirect.git",
-                "reference": "edfe05d864fa8b324c432dd9d0a475d4752cd685"
+                "reference": "63426b2721d908f4e06621e349c04153f711408d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-redirect/zipball/edfe05d864fa8b324c432dd9d0a475d4752cd685",
-                "reference": "edfe05d864fa8b324c432dd9d0a475d4752cd685",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-redirect/zipball/63426b2721d908f4e06621e349c04153f711408d",
+                "reference": "63426b2721d908f4e06621e349c04153f711408d",
                 "shasum": ""
             },
             "require": {
                 "bonnier/contenthub-editor": "dev-IVD",
+                "bonnier/willow-mu-plugins": "^1.0.0",
                 "bonnier/wp-bonnier-cache": "dev-IVD",
                 "illuminate/support": "^5.6",
                 "league/csv": "^9.1",
@@ -344,7 +328,7 @@
                 }
             ],
             "description": "Redirect for Bonnier integration with Custom Permalink and Polylang",
-            "time": "2018-08-07T10:39:24+00:00"
+            "time": "2018-08-07T13:38:32+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-some",
@@ -1217,62 +1201,6 @@
                 "random"
             ],
             "time": "2018-07-04T16:31:37+00:00"
-        },
-        {
-            "name": "philippbaschke/acf-pro-installer",
-            "version": "v1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PhilippBaschke/acf-pro-installer.git",
-                "reference": "f18e537183958159ef5f6cb1f5b684f59d55f3eb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PhilippBaschke/acf-pro-installer/zipball/f18e537183958159ef5f6cb1f5b684f59d55f3eb",
-                "reference": "f18e537183958159ef5f6cb1f5b684f59d55f3eb",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1.0",
-                "php": ">=5.5",
-                "vlucas/phpdotenv": "^2.2"
-            },
-            "require-dev": {
-                "composer/composer": "1.0.*",
-                "phpunit/phpunit": "4.8.*",
-                "satooshi/php-coveralls": "1.*",
-                "squizlabs/php_codesniffer": "2.*"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "PhilippBaschke\\ACFProInstaller\\Plugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "PhilippBaschke\\ACFProInstaller\\": "src/ACFProInstaller"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Philipp Baschke",
-                    "email": "philipp@baschke.com"
-                }
-            ],
-            "description": "An install helper for Advanced Custom Fields PRO",
-            "keywords": [
-                "acf",
-                "composer",
-                "env",
-                "plugin",
-                "pro",
-                "wordpress",
-                "wp"
-            ],
-            "time": "2016-07-20T10:19:36+00:00"
         },
         {
             "name": "psr/container",
@@ -7326,7 +7254,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "bonnier/willow-mu-plugins": 20,
         "bonnier/contenthub-editor": 20,
         "benjaminmedia/wp-cxense": 20,
         "benjaminmedia/wp-site-manager": 20,

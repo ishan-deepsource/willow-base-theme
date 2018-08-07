@@ -52,7 +52,7 @@
         "junaidbhura/polylang-pro": "*",
         "league/fractal": "^0.17.0",
         "wpackagist-plugin/amazon-s3-and-cloudfront": "^1.4",
-        "bonnier/willow-mu-plugins": "dev-master",
+        "bonnier/willow-mu-plugins": "^1.0.0",
         "bonnier/contenthub-editor": "dev-IVD",
         "benjaminmedia/wp-cxense": "dev-IVD",
         "benjaminmedia/wp-site-manager": "dev-IVD",
