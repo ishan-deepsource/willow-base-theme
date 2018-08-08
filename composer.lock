@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4c1b7a8c3f37bdf786b8be3352c8df63",
+    "content-hash": "ace88c1e3ede780ce6cea6d410590b98",
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
@@ -102,17 +102,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-contenthub-editor.git",
-                "reference": "67a31fca8f4d76376a59b40d87423f1a07ff0a68"
+                "reference": "fc3afb3cc2d0ed7ad971a90e0aff171d8b8dbcd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/67a31fca8f4d76376a59b40d87423f1a07ff0a68",
-                "reference": "67a31fca8f4d76376a59b40d87423f1a07ff0a68",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/fc3afb3cc2d0ed7ad971a90e0aff171d8b8dbcd7",
+                "reference": "fc3afb3cc2d0ed7ad971a90e0aff171d8b8dbcd7",
                 "shasum": ""
             },
             "require": {
                 "bonnier/php-video-helper": "1.0.*",
-                "bonnier/willow-mu-plugins": "1.0.0",
+                "bonnier/willow-mu-plugins": "^1.0.0",
                 "composer/installers": "~1.0",
                 "guzzlehttp/guzzle": "^6.3",
                 "illuminate/support": "^5.6",
@@ -150,7 +150,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-08-07T13:26:29+00:00"
+            "time": "2018-08-08T13:53:07+00:00"
         },
         {
             "name": "bonnier/php-video-helper",
@@ -201,16 +201,16 @@
         },
         {
             "name": "bonnier/willow-mu-plugins",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:BenjaminMedia/willow-mu-plugins.git",
-                "reference": "c12da365f108bafdd08b8445e7552b3eb7dba409"
+                "url": "https://github.com/BenjaminMedia/willow-mu-plugins.git",
+                "reference": "470ff905d5f9da04a3c2f735acffe991e578ccbb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/c12da365f108bafdd08b8445e7552b3eb7dba409",
-                "reference": "c12da365f108bafdd08b8445e7552b3eb7dba409",
+                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/470ff905d5f9da04a3c2f735acffe991e578ccbb",
+                "reference": "470ff905d5f9da04a3c2f735acffe991e578ccbb",
                 "shasum": ""
             },
             "require": {
@@ -229,11 +229,7 @@
                     "Bonnier\\Willow\\MuPlugins\\Tests\\": "tests"
                 }
             },
-            "scripts": {
-                "unit": [
-                    "vendor/bin/codecept run wpunit"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -244,11 +240,7 @@
                 }
             ],
             "description": "A collection of Must Use WordPress Plugins for Willow",
-            "support": {
-                "source": "https://github.com/BenjaminMedia/willow-mu-plugins/tree/v1.0.0",
-                "issues": "https://github.com/BenjaminMedia/willow-mu-plugins/issues"
-            },
-            "time": "2018-08-07T12:50:49+00:00"
+            "time": "2018-08-08T13:20:59+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-cache",
@@ -1867,16 +1859,16 @@
         },
         {
             "name": "composer/ca-bundle",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "d2c0a83b7533d6912e8d516756ebd34f893e9169"
+                "reference": "46afded9720f40b9dc63542af4e3e43a1177acb0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/d2c0a83b7533d6912e8d516756ebd34f893e9169",
-                "reference": "d2c0a83b7533d6912e8d516756ebd34f893e9169",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/46afded9720f40b9dc63542af4e3e43a1177acb0",
+                "reference": "46afded9720f40b9dc63542af4e3e43a1177acb0",
                 "shasum": ""
             },
             "require": {
@@ -1919,7 +1911,7 @@
                 "ssl",
                 "tls"
             ],
-            "time": "2018-03-29T19:57:20+00:00"
+            "time": "2018-08-08T08:57:40+00:00"
         },
         {
             "name": "composer/composer",

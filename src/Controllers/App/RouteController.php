@@ -29,6 +29,10 @@ use WP_Term;
 
 class RouteController extends WP_REST_Controller
 {
+    const STATUS_PUBLISHED = 'publish';
+    const STATUS_SCHEDULED = 'future';
+    const STATUS_DRAFT = 'draft';
+
     public function register_routes()
     {
         register_rest_route('app', '/resolve', [
@@ -91,7 +95,8 @@ class RouteController extends WP_REST_Controller
         parse_str($query, $queryParams);
         $path = parse_url(urldecode($path), PHP_URL_PATH);
 
-        if ($queryParams['preview'] ?? false) {
+        // Route resolving for previewing article drafts
+        if (($queryParams['preview'] ?? false) && ($queryParams['post_type'] ?? false) && ($queryParams['p'] ?? false)) {
             $posts =  get_posts([
                 'post_type' => $queryParams['post_type'],
                 'include' => $queryParams['p'], // Wordpress way of saying give me the content that match id
@@ -102,6 +107,17 @@ class RouteController extends WP_REST_Controller
             }
         }
 
+        // Route resolving for previewing scheduled articles
+        if (($queryParams['preview'] ?? false) && $path) {
+            if ($scheduled = $this->resolvePath($path, self::STATUS_SCHEDULED)) {
+                return $scheduled;
+            }
+
+            // If a scheduled article wasn't found, we'll look for a published one.
+            return $this->resolvePath($path, self::STATUS_PUBLISHED);
+        }
+
+        // Route resolving for search page or frontpage
         if (null === $path || '/' === $path) {
             if ($query && substr($query, 0, 2) === 's=') {
                 return 'search';
@@ -110,6 +126,7 @@ class RouteController extends WP_REST_Controller
             return get_post($id);
         }
 
+        // Route resolving for tag pages
         if (preg_match('#/?tags/([^/]+)$#', $path, $match)) {
             $slug = $match[1];
             if ($tag = get_term_by('slug', $slug, 'post_tag')) {
@@ -117,7 +134,13 @@ class RouteController extends WP_REST_Controller
             }
         }
 
-        if ($page = $this->findPage($path)) {
+        // Route resolving for all other content
+        return $this->resolvePath($path);
+    }
+
+    private function resolvePath($path, string $status = self::STATUS_PUBLISHED)
+    {
+        if ($page = $this->findPage($path, $status)) {
             return $page;
         }
 
@@ -125,7 +148,7 @@ class RouteController extends WP_REST_Controller
             return $category;
         }
 
-        if (($composite = $this->findContenthubComposite($path))) {
+        if (($composite = $this->findContenthubComposite($path, $status))) {
             return $composite;
         }
 
@@ -139,10 +162,10 @@ class RouteController extends WP_REST_Controller
         return null;
     }
 
-    private function findPage(string $path): ?WP_Post
+    private function findPage(string $path, string $status = self::STATUS_PUBLISHED): ?WP_Post
     {
         $page = get_page_by_path($path);
-        if (!$page || !$page instanceof WP_Post || $page->post_status !== 'publish') {
+        if (!$page || !$page instanceof WP_Post || $page->post_status !== $status) {
             return null;
         }
 
@@ -151,7 +174,7 @@ class RouteController extends WP_REST_Controller
         while ($parent_id) {
             $parent = get_post($parent_id);
             if ($parent) {
-                if ($parent->post_status === 'publish') {
+                if ($parent->post_status === $status) {
                     $parent_id = $parent->post_parent;
                 } else {
                     return null;
@@ -164,7 +187,7 @@ class RouteController extends WP_REST_Controller
         return $page;
     }
 
-    private function findContenthubComposite(string $path): ?WP_Post
+    private function findContenthubComposite(string $path, string $status = self::STATUS_PUBLISHED): ?WP_Post
     {
         $parts = preg_split('#/#', $path, -1, PREG_SPLIT_NO_EMPTY);
 
@@ -183,7 +206,7 @@ class RouteController extends WP_REST_Controller
                 }
             } elseif ($composite = get_page_by_path($part, OBJECT, WpComposite::POST_TYPE)) {
                 $cat = get_field('category', $composite->ID);
-                if ($composite->post_status !== 'publish') {
+                if ($composite->post_status !== $status) {
                     return null;
                 } elseif ($content && !$content instanceof WP_Term) {
                     // The parent element of the slug is not a WP_Term
@@ -224,8 +247,6 @@ class RouteController extends WP_REST_Controller
             );
             return $redirect;
         }
-
-        return null;
     }
 
     private function findWaRedirect($path)
@@ -241,8 +262,6 @@ class RouteController extends WP_REST_Controller
                 'code' => 301
             ];
         }
-
-        return null;
     }
 
     private function recursiveRedirectResolve($url)

@@ -8,10 +8,6 @@
             "url": "https://wpackagist.org"
         },
         {
-            "type": "vcs",
-            "url": "https://github.com/BenjaminMedia/willow-mu-plugins"
-        },
-        {
             "type":"vcs",
             "url":"https://github.com/junaidbhura/composer-wp-pro-plugins"
         },
