@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Controllers\App;
 
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\WP\Redirect\Http\BonnierRedirect;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
@@ -237,14 +238,20 @@ class RouteController extends WP_REST_Controller
             return $bonnierRedirect;
         }
         if (env('RESOLVE_WA_REDIRECTS') && env('WP_ENV') !== 'testing' && $redirect = $this->findWaRedirect($path)) {
-            BonnierRedirect::createRedirect($path, $redirect->to, pll_current_language(), 'wa-route-resolve', null);
+            BonnierRedirect::createRedirect(
+                $path,
+                $redirect->to,
+                LanguageProvider::getCurrentLanguage(),
+                'wa-route-resolve',
+                null
+            );
             return $redirect;
         }
     }
 
     private function findWaRedirect($path)
     {
-        $domain = parse_url(pll_home_url(), PHP_URL_HOST);
+        $domain = parse_url(LanguageProvider::getHomeUrl(), PHP_URL_HOST);
         $oldDomain = 'old.' .$domain;
         $url = sprintf('http://%s%s', $oldDomain, $path);
         $redirectUrl = $this->recursiveRedirectResolve($url);
