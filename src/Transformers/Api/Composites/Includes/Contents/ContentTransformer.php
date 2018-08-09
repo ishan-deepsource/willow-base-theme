@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents;
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentAudioTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentFileTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\GalleryTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentImageTransformer;
@@ -14,6 +15,7 @@ use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\Text
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\VideoTransformer;
 use Bonnier\Willow\Base\Transformers\NullTransformer;
 use League\Fractal\TransformerAbstract;
+use Tests\CompositeContent\Audio;
 
 class ContentTransformer extends TransformerAbstract
 {
@@ -27,6 +29,7 @@ class ContentTransformer extends TransformerAbstract
         'video'                => VideoTransformer::class,
         'infobox'              => InfoBoxTransformer::class,
         'associated_composite' => CompositeTransformer::class,
+        'audio'                => ContentAudioTransformer::class
     ];
 
     public function transform(ContentContract $content)
