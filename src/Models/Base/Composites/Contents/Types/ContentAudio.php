@@ -4,13 +4,12 @@ namespace Bonnier\Willow\Base\Models\Base\Composites\Contents\Types;
 
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\AbstractContent;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentAudioContract;
-use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentFileContract;
 use Illuminate\Support\Collection;
 
 /**
  * Class File
  *
- * @property ContentFileContract $model
+ * @property ContentAudioContract $model
  *
  * @package Bonnier\Willow\Base\Models\Base\Composites\Contents\Types
  */
