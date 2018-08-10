@@ -4,11 +4,13 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites;
 
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentImageAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Root\AudioAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\CommercialAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\CategoryAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagAdapter;
 use Bonnier\Willow\Base\Factories\CompositeContentFactory;
+use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentAudio;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentFile;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentImage;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Gallery;
@@ -17,6 +19,7 @@ use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\InsertedCode;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Link;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\TextItem;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Video;
+use \Bonnier\Willow\Base\Models\Base\Root\Audio;
 use Bonnier\Willow\Base\Models\Base\Root\Author;
 use Bonnier\Willow\Base\Models\Base\Root\Commercial;
 use Bonnier\Willow\Base\Models\Base\Root\Teaser;
@@ -60,7 +63,8 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         'inserted_code' => InsertedCode::class,
         'link'          => Link::class,
         'text_item'     => TextItem::class,
-        'video'         => Video::class
+        'video'         => Video::class,
+        'audio'         => ContentAudio::class,
     ];
 
     protected $acfFields;

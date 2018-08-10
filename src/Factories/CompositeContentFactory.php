@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Factories;
 
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentAudioAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentFileAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentImageAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\GalleryAdapter;
@@ -22,7 +23,8 @@ class CompositeContentFactory extends AbstractModelFactory
         'inserted_code' => InsertedCodeAdapter::class,
         'link'          => LinkAdapter::class,
         'text_item'     => TextItemAdapter::class,
-        'video'         => VideoAdapter::class
+        'video'         => VideoAdapter::class,
+        'audio'         => ContentAudioAdapter::class
     ];
     
     public function getAdapter($model)
