@@ -48,7 +48,7 @@ abstract class AbstractModelFactory implements ModelFactoryContract
         }
         return $baseModel;
     }
-    
+
     /**
      * @return mixed|null
      * @throws OverrideModelMissingContractException
@@ -101,7 +101,6 @@ abstract class AbstractModelFactory implements ModelFactoryContract
         if (!$adapter || !class_exists($adapter)) {
             throw new MissingAdapterException(sprintf('The adapter class \'%s\' does not exist', $adapter));
         }
-        
         return new $adapter($model);
     }
 }
