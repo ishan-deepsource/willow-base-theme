@@ -69,7 +69,7 @@
         "johnpbloch/wordpress": "^4.9"
     },
     "scripts": {
-        "unit": "vendor/bin/codecept run unit"
+        "unit": "vendor/bin/codecept run Unit"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
