@@ -19,7 +19,13 @@ jobs:
 
     steps:
     - checkout
-
+    - run:
+      name: Install PHP libzip-dev
+      command: sudo apt-get install -y libzip-dev libpng-dev
+    - run:
+      name: Install PHP Modules
+      command: sudo docker-php-ext-install zip gd
+    - run: sudo composer self-update
     # Download and cache dependencies
     - restore_cache:
         keys:
