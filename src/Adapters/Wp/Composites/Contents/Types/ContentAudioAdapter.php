@@ -48,38 +48,18 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
         return optional($this->audio)->getDescription();
     }
 
-    public function getCaption(): ?string
-    {
-        return optional($this->audio)->getCaption();
-    }
-
-    public function getAlt(): ?string
-    {
-        return optional($this->audio)->getAlt();
-    }
-
-    public function getCopyright(): ?string
-    {
-        return optional($this->audio)->getCopyright();
-    }
-
     public function getLanguage(): ?string
     {
         return optional($this->audio)->getLanguage();
     }
-    
-    public function getFocalPoint(): array
-    {
-        return optional($this->audio)->getFocalPoint() ?? [];
-    }
-    
-    public function getAspectRatio(): float
-    {
-        return optional($this->audio)->getAspectRatio() ?? 0.0;
-    }
 
     public function getAudioTitle(): ?string
     {
-        return $this->acfArray['audio_title'];
+        return $this->acfArray['audio_title'] ?? null;
+    }
+
+    public function getCaption(): ?string
+    {
+        return optional($this->audio)->getCaption();
     }
 }
