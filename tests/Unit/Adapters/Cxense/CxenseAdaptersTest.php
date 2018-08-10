@@ -8,7 +8,7 @@ class CxenseAdaptersTest extends ClassTestCase
 {
     public function testCxenseAdaptersImplementsInterfaceMethods()
     {
-        $path = str_replace('test/server/Unit/Adapters/Cxense', 'server/Adapters/Cxense', __DIR__);
+        $path = str_replace('tests/unit/Adapters/Cxense', 'src/Adapters/Cxense', __DIR__);
         $classes = $this->loadClasses($path);
         $classInterfaceMap = $this->loadInterfaces($classes);
         if (empty($classInterfaceMap)) {

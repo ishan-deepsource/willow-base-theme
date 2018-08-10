@@ -13,7 +13,7 @@ class WpAdaptersTest extends ClassTestCase
 
     public function testWpAdaptersImplementsInterfaceMethods()
     {
-        $path = str_replace('tests/Unit/Adapters/Wp', 'src/Adapters/Wp', __DIR__);
+        $path = str_replace('tests/unit/Adapters/Wp', 'src/Adapters/Wp', __DIR__);
         $classes = $this->loadClasses($path);
         $classInterfaceMap = $this->loadInterfaces($classes);
         if (empty($classInterfaceMap)) {
