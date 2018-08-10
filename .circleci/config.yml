@@ -8,7 +8,7 @@ jobs:
   build:
     docker:
     # specify the version you desire here
-    - image: circleci/php:7.1.5-browsers
+    - image: circleci/php:7.1-fpm-browsers
 
     # Specify service dependencies here if necessary
     # CircleCI maintains a library of pre-built images
@@ -18,30 +18,30 @@ jobs:
     working_directory: ~/repo
 
     steps:
-    - checkout
-    - run:
-       name: Install PHP libzip-dev
-       command: sudo apt-get install -y libzip-dev libpng-dev
-    - run:
-       name: Install PHP Modules
-       command: sudo docker-php-ext-install zip gd
-    - run: sudo composer self-update
-    # Download and cache dependencies
-    - restore_cache:
-        keys:
-        - v1-dependencies-{{ checksum "composer.json" }}
-        # fallback to using the latest cache if no exact match is found
-        - v1-dependencies-
+      - checkout
+      - run:
+         name: Install PHP libzip-dev
+         command: sudo apt-get install -y libzip-dev libpng-dev
+      - run:
+         name: Install PHP Modules
+         command: sudo docker-php-ext-install zip gd
+      - run: sudo composer self-update
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "composer.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
 
-    - run: composer install -n --prefer-dist
+      - run: composer install -n --prefer-dist
 
-    - save_cache:
-        paths:
-        - ./vendor
-        key: v1-dependencies-{{ checksum "composer.json" }}
+      - save_cache:
+          paths:
+          - ./vendor
+          key: v1-dependencies-{{ checksum "composer.json" }}
 
-    # run tests!
-    - run: composer unit
+      # run tests!
+      - run: composer unit
 
 workflows:
   version: 2
