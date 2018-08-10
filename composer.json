@@ -54,7 +54,8 @@
         "benjaminmedia/wp-site-manager": "dev-IVD",
         "bonnier/wp-bonnier-cache": "dev-IVD",
         "bonnier/wp-bonnier-redirect": "dev-IVD",
-        "bonnier/wp-bonnier-some": "dev-IVD"
+        "bonnier/wp-bonnier-some": "dev-IVD",
+        "wpackagist-plugin/user-role-editor": "^4.44"
     },
     "autoload": {
         "psr-4": {

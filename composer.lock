@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ace88c1e3ede780ce6cea6d410590b98",
+    "content-hash": "f3c82924eb4bce64daea5d7b66bf9600",
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
@@ -102,12 +102,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-contenthub-editor.git",
-                "reference": "0fa2e499ebe76e4188836c45efb5640a9fb1e7d7"
+                "reference": "717ccb421bcca6f8b2c4aa32d7640c6b6318d77e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/0fa2e499ebe76e4188836c45efb5640a9fb1e7d7",
-                "reference": "0fa2e499ebe76e4188836c45efb5640a9fb1e7d7",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/717ccb421bcca6f8b2c4aa32d7640c6b6318d77e",
+                "reference": "717ccb421bcca6f8b2c4aa32d7640c6b6318d77e",
                 "shasum": ""
             },
             "require": {
@@ -150,7 +150,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-08-09T07:54:41+00:00"
+            "time": "2018-08-10T08:12:42+00:00"
         },
         {
             "name": "bonnier/php-video-helper",
@@ -724,16 +724,16 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.6.29",
+            "version": "v5.6.33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "3dc639feabe0f302f574157a782ede323881a944"
+                "reference": "2c029101285f6066f45e3ae5910b1b5f900fdcb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/3dc639feabe0f302f574157a782ede323881a944",
-                "reference": "3dc639feabe0f302f574157a782ede323881a944",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/2c029101285f6066f45e3ae5910b1b5f900fdcb4",
+                "reference": "2c029101285f6066f45e3ae5910b1b5f900fdcb4",
                 "shasum": ""
             },
             "require": {
@@ -764,20 +764,20 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "https://laravel.com",
-            "time": "2018-05-11T23:38:58+00:00"
+            "time": "2018-07-31T12:49:53+00:00"
         },
         {
             "name": "illuminate/support",
-            "version": "v5.6.29",
+            "version": "v5.6.33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "c684cb5e77e213020f7a4ed213d94b2b384c2951"
+                "reference": "0561e4e48797fbaeafeec0054b14605b08722a5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/c684cb5e77e213020f7a4ed213d94b2b384c2951",
-                "reference": "c684cb5e77e213020f7a4ed213d94b2b384c2951",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/0561e4e48797fbaeafeec0054b14605b08722a5a",
+                "reference": "0561e4e48797fbaeafeec0054b14605b08722a5a",
                 "shasum": ""
             },
             "require": {
@@ -822,7 +822,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2018-07-26T15:32:11+00:00"
+            "time": "2018-08-06T19:58:11+00:00"
         },
         {
             "name": "junaidbhura/advanced-custom-fields-pro",
@@ -840,16 +840,16 @@
         },
         {
             "name": "junaidbhura/composer-wp-pro-plugins",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/junaidbhura/composer-wp-pro-plugins.git",
-                "reference": "94a36f218eba29877619f2745c8b9821479b72ab"
+                "reference": "c9886fdb4b2c7888281ec344e215b09e0bbb5f6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/junaidbhura/composer-wp-pro-plugins/zipball/94a36f218eba29877619f2745c8b9821479b72ab",
-                "reference": "94a36f218eba29877619f2745c8b9821479b72ab",
+                "url": "https://api.github.com/repos/junaidbhura/composer-wp-pro-plugins/zipball/c9886fdb4b2c7888281ec344e215b09e0bbb5f6e",
+                "reference": "c9886fdb4b2c7888281ec344e215b09e0bbb5f6e",
                 "shasum": ""
             },
             "require": {
@@ -873,10 +873,10 @@
                 }
             ],
             "support": {
-                "source": "https://github.com/junaidbhura/composer-wp-pro-plugins/tree/1.0.3",
+                "source": "https://github.com/junaidbhura/composer-wp-pro-plugins/tree/1.0.4",
                 "issues": "https://github.com/junaidbhura/composer-wp-pro-plugins/issues"
             },
-            "time": "2018-07-20T09:39:44+00:00"
+            "time": "2018-08-09T02:46:24+00:00"
         },
         {
             "name": "junaidbhura/polylang-pro",
@@ -1537,6 +1537,26 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/amazon-s3-and-cloudfront/"
+        },
+        {
+            "name": "wpackagist-plugin/user-role-editor",
+            "version": "4.44",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/user-role-editor/",
+                "reference": "tags/4.44"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/user-role-editor.4.44.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/user-role-editor/"
         }
     ],
     "packages-dev": [
