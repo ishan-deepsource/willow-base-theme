@@ -43,10 +43,15 @@ class RouteController extends WP_REST_Controller
 
     public function resolve(WP_REST_Request $request)
     {
+        $locale = $request->get_param('locale') ?? LanguageProvider::getDefaultLanguage();
         $path = $request->get_param('path');
-        $content = Cache::remember('path-resolve:' . $path, 2 * 3600, function () use ($path) {
-            return $this->resolveContent($path);
-        });
+        $content = Cache::remember(
+            'path-resolve:' . $path . '-' . $locale,
+            2 * 3600,
+            function () use ($path, $locale) {
+                return $this->resolveContent($path, $locale);
+            }
+        );
 
         $resource = null;
 
@@ -89,7 +94,7 @@ class RouteController extends WP_REST_Controller
         }
     }
 
-    private function resolveContent($path)
+    private function resolveContent($path, $locale)
     {
         $query = parse_url(urldecode($path), PHP_URL_QUERY);
         parse_str($query, $queryParams);
@@ -122,8 +127,9 @@ class RouteController extends WP_REST_Controller
             if ($query && substr($query, 0, 2) === 's=') {
                 return 'search';
             }
-            $id = get_option('page_on_front');
-            return get_post($id);
+            $frontpageID = get_option('page_on_front');
+            $translations = LanguageProvider::getPostTranslations($frontpageID);
+            return get_post($translations[$locale] ?? null);
         }
 
         // Route resolving for tag pages
