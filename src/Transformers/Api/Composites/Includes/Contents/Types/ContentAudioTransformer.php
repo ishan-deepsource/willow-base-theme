@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Type
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentAudioContract;
 use Bonnier\Willow\Base\Transformers\Api\Root\AudioTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Root\ImageTransformer;
 use League\Fractal\TransformerAbstract;
 
 class ContentAudioTransformer extends TransformerAbstract
@@ -12,7 +13,8 @@ class ContentAudioTransformer extends TransformerAbstract
     {
         return [
             'title' => $audio->getAudioTitle(),
-            'file' => $audio->isLocked() ? null : with(new AudioTransformer())->transform($audio)
+            'file' => $audio->isLocked() ? null : with(new AudioTransformer())->transform($audio),
+            'image' => with(new ImageTransformer())->transform($audio->getImage())
         ];
     }
 }
