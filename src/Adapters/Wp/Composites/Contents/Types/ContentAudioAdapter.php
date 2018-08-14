@@ -4,8 +4,11 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types;
 
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AudioAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
 use Bonnier\Willow\Base\Models\Base\Root\Audio;
+use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentAudioContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 
 /**
  * Class ImageAdapter
@@ -61,5 +64,14 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
     public function getCaption(): ?string
     {
         return optional($this->audio)->getCaption();
+    }
+
+    public function getImage(): ?ImageContract
+    {
+        if (($imageId = $this->acfArray['image'] ?? null) && $image = get_post($imageId)) {
+            return new Image(new ImageAdapter($image));
+        }
+
+        return null;
     }
 }

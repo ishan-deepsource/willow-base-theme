@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Models\Base\Composites\Contents\Types;
 
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\AbstractContent;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentAudioContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Illuminate\Support\Collection;
 
 /**
@@ -59,7 +60,7 @@ class ContentAudio extends AbstractContent implements ContentAudioContract
     {
         return $this->model->getLanguage();
     }
-    
+
     public function getStickToNext(): bool
     {
         return $this->model->getStickToNext() ?? false;
@@ -68,5 +69,10 @@ class ContentAudio extends AbstractContent implements ContentAudioContract
     public function getAudioTitle(): ?string
     {
         return $this->model->getAudioTitle();
+    }
+
+    public function getImage(): ?ImageContract
+    {
+        return $this->model->getImage();
     }
 }
