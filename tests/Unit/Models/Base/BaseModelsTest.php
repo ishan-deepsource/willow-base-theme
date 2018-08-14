@@ -8,7 +8,7 @@ class BaseModelsTest extends ClassTestCase
 {
     public function testModelsImplementsInterfaceMethods()
     {
-        $path = str_replace('tests/unit/Models/Base', 'src/Models/Base', __DIR__);
+        $path = str_replace('tests/Unit/Models/Base', 'src/Models/Base', __DIR__);
         $classes = $this->loadClasses($path);
         $classInterfaceMap = $this->loadInterfaces($classes);
         if (empty($classInterfaceMap)) {
