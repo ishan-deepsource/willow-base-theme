@@ -8,7 +8,7 @@ class GdsModelsTest extends ClassTestCase
 {
     public function testModelsImplementsInterfaceMethods()
     {
-        $path = str_replace('tests/unit/Models/Gds', 'src/Models/Gds', __DIR__);
+        $path = str_replace('tests/Unit/Models/Gds', 'src/Models/Gds', __DIR__);
         $classes = $this->loadClasses($path);
         $classInterfaceMap = $this->loadInterfaces($classes);
         if (empty($classInterfaceMap)) {

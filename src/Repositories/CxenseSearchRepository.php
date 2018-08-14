@@ -15,7 +15,7 @@ class CxenseSearchRepository
 
     public function __construct()
     {
-        $this->orgPrefix = WpCxense::instance()->settings->get_setting_value('organisation_prefix', get_locale());
+        $this->orgPrefix = WpCxense::instance()->settings->getOrganisationPrefix();
     }
 
     /**
