@@ -48,14 +48,15 @@
         "junaidbhura/polylang-pro": "*",
         "league/fractal": "^0.17.0",
         "wpackagist-plugin/amazon-s3-and-cloudfront": "^1.4",
-        "bonnier/willow-mu-plugins": "^1.0.0",
-        "bonnier/contenthub-editor": "dev-IVD",
-        "benjaminmedia/wp-cxense": "dev-IVD",
-        "benjaminmedia/wp-site-manager": "dev-IVD",
-        "bonnier/wp-bonnier-cache": "dev-IVD",
-        "bonnier/wp-bonnier-redirect": "dev-IVD",
-        "bonnier/wp-bonnier-some": "dev-IVD",
-        "wpackagist-plugin/user-role-editor": "^4.44"
+        "wpackagist-plugin/user-role-editor": "^4.44",
+        "bonnier/willow-mu-plugins": "^1.1",
+        "bonnier/contenthub-editor": "^3.0",
+        "benjaminmedia/wp-cxense": "^2.0",
+        "benjaminmedia/wp-site-manager": "^1.0",
+        "bonnier/wp-bonnier-cache": "^2.0",
+        "bonnier/wp-bonnier-redirect": "^2.0",
+        "bonnier/wp-bonnier-some": "^2.0",
+        "bonnier/wp-focal-point": "^1.1"
     },
     "autoload": {
         "psr-4": {
@@ -70,7 +71,5 @@
     },
     "scripts": {
         "unit": "vendor/bin/codecept run Unit"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }

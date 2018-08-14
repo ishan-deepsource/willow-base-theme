@@ -92,7 +92,7 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
         return null;
     }
-    
+
     public function getContentTeasers(
         $page = 1,
         $perPage = 10,
@@ -147,7 +147,7 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
         if ($contentHubId) {
             try {
                 $category = WpSiteManager::instance()->categories()->findByContentHubId($contentHubId) ?? null;
-                return $category->data;
+                return $category->data ?? null;
             } catch (\Exception $exception) {
                 return null;
             }
