@@ -128,8 +128,10 @@ class RouteController extends WP_REST_Controller
                 return 'search';
             }
             $frontpageID = get_option('page_on_front');
-            $translations = LanguageProvider::getPostTranslations($frontpageID);
-            return get_post($translations[$locale] ?? null);
+            if ($translations = LanguageProvider::getPostTranslations($frontpageID)) {
+                return get_post($translations[$locale] ?? null);
+            }
+            return get_post($frontpageID);
         }
 
         // Route resolving for tag pages

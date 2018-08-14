@@ -19,7 +19,7 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
     public function __construct(array $acfArray)
     {
         parent::__construct($acfArray);
-        $post = get_post($acfArray['audio_file'] ?? null);
+        $post = get_post($acfArray['file'] ?? null);
         $this->audio = $post ? new Audio(new AudioAdapter($post)) : null;
     }
 
@@ -55,7 +55,7 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
 
     public function getAudioTitle(): ?string
     {
-        return $this->acfArray['audio_title'] ?? null;
+        return $this->acfArray['title'] ?? null;
     }
 
     public function getCaption(): ?string
