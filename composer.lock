@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b40d2ef386f805ec1b56c81b859a3033",
+    "content-hash": "a0c9b6d8bf582c1712248afcfbc8d0f2",
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
-            "version": "2.0.4",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-cxense.git",
-                "reference": "581f1ebf79963f7a29027add8d61bf47d8856c42"
+                "reference": "a2247288b163ffc95bcc0522b6a9a04d556e954a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/581f1ebf79963f7a29027add8d61bf47d8856c42",
-                "reference": "581f1ebf79963f7a29027add8d61bf47d8856c42",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/a2247288b163ffc95bcc0522b6a9a04d556e954a",
+                "reference": "a2247288b163ffc95bcc0522b6a9a04d556e954a",
                 "shasum": ""
             },
             "require": {
@@ -48,7 +48,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-08-14T09:15:59+00:00"
+            "time": "2018-08-15T12:57:14+00:00"
         },
         {
             "name": "benjaminmedia/wp-site-manager",
