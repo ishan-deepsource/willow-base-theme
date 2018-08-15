@@ -8,5 +8,6 @@ use Illuminate\Support\Collection;
 interface GalleryContract extends ContentContract
 {
     public function getTitle() : ?string;
+    public function getDisplayHint(): ?string;
     public function getImages() : Collection;
 }

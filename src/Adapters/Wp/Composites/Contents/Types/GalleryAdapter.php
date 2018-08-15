@@ -3,7 +3,9 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types;
 
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Root\GalleryImageAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
+use Bonnier\Willow\Base\Models\Base\Root\GalleryImage;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\GalleryContract;
 use Illuminate\Support\Collection;
@@ -19,17 +21,19 @@ class GalleryAdapter extends AbstractContentAdapter implements GalleryContract
     {
         return $this->acfArray['title'] ?? null;
     }
-    
+
     public function getImages(): Collection
     {
         $collection = collect($this->acfArray['images'] ?? [])->map(function ($acfImage) {
-            if ($image = get_post($acfImage['image'] ?? null)) {
-                return new Image(new ImageAdapter($image));
-            }
-            return null;
+            return new GalleryImage(new GalleryImageAdapter($acfImage));
         })->reject(function ($image) {
             return is_null($image);
         });
         return $collection;
+    }
+
+    public function getDisplayHint(): ?string
+    {
+        return $this->acfArray['display_hint'] ?? null;
     }
 }
