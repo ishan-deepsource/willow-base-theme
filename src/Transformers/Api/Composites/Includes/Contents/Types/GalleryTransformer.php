@@ -3,7 +3,9 @@
 namespace Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types;
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\GalleryContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\GalleryImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
+use Bonnier\Willow\Base\Transformers\Api\Root\GalleryImageTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\ImageTransformer;
 use League\Fractal\TransformerAbstract;
 
@@ -18,9 +20,12 @@ class GalleryTransformer extends TransformerAbstract
     {
         return [
             'title' => $gallery->getTitle(),
-            'images' => $gallery->isLocked() ? null : $gallery->getImages()->map(function (ImageContract $image) {
-                return with(new ImageTransformer)->transform($image);
-            }),
+            'display_hint' => $gallery->getDisplayHint(),
+            'images' => $gallery->isLocked() ?
+                null :
+                $gallery->getImages()->map(function (GalleryImageContract $galleryImage) {
+                    return with(new GalleryImageTransformer())->transform($galleryImage);
+                }),
         ];
     }
 }
