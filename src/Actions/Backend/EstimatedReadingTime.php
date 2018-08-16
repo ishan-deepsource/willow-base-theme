@@ -65,11 +65,15 @@ class EstimatedReadingTime
                 $wordsPerMinute = 180 / 60;
                 break;
             default:
+                $wordsPerMinute = 180 / 60;
                 break;
         }
 
         $secondsForImages = $this->addTimeForImages($imageCounter);
         $readingTime = (int) round(($this->totalWordCount / $wordsPerMinute + $secondsForImages) / 60);
+        if ($readingTime < 1) {
+            $readingTime = 1;
+        }
 
         update_post_meta($postId, 'reading_time', $readingTime ?? null);
     }
