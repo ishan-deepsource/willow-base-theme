@@ -9,6 +9,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\CommercialAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\CategoryAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Terms\Vocabulary\VocabularyAdapter;
 use Bonnier\Willow\Base\Factories\CompositeContentFactory;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentAudio;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentFile;
@@ -25,6 +26,7 @@ use Bonnier\Willow\Base\Models\Base\Root\Commercial;
 use Bonnier\Willow\Base\Models\Base\Root\Teaser;
 use Bonnier\Willow\Base\Models\Base\Terms\Category;
 use Bonnier\Willow\Base\Models\Base\Terms\Tag;
+use Bonnier\Willow\Base\Models\Base\Terms\Vocabulary;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentFileContract;
@@ -35,7 +37,9 @@ use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
 use Bonnier\Willow\Base\Traits\DateTimeZoneTrait;
 use Bonnier\Willow\Base\Traits\UrlTrait;
+use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
+use Bonnier\WP\ContentHub\Editor\Models\WpTaxonomy;
 use DateTime;
 use Illuminate\Support\Collection;
 
@@ -222,6 +226,13 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         }
 
         return null;
+    }
+
+    public function getVocabularies(): ?Collection
+    {
+        return collect(WpTaxonomy::get_custom_taxonomies())->map(function ($taxonomy){
+            return new Vocabulary(new VocabularyAdapter($this, $taxonomy));
+        });
     }
 
     public function getTags(): Collection

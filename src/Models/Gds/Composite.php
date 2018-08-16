@@ -71,6 +71,11 @@ class Composite implements CompositeContract
         return $this->baseComposite->getCategory();
     }
 
+    public function getVocabularies(): ?Collection
+    {
+        return $this->composite->getVocabularies();
+    }
+
     public function getLeadImage(): ?ContentImageContract
     {
         return $this->baseComposite->getLeadImage();

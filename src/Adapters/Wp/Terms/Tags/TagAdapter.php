@@ -55,7 +55,7 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
 
     public function getUrl(): ?string
     {
-        $link = get_term_link($this->getId(), 'post_tag');
+        $link = get_term_link($this->getId(), $this->wpModel->taxonomy);
         return is_wp_error($link) ? null : $link;
     }
 

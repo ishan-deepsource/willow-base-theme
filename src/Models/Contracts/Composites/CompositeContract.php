@@ -35,6 +35,8 @@ interface CompositeContract
 
     public function getCategory(): ?CategoryContract;
 
+    public function getVocabularies(): ?Collection;
+
     public function getTags(): Collection;
 
     public function getLeadImage(): ?ContentImageContract;
