@@ -71,7 +71,7 @@ class EstimatedReadingTime
         $secondsForImages = $this->addTimeForImages($imageCounter);
         $readingTime = (int) round(($this->totalWordCount / $wordsPerMinute + $secondsForImages) / 60);
 
-        update_post_meta($postId, 'reading_time', '7' ?? null);
+        update_post_meta($postId, 'reading_time', $readingTime ?? null);
     }
 
     public function addTimeForImages($amountOfImages)
