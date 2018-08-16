@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
+use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\WP\Cxense\Services\WidgetDocumentQuery;
@@ -24,8 +25,9 @@ use WP_Post;
 
 class CompositeTransformer extends TransformerAbstract
 {
-    protected $originalResponseData;
+    use UrlTrait;
 
+    protected $originalResponseData;
 
     /**
      * List of resources possible to include
