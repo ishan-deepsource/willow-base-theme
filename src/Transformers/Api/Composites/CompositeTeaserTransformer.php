@@ -9,6 +9,7 @@ use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentImageTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\CommercialTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\ImageTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
 use League\Fractal\TransformerAbstract;
 
 class CompositeTeaserTransformer extends TransformerAbstract
@@ -23,7 +24,7 @@ class CompositeTeaserTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-
+        'vocabularies',
     ];
 
     /**
@@ -80,5 +81,10 @@ class CompositeTeaserTransformer extends TransformerAbstract
     {
         $commercial = $composite->getCommercial();
         return $commercial ? with(new CommercialTransformer())->transform($commercial) : null;
+    }
+
+    public function includeVocabularies(CompositeContract $composite)
+    {
+        return $this->collection($composite->getVocabularies(), new VocabularyTransformer());
     }
 }
