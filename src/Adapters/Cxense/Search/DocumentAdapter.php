@@ -150,6 +150,11 @@ class DocumentAdapter implements CompositeContract
         return collect([]);
     }
 
+    public function getVocabularies(): Collection
+    {
+        return collect([]);
+    }
+
     public function getCanonicalUrl(): ?string
     {
         return null;
