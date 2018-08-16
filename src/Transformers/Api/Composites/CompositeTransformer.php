@@ -151,26 +151,22 @@ class CompositeTransformer extends TransformerAbstract
 
     private function relatedFromCxense(CompositeContract $composite)
     {
-        $cacheKey = 'related_composites_' . $composite->getId();
-        $expiresIn = 10 * HOUR_IN_SECONDS;
-        $content = Cache::remember($cacheKey, $expiresIn, function () use ($composite) {
-            $result = WidgetDocumentQuery::make()
-                ->addContext('url', $composite->getLink())
-                ->byRelated()
-                ->addParameter('pageType', 'article gallery story')
-                ->setCategories()
-                ->get();
-
-            return collect($result['matches'])->map(function (Document $cxArticle) {
-                $postId = intval($cxArticle->{'recs-articleid'});
-                $post = get_post($postId);
-                return $post && $post->post_status === 'publish' && $post->ID === $postId ?
-                    new Composite(new CompositeAdapter($post)) :
-                    null;
-            })->reject(function ($content) {
-                return is_null($content);
-            })->toArray();
-        });
+        //Cache is handled inside cxense plugin
+        $result = WidgetDocumentQuery::make()
+            ->addContext('url', $this->getFullUrl($composite->getLink()))
+            ->byRelated()
+            ->addParameter('pageType', 'article gallery story')
+            ->setCategories()
+            ->get();
+        $content = collect($result['matches'])->map(function (Document $cxArticle) {
+            $postId = intval($cxArticle->{'recs-articleid'});
+            $post = get_post($postId);
+            return $post && $post->post_status === 'publish' && $post->ID === $postId ?
+                new Composite(new CompositeAdapter($post)) :
+                null;
+        })->reject(function ($content) {
+            return is_null($content);
+        })->toArray();
 
         return $this->collection($content, new CompositeTeaserTransformer());
     }
