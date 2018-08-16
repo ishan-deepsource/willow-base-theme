@@ -269,12 +269,17 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         if (isset($this->acfFields['canonical_url']) && $url = $this->acfFields['canonical_url']) {
             return $url;
         }
-        
+
         return $this->getFullUrl(get_permalink($this->getId()));
     }
 
     public function getTemplate(): ?string
     {
         return get_page_template_slug($this->getId());
+    }
+
+    public function getEstimatedReadingTime(): ?string
+    {
+        return get_post_meta($this->getId(), 'reading_time', true) ?? null;
     }
 }
