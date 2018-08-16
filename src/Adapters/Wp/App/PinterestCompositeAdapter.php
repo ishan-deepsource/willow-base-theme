@@ -20,7 +20,7 @@ class PinterestCompositeAdapter implements CompositeContract
 {
     protected $pinterestContent;
     protected $image;
-    
+
     public function __construct($pinterestContent)
     {
         $this->pinterestContent = $pinterestContent;
@@ -28,22 +28,22 @@ class PinterestCompositeAdapter implements CompositeContract
             $this->image = new ContentImage(new SocialFeedImageAdapter($this->pinterestContent->image->original->url));
         }
     }
-    
+
     public function getId(): int
     {
         return 0;
     }
-    
+
     public function getTitle(): string
     {
         return 'Pinterest';
     }
-    
+
     public function getDescription(): string
     {
         return $this->pinterestContent->note ?? '';
     }
-    
+
     public function getLink(): string
     {
         return $this->pinterestContent->url ?? '';
@@ -53,72 +53,72 @@ class PinterestCompositeAdapter implements CompositeContract
     {
         return null;
     }
-    
+
     public function getAuthor(): ?AuthorContract
     {
         return null;
     }
-    
+
     public function getAuthorDescription(): ?string
     {
         return null;
     }
-    
+
     public function getContents(): ?Collection
     {
         return null;
     }
-    
+
     public function getCategory(): ?CategoryContract
     {
         return null;
     }
-    
+
     public function getLeadImage(): ?ContentImageContract
     {
         return $this->image;
     }
-    
+
     public function getFirstInlineImage(): ?ContentImageContract
     {
         return $this->image;
     }
-    
+
     public function getFirstFileImage(): ?ContentImageContract
     {
         return $this->image;
     }
-    
+
     public function getCommercialLabel(): ?string
     {
         return null;
     }
-    
+
     public function getCommercialType(): ?string
     {
         return null;
     }
-    
+
     public function getCommercialLogo(): ?ImageContract
     {
         return null;
     }
-    
+
     public function getLabel(): ?string
     {
         return null;
     }
-    
+
     public function getLabelLink(): ?string
     {
         return null;
     }
-    
+
     public function getPublishedAt(): ?DateTime
     {
         return null;
     }
-    
+
     public function getUpdatedAt(): ?DateTime
     {
         return null;
@@ -155,6 +155,11 @@ class PinterestCompositeAdapter implements CompositeContract
     }
 
     public function getTemplate(): ?string
+    {
+        return null;
+    }
+
+    public function getEstimatedReadingTime(): ?string
     {
         return null;
     }

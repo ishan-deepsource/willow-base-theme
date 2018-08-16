@@ -125,7 +125,7 @@ class Composite implements CompositeContract
     {
         return $this->baseComposite->getTeasers();
     }
-    
+
     public function getLocale(): ?string
     {
         return $this->baseComposite->getLocale();
@@ -144,5 +144,10 @@ class Composite implements CompositeContract
     public function getTemplate(): ?string
     {
         return $this->baseComposite->getTemplate();
+    }
+
+    public function getEstimatedReadingTime(): ?string
+    {
+        return $this->baseComposite->getEstimatedReadingTime();
     }
 }
