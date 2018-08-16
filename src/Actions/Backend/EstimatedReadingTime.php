@@ -7,76 +7,80 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 
 class EstimatedReadingTime
 {
-    protected $total_word_count = 0;
+    protected $totalWordCount = 0;
 
     public function __construct()
     {
         add_filter('acf/save_post', [$this, 'addEstimatedReadingTime'], 20);
     }
 
-    public function addEstimatedReadingTime($post_id) {
-        $words_per_minute = 180 / 60; // 180 words per 60 seconds
-        $image_counter = 0;
-        $reading_time = 0;
+    public function addEstimatedReadingTime($postId) {
+        $wordsPerMinute = 180 / 60; // 180 words per 60 seconds
+        $imageCounter = 0;
+        $readingTime = 0;
 
-        $ca = new CompositeAdapter(get_post($post_id));
+        $compositeAdapter = new CompositeAdapter(get_post($postId));
 
-        foreach ($ca->getContents() as $item) {
+        foreach ($compositeAdapter->getContents() as $item) {
             switch ($item->getType()) {
                 case 'file':
                     break;
                 case 'gallery':
-                    $image_counter = $image_counter + $item->getImages()->count();
+                    $imageCounter = $imageCounter + $item->getImages()->count();
                     break;
                 case 'image':
-                    $image_counter++;
+                    $imageCounter++;
                     break;
                 case 'infobox':
-                    $this->total_word_count = $this->total_word_count + str_word_count($item->getBody());
+                    $this->totalWordCount = $this->totalWordCount + str_word_count($item->getBody());
                     break;
                 case 'inserted_code':
                     break;
                 case 'link':
                     break;
                 case 'text_item':
-                    $this->total_word_count = $this->total_word_count + str_word_count($item->getBody());
+                    $this->totalWordCount = $this->totalWordCount + str_word_count($item->getBody());
                     break;
                 case 'video':
+                    break;
+                default:
                     break;
             }
         }
 
-        switch ($ca->getLocale()) {
+        switch ($compositeAdapter->getLocale()) {
             case 'da':
-                $words_per_minute = 180 / 60;
+                $wordsPerMinute = 180 / 60;
                 break;
             case 'se':
-                $words_per_minute = 180 / 60;
+                $wordsPerMinute = 180 / 60;
                 break;
             case 'nb':
-                $words_per_minute = 180 / 60;
+                $wordsPerMinute = 180 / 60;
                 break;
             case 'fi':
-                $words_per_minute = 150 / 60;
+                $wordsPerMinute = 150 / 60;
                 break;
             case 'nl':
-                $words_per_minute = 180 / 60;
+                $wordsPerMinute = 180 / 60;
                 break;
             default:
+                break;
         }
 
-        $seconds_for_images = $this->addTimeForImages($image_counter);
-        $reading_time = (int) round(($this->total_word_count / $words_per_minute + $seconds_for_images) / 60);
+        $secondsForImages = $this->addTimeForImages($imageCounter);
+        $readingTime = (int) round(($this->totalWordCount / $wordsPerMinute + $secondsForImages) / 60);
 
-        update_post_meta($post_id, 'reading_time', $reading_time ?? null);
+        update_post_meta($postId, 'reading_time', '7' ?? null);
     }
 
-    public function addTimeForImages($amount_of_images) {
+    public function addTimeForImages($amountOfImages)
+    {
         $seconds = 0;
-        $initial_seconds_per_image = 12;
+        $initialSecondsPerImage = 12;
 
-        for($i=0;$i<$amount_of_images;$i++) {
-            $seconds = $seconds + ($initial_seconds_per_image - $i);
+        for($i=0; $i<$amountOfImages; $i++) {
+            $seconds = $seconds + ($initialSecondsPerImage - $i);
         }
         return $seconds;
     }
