@@ -25,7 +25,6 @@ class EstimatedReadingTime
                 case 'file':
                     break;
                 case 'gallery':
-                    var_dump($item->getImages());
                     $imageCounter = $imageCounter + $item->getImages()->count();
                     break;
                 case 'image':
@@ -89,7 +88,7 @@ class EstimatedReadingTime
             if($i<10) {
                 $seconds = $seconds + ($initialSecondsPerImage - $i);
             } else {
-                $seconds = $seconds + 3;
+                $seconds = $seconds + 3; // After 10 images the average time pr images is estimated to 3 sec. (According to research made by Medium).
             }
 
         }
