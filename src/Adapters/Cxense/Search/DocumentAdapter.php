@@ -164,4 +164,9 @@ class DocumentAdapter implements CompositeContract
     {
         return null;
     }
+
+    public function getEstimatedReadingTime(): ?string
+    {
+        return null;
+    }
 }

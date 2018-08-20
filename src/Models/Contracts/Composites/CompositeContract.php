@@ -60,4 +60,6 @@ interface CompositeContract
     public function getPublishedAt(): ?DateTime;
 
     public function getUpdatedAt(): ?DateTime;
+
+    public function getEstimatedReadingTime(): ?string;
 }

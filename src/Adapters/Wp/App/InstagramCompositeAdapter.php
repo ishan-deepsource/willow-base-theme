@@ -20,7 +20,7 @@ class InstagramCompositeAdapter implements CompositeContract
 {
     protected $instagramContent;
     protected $image;
-    
+
     public function __construct($instagramContent)
     {
         $this->instagramContent = $instagramContent;
@@ -28,17 +28,17 @@ class InstagramCompositeAdapter implements CompositeContract
             $this->image = new ContentImage(new SocialFeedImageAdapter($this->instagramContent->media_url));
         }
     }
-    
+
     public function getTitle(): string
     {
         return 'Instagram';
     }
-    
+
     public function getDescription(): string
     {
         return trim(preg_replace('/#[^\s]+/', '', $this->instagramContent->caption ?? ''));
     }
-    
+
     public function getLink(): string
     {
         return $this->instagramContent->permalink ?? '';
@@ -162,5 +162,10 @@ class InstagramCompositeAdapter implements CompositeContract
     public function getVocabularies(): ?Collection
     {
         return collect([]);
+    }
+
+    public function getEstimatedReadingTime(): ?string
+    {
+        return null;
     }
 }
