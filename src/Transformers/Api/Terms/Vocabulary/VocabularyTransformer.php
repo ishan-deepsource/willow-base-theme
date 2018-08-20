@@ -27,7 +27,7 @@ class VocabularyTransformer extends TransformerAbstract
             'name' => $vocabulary->getName(),
             'taxonomy' => $vocabulary->getMachineName(),
             'multi_select' => $vocabulary->getMultiSelect() === '' ? false : true,
-            'terms' => $this->transformTerms($vocabulary->getTerms()),
+            'terms' => $this->transformTerms($vocabulary->getTerms())->toArray(),
         ];
     }
 
