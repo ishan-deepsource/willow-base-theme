@@ -2,11 +2,8 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
-<<<<<<< HEAD
 use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
-=======
 use Bonnier\Willow\Base\Traits\UrlTrait;
->>>>>>> 82417c53e1585d106ad91114249acd6030c343f7
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\WP\Cxense\Services\WidgetDocumentQuery;
