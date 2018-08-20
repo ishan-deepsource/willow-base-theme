@@ -18,16 +18,16 @@ class BrandAdapter implements BrandContract
         $this->brand = $brand;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
-        return $this->brand->id;
+        return $this->brand->id ?? null;
     }
     public function getName(): ?string
     {
-        return $this->brand->name;
+        return $this->brand->name ?? null;
     }
     public function getBrandCode(): ?string
     {
-        return $this->brand->brand_code;
+        return $this->brand->brand_code ?? null;
     }
 }

@@ -22,46 +22,41 @@ class VocabularyAdapter extends AbstractWpAdapter implements VocabularyContract
     protected $vocabulary;
     protected $composite;
 
-    public function __construct(CompositeContract $composite, $vocabulary)
+    public function __construct(CompositeContract $composite,$vocabulary)
     {
         $this->vocabulary = $vocabulary;
         $this->composite = $composite;
     }
 
-    public function getId(): ?int
-    {
-        return $this->vocabulary->id;
-    }
-
     public function getName(): ?string
     {
-        return $this->vocabulary->name;
+        return $this->vocabulary->name ?? null;
     }
 
     public function getMachineName(): ?string
     {
-        return $this->vocabulary->machine_name;
+        return $this->vocabulary->machine_name ?? null;
     }
 
     public function getContentHubId(): ?string
     {
-        return $this->vocabulary->content_hub_id;
+        return $this->vocabulary->content_hub_id ?? null;
     }
 
     public function getMultiSelect(): ?string
     {
-        return $this->vocabulary->multi_select;
+        return $this->vocabulary->multi_select ?? null;
     }
 
     public function getBrand(): ?BrandContract
     {
-        return new Brand(new BrandAdapter($this->vocabulary->brand));
+        return $this->vocabulary ? new Brand(new BrandAdapter($this->vocabulary->brand)) : null;
     }
 
     public function getTerms(): ?Collection{
         //If it's possible to select multiple, we need to run through each item
-        return new Collection(collect(wp_get_post_terms($this->composite->getId(), $this->vocabulary->machine_name))->map(function (\WP_Term $tag) {
+        return $this->vocabulary ? new Collection(collect(wp_get_post_terms($this->composite->getId(), $this->vocabulary->machine_name))->map(function (\WP_Term $tag) {
             return new Tag(new TagAdapter($tag));
-        })->toArray());
+        })->toArray()) : collect([]);
     }
 }

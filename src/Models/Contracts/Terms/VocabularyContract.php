@@ -12,8 +12,6 @@ use Illuminate\Support\Collection;
  */
 interface VocabularyContract
 {
-    public function getId(): ?int;
-
     public function getName(): ?string;
 
     public function getMachineName(): ?string;

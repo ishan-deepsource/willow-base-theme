@@ -24,10 +24,9 @@ class VocabularyTransformer extends TransformerAbstract
     public function transform(VocabularyContract $vocabulary)
     {
         return [
-            'id' => $vocabulary->getId(),
             'name' => $vocabulary->getName(),
             'taxonomy' => $vocabulary->getMachineName(),
-            'multi_select' => $vocabulary->getMultiSelect(),
+            'multi_select' => $vocabulary->getMultiSelect() === '' ? false : true,
             'terms' => $this->transformTerms($vocabulary->getTerms()),
         ];
     }

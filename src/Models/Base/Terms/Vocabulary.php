@@ -20,11 +20,6 @@ class Vocabulary implements VocabularyContract
         $this->Vocabulary = $Vocabulary;
     }
 
-    public function getId(): ?int
-    {
-        return $this->Vocabulary->getId();
-    }
-
     public function getName(): ?string
     {
         return $this->Vocabulary->getName();
