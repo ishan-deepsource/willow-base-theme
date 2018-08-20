@@ -111,8 +111,8 @@ class CategoryTransformer extends TransformerAbstract
                  */
                 foreach ($categories as $i => $cat) {
                     if ($category->getId() == $cat->term_id) {
-                        $prevCat = $categories[$i-1] ?? end($categories);
-                        $nextCat = $categories[$i+1] ?? $categories[0];
+                        $prevCat = $categories[$i-1] ?? collect($categories)->last();
+                        $nextCat = $categories[$i+1] ?? collect($categories)->first();
                         break;
                     }
                 }
