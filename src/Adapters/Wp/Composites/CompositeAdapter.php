@@ -289,8 +289,8 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         return get_page_template_slug($this->getId());
     }
 
-    public function getEstimatedReadingTime(): ?string
+    public function getEstimatedReadingTime(): ?int
     {
-        return get_post_meta($this->getId(), 'reading_time', true) ?? null;
+        return intval(get_post_meta($this->getId(), 'reading_time', true)) ?: null;
     }
 }

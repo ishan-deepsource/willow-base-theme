@@ -61,5 +61,5 @@ interface CompositeContract
 
     public function getUpdatedAt(): ?DateTime;
 
-    public function getEstimatedReadingTime(): ?string;
+    public function getEstimatedReadingTime(): ?int;
 }

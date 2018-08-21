@@ -164,7 +164,7 @@ class InstagramCompositeAdapter implements CompositeContract
         return collect([]);
     }
 
-    public function getEstimatedReadingTime(): ?string
+    public function getEstimatedReadingTime(): ?int
     {
         return null;
     }
