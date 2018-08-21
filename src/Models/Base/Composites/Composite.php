@@ -146,7 +146,7 @@ class Composite implements CompositeContract
         return $this->composite->getTemplate();
     }
 
-    public function getEstimatedReadingTime(): ?string
+    public function getEstimatedReadingTime(): ?int
     {
         return $this->composite->getEstimatedReadingTime();
     }
