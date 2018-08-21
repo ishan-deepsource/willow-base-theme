@@ -116,6 +116,11 @@ class Composite implements CompositeContract
         return $this->composite->getCategory();
     }
 
+    public function getVocabularies(): ?Collection
+    {
+        return $this->composite->getVocabularies();
+    }
+
     public function getCommercial(): ?CommercialContract
     {
         return $this->composite->getCommercial();

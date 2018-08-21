@@ -159,6 +159,11 @@ class InstagramCompositeAdapter implements CompositeContract
         return null;
     }
 
+    public function getVocabularies(): ?Collection
+    {
+        return collect([]);
+    }
+
     public function getEstimatedReadingTime(): ?int
     {
         return null;

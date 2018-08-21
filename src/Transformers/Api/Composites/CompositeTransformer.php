@@ -2,15 +2,14 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
+use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\WP\Cxense\Services\WidgetDocumentQuery;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
-use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagAdapter;
 use Bonnier\Willow\Base\Helpers\Cache;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
-use Bonnier\Willow\Base\Models\Base\Terms\Tag;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\ContentTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\AuthorTransformer;
@@ -39,7 +38,8 @@ class CompositeTransformer extends TransformerAbstract
         'category',
         'related',
         'teasers',
-        'tags'
+        'tags',
+        'vocabularies',
     ];
 
     protected $defaultIncludes = [
@@ -79,6 +79,11 @@ class CompositeTransformer extends TransformerAbstract
     public function includeContents(CompositeContract $composite)
     {
         return $this->collection($composite->getContents(), new ContentTransformer());
+    }
+
+    public function includeVocabularies(CompositeContract $composite)
+    {
+        return $this->collection($composite->getVocabularies(), new VocabularyTransformer());
     }
 
     public function includeCategory(CompositeContract $composite)
