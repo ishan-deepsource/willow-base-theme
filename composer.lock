@@ -356,16 +356,16 @@
         },
         {
             "name": "bonnier/wp-focal-point",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-focal-point.git",
-                "reference": "300ed2bf23ab179288b102c8de818fd303682ba7"
+                "reference": "cb46d9b7b2c071eb0245061782911d9ad67fafe0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-focal-point/zipball/300ed2bf23ab179288b102c8de818fd303682ba7",
-                "reference": "300ed2bf23ab179288b102c8de818fd303682ba7",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-focal-point/zipball/cb46d9b7b2c071eb0245061782911d9ad67fafe0",
+                "reference": "cb46d9b7b2c071eb0245061782911d9ad67fafe0",
                 "shasum": ""
             },
             "require-dev": {
@@ -391,7 +391,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-08-13T12:43:31+00:00"
+            "time": "2018-08-23T11:54:17+00:00"
         },
         {
             "name": "composer/installers",
