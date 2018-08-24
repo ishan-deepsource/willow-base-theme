@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
-            "version": "2.1.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-cxense.git",
-                "reference": "a2247288b163ffc95bcc0522b6a9a04d556e954a"
+                "reference": "519f8a7874314e28c210b2a14b9d545f5462f08e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/a2247288b163ffc95bcc0522b6a9a04d556e954a",
-                "reference": "a2247288b163ffc95bcc0522b6a9a04d556e954a",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/519f8a7874314e28c210b2a14b9d545f5462f08e",
+                "reference": "519f8a7874314e28c210b2a14b9d545f5462f08e",
                 "shasum": ""
             },
             "require": {
@@ -26,7 +26,9 @@
                 "php": ">=7.1"
             },
             "require-dev": {
-                "johnpbloch/wordpress": "^4.9"
+                "johnpbloch/wordpress": "^4.9",
+                "lucatume/wp-browser": "^2.1",
+                "phpunit/phpunit": "7.1.*"
             },
             "type": "wordpress-plugin",
             "autoload": {
@@ -48,7 +50,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-08-15T12:57:14+00:00"
+            "time": "2018-08-17T07:57:14+00:00"
         },
         {
             "name": "benjaminmedia/wp-site-manager",
@@ -356,16 +358,16 @@
         },
         {
             "name": "bonnier/wp-focal-point",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-focal-point.git",
-                "reference": "300ed2bf23ab179288b102c8de818fd303682ba7"
+                "reference": "cb46d9b7b2c071eb0245061782911d9ad67fafe0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-focal-point/zipball/300ed2bf23ab179288b102c8de818fd303682ba7",
-                "reference": "300ed2bf23ab179288b102c8de818fd303682ba7",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-focal-point/zipball/cb46d9b7b2c071eb0245061782911d9ad67fafe0",
+                "reference": "cb46d9b7b2c071eb0245061782911d9ad67fafe0",
                 "shasum": ""
             },
             "require-dev": {
@@ -391,7 +393,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-08-13T12:43:31+00:00"
+            "time": "2018-08-23T11:54:17+00:00"
         },
         {
             "name": "composer/installers",
@@ -763,7 +765,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.6.33",
+            "version": "v5.6.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -807,16 +809,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v5.6.33",
+            "version": "v5.6.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "0561e4e48797fbaeafeec0054b14605b08722a5a"
+                "reference": "4eb12aa00bbf2d5e73c355ad404a9d0679879094"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/0561e4e48797fbaeafeec0054b14605b08722a5a",
-                "reference": "0561e4e48797fbaeafeec0054b14605b08722a5a",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/4eb12aa00bbf2d5e73c355ad404a9d0679879094",
+                "reference": "4eb12aa00bbf2d5e73c355ad404a9d0679879094",
                 "shasum": ""
             },
             "require": {
@@ -861,7 +863,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2018-08-06T19:58:11+00:00"
+            "time": "2018-08-15T21:02:31+00:00"
         },
         {
             "name": "junaidbhura/advanced-custom-fields-pro",
@@ -1579,15 +1581,15 @@
         },
         {
             "name": "wpackagist-plugin/user-role-editor",
-            "version": "4.44",
+            "version": "4.45",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/user-role-editor/",
-                "reference": "tags/4.44"
+                "reference": "tags/4.45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/user-role-editor.4.44.zip",
+                "url": "https://downloads.wordpress.org/plugin/user-role-editor.4.45.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -1974,16 +1976,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "1.7.1",
+            "version": "1.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "5d9311d4555787c8a57fea15f82471499aedf712"
+                "reference": "576aab9b5abb2ed11a1c52353a759363216a4ad2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/5d9311d4555787c8a57fea15f82471499aedf712",
-                "reference": "5d9311d4555787c8a57fea15f82471499aedf712",
+                "url": "https://api.github.com/repos/composer/composer/zipball/576aab9b5abb2ed11a1c52353a759363216a4ad2",
+                "reference": "576aab9b5abb2ed11a1c52353a759363216a4ad2",
                 "shasum": ""
             },
             "require": {
@@ -2050,7 +2052,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2018-08-07T07:39:23+00:00"
+            "time": "2018-08-16T14:57:12+00:00"
         },
         {
             "name": "composer/semver",
@@ -2177,16 +2179,16 @@
         },
         {
             "name": "composer/xdebug-handler",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/xdebug-handler.git",
-                "reference": "e1809da56ce1bd1b547a752936817341ac244d8e"
+                "reference": "e37cbd80da64afe314c72de8d2d2fec0e40d9373"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/e1809da56ce1bd1b547a752936817341ac244d8e",
-                "reference": "e1809da56ce1bd1b547a752936817341ac244d8e",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/e37cbd80da64afe314c72de8d2d2fec0e40d9373",
+                "reference": "e37cbd80da64afe314c72de8d2d2fec0e40d9373",
                 "shasum": ""
             },
             "require": {
@@ -2217,7 +2219,7 @@
                 "Xdebug",
                 "performance"
             ],
-            "time": "2018-08-16T10:54:23+00:00"
+            "time": "2018-08-23T12:00:19+00:00"
         },
         {
             "name": "dg/mysql-dump",
