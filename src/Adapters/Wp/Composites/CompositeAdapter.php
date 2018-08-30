@@ -11,6 +11,8 @@ use Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\CategoryAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Vocabulary\VocabularyAdapter;
 use Bonnier\Willow\Base\Factories\CompositeContentFactory;
+use Bonnier\Willow\Base\Models\Base\Composites\Composite;
+use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\AssociatedContent;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentAudio;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentFile;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentImage;
@@ -69,6 +71,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         'text_item'     => TextItem::class,
         'video'         => Video::class,
         'audio'         => ContentAudio::class,
+        'associated_composite' => AssociatedContent::class,
     ];
 
     protected $acfFields;
