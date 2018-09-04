@@ -12,10 +12,10 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
  */
 class AssociatedContentAdapter extends CompositeAdapter implements ContentContract
 {
-    protected $acfFields;
+    protected $acfArray;
 
     public function __construct($acfArray) {
-        $this->acfFields = $acfArray;
+        $this->acfArray = $acfArray;
         parent::__construct($acfArray['composite'][0]);
     }
 
@@ -32,5 +32,15 @@ class AssociatedContentAdapter extends CompositeAdapter implements ContentContra
     public function getStickToNext(): bool
     {
         return $this->acfArray['stick_to_next'] ?? false;
+    }
+
+    public function getKind(): ?string
+    {
+        return $this->getKind();
+    }
+
+    public function getAssociatedComposite(): ?\WP_Post
+    {
+        return $this->acfArray['composite'][0] ?? null;
     }
 }

@@ -4,14 +4,12 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites;
 
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentImageAdapter;
-use Bonnier\Willow\Base\Adapters\Wp\Root\AudioAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\CommercialAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\CategoryAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Vocabulary\VocabularyAdapter;
 use Bonnier\Willow\Base\Factories\CompositeContentFactory;
-use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\AssociatedContent;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentAudio;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentFile;
@@ -22,7 +20,6 @@ use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\InsertedCode;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Link;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\TextItem;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Video;
-use \Bonnier\Willow\Base\Models\Base\Root\Audio;
 use Bonnier\Willow\Base\Models\Base\Root\Author;
 use Bonnier\Willow\Base\Models\Base\Root\Commercial;
 use Bonnier\Willow\Base\Models\Base\Root\Teaser;
@@ -37,9 +34,10 @@ use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
+use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Traits\DateTimeZoneTrait;
 use Bonnier\Willow\Base\Traits\UrlTrait;
-use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTransformer;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpTaxonomy;
 use DateTime;
@@ -82,6 +80,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         if ($this->wpModel) {
             $this->acfFields = get_fields($this->wpModel->ID);
         }
+        //ddHtml(get_field('composite_content', 14377));
         $this->compositeContents = $this->acfFields['composite_content'] ?? [];
     }
 
@@ -96,6 +95,16 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     public function getId(): int
     {
         return $this->wpModel->ID ?? 0;
+    }
+
+    public function getKind(): ?string
+    {
+        return $this->acfFields['kind'] ?? 'Article';
+    }
+
+    public function getParent(): ?int
+    {
+        return $this->wpModel->post_parent ?? null;
     }
 
     public function getTitle(): ?string
@@ -295,5 +304,25 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     public function getEstimatedReadingTime(): ?int
     {
         return intval(get_post_meta($this->getId(), 'reading_time', true)) ?: null;
+    }
+
+    public function getAssociatedComposites(): ?Collection{
+        $associatedComposites = get_field('composite_content', $this->getParent());
+        if(!$associatedComposites){
+            return null;
+        }
+
+        $associatedCompositesFromParent = collect($associatedComposites)->map(function ($acfContentArray) {
+            $class = collect($this->contentModelsMapping)->get($acfContentArray['acf_fc_layout']);
+            return $this->getContentFactory($class)->getModel($acfContentArray);
+        })->reject(function ($content) {
+            return is_null($content);
+        });
+
+        return collect($associatedCompositesFromParent)->map(function ($content){
+            if($content->getType() === 'associated_composite'){
+                return new Composite(new CompositeAdapter($content->getAssociatedComposite()));
+            }
+        });
     }
 }

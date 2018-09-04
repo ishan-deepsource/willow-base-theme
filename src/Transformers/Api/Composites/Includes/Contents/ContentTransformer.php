@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents;
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\AssociatedContentTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentAudioTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentFileTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\GalleryTransformer;
@@ -28,7 +29,7 @@ class ContentTransformer extends TransformerAbstract
         'inserted_code'        => InsertedCodeTransformer::class,
         'video'                => VideoTransformer::class,
         'infobox'              => InfoBoxTransformer::class,
-        'associated_composite' => CompositeTransformer::class,
+        'associated_composite' => AssociatedContentTransformer::class,
         'audio'                => ContentAudioTransformer::class
     ];
 
