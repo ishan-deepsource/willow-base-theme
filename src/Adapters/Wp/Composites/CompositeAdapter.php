@@ -80,7 +80,6 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         if ($this->wpModel) {
             $this->acfFields = get_fields($this->wpModel->ID);
         }
-        //ddHtml(get_field('composite_content', 14377));
         $this->compositeContents = $this->acfFields['composite_content'] ?? [];
     }
 
