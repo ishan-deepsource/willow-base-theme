@@ -101,8 +101,8 @@ class DocumentAdapter implements CompositeContract
     public function getCommercial(): ?CommercialContract
     {
         return !empty($this->document->getField('bod-commercial-label')) ?
-                new Commercial(new CommercialAdapter($this->document)) :
-                null;
+            new Commercial(new CommercialAdapter($this->document)) :
+            null;
     }
 
     public function getLabel(): ?string
@@ -152,11 +152,13 @@ class DocumentAdapter implements CompositeContract
 
     public function getVocabularies(): Collection
     {
+        // todo find the right field
         return collect([]);
     }
 
     public function getCanonicalUrl(): ?string
     {
+        // todo find the right field
         return null;
     }
 
@@ -167,6 +169,25 @@ class DocumentAdapter implements CompositeContract
 
     public function getEstimatedReadingTime(): ?int
     {
+        // todo find the right field
         return null;
+    }
+
+    public function getKind(): ?string
+    {
+        // todo find the right field
+        return null;
+    }
+
+    public function getParent(): ?int
+    {
+        // todo find the right field
+        return null;
+    }
+
+    public function getAssociatedComposites(): ?Collection
+    {
+        // todo find the right field
+        return collect([]);
     }
 }

@@ -165,4 +165,9 @@ class Composite implements CompositeContract
     {
         return $this->composite->getAssociatedComposites();
     }
+
+    public function getParent(): ?int
+    {
+        return $this->composite->getParent();
+    }
 }

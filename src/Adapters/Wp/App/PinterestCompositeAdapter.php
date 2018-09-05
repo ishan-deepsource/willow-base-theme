@@ -168,4 +168,19 @@ class PinterestCompositeAdapter implements CompositeContract
     {
         return null;
     }
+
+    public function getKind(): ?string
+    {
+        return null;
+    }
+
+    public function getParent(): ?int
+    {
+        return null;
+    }
+
+    public function getAssociatedComposites(): ?Collection
+    {
+        return collect([]);
+    }
 }
