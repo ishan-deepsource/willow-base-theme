@@ -166,7 +166,7 @@ class PinterestCompositeAdapter implements CompositeContract
 
     public function getEstimatedReadingTime(): ?int
     {
-        return null;
+        return 0;
     }
 
     public function getKind(): ?string
