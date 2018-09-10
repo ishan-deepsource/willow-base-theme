@@ -177,6 +177,10 @@ class Cleanup extends WP_CLI_Command
         }
 
         if (preg_match('#^(.*)/.*$#', $article['from'], $matches)) {
+            // Get everything before the last dash.
+            // Given our URL structure, the parent category should be
+            // on the URL, that excludes the slug of the post, which should
+            // be after the last dash.
             return $matches[1];
         }
 
