@@ -18,7 +18,6 @@ class PostSlugChange
     }
 
     public function createRedirectOnSlugChange($postId, $oldLink, $newLink) {
-        //dd($oldLink, $newLink);
         BonnierRedirect::createRedirect(
             parse_url($oldLink, PHP_URL_PATH),
             parse_url($newLink, PHP_URL_PATH),
