@@ -112,7 +112,7 @@ class Cleanup extends WP_CLI_Command
             return [
                 'from' => $fromUrl,
                 'to' => $toUrl,
-                'slug' => $hostLanguage->get($host),
+                'slug' => $hostLanguage->get($host, 'da'),
                 'post' => with(new RouteController)->findContenthubComposite($path, 'all'),
             ];
         });
@@ -123,7 +123,7 @@ class Cleanup extends WP_CLI_Command
         $articles->each(function (array $article) {
             WP_CLI::line(sprintf('Deleting "%s"...', $article['from']));
             if ($post = $article['post']) {
-                wp_delete_post($post->ID);
+                wp_delete_post($post->ID, $forceDelete = true);
                 WP_CLI::line(sprintf('Deleted post with id %s', $post->ID));
             } else {
                 WP_CLI::line('No Composite to delete');
