@@ -36,7 +36,7 @@ class AssociatedContentAdapter extends CompositeAdapter implements ContentContra
 
     public function getKind(): ?string
     {
-        return $this->getKind();
+        return '';
     }
 
     public function getAssociatedComposite(): ?\WP_Post
