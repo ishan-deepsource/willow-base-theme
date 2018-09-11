@@ -56,7 +56,8 @@
         "bonnier/wp-bonnier-cache": "^2.0",
         "bonnier/wp-bonnier-redirect": "^2.0",
         "bonnier/wp-bonnier-some": "^2.0",
-        "bonnier/wp-focal-point": "^1.1"
+        "bonnier/wp-focal-point": "^1.1",
+        "league/csv": "^9.1"
     },
     "autoload": {
         "psr-4": {

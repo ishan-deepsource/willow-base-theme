@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Actions;
 
+use Bonnier\Willow\Base\Actions\Backend\PostSlugChange;
 use Bonnier\Willow\Base\Actions\Backend\PreviewUrl;
 use Bonnier\Willow\Base\Actions\Backend\EstimatedReadingTime;
 use Bonnier\Willow\Base\Actions\Universal\ImgixSettings;
@@ -33,6 +34,7 @@ class ActionsBootstrap
     private function loadBackendActions()
     {
         if (is_admin()) {
+            new PostSlugChange();
             new PreviewUrl();
             new EstimatedReadingTime();
         }
