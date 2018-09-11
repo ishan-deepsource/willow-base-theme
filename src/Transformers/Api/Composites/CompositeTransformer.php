@@ -40,6 +40,7 @@ class CompositeTransformer extends TransformerAbstract
         'teasers',
         'tags',
         'vocabularies',
+        'associated_content'
     ];
 
     protected $defaultIncludes = [
@@ -177,5 +178,12 @@ class CompositeTransformer extends TransformerAbstract
         })->toArray();
 
         return $this->collection($content, new CompositeTeaserTransformer());
+    }
+
+    public function includeAssociatedContent(CompositeContract $composite){
+        if(!$composite->getParent()){
+            return null;
+        }
+        return $this->collection($composite->getAssociatedComposites(), new CompositeTeaserTransformer());
     }
 }

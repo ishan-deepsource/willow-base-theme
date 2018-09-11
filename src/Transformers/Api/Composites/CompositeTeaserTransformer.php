@@ -3,10 +3,8 @@
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
-use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
-use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentImageTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\CommercialTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\ImageTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
@@ -25,6 +23,7 @@ class CompositeTeaserTransformer extends TransformerAbstract
      */
     protected $availableIncludes = [
         'vocabularies',
+        'associated'
     ];
 
     /**
@@ -42,6 +41,8 @@ class CompositeTeaserTransformer extends TransformerAbstract
         return [
             'id'            => $composite->getId(),
             'title'         => $this->getTitle($composite),
+            'kind'          => $composite->getKind(),
+            'status'        => $composite->getStatus(),
             'image'         => $this->getImage($composite),
             'description'   => $this->getDescription($composite),
             'link'          => $this->getPath($composite->getLink()),
@@ -87,5 +88,12 @@ class CompositeTeaserTransformer extends TransformerAbstract
     public function includeVocabularies(CompositeContract $composite)
     {
         return $this->collection($composite->getVocabularies(), new VocabularyTransformer());
+    }
+
+    public function includeAssociated(CompositeContract $composite){
+        if(!$composite->getKind() || ($composite->getKind() !== 'Story')){
+            return [];
+        }
+        return $this->collection($composite->getAssociatedComposites(), new CompositeTeaserTransformer());
     }
 }

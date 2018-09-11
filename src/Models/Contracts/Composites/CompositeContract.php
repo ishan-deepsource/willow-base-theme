@@ -15,9 +15,13 @@ interface CompositeContract
 {
     public function getId(): int;
 
+    public function getKind(): ?string;
+
     public function getTitle(): ?string;
 
     public function getDescription(): ?string;
+
+    public function getParent(): ?int;
 
     public function getStatus(): ?string;
 
@@ -62,4 +66,6 @@ interface CompositeContract
     public function getUpdatedAt(): ?DateTime;
 
     public function getEstimatedReadingTime(): ?int;
+
+    public function getAssociatedComposites(): ?Collection;
 }
