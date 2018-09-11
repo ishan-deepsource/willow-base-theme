@@ -305,7 +305,8 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         return intval(get_post_meta($this->getId(), 'reading_time', true)) ?: 0;
     }
 
-    public function getAssociatedComposites(): ?Collection{
+    public function getAssociatedComposites(): ?Collection
+    {
         $associatedComposites = get_field('composite_content', $this->getParent());
         if(!$associatedComposites){
             return null;
