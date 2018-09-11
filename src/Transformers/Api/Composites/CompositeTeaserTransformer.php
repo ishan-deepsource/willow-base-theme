@@ -2,16 +2,12 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
-use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
-use Bonnier\Willow\Base\Models\Base\Composites\Composite;
-use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\AssociatedContent;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\Base\Transformers\Api\Root\CommercialTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\ImageTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
-use function DeliciousBrains\WP_Offload_S3\Aws3\Aws\map;
 use League\Fractal\TransformerAbstract;
 
 class CompositeTeaserTransformer extends TransformerAbstract
