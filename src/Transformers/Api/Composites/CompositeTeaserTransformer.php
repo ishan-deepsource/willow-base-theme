@@ -91,7 +91,7 @@ class CompositeTeaserTransformer extends TransformerAbstract
     }
 
     public function includeAssociated(CompositeContract $composite){
-        if($composite->getKind() !== 'Story'){
+        if(!$composite->getKind() || ($composite->getKind() !== 'Story')){
             return [];
         }
         return $this->collection($composite->getAssociatedComposites(), new CompositeTeaserTransformer());
