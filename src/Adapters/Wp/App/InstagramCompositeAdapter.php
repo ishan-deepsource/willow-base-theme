@@ -168,4 +168,19 @@ class InstagramCompositeAdapter implements CompositeContract
     {
         return 0;
     }
+
+    public function getKind(): ?string
+    {
+        return null;
+    }
+
+    public function getParent(): ?int
+    {
+        return null;
+    }
+
+    public function getAssociatedComposites(): ?Collection
+    {
+        return collect([]);
+    }
 }

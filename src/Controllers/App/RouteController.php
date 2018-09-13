@@ -105,7 +105,7 @@ class RouteController extends WP_REST_Controller
             $posts =  get_posts([
                 'post_type' => $queryParams['post_type'],
                 'include' => $queryParams['p'], // Wordpress way of saying give me the content that match id
-                'post_status' => 'draft'
+                'post_status' => self::STATUS_DRAFT,
             ]);
             if (count($posts)) {
                 return $posts[0];
@@ -195,7 +195,7 @@ class RouteController extends WP_REST_Controller
         return $page;
     }
 
-    private function findContenthubComposite(string $path, string $status = self::STATUS_PUBLISHED): ?WP_Post
+    public function findContenthubComposite(string $path, string $status = self::STATUS_PUBLISHED): ?WP_Post
     {
         $parts = preg_split('#/#', $path, -1, PREG_SPLIT_NO_EMPTY);
 
@@ -214,7 +214,7 @@ class RouteController extends WP_REST_Controller
                 }
             } elseif ($composite = get_page_by_path($part, OBJECT, WpComposite::POST_TYPE)) {
                 $cat = get_field('category', $composite->ID);
-                if ($composite->post_status !== $status) {
+                if ($composite->post_status !== $status && $status !== 'all') {
                     return null;
                 } elseif ($content && !$content instanceof WP_Term) {
                     // The parent element of the slug is not a WP_Term

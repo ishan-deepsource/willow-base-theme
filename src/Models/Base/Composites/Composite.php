@@ -36,6 +36,11 @@ class Composite implements CompositeContract
         return $this->composite->getId();
     }
 
+    public function getKind(): string
+    {
+        return $this->composite->getKind();
+    }
+
     public function getTitle(): ?string
     {
         return $this->composite->getTitle();
@@ -154,5 +159,15 @@ class Composite implements CompositeContract
     public function getEstimatedReadingTime(): ?int
     {
         return $this->composite->getEstimatedReadingTime();
+    }
+
+    public function getAssociatedComposites(): ?Collection
+    {
+        return $this->composite->getAssociatedComposites();
+    }
+
+    public function getParent(): ?int
+    {
+        return $this->composite->getParent();
     }
 }
