@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Cxense\Search;
 
+use Bonnier\Willow\Base\Models\Contracts\Root\HyperlinkContract;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
@@ -92,5 +93,10 @@ class ContentImageAdapter implements ContentImageContract
     public function isLead(): bool
     {
         return false;
+    }
+
+    public function getLink(): ?HyperlinkContract
+    {
+        return null;
     }
 }

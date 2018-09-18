@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\App\Partials;
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\HyperlinkContract;
 
 class SocialFeedImageAdapter implements ContentImageContract
 {
@@ -85,5 +86,10 @@ class SocialFeedImageAdapter implements ContentImageContract
     public function getAspectRatio(): float
     {
         return 0.0;
+    }
+
+    public function getLink(): ?HyperlinkContract
+    {
+        return null;
     }
 }

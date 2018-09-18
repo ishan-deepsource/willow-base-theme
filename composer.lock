@@ -100,16 +100,16 @@
         },
         {
             "name": "bonnier/contenthub-editor",
-            "version": "3.0.9",
+            "version": "3.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-contenthub-editor.git",
-                "reference": "8e2ca9f0f338cd3498208ac0e28e7662b9df4344"
+                "reference": "8270fafa5c43ff7306fa59b6275bea1862243c95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/8e2ca9f0f338cd3498208ac0e28e7662b9df4344",
-                "reference": "8e2ca9f0f338cd3498208ac0e28e7662b9df4344",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/8270fafa5c43ff7306fa59b6275bea1862243c95",
+                "reference": "8270fafa5c43ff7306fa59b6275bea1862243c95",
                 "shasum": ""
             },
             "require": {
@@ -152,7 +152,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-09-05T12:19:27+00:00"
+            "time": "2018-09-18T11:42:46+00:00"
         },
         {
             "name": "bonnier/php-video-helper",
@@ -326,16 +326,16 @@
         },
         {
             "name": "bonnier/wp-bonnier-some",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-bonnier-socialmedia.git",
-                "reference": "6e8d57a679eebe8fc40837763d0c9eafda32bd39"
+                "reference": "d0122bdd0fcfd88429fcf09d55462b54db962657"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-socialmedia/zipball/6e8d57a679eebe8fc40837763d0c9eafda32bd39",
-                "reference": "6e8d57a679eebe8fc40837763d0c9eafda32bd39",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-socialmedia/zipball/d0122bdd0fcfd88429fcf09d55462b54db962657",
+                "reference": "d0122bdd0fcfd88429fcf09d55462b54db962657",
                 "shasum": ""
             },
             "require": {
@@ -354,7 +354,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Plugin for integrating social media into the application.",
-            "time": "2018-08-13T13:20:40+00:00"
+            "time": "2018-09-18T12:25:26+00:00"
         },
         {
             "name": "bonnier/wp-focal-point",

@@ -2,6 +2,8 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
+use Bonnier\Willow\Base\Models\Base\Root\Hyperlink;
+use Bonnier\Willow\Base\Models\Contracts\Root\HyperlinkContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 
 /**
@@ -25,7 +27,7 @@ class ImageAdapter extends FileAdapter implements ImageContract
     {
         return get_post_meta($this->getId(), 'attachment_copyright', true) ?: null;
     }
-    
+
     public function getFocalPoint(): array
     {
         if (($focalPoint = get_post_meta($this->getId(), '_focal_point', true) ?: null) &&
@@ -36,13 +38,13 @@ class ImageAdapter extends FileAdapter implements ImageContract
                 'y' => $coords[1]
             ];
         }
-        
+
         return [
             'x' => 0.5,
             'y' => 0.5
         ];
     }
-    
+
     public function getAspectRatio(): float
     {
         if (($metadata = wp_get_attachment_metadata($this->getId())) &&
@@ -52,5 +54,10 @@ class ImageAdapter extends FileAdapter implements ImageContract
             return $metadata['width'] / $metadata['height'];
         }
         return 0.0;
+    }
+
+    public function getLink(): ?HyperlinkContract
+    {
+        return new Hyperlink(new HyperlinkAdapter($this));
     }
 }

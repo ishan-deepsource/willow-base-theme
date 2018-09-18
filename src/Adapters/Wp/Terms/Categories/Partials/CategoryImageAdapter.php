@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\Partials;
 
+use Bonnier\Willow\Base\Models\Contracts\Root\HyperlinkContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 
@@ -58,14 +59,19 @@ class CategoryImageAdapter implements ImageContract
     {
         return null;
     }
-    
+
     public function getFocalPoint(): array
     {
         return ['x' => 0.5, 'y' => 0.5];
     }
-    
+
     public function getAspectRatio(): float
     {
         return 0.0;
+    }
+
+    public function getLink(): ?HyperlinkContract
+    {
+        return null;
     }
 }
