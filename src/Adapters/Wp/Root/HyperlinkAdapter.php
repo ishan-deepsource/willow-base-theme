@@ -25,11 +25,11 @@ class HyperlinkAdapter implements HyperlinkContract
 
     public function getRelationship(): ?string
     {
-        return 'nofollow';
+        return null;
     }
 
     public function getTarget(): ?string
     {
-        return '_blank';
+        return null;
     }
 }
