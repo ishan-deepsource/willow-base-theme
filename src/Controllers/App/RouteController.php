@@ -242,8 +242,12 @@ class RouteController extends WP_REST_Controller
         if (!class_exists(BonnierRedirect::class)) {
             return null;
         }
-        if ($bonnierRedirect =  BonnierRedirect::findRedirectFor($path)) {
-            return $bonnierRedirect;
+        try {
+            if ($bonnierRedirect = BonnierRedirect::recursiveRedirectFinder($path)) {
+                return $bonnierRedirect;
+            }
+        } catch (\Exception $exception) {
+            // Empty because we just need to go to the next line.
         }
         if (env('RESOLVE_WA_REDIRECTS') && env('WP_ENV') !== 'testing' && $redirect = $this->findWaRedirect($path)) {
             BonnierRedirect::createRedirect(
@@ -255,6 +259,8 @@ class RouteController extends WP_REST_Controller
             );
             return $redirect;
         }
+
+        return null;
     }
 
     private function findWaRedirect($path)
