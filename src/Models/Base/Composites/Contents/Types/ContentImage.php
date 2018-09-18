@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Models\Base\Composites\Contents\Types;
 
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\AbstractContent;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\HyperlinkContract;
 
 /**
  * Class Image
@@ -68,19 +69,24 @@ class ContentImage extends AbstractContent implements ContentImageContract
     {
         return $this->model->getLanguage();
     }
-    
+
     public function getStickToNext(): bool
     {
         return $this->model->getStickToNext();
     }
-    
+
     public function getFocalPoint(): array
     {
         return $this->model->getFocalPoint();
     }
-    
+
     public function getAspectRatio(): float
     {
         return $this->model->getAspectRatio();
+    }
+
+    public function getLink(): ?HyperlinkContract
+    {
+        return $this->model->getLink();
     }
 }

@@ -23,6 +23,16 @@ class ImageTransformer extends TransformerAbstract
             'language' => $image->getLanguage(),
             'focalpoint' => $image->getFocalPoint(),
             'aspectratio' => $image->getAspectRatio(),
+            'link' => $this->transformLink($image),
         ];
+    }
+
+    private function transformLink(ImageContract $image)
+    {
+        if ($hyperlink = $image->getLink()) {
+            return with(new HyperlinkTransformer)->transform($hyperlink);
+        }
+
+        return null;
     }
 }
