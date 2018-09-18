@@ -14,7 +14,15 @@ class ContentAudioTransformer extends TransformerAbstract
         return [
             'title' => $audio->getAudioTitle(),
             'file' => $audio->isLocked() ? null : with(new AudioTransformer())->transform($audio),
-            'image' => with(new ImageTransformer())->transform($audio->getImage())
+            'image' => $this->getImage($audio),
         ];
+    }
+
+    private function getImage(ContentAudioContract $audio)
+    {
+        if($image = $audio->getImage()) {
+            return with(new ImageTransformer())->transform($image);
+        }
+        return null;
     }
 }
