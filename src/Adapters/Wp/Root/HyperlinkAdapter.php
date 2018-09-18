@@ -8,19 +8,19 @@ class HyperlinkAdapter implements HyperlinkContract
 {
     protected $image;
 
-    public function __construct(\WP_Post $image)
+    public function __construct(ImageAdapter $image)
     {
         $this->image = $image;
     }
 
     public function getTitle(): ?string
     {
-        return get_post_meta($this->image->ID, '_wp_attachment_image_alt', true) ?: null;
+        return $this->image->getTitle();
     }
 
     public function getUrl(): ?string
     {
-        return wp_get_attachment_image_url($this->image->ID, 'original') ?: null;
+        return $this->image->getUrl();
     }
 
     public function getRelationship(): ?string
