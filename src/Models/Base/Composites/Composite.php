@@ -171,8 +171,8 @@ class Composite implements CompositeContract
         return $this->composite->getParent();
     }
 
-    public function getEstimatedListeningingTime(): ?int
+    public function getEstimatedListeningTime(): ?int
     {
-        return $this->composite->getEstimatedListeningingTime();
+        return $this->composite->getEstimatedListeningTime();
     }
 }
