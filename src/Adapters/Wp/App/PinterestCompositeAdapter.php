@@ -183,4 +183,9 @@ class PinterestCompositeAdapter implements CompositeContract
     {
         return collect([]);
     }
+
+    public function getEstimatedListeningTime(): ?int
+    {
+        return 0;
+    }
 }
