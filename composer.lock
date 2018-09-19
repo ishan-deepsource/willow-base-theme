@@ -246,16 +246,16 @@
         },
         {
             "name": "bonnier/wp-bonnier-cache",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/WP-Bonnier-Cache.git",
-                "reference": "bc791802b1b9364712357267e4e505b4ee4bf158"
+                "reference": "bc356ca52299cf2bba87d55fb92b2405dd81b7da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/WP-Bonnier-Cache/zipball/bc791802b1b9364712357267e4e505b4ee4bf158",
-                "reference": "bc791802b1b9364712357267e4e505b4ee4bf158",
+                "url": "https://api.github.com/repos/BenjaminMedia/WP-Bonnier-Cache/zipball/bc356ca52299cf2bba87d55fb92b2405dd81b7da",
+                "reference": "bc356ca52299cf2bba87d55fb92b2405dd81b7da",
                 "shasum": ""
             },
             "require": {
@@ -280,7 +280,7 @@
                 }
             ],
             "description": "Integrates Bonnier Caching into WordPress",
-            "time": "2018-08-13T13:42:30+00:00"
+            "time": "2018-09-19T11:07:39+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-redirect",
