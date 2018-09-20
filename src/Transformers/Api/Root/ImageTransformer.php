@@ -29,7 +29,7 @@ class ImageTransformer extends TransformerAbstract
 
     private function transformLink(ImageContract $image)
     {
-        if ($hyperlink = $image->getLink()) {
+        if (($hyperlink = $image->getLink()) && !empty($hyperlink->getUrl())) {
             return with(new HyperlinkTransformer)->transform($hyperlink);
         }
 
