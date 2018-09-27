@@ -14,8 +14,6 @@ class EstimatedListeningTIme
 
     public function addEstimatedListeningTime($postId)
     {
-        $duration = 0;
-
         $compositeAdapter = new CompositeAdapter(get_post($postId));
 
         $duration = $compositeAdapter->getContents()->reduce(function ($count, $item) {
