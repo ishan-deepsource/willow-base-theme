@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7ad2795411a6346505deff9e755dc67",
+    "content-hash": "23f449658cfe86cf4088b0349803fb23",
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
@@ -246,16 +246,16 @@
         },
         {
             "name": "bonnier/wp-bonnier-cache",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/WP-Bonnier-Cache.git",
-                "reference": "bc791802b1b9364712357267e4e505b4ee4bf158"
+                "reference": "bc356ca52299cf2bba87d55fb92b2405dd81b7da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/WP-Bonnier-Cache/zipball/bc791802b1b9364712357267e4e505b4ee4bf158",
-                "reference": "bc791802b1b9364712357267e4e505b4ee4bf158",
+                "url": "https://api.github.com/repos/BenjaminMedia/WP-Bonnier-Cache/zipball/bc356ca52299cf2bba87d55fb92b2405dd81b7da",
+                "reference": "bc356ca52299cf2bba87d55fb92b2405dd81b7da",
                 "shasum": ""
             },
             "require": {
@@ -280,7 +280,7 @@
                 }
             ],
             "description": "Integrates Bonnier Caching into WordPress",
-            "time": "2018-08-13T13:42:30+00:00"
+            "time": "2018-09-19T11:07:39+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-redirect",
@@ -1598,6 +1598,26 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/user-role-editor/"
+        },
+        {
+            "name": "wpackagist-plugin/wp-rest-filter",
+            "version": "1.2.5",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/wp-rest-filter/",
+                "reference": "tags/1.2.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/wp-rest-filter.1.2.5.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/wp-rest-filter/"
         }
     ],
     "packages-dev": [
