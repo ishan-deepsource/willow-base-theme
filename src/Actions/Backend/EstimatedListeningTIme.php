@@ -18,11 +18,12 @@ class EstimatedListeningTIme
 
         $compositeAdapter = new CompositeAdapter(get_post($postId));
 
-        foreach ($compositeAdapter->getContents() as $item) {
-            if ($item->getType() == 'audio') {
-                $duration = $duration + wp_get_attachment_metadata($item->getId())['length'];
+        $duration = $compositeAdapter->getContents()->reduce(function ($count, $item) {
+            if ($item->getType() === 'audio') {
+                return $count + wp_get_attachment_metadata($item->getId())['length'];
             }
-        }
+            return $count;
+        });
 
         $listeningTime = $this->formatEstimatedListeningTime($duration);
 
@@ -34,8 +35,6 @@ class EstimatedListeningTIme
     }
 
     protected function formatEstimatedListeningTime($duration) {
-
         return ceil($duration / 60); // Format as minutes and rounding up.
-//        return sprintf("%d:%02d", ($duration /60), $duration %60 ); // Optional format as time string.
     }
 }
