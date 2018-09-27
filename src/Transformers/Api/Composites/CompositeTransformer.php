@@ -60,20 +60,21 @@ class CompositeTransformer extends TransformerAbstract
     public function transform(CompositeContract $composite)
     {
         return [
-            'id'                      => $composite->getId(),
-            'title'                   => $composite->getTitle(),
-            'description'             => $composite->getDescription(),
-            'status'                  => $composite->getStatus(),
-            'locale'                  => $composite->getLocale(),
-            'commercial'              => $this->getCommercial($composite),
-            'author'                  => $this->getAuthor($composite),
-            'author_description'      => $composite->getAuthorDescription() ?: null,
-            'lead_image'              => $this->getLeadImage($composite),
-            'published_at'            => $composite->getPublishedAt(),
-            'updated_at'              => $composite->getUpdatedAt(),
-            'canonical_url'           => $composite->getCanonicalUrl(),
-            'template'                => $composite->getTemplate(),
-            'estimated_reading_time'  => $composite->getEstimatedReadingTime(),
+            'id'                        => $composite->getId(),
+            'title'                     => $composite->getTitle(),
+            'description'               => $composite->getDescription(),
+            'status'                    => $composite->getStatus(),
+            'locale'                    => $composite->getLocale(),
+            'commercial'                => $this->getCommercial($composite),
+            'author'                    => $this->getAuthor($composite),
+            'author_description'        => $composite->getAuthorDescription() ?: null,
+            'lead_image'                => $this->getLeadImage($composite),
+            'published_at'              => $composite->getPublishedAt(),
+            'updated_at'                => $composite->getUpdatedAt(),
+            'canonical_url'             => $composite->getCanonicalUrl(),
+            'template'                  => $composite->getTemplate(),
+            'estimated_reading_time'    => $composite->getEstimatedReadingTime(),
+            'estimated_listening_time'  => $composite->getEstimatedListeningTime(),
         ];
     }
 

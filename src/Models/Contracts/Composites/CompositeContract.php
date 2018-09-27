@@ -68,4 +68,6 @@ interface CompositeContract
     public function getEstimatedReadingTime(): ?int;
 
     public function getAssociatedComposites(): ?Collection;
+
+    public function getEstimatedListeningTime(): ?int;
 }

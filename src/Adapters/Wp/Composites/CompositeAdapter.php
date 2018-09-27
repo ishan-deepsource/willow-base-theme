@@ -325,4 +325,9 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
             }
         });
     }
+
+    public function getEstimatedListeningTime(): ?int
+    {
+        return intval(get_post_meta($this->getId(), 'lisening_time', true)) ?: 0;
+    }
 }

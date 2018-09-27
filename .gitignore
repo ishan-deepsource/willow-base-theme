@@ -2,3 +2,4 @@ vendor
 wordpress
 wp-content
 .env
+.idea
