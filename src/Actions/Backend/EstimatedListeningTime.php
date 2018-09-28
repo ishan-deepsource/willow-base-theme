@@ -5,7 +5,7 @@ namespace Bonnier\Willow\Base\Actions\Backend;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 
 
-class EstimatedListeningTIme
+class EstimatedListeningTime
 {
     public function __construct()
     {
