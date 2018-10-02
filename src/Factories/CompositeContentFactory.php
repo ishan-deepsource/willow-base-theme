@@ -13,6 +13,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\InfoBoxAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\InsertedCodeAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\LinkAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\NullContentAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\QuoteAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\TextItemAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\VideoAdapter;
 
@@ -28,10 +29,10 @@ class CompositeContentFactory extends AbstractModelFactory
         'text_item'     => TextItemAdapter::class,
         'video'         => VideoAdapter::class,
         'audio'         => ContentAudioAdapter::class,
-        /** MAKE ASSOCIATED COMPOSITE ADAPTER */
         'associated_composite' => AssociatedContentAdapter::class,
+        'quote'         => QuoteAdapter::class,
     ];
-    
+
     public function getAdapter($model)
     {
         return collect($this->adapterMapping)->get($model['acf_fc_layout'], NullContentAdapter::class);
