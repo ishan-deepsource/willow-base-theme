@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "23f449658cfe86cf4088b0349803fb23",
+    "content-hash": "a22acc44c153f3db3987bb48a0421d48",
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
@@ -100,16 +100,16 @@
         },
         {
             "name": "bonnier/contenthub-editor",
-            "version": "3.2.1",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-contenthub-editor.git",
-                "reference": "120c4d882d84cb44d8f74ad4de3a6167d654418a"
+                "reference": "66a7cd838c02555c09ab65538544b1370ab4d92b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/120c4d882d84cb44d8f74ad4de3a6167d654418a",
-                "reference": "120c4d882d84cb44d8f74ad4de3a6167d654418a",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/66a7cd838c02555c09ab65538544b1370ab4d92b",
+                "reference": "66a7cd838c02555c09ab65538544b1370ab4d92b",
                 "shasum": ""
             },
             "require": {
@@ -152,7 +152,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-09-27T12:50:01+00:00"
+            "time": "2018-10-02T08:51:10+00:00"
         },
         {
             "name": "bonnier/php-video-helper",
