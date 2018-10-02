@@ -93,10 +93,11 @@ class PostSlugChange
 
     private function getNewPostLink(\WP_Post $post)
     {
+        remove_filter('transition_post_status', [$this, 'transitionPostStatus'], 10);
         if (acf_validate_save_post()) {
             acf_save_post($post->ID); // Save post to make sure that potential category change is updated
-            return get_permalink($post->ID);
         }
+        add_filter('transition_post_status', [$this, 'transitionPostStatus'], 10, 3);
         return get_permalink($post->ID);
     }
 }
