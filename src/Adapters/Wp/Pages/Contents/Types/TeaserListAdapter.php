@@ -2,11 +2,9 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types;
 
-use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\Partials\TeaserListHyperlink;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
-use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Base\Root\Hyperlink;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\Types\TeaserListContract;
@@ -19,7 +17,7 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
 {
     protected $teasers;
 
-    public function __construct($acfWidget)
+    public function __construct(array $acfWidget)
     {
         parent::__construct($acfWidget);
     }
@@ -34,9 +32,9 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
         return $this->acfArray['description'] ?? null;
     }
 
-    public function getBackgroundImage(): ?ImageContract
+    public function getImage(): ?ImageContract
     {
-        if (($imageId = $this->acfArray['background_image'] ?? null) && $image = get_post($imageId)) {
+        if (($imageId = $this->acfArray['image'] ?? null) && $image = get_post($imageId)) {
             return new Image(new ImageAdapter($image));
         }
 

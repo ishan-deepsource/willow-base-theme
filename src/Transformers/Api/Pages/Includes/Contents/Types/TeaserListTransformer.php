@@ -16,7 +16,7 @@ class TeaserListTransformer extends TransformerAbstract
         return [
             'title' => $teaserList->getTitle(),
             'description' => $teaserList->getDescription(),
-            'background_image' => $this->transformImage($teaserList),
+            'image' => $this->transformImage($teaserList),
             'link' => $this->transformLink($teaserList),
             'display_hint' => $teaserList->getDisplayHint(),
             'teasers' => $this->transformTeasers($teaserList),
@@ -25,8 +25,8 @@ class TeaserListTransformer extends TransformerAbstract
 
     private function transformImage(TeaserListContract $teaserList)
     {
-        if (optional($teaserList->getBackgroundImage())->getUrl()) {
-            return with(new ImageTransformer)->transform($teaserList->getBackgroundImage());
+        if (optional($teaserList->getImage())->getUrl()) {
+            return with(new ImageTransformer)->transform($teaserList->getImage());
         }
 
         return null;

@@ -11,7 +11,7 @@ interface TeaserListContract extends ContentContract
 {
     public function getTitle(): ?string;
     public function getDescription(): ?string;
-    public function getBackgroundImage(): ?ImageContract;
+    public function getImage(): ?ImageContract;
     public function getLink(): ?HyperlinkContract;
     public function getDisplayHint(): ?string;
     public function getTeasers(): ?Collection;

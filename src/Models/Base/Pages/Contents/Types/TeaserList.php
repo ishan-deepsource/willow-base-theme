@@ -30,9 +30,9 @@ class TeaserList extends AbstractContent implements TeaserListContract
         return $this->model->getDescription();
     }
 
-    public function getBackgroundImage(): ?ImageContract
+    public function getImage(): ?ImageContract
     {
-        return $this->model->getBackgroundImage();
+        return $this->model->getImage();
     }
 
     public function getLink(): ?HyperlinkContract

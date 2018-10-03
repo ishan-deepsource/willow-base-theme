@@ -321,9 +321,8 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
             return is_null($content);
         });
 
-        return collect($assocCompsFromParent)->map(function ($content) {
-            /** @var AssociatedContent $content */
-            if ($content->getType() === 'associated_composite') {
+        return collect($assocCompsFromParent)->map(function (ContentContract $content) {
+            if ($content instanceof AssociatedContent) {
                 return new Composite(new CompositeAdapter($content->getAssociatedComposite()));
             }
             return null;
