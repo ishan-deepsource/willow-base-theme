@@ -39,7 +39,6 @@ use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Traits\DateTimeZoneTrait;
 use Bonnier\Willow\Base\Traits\UrlTrait;
-use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTransformer;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpTaxonomy;
 use DateTime;
@@ -244,7 +243,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getVocabularies(): ?Collection
     {
-        return collect(WpTaxonomy::get_custom_taxonomies())->map(function ($taxonomy){
+        return collect(WpTaxonomy::get_custom_taxonomies())->map(function ($taxonomy) {
             return new Vocabulary(new VocabularyAdapter($this, $taxonomy));
         });
     }
@@ -311,21 +310,23 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     public function getAssociatedComposites(): ?Collection
     {
         $associatedComposites = get_field('composite_content', $this->getParent());
-        if(!$associatedComposites){
+        if (!$associatedComposites) {
             return null;
         }
 
-        $associatedCompositesFromParent = collect($associatedComposites)->map(function ($acfContentArray) {
+        $assocCompsFromParent = collect($associatedComposites)->map(function ($acfContentArray) {
             $class = collect($this->contentModelsMapping)->get($acfContentArray['acf_fc_layout']);
             return $this->getContentFactory($class)->getModel($acfContentArray);
         })->reject(function ($content) {
             return is_null($content);
         });
 
-        return collect($associatedCompositesFromParent)->map(function ($content){
-            if($content->getType() === 'associated_composite'){
+        return collect($assocCompsFromParent)->map(function ($content) {
+            /** @var AssociatedContent $content */
+            if ($content->getType() === 'associated_composite') {
                 return new Composite(new CompositeAdapter($content->getAssociatedComposite()));
             }
+            return null;
         });
     }
 
