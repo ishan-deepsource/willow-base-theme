@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Tests\Unit;
 
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
@@ -36,9 +37,13 @@ class ClassTestCase extends TestCase
     protected function classImplementsInterfaceMethods($classInterfaceMap)
     {
         foreach ($classInterfaceMap as $class => $interface) {
-            foreach (get_class_methods($interface) as $method) {
-                $message = sprintf('Class %s does not implement %s', $class, $method);
-                $this->assertTrue(method_exists($class, $method), $message);
+            try {
+                foreach (get_class_methods($interface) as $method) {
+                    $message = sprintf('Class %s does not implement %s', $class, $method);
+                    $this->assertTrue(method_exists($class, $method), $message);
+                }
+            } catch (Exception $exception) {
+                $this->fail(sprintf('Class \'%s\' is not implementing an interface!', $class));
             }
         }
     }
