@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites;
 
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentImageAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\QuoteAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\CommercialAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\CategoryAdapter;
@@ -18,6 +19,7 @@ use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Gallery;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\InfoBox;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\InsertedCode;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Link;
+use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Quote;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\TextItem;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Video;
 use Bonnier\Willow\Base\Models\Base\Root\Author;
@@ -70,6 +72,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         'video'         => Video::class,
         'audio'         => ContentAudio::class,
         'associated_composite' => AssociatedContent::class,
+        'quote'         => Quote::class,
     ];
 
     protected $acfFields;

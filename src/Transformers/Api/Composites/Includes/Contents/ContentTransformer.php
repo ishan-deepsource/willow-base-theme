@@ -12,6 +12,7 @@ use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\Cont
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\InfoBoxTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\InsertedCodeTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\LinkTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\QuoteTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\TextItemTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\VideoTransformer;
 use Bonnier\Willow\Base\Transformers\NullTransformer;
@@ -30,7 +31,8 @@ class ContentTransformer extends TransformerAbstract
         'video'                => VideoTransformer::class,
         'infobox'              => InfoBoxTransformer::class,
         'associated_composite' => AssociatedContentTransformer::class,
-        'audio'                => ContentAudioTransformer::class
+        'audio'                => ContentAudioTransformer::class,
+        'quote'                => QuoteTransformer::class
     ];
 
     public function transform(ContentContract $content)
