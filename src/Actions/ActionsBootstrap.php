@@ -11,6 +11,7 @@ use Bonnier\Willow\Base\Actions\Universal\PolylangSubdomain;
 use Bonnier\Willow\Base\Actions\Universal\PolylangTranslations;
 use Bonnier\Willow\Base\Actions\Universal\Navigation;
 use Bonnier\Willow\Base\Actions\Backend\EstimatedListeningTime;
+use Bonnier\Willow\Base\Actions\Backend\AddMedia;
 
 class ActionsBootstrap
 {
@@ -39,6 +40,7 @@ class ActionsBootstrap
             new PreviewUrl();
             new EstimatedReadingTime();
             new EstimatedListeningTime();
+            new AddMedia();
         }
     }
 }
