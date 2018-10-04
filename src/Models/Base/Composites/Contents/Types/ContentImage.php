@@ -89,4 +89,9 @@ class ContentImage extends AbstractContent implements ContentImageContract
     {
         return $this->model->getLink();
     }
+
+    public function getDisplayHint(): ?string
+    {
+        return $this->model->getDisplayHint();
+    }
 }

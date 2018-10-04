@@ -85,4 +85,9 @@ class ContentImageAdapter extends AbstractContentAdapter implements ContentImage
     {
         return new Hyperlink(new ContentImageHyperlinkAdapter($this, $this->acfArray));
     }
+
+    public function getDisplayHint(): ?string
+    {
+        return $this->acfArray['display_hint'] ?? null;
+    }
 }
