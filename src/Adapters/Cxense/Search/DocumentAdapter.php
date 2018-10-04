@@ -192,12 +192,6 @@ class DocumentAdapter implements CompositeContract
         return collect([]);
     }
 
-    public function getEstimatedListeningTime(): ?int
-    {
-        // todo find the right field
-        return null;
-    }
-
     public function getAudio(): ?AudioContract
     {
         // todo find the right field
