@@ -63,6 +63,6 @@ class ImageAdapter extends FileAdapter implements ImageContract
 
     public function getDisplayHint(): ?string
     {
-        return $this->acfArray['display_hint'] ?? null;
+        return null;
     }
 }
