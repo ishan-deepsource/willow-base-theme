@@ -11,4 +11,6 @@ interface ContentAudioContract extends ContentContract, AudioContract
     public function getAudioTitle() : ?string;
 
     public function getImage(): ?ImageContract;
+
+    public function getDuration() : int;
 }

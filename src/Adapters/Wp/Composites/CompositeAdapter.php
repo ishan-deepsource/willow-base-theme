@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites;
 
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\AssociatedContentAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentAudioAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentImageAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\CommercialAdapter;
@@ -33,11 +34,11 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentFileContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\AudioContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
-use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Traits\DateTimeZoneTrait;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
@@ -316,11 +317,20 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
                 return new AssociatedContent(new AssociatedContentAdapter($acfContentArray));
             }
             return null;
-        })->rejectNullValues();
+        })->reject(function ($associatedContent) {
+            return is_null($associatedContent);
+        });
     }
 
-    public function getEstimatedListeningTime(): ?int
+    public function getAudio(): ?AudioContract
     {
-        return intval(get_post_meta($this->getId(), 'lisening_time', true)) ?: 0;
+        if (($audio = get_field('audio')) && $file = array_get($audio, 'file')) {
+            return new ContentAudioAdapter([
+                'title' => array_get($audio, 'title'),
+                'file' => $file,
+                'image' => array_get($audio, 'audio_thumbnail'),
+            ]);
+        }
+        return null;
     }
 }

@@ -75,4 +75,9 @@ class ContentAudio extends AbstractContent implements ContentAudioContract
     {
         return $this->model->getImage();
     }
+
+    public function getDuration(): int
+    {
+        return $this->model->getDuration();
+    }
 }

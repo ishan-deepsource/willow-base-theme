@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Cxense\Search;
 
+use Bonnier\Willow\Base\Models\Contracts\Root\AudioContract;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\Willow\Base\Adapters\Cxense\Search\Partials\DocumentTeaserAdapter;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentImage;
@@ -192,6 +193,12 @@ class DocumentAdapter implements CompositeContract
     }
 
     public function getEstimatedListeningTime(): ?int
+    {
+        // todo find the right field
+        return null;
+    }
+
+    public function getAudio(): ?AudioContract
     {
         // todo find the right field
         return null;

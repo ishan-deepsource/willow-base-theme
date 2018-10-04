@@ -8,6 +8,7 @@ use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentImage;
 use Bonnier\Willow\Base\Models\Base\Root\Teaser;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\AudioContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
@@ -187,5 +188,10 @@ class InstagramCompositeAdapter implements CompositeContract
     public function getEstimatedListeningTime(): ?int
     {
         return 0;
+    }
+
+    public function getAudio(): ?AudioContract
+    {
+        return null;
     }
 }
