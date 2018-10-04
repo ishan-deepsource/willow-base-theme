@@ -12,8 +12,8 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\TextItemContr
  */
 class TextItemAdapter extends AbstractContentAdapter implements TextItemContract
 {
-    public function getBody(): string
+    public function getBody(): ?string
     {
-        return $this->acfArray['body'] ?? '';
+        return array_get($this->acfArray, 'body') ?: null;
     }
 }

@@ -38,12 +38,12 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     public function getId(): ?int
     {
-        return $this->wpModel->term_id ?? null;
+        return data_get($this->wpModel, 'term_id') ?: null;
     }
 
     public function getName(): ?string
     {
-        return $this->wpModel->name ?? null;
+        return data_get($this->wpModel, 'name') ?: null;
     }
 
     public function getChildren(): ?Collection
@@ -55,22 +55,22 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     public function getTitle(): ?string
     {
-        return $this->meta->title->{LanguageProvider::getCurrentLanguage()} ?? null;
+        return data_get($this->meta, 'title.' . LanguageProvider::getCurrentLanguage()) ?: null;
     }
 
     public function getDescription(): ?string
     {
-        return $this->meta->description->{LanguageProvider::getCurrentLanguage()} ?? null;
+        return data_get($this->meta, 'description.' . LanguageProvider::getCurrentLanguage()) ?: null;
     }
 
     public function getBody(): ?string
     {
-        return $this->meta->body->{LanguageProvider::getCurrentLanguage()} ?? null;
+        return data_get($this->meta, 'body.' . LanguageProvider::getCurrentLanguage()) ?: null;
     }
 
     public function getMetaDescription(): ?string
     {
-        return $this->meta->meta_description->{LanguageProvider::getCurrentLanguage()} ?? null;
+        return data_get($this->meta, 'meta_description.' . LanguageProvider::getCurrentLanguage()) ?: null;
     }
 
     public function getImage(): ?ImageContract
@@ -80,8 +80,11 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     public function getUrl(): ?string
     {
-        $link = get_term_link($this->getId(), 'category');
-        return is_wp_error($link) ? null : $link;
+        if ($link = get_term_link($this->getId(), 'category')) {
+            return is_wp_error($link) ? null : $link;
+        }
+
+        return null;
     }
 
     public function getLanguage(): ?string
@@ -123,7 +126,7 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     public function getCount(): ?int
     {
-        return $this->wpModel->count ?? null;
+        return data_get($this->wpModel, 'count');
     }
 
     public function getTeaser(string $type): ?TeaserContract
@@ -143,11 +146,10 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     private function getMeta()
     {
-        $contentHubId = get_term_meta($this->getId(), 'content_hub_id', true);
-        if ($contentHubId) {
+        if ($contentHubId = get_term_meta($this->getId(), 'content_hub_id', true)) {
             try {
                 $category = WpSiteManager::instance()->categories()->findByContentHubId($contentHubId) ?? null;
-                return $category->data ?? null;
+                return data_get($category, 'data');
             } catch (\Exception $exception) {
                 return null;
             }
@@ -157,11 +159,11 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     public function getParent(): ?CategoryContract
     {
-        if (!$this->wpModel) {
-            return null;
+        if ($parent = intval(data_get($this->wpModel, 'parent'))) {
+            return new static(get_category($parent));
         }
-        $parent = intval($this->wpModel->parent);
-        return $parent ? new static(get_category($parent)) : null;
+
+        return null;
     }
 
     public function getCanonicalUrl(): ?string

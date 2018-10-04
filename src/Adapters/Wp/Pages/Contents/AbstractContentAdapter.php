@@ -13,8 +13,8 @@ abstract class AbstractContentAdapter implements ContentContract
         $this->acfArray = $acfArray;
     }
 
-    public function getType() : string
+    public function getType() : ?string
     {
-        return $this->acfArray['acf_fc_layout'] ?? '';
+        return array_get($this->acfArray, 'acf_fc_layout');
     }
 }

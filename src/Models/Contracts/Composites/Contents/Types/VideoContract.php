@@ -7,9 +7,9 @@ use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 
 interface VideoContract extends ContentContract
 {
-    public function getEmbedUrl() : string;
+    public function getEmbedUrl(): ?string;
 
-    public function getCaption() : string;
+    public function getCaption(): ?string;
 
     // todo: maybe implement getThumbnail?
 }

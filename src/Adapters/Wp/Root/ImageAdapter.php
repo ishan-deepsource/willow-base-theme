@@ -58,7 +58,7 @@ class ImageAdapter extends FileAdapter implements ImageContract
 
     public function getLink(): ?HyperlinkContract
     {
-        return new Hyperlink(new HyperlinkAdapter($this));
+        return null;
     }
 
     public function getDisplayHint(): ?string

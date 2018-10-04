@@ -4,7 +4,7 @@ namespace Bonnier\Willow\Base\Models\Contracts\Composites\Contents;
 
 interface ContentContract
 {
-    public function getType() : string;
+    public function getType() : ?string;
 
     public function isLocked() : bool;
 

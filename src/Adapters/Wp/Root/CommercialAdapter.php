@@ -19,7 +19,7 @@ class CommercialAdapter implements CommercialContract
 
     public function getType(): ?string
     {
-        return $this->acFields['commercial_type'] ?? null;
+        return array_get($this->acFields, 'commercial_type') ?: null;
     }
 
     public function getLabel(): ?string
@@ -32,8 +32,8 @@ class CommercialAdapter implements CommercialContract
 
     public function getLogo(): ?ImageContract
     {
-        if (!empty($this->acFields['commercial_logo'] ?? null)) {
-            if ($logo = get_post($this->acFields['commercial_logo'])) {
+        if ($logoId = array_get($this->acFields, 'commercial_logo')) {
+            if ($logo = get_post($logoId)) {
                 return new Image(new ImageAdapter($logo));
             }
         }
