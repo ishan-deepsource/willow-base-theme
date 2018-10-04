@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Models\Base\Composites;
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\AudioContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
@@ -171,8 +172,8 @@ class Composite implements CompositeContract
         return $this->composite->getParent();
     }
 
-    public function getEstimatedListeningTime(): ?int
+    public function getAudio(): ?AudioContract
     {
-        return $this->composite->getEstimatedListeningTime();
+        return $this->composite->getAudio();
     }
 }
