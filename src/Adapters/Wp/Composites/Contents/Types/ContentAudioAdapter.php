@@ -79,7 +79,7 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
     {
         require_once( ABSPATH . 'wp-admin/includes/media.php' );
         if($id = $this->audio->getId()){
-            $metaData = $metadata = wp_get_attachment_metadata( $id );
+            $metaData = wp_get_attachment_metadata( $id );
             return $metaData['length'] ? ceil($metaData['length'] / 60) : 0;
         }
         return 0;
