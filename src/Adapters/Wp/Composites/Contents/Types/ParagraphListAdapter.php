@@ -13,11 +13,6 @@ use Illuminate\Support\Collection;
 
 class ParagraphListAdapter extends AbstractContentAdapter implements ParagraphListContract
 {
-    public function __construct(array $acfArray, \WP_Post $post = null)
-    {
-        parent::__construct($acfArray, $post);
-    }
-
     public function getTitle(): ?string
     {
         return array_get($this->acfArray, 'title') ?: null;
