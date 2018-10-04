@@ -334,8 +334,8 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getAudio(): ?AudioContract
     {
-        $audio = get_field('audio');
-        if($audio && $audio['file']){
+        if (($audio = get_field('audio')) && $file = array_get($audio, 'file'))
+        {
             return new ContentAudioAdapter([
                 'title' => array_get($audio, 'title'),
                 'file' => $audio['file'],
