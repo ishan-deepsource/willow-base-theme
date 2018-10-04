@@ -15,7 +15,7 @@ class ContentAudioTransformer extends TransformerAbstract
             'title' => $audio->getAudioTitle(),
             'file' => $audio->isLocked() ? null : with(new AudioTransformer())->transform($audio),
             'image' => $this->getImage($audio),
-            'length' => $audio->getDuration(),
+            'duration' => $audio->getDuration(),
         ];
     }
 
