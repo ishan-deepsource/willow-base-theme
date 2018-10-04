@@ -10,7 +10,7 @@ abstract class AbstractModelFactory implements ModelFactoryContract
 {
     protected $baseClass;
     protected $adapterMapping;
-    
+
     /**
      * ModelFactory constructor.
      *
@@ -20,7 +20,7 @@ abstract class AbstractModelFactory implements ModelFactoryContract
     {
         $this->baseClass = $baseClass;
     }
-    
+
     /**
      * @param mixed $baseClass
      *
@@ -31,7 +31,7 @@ abstract class AbstractModelFactory implements ModelFactoryContract
         $this->baseClass = $baseClass;
         return $this;
     }
-    
+
     /**
      * @param $model
      *
@@ -62,7 +62,7 @@ abstract class AbstractModelFactory implements ModelFactoryContract
         }
         return null;
     }
-    
+
     /**
      * @param $overrideClass
      *
@@ -87,7 +87,7 @@ abstract class AbstractModelFactory implements ModelFactoryContract
         }
         return true;
     }
-    
+
     /**
      * @param $adapter
      * @param $model

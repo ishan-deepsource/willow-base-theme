@@ -22,13 +22,13 @@ class ContentImageAdapter extends AbstractContentAdapter implements ContentImage
     public function __construct(array $acfArray)
     {
         parent::__construct($acfArray);
-        $post = get_post($acfArray['file'] ?? $acfArray['image'] ?? null);
+        $post = get_post(array_get($acfArray, 'file') ?? array_get($acfArray, 'image'));
         $this->image = $post ? new Image(new ImageAdapter($post)) : null;
     }
 
     public function isLead() : bool
     {
-        return $this->acfArray['lead_image'] ?? false;
+        return array_get($this->acfArray, 'lead_image', false);
     }
 
     public function getId(): ?int

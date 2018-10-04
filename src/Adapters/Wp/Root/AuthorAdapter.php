@@ -29,17 +29,17 @@ class AuthorAdapter implements AuthorContract
 
     public function getId(): ?int
     {
-        return $this->user->ID ?? null;
+        return data_get($this->user, 'ID');
     }
 
     public function getName(): ?string
     {
-        return $this->user->display_name ?? null;
+        return data_get($this->user, 'display_name') ?: null;
     }
 
     public function getBiography(): ?string
     {
-        return $this->user->description ?? null;
+        return data_get($this->user, 'description') ?: null;
     }
 
     public function getAvatar(): ?ImageContract
@@ -48,13 +48,13 @@ class AuthorAdapter implements AuthorContract
         return $avatar ? new Image(new ImageAdapter($avatar)) : null;
     }
 
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
-        return get_author_posts_url($this->getId()) ?: "";
+        return get_author_posts_url($this->getId()) ?: null;
     }
 
     public function getTitle(): ?string
     {
-        return WpUserProfile::getTitle($this->getId());
+        return WpUserProfile::getTitle($this->getId()) ?: null;
     }
 }

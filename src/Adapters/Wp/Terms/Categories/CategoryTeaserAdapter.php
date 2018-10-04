@@ -18,9 +18,9 @@ class CategoryTeaserAdapter extends AbstractTeaserAdapter
         parent::__construct($type);
     }
 
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
-        return $this->meta->meta_title->{LanguageProvider::getCurrentLanguage()} ?? '';
+        return data_get($this->meta, 'meta_title.' . LanguageProvider::getCurrentLanguage()) ?: null;
     }
 
     public function getImage(): ?ImageContract
@@ -28,8 +28,8 @@ class CategoryTeaserAdapter extends AbstractTeaserAdapter
         return new Image(new CategoryImageAdapter($this->meta));
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
-        return $this->meta->meta_description->{LanguageProvider::getCurrentLanguage()} ?? '';
+        return data_get($this->meta, 'meta_description.' . LanguageProvider::getCurrentLanguage()) ?: null;
     }
 }

@@ -12,6 +12,7 @@ use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\Cont
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\InfoBoxTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\InsertedCodeTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\LinkTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ParagraphListTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\QuoteTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\TextItemTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\VideoTransformer;
@@ -22,17 +23,18 @@ use Tests\CompositeContent\Audio;
 class ContentTransformer extends TransformerAbstract
 {
     protected $transformerMapping = [
-        'image'                => ContentImageTransformer::class,
-        'text_item'            => TextItemTransformer::class,
-        'file'                 => ContentFileTransformer::class,
-        'gallery'              => GalleryTransformer::class,
-        'link'                 => LinkTransformer::class,
-        'inserted_code'        => InsertedCodeTransformer::class,
-        'video'                => VideoTransformer::class,
-        'infobox'              => InfoBoxTransformer::class,
+        'image' => ContentImageTransformer::class,
+        'text_item' => TextItemTransformer::class,
+        'file' => ContentFileTransformer::class,
+        'gallery' => GalleryTransformer::class,
+        'link' => LinkTransformer::class,
+        'inserted_code' => InsertedCodeTransformer::class,
+        'video' => VideoTransformer::class,
+        'infobox' => InfoBoxTransformer::class,
         'associated_composite' => AssociatedContentTransformer::class,
-        'audio'                => ContentAudioTransformer::class,
-        'quote'                => QuoteTransformer::class
+        'audio' => ContentAudioTransformer::class,
+        'quote' => QuoteTransformer::class,
+        'paragraph_list' => ParagraphListTransformer::class,
     ];
 
     public function transform(ContentContract $content)

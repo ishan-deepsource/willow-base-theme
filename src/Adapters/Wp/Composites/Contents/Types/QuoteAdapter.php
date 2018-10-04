@@ -12,13 +12,13 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\QuoteContract
  */
 class QuoteAdapter extends AbstractContentAdapter implements QuoteContract
 {
-    public function getQuote(): string
+    public function getQuote(): ?string
     {
-        return $this->acfArray['quote'] ?? '';
+        return array_get($this->acfArray, 'quote') ?: null;
     }
 
-    public function getAuthor(): string
+    public function getAuthor(): ?string
     {
-        return $this->acfArray['author'] ?? '';
+        return array_get($this->acfArray, 'author') ?: null;
     }
 }

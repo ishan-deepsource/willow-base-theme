@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Models\Base\Composites\Contents\Types;
 
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\AbstractContent;
+use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\AssociatedContentContract;
 
@@ -10,6 +11,7 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\AssociatedCon
  * Class AssociatedContent
  *
  * @package \Bonnier\Willow\Base\Models\Base\Composites\Contents\Types
+ * @property AssociatedContentContract $model
  */
 class AssociatedContent extends AbstractContent implements AssociatedContentContract
 {
@@ -17,7 +19,7 @@ class AssociatedContent extends AbstractContent implements AssociatedContentCont
     protected $model;
     protected $locked;
 
-    public function __construct(ContentContract $associatedContent)
+    public function __construct(AssociatedContentContract $associatedContent)
     {
         parent::__construct($associatedContent);
     }
@@ -37,7 +39,7 @@ class AssociatedContent extends AbstractContent implements AssociatedContentCont
         return $this->model->getStickToNext();
     }
 
-    public function getAssociatedComposite(): ?\WP_Post
+    public function getAssociatedComposite(): ?CompositeContract
     {
         return $this->model->getAssociatedComposite();
     }

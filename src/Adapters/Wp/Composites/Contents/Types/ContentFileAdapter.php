@@ -22,7 +22,7 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
     public function __construct(array $acfArray)
     {
         parent::__construct($acfArray);
-        if ($fileId = $acfArray['file']['id'] ?? null) {
+        if ($fileId = array_get($acfArray, 'file.id')) {
             $post = get_post($fileId);
             $this->file = $post ? new File(new FileAdapter($post)) : null;
         }
@@ -35,8 +35,9 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
 
     public function getImages(): ?Collection
     {
-        return collect($this->acfArray['images'] ?? [])->map(function ($acfImage) {
-            return $acfImage['file'] ? new Image(new ImageAdapter(get_post($acfImage['file']))) : null;
+        return collect(array_get($this->acfArray, 'images', []))->map(function ($acfImage) {
+            $file = array_get($acfImage, 'file');
+            return $file ? new Image(new ImageAdapter(get_post($file))) : null;
         })->reject(function ($image) {
             return is_null($image);
         });

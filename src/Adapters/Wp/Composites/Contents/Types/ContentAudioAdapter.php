@@ -22,13 +22,13 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
     public function __construct(array $acfArray)
     {
         parent::__construct($acfArray);
-        $post = get_post($acfArray['file'] ?? null);
+        $post = get_post(array_get($this->acfArray, 'file'));
         $this->audio = $post ? new Audio(new AudioAdapter($post)) : null;
     }
 
     public function isLead() : bool
     {
-        return $this->acfArray['lead_image'] ?? false;
+        return array_get($this->acfArray, 'lead_image', false);
     }
 
     public function getId(): ?int
@@ -58,7 +58,7 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
 
     public function getAudioTitle(): ?string
     {
-        return $this->acfArray['title'] ?? null;
+        return array_get($this->acfArray, 'title') ?: null;
     }
 
     public function getCaption(): ?string
@@ -68,7 +68,7 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
 
     public function getImage(): ?ImageContract
     {
-        if (($imageId = $this->acfArray['image'] ?? null) && $image = get_post($imageId)) {
+        if (($imageId = array_get($this->acfArray, 'image')) && $image = get_post($imageId)) {
             return new Image(new ImageAdapter($image));
         }
 

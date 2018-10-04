@@ -3,10 +3,9 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Composites;
 
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\AssociatedContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentAudioAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentImageAdapter;
-use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\QuoteAdapter;
-use Bonnier\Willow\Base\Adapters\Wp\Root\AudioAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\CommercialAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\CategoryAdapter;
@@ -21,6 +20,7 @@ use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Gallery;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\InfoBox;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\InsertedCode;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Link;
+use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ParagraphList;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Quote;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\TextItem;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Video;
@@ -39,7 +39,6 @@ use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
-use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Traits\DateTimeZoneTrait;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
@@ -64,17 +63,18 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     protected $contents;
 
     protected $contentModelsMapping = [
-        'file'          => ContentFile::class,
-        'gallery'       => Gallery::class,
-        'image'         => ContentImage::class,
-        'infobox'       => InfoBox::class,
+        'file' => ContentFile::class,
+        'gallery' => Gallery::class,
+        'image' => ContentImage::class,
+        'infobox' => InfoBox::class,
         'inserted_code' => InsertedCode::class,
-        'link'          => Link::class,
-        'text_item'     => TextItem::class,
-        'video'         => Video::class,
-        'audio'         => ContentAudio::class,
+        'link' => Link::class,
+        'text_item' => TextItem::class,
+        'video' => Video::class,
+        'audio' => ContentAudio::class,
+        'quote' => Quote::class,
         'associated_composite' => AssociatedContent::class,
-        'quote'         => Quote::class,
+        'paragraph_list' => ParagraphList::class
     ];
 
     protected $acfFields;
@@ -82,10 +82,10 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     public function __construct($wpModel)
     {
         parent::__construct($wpModel);
-        if ($this->wpModel) {
-            $this->acfFields = get_fields($this->wpModel->ID);
+        if ($postId = data_get($this->wpModel, 'ID')) {
+            $this->acfFields = get_fields($postId);
         }
-        $this->compositeContents = $this->acfFields['composite_content'] ?? [];
+        $this->compositeContents = array_get($this->acfFields, 'composite_content', []);
     }
 
     public function getAcfFields()
@@ -98,32 +98,32 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
      */
     public function getId(): int
     {
-        return $this->wpModel->ID ?? 0;
+        return data_get($this->wpModel, 'ID', 0);
     }
 
     public function getKind(): ?string
     {
-        return $this->acfFields['kind'] ?? 'Article';
+        return array_get($this->acfFields, 'kind', 'Article');
     }
 
     public function getParent(): ?int
     {
-        return $this->wpModel->post_parent ?? null;
+        return data_get($this->wpModel, 'post_parent');
     }
 
     public function getTitle(): ?string
     {
-        return $this->wpModel->post_title ?? null;
+        return data_get($this->wpModel, 'post_title') ?: null;
     }
 
     public function getDescription(): ?string
     {
-        return $this->acfFields['description'] ?? null;
+        return array_get($this->acfFields, 'description') ?: null;
     }
 
     public function getStatus(): ?string
     {
-        return $this->wpModel->post_status ?? null;
+        return data_get($this->wpModel, 'post_status');
     }
 
     public function getLocale(): ?string
@@ -135,10 +135,10 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     {
         if (!$this->contents) {
             $this->contents = collect($this->compositeContents)->map(function ($acfContentArray) {
-                if ($acfContentArray['lead_image'] ?? false) {
+                if (array_get($acfContentArray, 'lead_image')) {
                     return null;
                 }
-                $class = collect($this->contentModelsMapping)->get($acfContentArray['acf_fc_layout']);
+                $class = collect($this->contentModelsMapping)->get(array_get($acfContentArray, 'acf_fc_layout'));
                 return $this->getContentFactory($class)->getModel($acfContentArray);
             })->reject(function ($content) {
                 return is_null($content);
@@ -151,7 +151,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     public function getLeadImage(): ?ContentImageContract
     {
         $leadImageContent = collect($this->compositeContents)->first(function ($acfContentArray) {
-            return $acfContentArray['lead_image'] ?? false;
+            return array_get($acfContentArray, 'lead_image', false);
         });
         if ($leadImageContent) {
             return new ContentImage(new ContentImageAdapter($leadImageContent));
@@ -181,10 +181,11 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getLink(): ?string
     {
-        if (!$this->wpModel) {
-            return null;
+        if ($postId = $this->getId()) {
+            return get_permalink($postId);
         }
-        return get_permalink($this->wpModel->ID);
+
+        return null;
     }
 
     public function getLabel(): ?string
@@ -204,26 +205,23 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getPublishedAt(): ?DateTime
     {
-        if (!$this->wpModel) {
-            return null;
+        if ($date = data_get($this->wpModel, 'post_date')) {
+            return $this->toDateTime($date);
         }
-        return $this->toDateTime($this->wpModel->post_date);
+        return null;
     }
 
     public function getUpdatedAt(): ?DateTime
     {
-        if (!$this->wpModel) {
-            return null;
+        if ($date = data_get($this->wpModel, 'post_modified')) {
+            return $this->toDateTime($date);
         }
-        return $this->toDateTime($this->wpModel->post_modified);
+        return null;
     }
 
     public function getAuthor(): ?AuthorContract
     {
-        if (!$this->wpModel) {
-            return null;
-        }
-        if ($wpUser = get_user_by('id', $this->wpModel->post_author)) {
+        if (($author = data_get($this->wpModel, 'post_author')) && $wpUser = get_user_by('id', $author)) {
             return new Author(new AuthorAdapter($wpUser));
         }
 
@@ -232,12 +230,12 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getAuthorDescription(): ?string
     {
-        return $this->acfFields['author_description'] ?? null;
+        return array_get($this->acfFields, 'author_description') ?: null;
     }
 
     public function getCategory(): ?CategoryContract
     {
-        if ($category = $this->acfFields['category'] ?? null) {
+        if ($category = array_get($this->acfFields, 'category')) {
             return new Category(new CategoryAdapter($category));
         }
 
@@ -253,10 +251,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getTags(): Collection
     {
-        if (!$this->acfFields['tags']) {
-            return collect([]);
-        }
-        return collect($this->acfFields['tags'])->map(function (\WP_Term $tag) {
+        return collect(array_get($this->acfFields, 'tags', []))->map(function (\WP_Term $tag) {
             return new Tag(new TagAdapter($tag));
         });
     }
@@ -317,28 +312,22 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
             return null;
         }
 
-        $assocCompsFromParent = collect($associatedComposites)->map(function ($acfContentArray) {
-            $class = collect($this->contentModelsMapping)->get($acfContentArray['acf_fc_layout']);
-            return $this->getContentFactory($class)->getModel($acfContentArray);
-        })->reject(function ($content) {
-            return is_null($content);
-        });
-
-        return collect($assocCompsFromParent)->map(function (ContentContract $content) {
-            if ($content instanceof AssociatedContent) {
-                return new Composite(new CompositeAdapter($content->getAssociatedComposite()));
+        return collect($associatedComposites)->map(function ($acfContentArray) {
+            if (array_get($acfContentArray, 'acf_fc_layout') === 'associated_composite') {
+                return new AssociatedContent(new AssociatedContentAdapter($acfContentArray));
             }
             return null;
+        })->reject(function ($associatedContent) {
+            return is_null($associatedContent);
         });
     }
 
     public function getAudio(): ?AudioContract
     {
-        if (($audio = get_field('audio')) && $file = array_get($audio, 'file'))
-        {
+        if (($audio = get_field('audio')) && $file = array_get($audio, 'file')) {
             return new ContentAudioAdapter([
                 'title' => array_get($audio, 'title'),
-                'file' => $audio['file'],
+                'file' => $file,
                 'image' => array_get($audio, 'audio_thumbnail'),
             ]);
         }

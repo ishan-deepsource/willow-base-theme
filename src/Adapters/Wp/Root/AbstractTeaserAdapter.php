@@ -35,7 +35,7 @@ abstract class AbstractTeaserAdapter implements TeaserContract
         }
     }
 
-    public function getType(): string
+    public function getType(): ?string
     {
         switch ($this->type) {
             case 'seo_':

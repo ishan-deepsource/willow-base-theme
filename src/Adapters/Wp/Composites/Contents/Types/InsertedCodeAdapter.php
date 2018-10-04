@@ -12,8 +12,8 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\InsertedCodeC
  */
 class InsertedCodeAdapter extends AbstractContentAdapter implements InsertedCodeContract
 {
-    public function getCode(): string
+    public function getCode(): ?string
     {
-        return $this->acfArray['code'] ?? '';
+        return array_get($this->acfArray, 'code') ?: null;
     }
 }

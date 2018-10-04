@@ -14,7 +14,7 @@ class Teaser implements TeaserContract
         $this->teaser = $teaser;
     }
 
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->teaser->getTitle();
     }
@@ -24,12 +24,12 @@ class Teaser implements TeaserContract
         return $this->teaser->getImage();
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->teaser->getDescription();
     }
 
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->teaser->getType();
     }

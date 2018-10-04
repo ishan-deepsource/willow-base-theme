@@ -19,12 +19,12 @@ class GalleryAdapter extends AbstractContentAdapter implements GalleryContract
 {
     public function getTitle(): ?string
     {
-        return $this->acfArray['title'] ?? null;
+        return array_get($this->acfArray, 'title') ?: null;
     }
 
     public function getImages(): Collection
     {
-        $collection = collect($this->acfArray['images'] ?? [])->map(function ($acfImage) {
+        $collection = collect(array_get($this->acfArray, 'images', []))->map(function ($acfImage) {
             return new GalleryImage(new GalleryImageAdapter($acfImage));
         })->reject(function ($image) {
             return is_null($image);
@@ -34,6 +34,6 @@ class GalleryAdapter extends AbstractContentAdapter implements GalleryContract
 
     public function getDisplayHint(): ?string
     {
-        return $this->acfArray['display_hint'] ?? null;
+        return array_get($this->acfArray, 'display_hint') ?: null;
     }
 }

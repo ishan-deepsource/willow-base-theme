@@ -55,27 +55,27 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
 
     public function getId(): int
     {
-        return $this->wpModel->ID;
+        return data_get($this->wpModel, 'ID', 0);
     }
 
     public function getTitle(): ?string
     {
-        return $this->wpModel->post_title;
+        return data_get($this->wpModel, 'post_title') ?: null;
     }
 
     public function getContent(): ?string
     {
-        return $this->wpModel->post_content;
+        return data_get($this->wpModel, 'post_content') ?: null;
     }
 
     public function getStatus(): ?string
     {
-        return $this->wpModel->post_status;
+        return data_get($this->wpModel, 'post_status') ?: null;
     }
 
     public function getAuthor(): ?AuthorContract
     {
-        if ($wpUser = get_user_by('id', $this->wpModel->post_author)) {
+        if (($author = data_get($this->wpModel, 'post_author')) && $wpUser = get_user_by('id', $author)) {
             return new Author(new AuthorAdapter($wpUser));
         }
 
@@ -89,17 +89,25 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
 
     public function getPublishedAt(): ?DateTime
     {
-        return $this->toDateTime($this->wpModel->post_date);
+        if ($date = data_get($this->wpModel, 'post_date')) {
+            return $this->toDateTime($date);
+        }
+
+        return null;
     }
 
     public function getUpdatedAt(): ?DateTime
     {
-        return $this->toDateTime($this->wpModel->post_modified);
+        if ($date = data_get($this->wpModel, 'post_modified')) {
+            return $this->toDateTime($date);
+        }
+
+        return null;
     }
 
     public function isFrontPage(): bool
     {
-        return intval(get_option('page_on_front')) === $this->wpModel->ID;
+        return intval(get_option('page_on_front')) === $this->getId();
     }
 
     public function getTeaser(string $type): ?TeaserContract
@@ -126,7 +134,7 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
     {
         if (!$this->contents) {
             $this->contents = collect($this->pageContents)->map(function ($acfContentArray) {
-                $class = collect($this->contentModelsMapping)->get($acfContentArray['acf_fc_layout']);
+                $class = collect($this->contentModelsMapping)->get(array_get($acfContentArray, 'acf_fc_layout'));
                 return $this->getContentFactory($class)->getModel($acfContentArray);
             })->reject(function ($content) {
                 return is_null($content);

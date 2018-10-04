@@ -17,12 +17,12 @@ use Illuminate\Support\Collection;
  *
  * @package \Bonnier\Willow\Base\Adapters\Wp\Terms\Vocabulary
  */
-class VocabularyAdapter extends AbstractWpAdapter implements VocabularyContract
+class VocabularyAdapter implements VocabularyContract
 {
     protected $vocabulary;
     protected $composite;
 
-    public function __construct(CompositeContract $composite,$vocabulary)
+    public function __construct(CompositeContract $composite, $vocabulary)
     {
         $this->vocabulary = $vocabulary;
         $this->composite = $composite;
@@ -30,33 +30,33 @@ class VocabularyAdapter extends AbstractWpAdapter implements VocabularyContract
 
     public function getName(): ?string
     {
-        return $this->vocabulary->name ?? null;
+        return data_get($this->vocabulary, 'name') ?: null;
     }
 
     public function getMachineName(): ?string
     {
-        return $this->vocabulary->machine_name ?? null;
+        return data_get($this->vocabulary, 'machine_name') ?: null;
     }
 
     public function getContentHubId(): ?string
     {
-        return $this->vocabulary->content_hub_id ?? null;
+        return data_get($this->vocabulary, 'content_hub_id') ?: null;
     }
 
     public function getMultiSelect(): ?string
     {
-        return $this->vocabulary->multi_select ?? null;
+        return data_get($this->vocabulary, 'multi_select') ?: null;
     }
 
-    public function getBrand(): ?BrandContract
+    public function getTerms(): ?Collection
     {
-        return $this->vocabulary ? new Brand(new BrandAdapter($this->vocabulary->brand)) : null;
-    }
+        if ($machineName = $this->getMachineName()) {
+            $term = wp_get_post_terms($this->composite->getId(), $machineName);
+            return collect($term)->map(function (\WP_Term $tag) {
+                return new Tag(new TagAdapter($tag));
+            });
+        }
 
-    public function getTerms(): ?Collection{
-        //If it's possible to select multiple, we need to run through each item
-        return $this->vocabulary ? new Collection(collect(wp_get_post_terms($this->composite->getId(), $this->vocabulary->machine_name))->map(function (\WP_Term $tag) {
-            return new Tag(new TagAdapter($tag));
-        })->toArray()) : collect([]);
+        return null;
     }
 }

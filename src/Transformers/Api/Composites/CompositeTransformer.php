@@ -2,8 +2,8 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
+use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\AssociatedContentContract;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentAudioTransformer;
-use Bonnier\Willow\Base\Transformers\Api\Root\AudioTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
@@ -124,7 +124,7 @@ class CompositeTransformer extends TransformerAbstract
 
     private function getAudio(CompositeContract $composite)
     {
-        if($audio = $composite->getAudio()){
+        if ($audio = $composite->getAudio()) {
             return with(new ContentAudioTransformer())->transform($audio);
         }
         return null;
@@ -191,10 +191,16 @@ class CompositeTransformer extends TransformerAbstract
         return $this->collection($content, new CompositeTeaserTransformer());
     }
 
-    public function includeAssociatedContent(CompositeContract $composite){
-        if(!$composite->getParent()){
-            return null;
+    public function includeAssociatedContent(CompositeContract $composite)
+    {
+        if ($associatedContents = $composite->getAssociatedComposites()) {
+            return $this->collection($associatedContents->map(function (AssociatedContentContract $associatedContent) {
+                return $associatedContent->getAssociatedComposite();
+            })->reject(function ($composite) {
+                return is_null($composite);
+            }), new CompositeTeaserTransformer);
         }
-        return $this->collection($composite->getAssociatedComposites(), new CompositeTeaserTransformer());
+
+        return null;
     }
 }

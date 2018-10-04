@@ -6,5 +6,5 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
 
 interface TextItemContract extends ContentContract
 {
-    public function getBody() : string;
+    public function getBody(): ?string;
 }

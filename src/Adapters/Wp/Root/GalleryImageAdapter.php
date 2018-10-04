@@ -25,12 +25,12 @@ class GalleryImageAdapter implements GalleryImageContract
 
     public function getDescription(): ?string
     {
-        return $this->galleryImage['description'] ?? null;
+        return array_get($this->galleryImage, 'description') ?: null;
     }
 
     public function getImage(): ?ImageContract
     {
-        if (($imageId = $this->galleryImage['image'] ?? null) && $image = get_post($imageId)) {
+        if (($imageId = array_get($this->galleryImage, 'image')) && $image = get_post($imageId)) {
             return new Image(new ImageAdapter($image));
         }
 
