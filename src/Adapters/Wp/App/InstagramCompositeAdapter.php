@@ -185,11 +185,6 @@ class InstagramCompositeAdapter implements CompositeContract
         return collect([]);
     }
 
-    public function getEstimatedListeningTime(): ?int
-    {
-        return 0;
-    }
-
     public function getAudio(): ?AudioContract
     {
         return null;

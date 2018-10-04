@@ -39,7 +39,7 @@ class Composite implements CompositeContract
 
     public function getKind(): string
     {
-        return $this->composite->getKind();
+        return $this->baseComposite->getKind();
     }
 
     public function getTitle(): ?string
@@ -79,7 +79,7 @@ class Composite implements CompositeContract
 
     public function getVocabularies(): ?Collection
     {
-        return $this->composite->getVocabularies();
+        return $this->baseComposite->getVocabularies();
     }
 
     public function getLeadImage(): ?ContentImageContract
@@ -164,17 +164,12 @@ class Composite implements CompositeContract
 
     public function getAssociatedComposites(): ?Collection
     {
-        return $this->composite->getAssociatedComposites();
+        return $this->baseComposite->getAssociatedComposites();
     }
 
     public function getParent(): ?int
     {
-        return $this->composite->getParent();
-    }
-
-    public function getEstimatedListeningTime(): ?int
-    {
-        return $this->baseComposite->getEstimatedReadingTime();
+        return $this->baseComposite->getParent();
     }
 
     public function getAudio(): ?AudioContract

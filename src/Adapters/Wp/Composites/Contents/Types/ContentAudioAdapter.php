@@ -77,8 +77,7 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
 
     public function getDuration(): int
     {
-        require_once( ABSPATH . 'wp-admin/includes/media.php' );
-        if($id = $this->audio->getId()){
+        if($id = $this->getId()){
             $metaData = wp_get_attachment_metadata( $id );
             return $metaData['length'] ? ceil($metaData['length'] / 60) : 0;
         }
