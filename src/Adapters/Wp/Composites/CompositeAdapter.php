@@ -3,8 +3,10 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Composites;
 
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentAudioAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentImageAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\QuoteAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Root\AudioAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\CommercialAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\CategoryAdapter;
@@ -32,6 +34,7 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentFileContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\AudioContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
@@ -329,8 +332,16 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         });
     }
 
-    public function getEstimatedListeningTime(): ?int
+    public function getAudio(): ?AudioContract
     {
-        return intval(get_post_meta($this->getId(), 'lisening_time', true)) ?: 0;
+        if (($audio = get_field('audio')) && $file = array_get($audio, 'file'))
+        {
+            return new ContentAudioAdapter([
+                'title' => array_get($audio, 'title'),
+                'file' => $audio['file'],
+                'image' => array_get($audio, 'audio_thumbnail'),
+            ]);
+        }
+        return null;
     }
 }

@@ -38,7 +38,6 @@ class ActionsBootstrap
             new PostSlugChange();
             new PreviewUrl();
             new EstimatedReadingTime();
-            new EstimatedListeningTime();
         }
     }
 }

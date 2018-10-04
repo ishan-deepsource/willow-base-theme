@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Models\Contracts\Composites;
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\AudioContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
@@ -69,5 +70,5 @@ interface CompositeContract
 
     public function getAssociatedComposites(): ?Collection;
 
-    public function getEstimatedListeningTime(): ?int;
+    public function getAudio(): ?AudioContract;
 }
