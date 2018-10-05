@@ -24,12 +24,12 @@ class Video extends AbstractContent implements VideoContract
         parent::__construct($video);
     }
 
-    public function getEmbedUrl(): string
+    public function getEmbedUrl(): ?string
     {
         return $this->model->getEmbedUrl();
     }
 
-    public function getCaption(): string
+    public function getCaption(): ?string
     {
         return $this->model->getCaption();
     }
