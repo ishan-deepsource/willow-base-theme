@@ -43,7 +43,7 @@ class HotspotImage extends AbstractContent implements HotspotImageContract
         return $this->model->getDescription();
     }
 
-    public function getImage(): ImageContract
+    public function getImage(): ?ImageContract
     {
         return $this->model->getImage();
     }

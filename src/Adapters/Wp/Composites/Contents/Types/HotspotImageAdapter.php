@@ -33,9 +33,10 @@ class HotspotImageAdapter extends AbstractContentAdapter implements HotspotImage
         return array_get($this->acfArray, 'display_hint') ?: null;
     }
 
-    public function getImage(): ImageContract
+    public function getImage(): ?ImageContract
     {
-        return new Image(new ImageAdapter($this->acfArray['image']));
+        $image = array_get($this->acfArray, 'image');
+        return $image ? new Image(new ImageAdapter($image)) : null;
     }
 
     public function getHotspots(): Collection

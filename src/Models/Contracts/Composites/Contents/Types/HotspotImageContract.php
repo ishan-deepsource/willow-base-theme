@@ -12,7 +12,7 @@ interface HotspotImageContract extends ContentContract
 
     public function getDescription(): ?string;
 
-    public function getImage(): ImageContract;
+    public function getImage(): ?ImageContract;
 
     public function getDisplayHint(): ?string;
 
