@@ -17,6 +17,7 @@ use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentAudio;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentFile;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentImage;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Gallery;
+use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\HotspotImage;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\InfoBox;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\InsertedCode;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Link;
@@ -63,18 +64,19 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     protected $contents;
 
     protected $contentModelsMapping = [
-        'file' => ContentFile::class,
-        'gallery' => Gallery::class,
-        'image' => ContentImage::class,
-        'infobox' => InfoBox::class,
-        'inserted_code' => InsertedCode::class,
-        'link' => Link::class,
-        'text_item' => TextItem::class,
-        'video' => Video::class,
-        'audio' => ContentAudio::class,
-        'quote' => Quote::class,
+        'file'                 => ContentFile::class,
+        'gallery'              => Gallery::class,
+        'image'                => ContentImage::class,
+        'infobox'              => InfoBox::class,
+        'inserted_code'        => InsertedCode::class,
+        'link'                 => Link::class,
+        'text_item'            => TextItem::class,
+        'video'                => Video::class,
+        'audio'                => ContentAudio::class,
+        'quote'                => Quote::class,
         'associated_composite' => AssociatedContent::class,
-        'paragraph_list' => ParagraphList::class
+        'paragraph_list'       => ParagraphList::class,
+        'hotspot_image'        => HotspotImage::class,
     ];
 
     protected $acfFields;
@@ -133,7 +135,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getContents(): ?Collection
     {
-        if (!$this->contents) {
+        if (! $this->contents) {
             $this->contents = collect($this->compositeContents)->map(function ($acfContentArray) {
                 if (array_get($acfContentArray, 'lead_image')) {
                     return null;
@@ -162,7 +164,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     public function getFirstInlineImage(): ?ContentImageContract
     {
         return $this->getContents()->first(function (ContentContract $content) {
-            return $content instanceof ContentImageContract;
+                return $content instanceof ContentImageContract;
         }) ?? new ContentImage(new ContentImageAdapter([]));
     }
 
@@ -197,7 +199,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getLabelLink(): ?string
     {
-        if (!$this->getCommercial()) {
+        if (! $this->getCommercial()) {
             return optional($this->getCategory())->getUrl();
         }
         return null;
@@ -308,7 +310,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     public function getAssociatedComposites(): ?Collection
     {
         $associatedComposites = get_field('composite_content', $this->getParent());
-        if (!$associatedComposites) {
+        if (! $associatedComposites) {
             return null;
         }
 
@@ -327,7 +329,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         if (($audio = get_field('audio')) && $file = array_get($audio, 'file')) {
             return new ContentAudioAdapter([
                 'title' => array_get($audio, 'title'),
-                'file' => $file,
+                'file'  => $file,
                 'image' => array_get($audio, 'audio_thumbnail'),
             ]);
         }
