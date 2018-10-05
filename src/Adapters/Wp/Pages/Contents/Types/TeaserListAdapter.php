@@ -27,6 +27,11 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
         return array_get($this->acfArray, 'title') ?: null;
     }
 
+    public function getLabel(): ?string
+    {
+        return array_get($this->acfArray, 'label') ?: null;
+    }
+
     public function getDescription(): ?string
     {
         return array_get($this->acfArray, 'description') ?: null;
@@ -50,9 +55,14 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
         return null;
     }
 
+    public function getLinkLabel(): ?string
+    {
+        return array_get($this->acfArray, 'link_label') ?: null;
+    }
+
     public function getDisplayHint(): ?string
     {
-        return array_get($this->acfArray, 'display_hint');
+        return array_get($this->acfArray, 'display_hint') ?: null;
     }
 
     public function getTeasers(): ?Collection
