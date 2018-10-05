@@ -20,17 +20,17 @@ class HotspotImageAdapter extends AbstractContentAdapter implements HotspotImage
 {
     public function getTitle(): ?string
     {
-        return array_get($this->acfArray, 'title', null) ?: null;
+        return array_get($this->acfArray, 'title') ?: null;
     }
 
     public function getDescription(): ?string
     {
-        return array_get($this->acfArray, 'description', null) ?: null;
+        return array_get($this->acfArray, 'description') ?: null;
     }
 
     public function getDisplayHint(): ?string
     {
-        return array_get($this->acfArray, 'display_hint', null) ?: null;
+        return array_get($this->acfArray, 'display_hint') ?: null;
     }
 
     public function getImage(): ImageContract

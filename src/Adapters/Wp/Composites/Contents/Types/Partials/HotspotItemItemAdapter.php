@@ -24,12 +24,12 @@ class HotspotItemItemAdapter implements HotspotItemContract
 
     public function getTitle(): ?string
     {
-        return array_get($this->acfArray, 'title', null) ?: null;
+        return array_get($this->acfArray, 'title') ?: null;
     }
 
     public function getDescription(): ?string
     {
-        return array_get($this->acfArray, 'description', null) ?: null;
+        return array_get($this->acfArray, 'description') ?: null;
     }
 
     public function getCoordinates(): array
