@@ -23,7 +23,7 @@ abstract class AbstractContent implements ContentContract
         $this->model = $content;
     }
 
-    public function getType() : string
+    public function getType(): ?string
     {
         return $this->model->getType();
     }

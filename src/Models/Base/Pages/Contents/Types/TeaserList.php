@@ -25,6 +25,11 @@ class TeaserList extends AbstractContent implements TeaserListContract
         return $this->model->getTitle();
     }
 
+    public function getLabel(): ?string
+    {
+        return $this->model->getLabel();
+    }
+
     public function getDescription(): ?string
     {
         return $this->model->getDescription();
@@ -38,6 +43,11 @@ class TeaserList extends AbstractContent implements TeaserListContract
     public function getLink(): ?HyperlinkContract
     {
         return $this->model->getLink();
+    }
+
+    public function getLinkLabel(): ?string
+    {
+        return $this->model->getLinkLabel();
     }
 
     public function getDisplayHint(): ?string

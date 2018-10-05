@@ -100,16 +100,16 @@
         },
         {
             "name": "bonnier/contenthub-editor",
-            "version": "3.8.0",
+            "version": "3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-contenthub-editor.git",
-                "reference": "32e3e9333d2ce5ef8dea590661dd2a6d89305fdf"
+                "reference": "874fb336019655132cf72f8de05751c99ce08adc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/32e3e9333d2ce5ef8dea590661dd2a6d89305fdf",
-                "reference": "32e3e9333d2ce5ef8dea590661dd2a6d89305fdf",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/874fb336019655132cf72f8de05751c99ce08adc",
+                "reference": "874fb336019655132cf72f8de05751c99ce08adc",
                 "shasum": ""
             },
             "require": {
@@ -152,7 +152,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-10-04T09:40:46+00:00"
+            "time": "2018-10-05T12:48:08+00:00"
         },
         {
             "name": "bonnier/php-video-helper",
@@ -765,16 +765,16 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.7.7",
+            "version": "v5.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "72e125b25d3f7aabbf4b2ef68590db7637b8223c"
+                "reference": "9532d673de305b0c0028c0ce60c8952b807d7bc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/72e125b25d3f7aabbf4b2ef68590db7637b8223c",
-                "reference": "72e125b25d3f7aabbf4b2ef68590db7637b8223c",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/9532d673de305b0c0028c0ce60c8952b807d7bc3",
+                "reference": "9532d673de305b0c0028c0ce60c8952b807d7bc3",
                 "shasum": ""
             },
             "require": {
@@ -805,20 +805,20 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "https://laravel.com",
-            "time": "2018-09-27T14:15:29+00:00"
+            "time": "2018-10-03T14:04:39+00:00"
         },
         {
             "name": "illuminate/support",
-            "version": "v5.7.7",
+            "version": "v5.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "d01c9ac04dee022ff3cd931e60e989a0d950812a"
+                "reference": "c7583db6703a36b7fa76254073046e0a920ed276"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/d01c9ac04dee022ff3cd931e60e989a0d950812a",
-                "reference": "d01c9ac04dee022ff3cd931e60e989a0d950812a",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/c7583db6703a36b7fa76254073046e0a920ed276",
+                "reference": "c7583db6703a36b7fa76254073046e0a920ed276",
                 "shasum": ""
             },
             "require": {
@@ -864,7 +864,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2018-10-01T13:13:54+00:00"
+            "time": "2018-10-04T13:27:30+00:00"
         },
         {
             "name": "junaidbhura/advanced-custom-fields-pro",

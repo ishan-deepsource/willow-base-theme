@@ -18,7 +18,7 @@ class TeaserListHyperlink implements HyperlinkContract
 
     public function getTitle(): ?string
     {
-        return $this->teaserList->getTitle();
+        return $this->teaserList->getLinkLabel() ?: $this->teaserList->getTitle();
     }
 
     public function getUrl(): ?string

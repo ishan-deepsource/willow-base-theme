@@ -15,9 +15,11 @@ class TeaserListTransformer extends TransformerAbstract
     {
         return [
             'title' => $teaserList->getTitle(),
+            'label' => $teaserList->getLabel(),
             'description' => $teaserList->getDescription(),
             'image' => $this->transformImage($teaserList),
             'link' => $this->transformLink($teaserList),
+            'link_label' => $teaserList->getLinkLabel(),
             'display_hint' => $teaserList->getDisplayHint(),
             'teasers' => $this->transformTeasers($teaserList),
         ];
