@@ -32,9 +32,9 @@ class HotspotItemItemAdapter implements HotspotItemContract
         return array_get($this->acfArray, 'description') ?: null;
     }
 
-    public function getCoordinates(): array
+    public function getCoordinates(): ?array
     {
-        if (($focalPoint = array_get($this->acfArray, 'coordinates') ?: null) &&
+        if (($focalPoint = array_get($this->acfArray, 'coordinates')) &&
             !empty($coords = explode(',', $focalPoint)) &&
             count($coords) == 2) {
             return [
@@ -42,10 +42,6 @@ class HotspotItemItemAdapter implements HotspotItemContract
                 'y' => $coords[1]
             ];
         }
-
-        return [
-            'x' => 0.5,
-            'y' => 0.5
-        ];
+        return null;
     }
 }

@@ -6,5 +6,5 @@ interface HotspotItemContract
 {
     public function getTitle(): ?string;
     public function getDescription(): ?string;
-    public function getCoordinates(): array;
+    public function getCoordinates(): ?array;
 }

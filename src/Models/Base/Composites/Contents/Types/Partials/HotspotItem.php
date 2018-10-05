@@ -38,7 +38,7 @@ class HotspotItem implements HotspotItemContract
         return $this->model->getDescription();
     }
 
-    public function getCoordinates(): array
+    public function getCoordinates(): ?array
     {
         return $this->model->getCoordinates();
     }
