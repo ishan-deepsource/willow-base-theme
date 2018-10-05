@@ -41,23 +41,8 @@ class HotspotImageAdapter extends AbstractContentAdapter implements HotspotImage
 
     public function getHotspots(): Collection
     {
-        return collect($this->acfArray['hotspots'])->transform(function ($acfHotspotArr) {
+        return collect(array_get($this->acfArray, 'hotspots', []))->transform(function ($acfHotspotArr) {
             return new HotspotItem(new HotspotItemItemAdapter($acfHotspotArr));
         });
-    }
-
-    public function getType(): string
-    {
-        return 'hotspot_image';
-    }
-
-    public function isLocked(): bool
-    {
-        return false;
-    }
-
-    public function getStickToNext(): bool
-    {
-        return false;
     }
 }
