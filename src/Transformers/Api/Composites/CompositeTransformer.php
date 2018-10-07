@@ -92,7 +92,8 @@ class CompositeTransformer extends TransformerAbstract
 
     public function includeCategory(CompositeContract $composite)
     {
-        return $this->item($composite->getCategory(), new CategoryTransformer());
+        $category = $composite->getCategory();
+        return $category ? $this->item($category, new CategoryTransformer()) : null;
     }
 
     public function includeTags(CompositeContract $composite)
