@@ -32,9 +32,9 @@ class ParagraphListAdapter extends AbstractContentAdapter implements ParagraphLi
         return null;
     }
 
-    public function getDisplayHint(): string
+    public function getDisplayHint(): ?string
     {
-        return array_get($this->acfArray, 'display_hint') ?: 'default';
+        return array_get($this->acfArray, 'display_hint') ?: null;
     }
 
     public function getItems(): Collection

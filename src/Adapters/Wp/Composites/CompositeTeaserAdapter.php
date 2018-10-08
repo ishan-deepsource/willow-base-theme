@@ -27,7 +27,7 @@ class CompositeTeaserAdapter extends AbstractTeaserAdapter
             return $title;
         }
 
-        return ($this->composite->getTitle() ?? null) ?: null;
+        return optional($this->composite)->getTitle() ?: null;
     }
 
     public function getImage(): ?ImageContract
@@ -69,6 +69,6 @@ class CompositeTeaserAdapter extends AbstractTeaserAdapter
             return $description;
         }
 
-        return ($this->composite->getDescription() ?? null) ?: null;
+        return optional($this->composite)->getDescription() ?: null;
     }
 }

@@ -19,41 +19,41 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
 {
     protected $audio;
 
-    public function __construct(array $acfArray)
+    public function __construct(?array $acfArray)
     {
         parent::__construct($acfArray);
         $post = get_post(array_get($this->acfArray, 'file'));
         $this->audio = $post ? new Audio(new AudioAdapter($post)) : null;
     }
 
-    public function isLead() : bool
+    public function isLead(): bool
     {
         return array_get($this->acfArray, 'lead_image', false);
     }
 
     public function getId(): ?int
     {
-        return optional($this->audio)->getId();
+        return optional($this->audio)->getId() ?: null;
     }
 
     public function getUrl(): ?string
     {
-        return optional($this->audio)->getUrl();
+        return optional($this->audio)->getUrl() ?: null;
     }
 
     public function getTitle(): ?string
     {
-        return optional($this->audio)->getTitle();
+        return optional($this->audio)->getTitle() ?: null;
     }
 
     public function getDescription(): ?string
     {
-        return optional($this->audio)->getDescription();
+        return optional($this->audio)->getDescription() ?: null;
     }
 
     public function getLanguage(): ?string
     {
-        return optional($this->audio)->getLanguage();
+        return optional($this->audio)->getLanguage() ?: null;
     }
 
     public function getAudioTitle(): ?string
@@ -63,7 +63,7 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
 
     public function getCaption(): ?string
     {
-        return optional($this->audio)->getCaption();
+        return optional($this->audio)->getCaption() ?: null;
     }
 
     public function getImage(): ?ImageContract

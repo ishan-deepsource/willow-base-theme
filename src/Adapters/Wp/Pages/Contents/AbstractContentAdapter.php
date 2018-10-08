@@ -15,6 +15,6 @@ abstract class AbstractContentAdapter implements ContentContract
 
     public function getType() : ?string
     {
-        return array_get($this->acfArray, 'acf_fc_layout');
+        return array_get($this->acfArray, 'acf_fc_layout') ?: null;
     }
 }

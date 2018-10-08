@@ -17,9 +17,9 @@ class SocialFeedTeaserAdapter extends AbstractTeaserAdapter
         $this->adapter = $adapter;
     }
 
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
-        return $this->adapter->getTitle() ?? '';
+        return optional($this->adapter)->getTitle() ?: null;
     }
 
     public function getImage(): ?ImageContract
@@ -27,8 +27,8 @@ class SocialFeedTeaserAdapter extends AbstractTeaserAdapter
         return $this->adapter->getLeadImage();
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
-        return $this->adapter->getDescription() ?? '';
+        return optional($this->adapter)->getDescription() ?: null;
     }
 }

@@ -22,7 +22,7 @@ class FileAdapter implements FileContract
 
     public function getId(): ?int
     {
-        return data_get($this->file, 'ID');
+        return data_get($this->file, 'ID') ?: null;
     }
 
     public function getUrl(): ?string

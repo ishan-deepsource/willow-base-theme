@@ -84,7 +84,7 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
 
     public function getTemplate(): ?string
     {
-        return get_page_template_slug($this->getId());
+        return get_page_template_slug($this->getId()) ?: null;
     }
 
     public function getPublishedAt(): ?DateTime

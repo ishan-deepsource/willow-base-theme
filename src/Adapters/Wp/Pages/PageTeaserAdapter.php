@@ -27,7 +27,7 @@ class PageTeaserAdapter extends AbstractTeaserAdapter
             return $title;
         }
 
-        return ($this->page->getTitle() ?? null) ?: null;
+        return optional($this->page->getTitle()) ?: null;
     }
 
     public function getImage(): ?ImageContract

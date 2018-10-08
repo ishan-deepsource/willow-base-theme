@@ -26,8 +26,7 @@ class HotspotImage extends AbstractContent implements HotspotImageContract
     {
         parent::__construct($hotspotImage);
     }
-
-
+    
     public function getStickToNext(): bool
     {
         return $this->model->getStickToNext();

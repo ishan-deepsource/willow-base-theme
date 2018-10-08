@@ -37,7 +37,7 @@ class Composite implements CompositeContract
         return $this->baseComposite->getId();
     }
 
-    public function getKind(): string
+    public function getKind(): ?string
     {
         return $this->baseComposite->getKind();
     }

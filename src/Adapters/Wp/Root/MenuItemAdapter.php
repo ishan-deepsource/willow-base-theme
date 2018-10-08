@@ -22,7 +22,7 @@ class MenuItemAdapter implements MenuItemContract
 
     public function getId(): ?int
     {
-        return data_get($this->menuItem, 'object_id');
+        return data_get($this->menuItem, 'object_id') ?: null;
     }
 
     public function getUrl(): ?string

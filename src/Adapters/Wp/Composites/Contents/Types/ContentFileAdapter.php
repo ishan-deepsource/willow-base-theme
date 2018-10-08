@@ -26,11 +26,14 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
             $post = get_post($fileId);
             $this->file = $post ? new File(new FileAdapter($post)) : null;
         }
+        if (!$this->file) {
+            throw new \InvalidArgumentException('Missing file');
+        }
     }
 
     public function getId(): ?int
     {
-        return optional($this->file)->getId() ?? null;
+        return optional($this->file)->getId() ?: null;
     }
 
     public function getImages(): ?Collection
@@ -45,26 +48,26 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
 
     public function getCaption(): ?string
     {
-        return optional($this->file)->getCaption() ?? null;
+        return optional($this->file)->getCaption() ?: null;
     }
 
     public function getUrl() : ?string
     {
-        return optional($this->file)->getUrl() ?? null;
+        return optional($this->file)->getUrl() ?: null;
     }
 
     public function getTitle(): ?string
     {
-        return optional($this->file)->getTitle() ?? null;
+        return optional($this->file)->getTitle() ?: null;
     }
 
     public function getDescription(): ?string
     {
-        return optional($this->file)->getDescription() ?? null;
+        return optional($this->file)->getDescription() ?: null;
     }
 
     public function getLanguage(): ?string
     {
-        return optional($this->file)->getLanguage() ?? null;
+        return optional($this->file)->getLanguage() ?: null;
     }
 }
