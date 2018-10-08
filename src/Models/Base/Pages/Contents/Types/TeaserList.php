@@ -15,11 +15,6 @@ use Illuminate\Support\Collection;
  */
 class TeaserList extends AbstractContent implements TeaserListContract
 {
-    public function __construct(TeaserListContract $teaserList)
-    {
-        parent::__construct($teaserList);
-    }
-
     public function getTitle(): ?string
     {
         return $this->model->getTitle();

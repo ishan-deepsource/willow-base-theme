@@ -17,11 +17,6 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
 {
     protected $teasers;
 
-    public function __construct(array $acfWidget)
-    {
-        parent::__construct($acfWidget);
-    }
-
     public function getTitle(): ?string
     {
         return array_get($this->acfArray, 'title') ?: null;

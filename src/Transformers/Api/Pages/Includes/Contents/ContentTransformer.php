@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents;
 
 use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\ContentContract;
+use Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents\Types\FeaturedContentTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents\Types\TeaserListTransformer;
 use Bonnier\Willow\Base\Transformers\NullTransformer;
 use League\Fractal\TransformerAbstract;
@@ -10,7 +11,8 @@ use League\Fractal\TransformerAbstract;
 class ContentTransformer extends TransformerAbstract
 {
     protected $transformerMapping = [
-        'teaser_list' => TeaserListTransformer::class
+        'teaser_list' => TeaserListTransformer::class,
+        'featured_content' => FeaturedContentTransformer::class,
     ];
     public function transform(ContentContract $content)
     {
