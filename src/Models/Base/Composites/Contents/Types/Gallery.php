@@ -40,6 +40,11 @@ class Gallery extends AbstractContent implements GalleryContract
         return $this->model->getTitle();
     }
 
+    public function getDescription(): ?string
+    {
+        return $this->model->getDescription();
+    }
+
     public function getDisplayHint(): ?string
     {
         return $this->model->getDisplayHint();

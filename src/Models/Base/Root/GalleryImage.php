@@ -14,6 +14,11 @@ class GalleryImage implements GalleryImageContract
         $this->galleryImage = $galleryImage;
     }
 
+    public function getTitle(): ?string
+    {
+        return $this->galleryImage->getTitle();
+    }
+
     public function getDescription(): ?string
     {
         return $this->galleryImage->getDescription();

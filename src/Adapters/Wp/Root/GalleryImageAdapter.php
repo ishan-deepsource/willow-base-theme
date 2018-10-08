@@ -22,6 +22,10 @@ class GalleryImageAdapter implements GalleryImageContract
         $this->galleryImage = $galleryImage;
     }
 
+    public function getTitle(): ?string
+    {
+        return array_get($this->galleryImage, 'title') ?: null;
+    }
 
     public function getDescription(): ?string
     {

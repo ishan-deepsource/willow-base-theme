@@ -20,6 +20,7 @@ class GalleryTransformer extends TransformerAbstract
     {
         return [
             'title' => $gallery->getTitle(),
+            'description' => $gallery->getDescription(),
             'display_hint' => $gallery->getDisplayHint(),
             'images' => $gallery->isLocked() ?
                 null :
