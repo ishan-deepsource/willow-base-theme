@@ -12,6 +12,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\CategoryAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Vocabulary\VocabularyAdapter;
 use Bonnier\Willow\Base\Factories\CompositeContentFactory;
+use Bonnier\Willow\Base\Factories\Contracts\ModelFactoryContract;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\AssociatedContent;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentAudio;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentFile;
@@ -125,7 +126,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getStatus(): ?string
     {
-        return data_get($this->wpModel, 'post_status');
+        return data_get($this->wpModel, 'post_status') ?: null;
     }
 
     public function getLocale(): ?string
@@ -141,7 +142,11 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
                     return null;
                 }
                 $class = collect($this->contentModelsMapping)->get(array_get($acfContentArray, 'acf_fc_layout'));
-                return $this->getContentFactory($class)->getModel($acfContentArray);
+                try {
+                    return $this->getContentFactory($class)->getModel($acfContentArray);
+                } catch (\InvalidArgumentException $exception) {
+                    return null;
+                }
             })->reject(function ($content) {
                 return is_null($content);
             });
@@ -158,14 +163,14 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         if ($leadImageContent) {
             return new ContentImage(new ContentImageAdapter($leadImageContent));
         }
-        return new ContentImage(new ContentImageAdapter([]));
+        return null;
     }
 
     public function getFirstInlineImage(): ?ContentImageContract
     {
         return $this->getContents()->first(function (ContentContract $content) {
                 return $content instanceof ContentImageContract;
-        }) ?? new ContentImage(new ContentImageAdapter([]));
+        }) ?? null;
     }
 
     public function getFirstFileImage(): ?ContentImageContract
@@ -178,7 +183,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
                 }
             }
             return $returnVal;
-        }, new ContentImage(new ContentImageAdapter([])));
+        }, null);
     }
 
     public function getLink(): ?string
@@ -264,7 +269,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         return $commercial->getType() ? $commercial : null;
     }
 
-    private function getContentFactory($class)
+    private function getContentFactory($class): ModelFactoryContract
     {
         if ($this->contentFactory) {
             return $this->contentFactory->setBaseClass($class);

@@ -24,16 +24,6 @@ class AssociatedContent extends AbstractContent implements AssociatedContentCont
         parent::__construct($associatedContent);
     }
 
-    public function getType() : string
-    {
-        return $this->model->getType();
-    }
-
-    public function isLocked() : bool
-    {
-        return $this->model->isLocked();
-    }
-
     public function getStickToNext(): bool
     {
         return $this->model->getStickToNext();

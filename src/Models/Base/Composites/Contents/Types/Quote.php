@@ -24,7 +24,7 @@ class Quote extends AbstractContent implements QuoteContract
         parent::__construct($quote);
     }
 
-    public function getQuote(): string
+    public function getQuote(): ?string
     {
         return $this->model->getQuote();
     }

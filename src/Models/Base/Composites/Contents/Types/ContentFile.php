@@ -35,12 +35,12 @@ class ContentFile extends AbstractContent implements ContentFileContract
         return $this->model->getImages() ?? new Collection();
     }
 
-    public function getCaption(): string
+    public function getCaption(): ?string
     {
         return $this->model->getCaption() ?: '';
     }
 
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
         return $this->model->getUrl() ?? '';
     }
@@ -59,7 +59,7 @@ class ContentFile extends AbstractContent implements ContentFileContract
     {
         return $this->model->getLanguage();
     }
-    
+
     public function getStickToNext(): bool
     {
         return $this->model->getStickToNext() ?? false;

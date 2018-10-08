@@ -39,7 +39,7 @@ class ParagraphList extends AbstractContent implements ParagraphListContract
         return $this->model->getImage();
     }
 
-    public function getDisplayHint(): string
+    public function getDisplayHint(): ?string
     {
         return $this->model->getDisplayHint();
     }

@@ -29,7 +29,7 @@ class AuthorAdapter implements AuthorContract
 
     public function getId(): ?int
     {
-        return data_get($this->user, 'ID');
+        return data_get($this->user, 'ID') ?: null;
     }
 
     public function getName(): ?string

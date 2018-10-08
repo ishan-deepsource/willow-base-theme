@@ -24,14 +24,17 @@ abstract class AbstractContentAdapter implements ContentContract
     {
         $this->acfArray = $acfArray;
         $this->post = $post;
+        if (!$this->acfArray) {
+            throw new \InvalidArgumentException('Missing ACF Array');
+        }
     }
 
     public function getType() : ?string
     {
-        return array_get($this->acfArray, 'acf_fc_layout');
+        return array_get($this->acfArray, 'acf_fc_layout') ?: null;
     }
 
-    public function isLocked() : bool
+    public function isLocked(): bool
     {
         return array_get($this->acfArray, 'locked_content', false);
     }

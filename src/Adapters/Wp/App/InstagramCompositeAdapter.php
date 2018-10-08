@@ -35,14 +35,15 @@ class InstagramCompositeAdapter implements CompositeContract
         return 'Instagram';
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
-        return trim(preg_replace('/#[^\s]+/', '', $this->instagramContent->caption ?? ''));
+        $removedHashtags = preg_replace('/#[^\s]+/', '', $this->instagramContent->caption ?? '');
+        return trim($removedHashtags) ?: null;
     }
 
-    public function getLink(): string
+    public function getLink(): ?string
     {
-        return $this->instagramContent->permalink ?? '';
+        return optional($this->instagramContent)->permalink ?: null;
     }
 
     public function getId(): int
@@ -162,7 +163,7 @@ class InstagramCompositeAdapter implements CompositeContract
 
     public function getVocabularies(): ?Collection
     {
-        return collect([]);
+        return null;
     }
 
     public function getEstimatedReadingTime(): ?int
@@ -182,7 +183,7 @@ class InstagramCompositeAdapter implements CompositeContract
 
     public function getAssociatedComposites(): ?Collection
     {
-        return collect([]);
+        return null;
     }
 
     public function getAudio(): ?AudioContract

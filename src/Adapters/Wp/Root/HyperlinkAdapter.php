@@ -15,12 +15,12 @@ class HyperlinkAdapter implements HyperlinkContract
 
     public function getTitle(): ?string
     {
-        return $this->image->getTitle();
+        return optional($this->image)->getTitle() ?: null;
     }
 
     public function getUrl(): ?string
     {
-        return $this->image->getUrl();
+        return optional($this->image)->getUrl() ?: null;
     }
 
     public function getRelationship(): ?string

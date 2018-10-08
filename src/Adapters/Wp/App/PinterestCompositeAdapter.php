@@ -26,7 +26,9 @@ class PinterestCompositeAdapter implements CompositeContract
     {
         $this->pinterestContent = $pinterestContent;
         if ($pinterestContent) {
-            $this->image = new ContentImage(new SocialFeedImageAdapter($this->pinterestContent->image->original->url));
+            $this->image = new ContentImage(
+                new SocialFeedImageAdapter($this->pinterestContent->image->original->url)
+            );
         }
     }
 
@@ -40,14 +42,14 @@ class PinterestCompositeAdapter implements CompositeContract
         return 'Pinterest';
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
-        return $this->pinterestContent->note ?? '';
+        return optional($this->pinterestContent)->note ?: null;
     }
 
-    public function getLink(): string
+    public function getLink(): ?string
     {
-        return $this->pinterestContent->url ?? '';
+        return optional($this->pinterestContent)->url ?: null;
     }
 
     public function getStatus(): ?string
@@ -162,12 +164,12 @@ class PinterestCompositeAdapter implements CompositeContract
 
     public function getVocabularies(): ?Collection
     {
-        return collect([]);
+        return null;
     }
 
     public function getEstimatedReadingTime(): ?int
     {
-        return 0;
+        return null;
     }
 
     public function getKind(): ?string
@@ -182,7 +184,7 @@ class PinterestCompositeAdapter implements CompositeContract
 
     public function getAssociatedComposites(): ?Collection
     {
-        return collect([]);
+        return null;
     }
 
     public function getAudio(): ?AudioContract

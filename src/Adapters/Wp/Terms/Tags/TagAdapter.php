@@ -30,7 +30,7 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
 
     public function getId(): ?int
     {
-        return data_get($this->wpModel, 'term_id');
+        return data_get($this->wpModel, 'term_id') ?: null;
     }
 
     public function getName(): ?string

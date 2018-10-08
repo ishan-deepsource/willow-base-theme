@@ -24,11 +24,11 @@ class InsertedCode extends AbstractContent implements InsertedCodeContract
         parent::__construct($insertedCode);
     }
 
-    public function getCode(): string
+    public function getCode(): ?string
     {
         return $this->model->getCode();
     }
-    
+
     public function getStickToNext(): bool
     {
         return $this->model->getStickToNext();

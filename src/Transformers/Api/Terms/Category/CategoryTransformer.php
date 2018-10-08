@@ -70,7 +70,7 @@ class CategoryTransformer extends TransformerAbstract
     {
         return $this->collection($category->getChildren(), new CategoryTransformer());
     }
-    
+
     public function includeContentTeasers(CategoryContract $category, ParamBag $paramBag)
     {
         list($perPage) = $paramBag->get('per_page') ?: [10];
@@ -92,7 +92,7 @@ class CategoryTransformer extends TransformerAbstract
         }
         return null;
     }
-    
+
     public function includeSiblings(CategoryContract $category)
     {
         return Cache::remember(
@@ -116,7 +116,7 @@ class CategoryTransformer extends TransformerAbstract
                         break;
                     }
                 }
-                
+
                 $siblings = [
                     'prev' => null,
                     'next' => null,
