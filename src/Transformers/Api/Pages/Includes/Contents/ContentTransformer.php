@@ -6,6 +6,7 @@ use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\ContentContract;
 use Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents\Types\BannerPlacementTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents\Types\FeaturedContentTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents\Types\NewsletterTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents\Types\SeoTextTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents\Types\TeaserListTransformer;
 use Bonnier\Willow\Base\Transformers\NullTransformer;
 use League\Fractal\TransformerAbstract;
@@ -17,6 +18,7 @@ class ContentTransformer extends TransformerAbstract
         'featured_content' => FeaturedContentTransformer::class,
         'banner_placement' => BannerPlacementTransformer::class,
         'newsletter' => NewsletterTransformer::class
+        'seo_text' => SeoTextTransformer::class,
     ];
     public function transform(ContentContract $content)
     {

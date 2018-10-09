@@ -19,6 +19,7 @@ use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Traits\DateTimeZoneTrait;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\WP\ContentHub\Editor\Helpers\AcfName;
+use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\SeoText;
 use DateTime;
 use Illuminate\Support\Collection;
 use WP_Post;
@@ -44,6 +45,7 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
         AcfName::WIDGET_FEATURED_CONTENT => FeaturedContent::class,
         AcfName::WIDGET_BANNER_PLACEMENT => BannerPlacement::class,
         AcfName::WIDGET_NEWSLETTER => Newsletter::class,
+        AcfName::WIDGET_SEO_TEXT => SeoText::class,
     ];
 
     public function __construct(WP_Post $page)
