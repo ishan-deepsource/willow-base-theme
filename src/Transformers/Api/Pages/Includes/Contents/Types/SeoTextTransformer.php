@@ -2,11 +2,8 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents\Types;
 
-use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\Types\FeaturedContentContract;
 use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\Types\SeoTextContract;
-use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\ImageTransformer;
-use Bonnier\Willow\Base\Transformers\Api\Root\NativeVideoTransformer;
 use League\Fractal\TransformerAbstract;
 
 class SeoTextTransformer extends TransformerAbstract

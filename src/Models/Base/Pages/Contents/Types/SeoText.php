@@ -3,12 +3,8 @@
 namespace Bonnier\Willow\Base\Models\Base\Pages\Contents\Types;
 
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\AbstractContent;
-use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
-use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\VideoContract;
-use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\Types\FeaturedContentContract;
 use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\Types\SeoTextContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
-use Bonnier\Willow\Base\Models\Contracts\Root\NativeVideoContract;
 
 /**
  * Class SeoText
