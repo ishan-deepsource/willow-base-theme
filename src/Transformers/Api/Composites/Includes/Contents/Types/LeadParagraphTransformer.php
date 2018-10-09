@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sorenthorup
- * Date: 08/10/2018
- * Time: 13.40
- */
 
 namespace Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types;
 
