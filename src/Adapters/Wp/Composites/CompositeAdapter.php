@@ -260,8 +260,13 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getTags(): Collection
     {
-        return collect(array_get($this->acfFields, 'tags', []))->map(function (\WP_Term $tag) {
-            return new Tag(new TagAdapter($tag));
+        return collect(array_get($this->acfFields, 'tags', []))->map(function ($tag) {
+            if ($tag instanceof \WP_Term) {
+                return new Tag(new TagAdapter($tag));
+            }
+            return null;
+        })->reject(function ($tag) {
+            return is_null($tag);
         });
     }
 
