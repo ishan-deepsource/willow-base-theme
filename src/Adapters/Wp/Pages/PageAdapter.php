@@ -7,9 +7,7 @@ use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\TeaserListAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
 use Bonnier\Willow\Base\Factories\PageContentFactory;
-use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\BannerPlacement;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\FeaturedContent;
-use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\Newsletter;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TeaserList;
 use Bonnier\Willow\Base\Models\Base\Root\Author;
 use Bonnier\Willow\Base\Models\Base\Root\Teaser;
@@ -43,8 +41,6 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
     protected $contentModelsMapping = [
         AcfName::WIDGET_TEASER_LIST => TeaserList::class,
         AcfName::WIDGET_FEATURED_CONTENT => FeaturedContent::class,
-        AcfName::WIDGET_BANNER_PLACEMENT => BannerPlacement::class,
-        AcfName::WIDGET_NEWSLETTER => Newsletter::class,
         AcfName::WIDGET_SEO_TEXT => SeoText::class,
     ];
 
