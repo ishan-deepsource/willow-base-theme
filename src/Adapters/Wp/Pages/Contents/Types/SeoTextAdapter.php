@@ -12,12 +12,12 @@ class SeoTextAdapter extends AbstractContentAdapter implements SeoTextContract
 {
     public function getTitle(): ?string
     {
-        return array_get($this->acfArray, 'title') ?? null;
+        return array_get($this->acfArray, 'title') ?: null;
     }
 
     public function getDescription(): ?string
     {
-        return array_get($this->acfArray, 'description') ?? null;
+        return array_get($this->acfArray, 'description') ?: null;
     }
 
     public function getImage(): ?ImageContract
