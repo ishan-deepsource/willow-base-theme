@@ -16,34 +16,19 @@ use Illuminate\Support\Collection;
  */
 class ContentAudio extends AbstractContent implements ContentAudioContract
 {
-    /**
-     * File constructor.
-     *
-     * @param \Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentAudioContract $file
-     */
-    public function __construct(ContentAudioContract $file)
-    {
-        parent::__construct($file);
-    }
-
     public function getId(): int
     {
-        return $this->model->getId() ?? 0;
+        return $this->model->getId();
     }
 
-    public function getImages(): Collection
+    public function getCaption(): ?string
     {
-        return $this->model->getImages() ?? new Collection();
+        return $this->model->getCaption();
     }
 
-    public function getCaption(): string
+    public function getUrl(): ?string
     {
-        return $this->model->getCaption() ?: '';
-    }
-
-    public function getUrl(): string
-    {
-        return $this->model->getUrl() ?? '';
+        return $this->model->getUrl();
     }
 
     public function getTitle(): ?string
@@ -63,7 +48,7 @@ class ContentAudio extends AbstractContent implements ContentAudioContract
 
     public function getStickToNext(): bool
     {
-        return $this->model->getStickToNext() ?? false;
+        return $this->model->getStickToNext();
     }
 
     public function getAudioTitle(): ?string
