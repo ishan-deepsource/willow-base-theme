@@ -35,6 +35,7 @@ class ContentTransformer extends TransformerAbstract
         'quote'                => QuoteTransformer::class,
         'paragraph_list'       => ParagraphListTransformer::class,
         'hotspot_image'        => HotspotImageTransformer::class,
+        'lead_paragraph'       => LeadParagraphTransformer::class,
     ];
 
     public function transform(ContentContract $content)
