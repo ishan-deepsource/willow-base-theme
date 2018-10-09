@@ -3,7 +3,9 @@
 namespace Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents;
 
 use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\ContentContract;
+use Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents\Types\BannerPlacementTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents\Types\FeaturedContentTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents\Types\NewsletterTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents\Types\SeoTextTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents\Types\TeaserListTransformer;
 use Bonnier\Willow\Base\Transformers\NullTransformer;
@@ -15,6 +17,8 @@ class ContentTransformer extends TransformerAbstract
         'teaser_list' => TeaserListTransformer::class,
         'featured_content' => FeaturedContentTransformer::class,
         'seo_text' => SeoTextTransformer::class,
+        'newsletter' => NewsletterTransformer::class,
+        'banner_placement' => BannerPlacementTransformer::class,
     ];
     public function transform(ContentContract $content)
     {
