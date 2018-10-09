@@ -21,6 +21,7 @@ use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Gallery;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\HotspotImage;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\InfoBox;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\InsertedCode;
+use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\LeadParagraph;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Link;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ParagraphList;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Quote;
@@ -78,6 +79,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         'associated_composite' => AssociatedContent::class,
         'paragraph_list'       => ParagraphList::class,
         'hotspot_image'        => HotspotImage::class,
+        'lead_paragraph'       => LeadParagraph::class,
     ];
 
     protected $acfFields;

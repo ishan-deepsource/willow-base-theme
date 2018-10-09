@@ -12,6 +12,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\GalleryAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\HotspotImageAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\InfoBoxAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\InsertedCodeAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\LeadParagraphAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\LinkAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\NullContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ParagraphListAdapter;
@@ -35,6 +36,7 @@ class CompositeContentFactory extends AbstractModelFactory
         'associated_composite' => AssociatedContentAdapter::class,
         'paragraph_list'       => ParagraphListAdapter::class,
         'hotspot_image'        => HotspotImageAdapter::class,
+        'lead_paragraph'       => LeadParagraphAdapter::class,
     ];
 
     public function getAdapter($model)
