@@ -11,6 +11,7 @@ use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\Cont
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\HotspotImageTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\InfoBoxTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\InsertedCodeTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\LeadParagraphTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\LinkTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ParagraphListTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\QuoteTransformer;
