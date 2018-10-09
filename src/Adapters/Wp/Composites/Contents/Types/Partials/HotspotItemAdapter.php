@@ -9,7 +9,7 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\Partials\Hots
  *
  * @package \Bonnier\Willow\Base\Adapters\Wp
  */
-class HotspotItemItemAdapter implements HotspotItemContract
+class HotspotItemAdapter implements HotspotItemContract
 {
     protected $acfArray;
 
@@ -38,8 +38,8 @@ class HotspotItemItemAdapter implements HotspotItemContract
             !empty($coords = explode(',', $focalPoint)) &&
             count($coords) == 2) {
             return [
-                'x' => $coords[0],
-                'y' => $coords[1]
+                'x' => floatval($coords[0]),
+                'y' => floatval($coords[1])
             ];
         }
         return null;

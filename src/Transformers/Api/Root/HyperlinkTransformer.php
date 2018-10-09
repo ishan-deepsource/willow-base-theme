@@ -12,8 +12,8 @@ class HyperlinkTransformer extends TransformerAbstract
         return [
             'title' => $hyperlink->getTitle(),
             'url' => $hyperlink->getUrl(),
+            'rel' => $hyperlink->getRelationship(),
             'target' => $hyperlink->getTarget(),
-            'rel' => $hyperlink->getRelationship()
         ];
     }
 }

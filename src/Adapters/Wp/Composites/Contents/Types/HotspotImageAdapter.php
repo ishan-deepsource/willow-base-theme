@@ -3,7 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types;
 
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
-use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\Partials\HotspotItemItemAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\Partials\HotspotItemAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Partials\HotspotItem;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
@@ -42,7 +42,7 @@ class HotspotImageAdapter extends AbstractContentAdapter implements HotspotImage
     public function getHotspots(): Collection
     {
         return collect(array_get($this->acfArray, 'hotspots', []))->transform(function ($acfHotspotArr) {
-            return new HotspotItem(new HotspotItemItemAdapter($acfHotspotArr));
+            return new HotspotItem(new HotspotItemAdapter($acfHotspotArr));
         });
     }
 }
