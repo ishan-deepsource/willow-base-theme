@@ -9,7 +9,7 @@ use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 /**
  * Class SeoText
  * @package Bonnier\Willow\Base\Models\Base\Pages\Contents\Types
- * @property FeaturedContentContract $model
+ * @property SeoTextContract $model
  */
 class SeoText extends AbstractContent implements SeoTextContract
 {
