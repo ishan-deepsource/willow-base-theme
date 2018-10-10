@@ -162,8 +162,11 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         $leadImageContent = collect($this->compositeContents)->first(function ($acfContentArray) {
             return array_get($acfContentArray, 'lead_image', false);
         });
-        if ($leadImageContent) {
-            return new ContentImage(new ContentImageAdapter($leadImageContent));
+        try {
+            if ($leadImageContent) {
+                return new ContentImage(new ContentImageAdapter($leadImageContent));
+            }
+        } catch (\InvalidArgumentException $exception) {
         }
         return null;
     }
