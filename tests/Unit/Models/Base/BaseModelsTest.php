@@ -11,7 +11,7 @@ class BaseModelsTest extends ClassTestCase
         $path = str_replace('tests/Unit/Models/Base', 'src/Models/Base', __DIR__);
         $classes = $this->loadClasses($path);
         $classInterfaceMap = $this->loadInterfaces($classes);
-        if (empty($classInterfaceMap)) {
+        if ($classes->isEmpty()) {
             self::fail('BaseModelsTest has no classes to test!');
         }
         $this->classImplementsInterfaceMethods($classInterfaceMap);
