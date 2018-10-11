@@ -26,8 +26,8 @@ class TranslationController extends WP_REST_Controller
      */
     public function translationStrings(\WP_REST_Request $request)
     {
-        $locale = $request->get_param('locale') ?? LanguageProvider::getCurrentLanguage();
-        
+        $locale = $request->get_param('lang');
+
         $translations = Cache::remember(
             'willow_translation_strings_' . $locale,
             4 * HOUR_IN_SECONDS,
@@ -35,10 +35,10 @@ class TranslationController extends WP_REST_Controller
                 return optional($this->getRepository())->getTranslations($locale) ?? [];
             }
         );
-        
+
         return new WP_REST_Response($translations);
     }
-    
+
     /**
      * @return TranslationRepositoryContract|null
      */
@@ -55,7 +55,7 @@ class TranslationController extends WP_REST_Controller
                 );
             }
         }
-        
+
         return null;
     }
 }
