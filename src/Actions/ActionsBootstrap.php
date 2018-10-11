@@ -6,6 +6,7 @@ use Bonnier\Willow\Base\Actions\Backend\PostSlugChange;
 use Bonnier\Willow\Base\Actions\Backend\PreviewUrl;
 use Bonnier\Willow\Base\Actions\Backend\EstimatedReadingTime;
 use Bonnier\Willow\Base\Actions\Universal\ImgixSettings;
+use Bonnier\Willow\Base\Actions\Universal\LocalizeApi;
 use Bonnier\Willow\Base\Actions\Universal\PageTemplates;
 use Bonnier\Willow\Base\Actions\Universal\PolylangSubdomain;
 use Bonnier\Willow\Base\Actions\Universal\PolylangTranslations;
@@ -22,11 +23,11 @@ class ActionsBootstrap
     public function loadFrontendActions()
     {
         // Universal
+        new LocalizeApi();
         new Navigation();
         new PolylangTranslations();
         PageTemplates::get_instance();
         if (!is_admin()) {
-            new PolylangSubdomain();
             new ImgixSettings();
         }
     }

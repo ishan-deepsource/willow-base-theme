@@ -203,16 +203,16 @@
         },
         {
             "name": "bonnier/willow-mu-plugins",
-            "version": "1.1.2",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/willow-mu-plugins.git",
-                "reference": "59765af08251512ac99b055e406685f1d9418d19"
+                "reference": "299e99f77342be7f4def99e62c509c8a27f34052"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/59765af08251512ac99b055e406685f1d9418d19",
-                "reference": "59765af08251512ac99b055e406685f1d9418d19",
+                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/299e99f77342be7f4def99e62c509c8a27f34052",
+                "reference": "299e99f77342be7f4def99e62c509c8a27f34052",
                 "shasum": ""
             },
             "require": {
@@ -242,7 +242,7 @@
                 }
             ],
             "description": "A collection of Must Use WordPress Plugins for Willow",
-            "time": "2018-08-14T08:41:26+00:00"
+            "time": "2018-10-10T12:37:17+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-cache",

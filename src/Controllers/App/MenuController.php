@@ -15,7 +15,7 @@ use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
 
-class MenuController extends WP_REST_Controller
+class MenuController extends BaseController
 {
     public function register_routes()
     {
@@ -38,7 +38,7 @@ class MenuController extends WP_REST_Controller
      */
     public function getMenus(WP_REST_Request $request)
     {
-        $locale = LanguageProvider::getCurrentLanguage();
+        $locale = $request->get_param('lang');
 
         $menus = Cache::remember(
             'willow_menus_' . $locale,
@@ -62,7 +62,7 @@ class MenuController extends WP_REST_Controller
      */
     public function getMenu(WP_REST_Request $request)
     {
-        $locale = LanguageProvider::getCurrentLanguage();
+        $locale = $request->get_param('lang');
 
         $menuItems = Cache::remember(
             'willow_menu_' . $request->get_param('menu')  . $locale,
