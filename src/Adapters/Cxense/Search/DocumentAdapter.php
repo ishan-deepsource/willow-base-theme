@@ -197,4 +197,10 @@ class DocumentAdapter implements CompositeContract
         // todo find the right field
         return null;
     }
+
+    public function getWordCount(): ?int
+    {
+        // todo find the right field
+        return null;
+    }
 }

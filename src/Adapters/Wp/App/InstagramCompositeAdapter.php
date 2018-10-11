@@ -190,4 +190,9 @@ class InstagramCompositeAdapter implements CompositeContract
     {
         return null;
     }
+
+    public function getWordCount(): ?int
+    {
+        return 0;
+    }
 }

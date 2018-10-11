@@ -350,4 +350,9 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         }
         return null;
     }
+
+    public function getWordCount(): ?int
+    {
+        return intval(get_post_meta($this->getId(), 'word_count', true)) ?: 0;
+    }
 }

@@ -53,6 +53,7 @@ class CompositeTeaserTransformer extends TransformerAbstract
                 'url'   => $this->getPath($composite->getLabelLink()),
             ],
             'estimated_reading_time'  => $composite->getEstimatedReadingTime(),
+            'word_count'              => $composite->getWordCount(),
         ];
     }
 
