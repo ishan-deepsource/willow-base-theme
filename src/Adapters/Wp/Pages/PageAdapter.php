@@ -10,6 +10,7 @@ use Bonnier\Willow\Base\Factories\PageContentFactory;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\BannerPlacement;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\FeaturedContent;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\Newsletter;
+use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TaxonomyList;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TeaserList;
 use Bonnier\Willow\Base\Models\Base\Root\Author;
 use Bonnier\Willow\Base\Models\Base\Root\Teaser;
@@ -46,6 +47,7 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
         AcfName::WIDGET_SEO_TEXT => SeoText::class,
         AcfName::WIDGET_NEWSLETTER => Newsletter::class,
         AcfName::WIDGET_BANNER_PLACEMENT => BannerPlacement::class,
+        AcfName::WIDGET_TAXONOMY_TEASER_LIST => TaxonomyList::class,
     ];
 
     public function __construct(WP_Post $page)
