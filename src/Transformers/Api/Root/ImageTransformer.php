@@ -24,7 +24,9 @@ class ImageTransformer extends TransformerAbstract
             'focalpoint' => $image->getFocalPoint(),
             'aspectratio' => $image->getAspectRatio(),
             'link' => $this->transformLink($image),
-            'imgix_palette' => $this->transformImgixPalette($image),
+            'color_palette' => [
+              'colors' => $image->getColorPalette()->getColors(),
+            ],
         ];
     }
 
@@ -35,24 +37,5 @@ class ImageTransformer extends TransformerAbstract
         }
 
         return null;
-    }
-
-    private function transformImgixPalette($image)
-    {
-        $meta = wp_get_attachment_metadata($image->getId());
-
-        if (!isset($meta['imgix_palette'])) {
-            return '';
-        }
-
-        $data = json_decode($meta['imgix_palette']);
-
-        // Only output the hex values of the colors
-        $data->colors = collect($data->colors)->pluck('hex');
-        $data->dominant_colors = collect($data->dominant_colors)->map(function ($var) {
-            return $var->hex;
-        });
-
-        return $data;
     }
 }

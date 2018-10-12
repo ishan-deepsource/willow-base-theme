@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Models\Base\Composites\Contents\Types;
 
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\AbstractContent;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\ColorPaletteContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\HyperlinkContract;
 
 /**
@@ -88,5 +89,10 @@ class ContentImage extends AbstractContent implements ContentImageContract
     public function getLink(): ?HyperlinkContract
     {
         return $this->model->getLink();
+    }
+
+    public function getColorPalette(): ?ColorPaletteContract
+    {
+        return $this->model->getColorPalette();
     }
 }
