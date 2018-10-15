@@ -10,6 +10,7 @@ class GalleryImageTransformer extends TransformerAbstract
     public function transform(GalleryImageContract $galleryImage)
     {
         return [
+            'title' => $galleryImage->getTitle(),
             'description' => $galleryImage->getDescription(),
             'image' => with(new ImageTransformer)->transform($galleryImage->getImage()),
         ];

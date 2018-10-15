@@ -24,21 +24,21 @@ class Link extends AbstractContent implements LinkContract
         parent::__construct($link);
     }
 
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->model->getTitle();
     }
 
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
         return $this->model->getUrl();
     }
 
-    public function getTarget(): string
+    public function getTarget(): ?string
     {
         return $this->model->getTarget();
     }
-    
+
     public function getStickToNext(): bool
     {
         return $this->model->getStickToNext();

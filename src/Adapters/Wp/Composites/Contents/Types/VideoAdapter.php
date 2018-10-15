@@ -13,20 +13,20 @@ use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
  */
 class VideoAdapter extends AbstractContentAdapter implements VideoContract
 {
-    public function getEmbedUrl(): string
+    public function getEmbedUrl(): ?string
     {
-        if ($embedUrl = $this->acfArray['embed_url'] ?? null) {
+        if ($embedUrl = array_get($this->acfArray, 'embed_url')) {
             if (preg_match('/src=["\']([^\'"]+)/', $embedUrl, $matches)) {
                 return $matches[1];
             }
             return $embedUrl;
         }
 
-        return '';
+        return null;
     }
 
-    public function getCaption(): string
+    public function getCaption(): ?string
     {
-        return $this->acfArray['caption'] ?? '';
+        return array_get($this->acfArray, 'caption') ?: null;
     }
 }

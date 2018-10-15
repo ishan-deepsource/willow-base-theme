@@ -27,7 +27,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Term;
 
-class RouteController extends WP_REST_Controller
+class RouteController extends BaseController
 {
     const STATUS_PUBLISHED = 'publish';
     const STATUS_SCHEDULED = 'future';
@@ -43,7 +43,7 @@ class RouteController extends WP_REST_Controller
 
     public function resolve(WP_REST_Request $request)
     {
-        $locale = $request->get_param('locale') ?? LanguageProvider::getDefaultLanguage();
+        $locale = $request->get_param('lang');
         $path = $request->get_param('path');
         $content = Cache::remember(
             'path-resolve:' . $path . '-' . $locale,

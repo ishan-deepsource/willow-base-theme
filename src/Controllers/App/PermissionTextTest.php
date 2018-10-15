@@ -5,7 +5,7 @@ namespace Bonnier\Willow\Base\Controllers\App;
 use WP_REST_Controller;
 use WP_REST_Response;
 
-class PermissionTextTest extends WP_REST_Controller
+class PermissionTextTest extends BaseController
 {
     //TODO DELETE THIS ONCE WILL-384 is done
     public function register_routes()

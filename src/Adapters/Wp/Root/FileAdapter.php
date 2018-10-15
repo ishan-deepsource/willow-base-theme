@@ -22,7 +22,7 @@ class FileAdapter implements FileContract
 
     public function getId(): ?int
     {
-        return $this->file->ID ?? null;
+        return data_get($this->file, 'ID') ?: null;
     }
 
     public function getUrl(): ?string
@@ -32,7 +32,7 @@ class FileAdapter implements FileContract
 
     public function getTitle(): ?string
     {
-        if (($title = $this->file->post_title) && $title !== $this->getId()) {
+        if (($title = data_get($this->file, 'post_title')) && $title !== $this->getId()) {
             return $title;
         }
 
@@ -41,12 +41,12 @@ class FileAdapter implements FileContract
 
     public function getDescription(): ?string
     {
-        return $this->file->post_content ?: null;
+        return data_get($this->file, 'post_content') ?: null;
     }
 
     public function getCaption(): ?string
     {
-        return $this->file->post_excerpt ?: null;
+        return data_get($this->file, 'post_excerpt') ?: null;
     }
 
     public function getLanguage(): ?string

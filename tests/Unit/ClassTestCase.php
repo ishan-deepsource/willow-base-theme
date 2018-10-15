@@ -2,45 +2,64 @@
 
 namespace Bonnier\Willow\Base\Tests\Unit;
 
+use Illuminate\Support\Collection;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
 
 class ClassTestCase extends TestCase
 {
-    protected function loadClasses($path)
+    protected function loadClasses($path): Collection
     {
         $files = self::findFiles($path);
-        $adapters = collect($files)->reject(function (string $filename) {
+        return collect($files)->reject(function (string $filename) {
             $class = new \ReflectionClass($filename);
             return $class->isInterface() || $class->isAbstract();
         });
-        return $adapters->toArray();
     }
 
-    protected function loadInterfaces(array $classes)
+    protected function loadInterfaces(Collection $classes): Collection
     {
-        $classInterfaceMap = [];
-        foreach ($classes as $class) {
+        return $classes->mapWithKeys(function (string $class) {
             try {
                 $interfaces = (new ReflectionClass($class))->getInterfaces();
-                $classInterfaceMap[$class] = key($interfaces);
-            } catch (ReflectionException $e) {
-                self::fail($e->getMessage());
+                return [$class => key($interfaces)];
+            } catch (ReflectionException $exception) {
+                self::fail($exception->getMessage());
             }
-        }
-
-        return $classInterfaceMap;
+            return null;
+        })->reject(function ($classMap) {
+            return is_null($classMap);
+        });
     }
 
-    protected function classImplementsInterfaceMethods($classInterfaceMap)
+    protected function loadContracts($path): Collection
     {
-        foreach ($classInterfaceMap as $class => $interface) {
-            foreach (get_class_methods($interface) as $method) {
-                $message = sprintf('Class %s does not implement %s', $class, $method);
-                $this->assertTrue(method_exists($class, $method), $message);
+        $files = self::findFiles($path);
+        return collect($files)->map(function (string $filename) {
+            return new ReflectionClass($filename);
+        })->reject(function (ReflectionClass $contract) {
+            return !$contract->isInterface();
+        });
+    }
+
+    protected function classImplementsInterfaceMethods(Collection $classInterfaceMap)
+    {
+        $classInterfaceMap->each(function ($interface, $class) {
+            try {
+                collect(get_class_methods($interface))->each(function ($method) use ($class) {
+                    $message = sprintf(
+                        'Class \'%s\' does not implement \'%s\'',
+                        $class,
+                        $method
+                    );
+                    $this->assertTrue(method_exists($class, $method), $message);
+                });
+            } catch (Exception $exception) {
+                $this->fail(sprintf('Class \'%s\' is not implementing an interface!', $class));
             }
-        }
+        });
     }
 
     private function findFiles($path, $files = [])

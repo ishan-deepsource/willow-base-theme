@@ -8,6 +8,7 @@ use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentImage;
 use Bonnier\Willow\Base\Models\Base\Root\Teaser;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\AudioContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
@@ -34,14 +35,15 @@ class InstagramCompositeAdapter implements CompositeContract
         return 'Instagram';
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
-        return trim(preg_replace('/#[^\s]+/', '', $this->instagramContent->caption ?? ''));
+        $removedHashtags = preg_replace('/#[^\s]+/', '', $this->instagramContent->caption ?? '');
+        return trim($removedHashtags) ?: null;
     }
 
-    public function getLink(): string
+    public function getLink(): ?string
     {
-        return $this->instagramContent->permalink ?? '';
+        return optional($this->instagramContent)->permalink ?: null;
     }
 
     public function getId(): int
@@ -161,7 +163,7 @@ class InstagramCompositeAdapter implements CompositeContract
 
     public function getVocabularies(): ?Collection
     {
-        return collect([]);
+        return null;
     }
 
     public function getEstimatedReadingTime(): ?int
@@ -181,11 +183,11 @@ class InstagramCompositeAdapter implements CompositeContract
 
     public function getAssociatedComposites(): ?Collection
     {
-        return collect([]);
+        return null;
     }
 
-    public function getEstimatedListeningTime(): ?int
+    public function getAudio(): ?AudioContract
     {
-        return 0;
+        return null;
     }
 }

@@ -11,6 +11,7 @@ use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ColorPaletteContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\HyperlinkContract;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 /**
  * Class ImageAdapter
@@ -24,23 +25,26 @@ class ContentImageAdapter extends AbstractContentAdapter implements ContentImage
     public function __construct(array $acfArray)
     {
         parent::__construct($acfArray);
-        $post = get_post($acfArray['file'] ?? $acfArray['image'] ?? null);
+        $post = get_post(array_get($acfArray, 'file') ?? array_get($acfArray, 'image'));
         $this->image = $post ? new Image(new ImageAdapter($post)) : null;
+        if (!$this->image) {
+            throw new \InvalidArgumentException('Missing image.');
+        }
     }
 
-    public function isLead() : bool
+    public function isLead(): bool
     {
-        return $this->acfArray['lead_image'] ?? false;
+        return array_get($this->acfArray, 'lead_image', false);
     }
 
     public function getId(): ?int
     {
-        return optional($this->image)->getId();
+        return optional($this->image)->getId() ?: null;
     }
 
     public function getUrl(): ?string
     {
-        return optional($this->image)->getUrl();
+        return optional($this->image)->getUrl() ?: null;
     }
 
     public function getTitle(): ?string
@@ -88,15 +92,13 @@ class ContentImageAdapter extends AbstractContentAdapter implements ContentImage
         return new Hyperlink(new ContentImageHyperlinkAdapter($this, $this->acfArray));
     }
 
-    /*
     public function getColorPalette(): ?ColorPaletteContract
     {
-        return new ColorPaletteAdapter($this->getId());
+        return optional($this->image)->getColorPalette();
     }
-    */
 
-    public function getColorPaletteArray(): array
+    public function getDisplayHint(): ?string
     {
-        return optional($this->image)->getColorPaletteArray() ?? [];
+        return $this->acfArray['display_hint'] ?? null;
     }
 }

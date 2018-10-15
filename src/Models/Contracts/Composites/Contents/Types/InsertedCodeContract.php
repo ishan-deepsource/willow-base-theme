@@ -6,5 +6,5 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
 
 interface InsertedCodeContract extends ContentContract
 {
-    public function getCode() : string;
+    public function getCode(): ?string;
 }

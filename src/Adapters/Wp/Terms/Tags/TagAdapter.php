@@ -30,33 +30,36 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
 
     public function getId(): ?int
     {
-        return $this->wpModel->term_id;
+        return data_get($this->wpModel, 'term_id') ?: null;
     }
 
     public function getName(): ?string
     {
-        return $this->wpModel->name;
+        return data_get($this->wpModel, 'name') ?: null;
     }
 
     public function getTitle(): ?string
     {
-        return $this->meta->title->{LanguageProvider::getCurrentLanguage()} ?? null;
+        return data_get($this->meta, 'title.' . LanguageProvider::getCurrentLanguage()) ?: null;
     }
 
     public function getDescription(): ?string
     {
-        return $this->meta->description->{LanguageProvider::getCurrentLanguage()} ?? null;
+        return data_get($this->meta, 'description.' . LanguageProvider::getCurrentLanguage()) ?: null;
     }
 
     public function getSlug(): ?string
     {
-        return $this->wpModel->slug;
+        return data_get($this->wpModel, 'slug') ?: null;
     }
 
     public function getUrl(): ?string
     {
-        $link = get_term_link($this->getId(), $this->wpModel->taxonomy);
-        return is_wp_error($link) ? null : $link;
+        if (($taxonomy = data_get($this->wpModel, 'taxonomy')) && $link = get_term_link($this->getId(), $taxonomy)) {
+            return is_wp_error($link) ? null : $link;
+        }
+
+        return null;
     }
 
     public function getLanguage(): ?string
@@ -107,7 +110,7 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
             ]
         ]);
 
-        return $query->found_posts ?: $this->wpModel->count;
+        return $query->found_posts ?: data_get($this->wpModel, 'count');
     }
 
     public function getCanonicalUrl(): ?string
@@ -132,12 +135,9 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
 
     private function getMeta()
     {
-        $contentHubId = get_term_meta($this->getId(), 'content_hub_id', true);
-        if ($contentHubId) {
+        if ($contentHubId = get_term_meta($this->getId(), 'content_hub_id', true)) {
             try {
-                $tag = WpSiteManager::instance()->tags()->findByContentHubId($contentHubId) ?? null;
-
-                return $tag;
+                return WpSiteManager::instance()->tags()->findByContentHubId($contentHubId) ?? null;
             } catch (\Exception $exception) {
                 return null;
             }

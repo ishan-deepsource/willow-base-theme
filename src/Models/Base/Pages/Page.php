@@ -76,4 +76,9 @@ class Page implements PageContract
     {
         return $this->page->getCanonicalUrl();
     }
+
+    public function getContents(): ?Collection
+    {
+        return $this->page->getContents();
+    }
 }

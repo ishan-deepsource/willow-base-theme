@@ -27,12 +27,12 @@ abstract class AbstractContent implements ContentContract
         $this->model = $content;
     }
 
-    public function getType() : string
+    public function getType() : ?string
     {
         return $this->type;
     }
 
-    public function isLocked() : bool
+    public function isLocked(): bool
     {
         return $this->locked;
     }

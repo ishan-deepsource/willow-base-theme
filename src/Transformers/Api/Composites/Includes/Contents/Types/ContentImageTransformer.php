@@ -12,7 +12,8 @@ class ContentImageTransformer extends TransformerAbstract
     {
         return [
             'is_lead' => $image->isLead(),
-            'file' => $image->isLocked() ? null : with(new ImageTransformer())->transform($image)
+            'file' => $image->isLocked() ? null : with(new ImageTransformer())->transform($image),
+            'display_hint' => $image->getDisplayHint(),
         ];
     }
 }

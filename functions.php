@@ -1,7 +1,6 @@
 <?php
 
 use Bonnier\Willow\Base\Bootstrap;
-use Illuminate\Support\Debug\Dumper;
 
 add_action('init', function () {
     new Bootstrap();
@@ -30,7 +29,7 @@ function ddHtml(...$args)
 {
     header('Content-Type: text/html');
     foreach ($args as $x) {
-        (new Dumper)->dump($x);
+        var_dump($x);
     }
 
     die(1);

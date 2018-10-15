@@ -22,32 +22,32 @@ class MenuItemAdapter implements MenuItemContract
 
     public function getId(): ?int
     {
-        return $this->menuItem->object_id ?? null;
+        return data_get($this->menuItem, 'object_id') ?: null;
     }
 
     public function getUrl(): ?string
     {
-        return $this->menuItem->url ?? null;
+        return data_get($this->menuItem, 'url') ?: null;
     }
 
     public function getTitle(): ?string
     {
-        return $this->menuItem->title ?? null;
+        return data_get($this->menuItem, 'title') ?: null;
     }
 
     public function getTarget(): ?string
     {
-        return $this->menuItem->target ?? null;
+        return data_get($this->menuItem, 'target') ?: null;
     }
 
     public function getType(): ?string
     {
-        return $this->menuItem->object ?? null;
+        return data_get($this->menuItem, 'object') ?: null;
     }
 
     public function getChildren(): Collection
     {
-        return collect($this->menuItem->children ?? [])->map(function ($child) {
+        return collect(data_get($this->menuItem, 'children'))->map(function ($child) {
             return new static($child);
         });
     }

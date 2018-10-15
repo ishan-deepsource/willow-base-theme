@@ -15,34 +15,25 @@ use Illuminate\Support\Collection;
  */
 class ContentFile extends AbstractContent implements ContentFileContract
 {
-    /**
-     * File constructor.
-     *
-     * @param \Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentFileContract $file
-     */
-    public function __construct(ContentFileContract $file)
-    {
-        parent::__construct($file);
-    }
 
     public function getId(): int
     {
-        return $this->model->getId() ?? 0;
+        return $this->model->getId();
     }
 
     public function getImages(): Collection
     {
-        return $this->model->getImages() ?? new Collection();
+        return $this->model->getImages();
     }
 
-    public function getCaption(): string
+    public function getCaption(): ?string
     {
-        return $this->model->getCaption() ?: '';
+        return $this->model->getCaption();
     }
 
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
-        return $this->model->getUrl() ?? '';
+        return $this->model->getUrl();
     }
 
     public function getTitle(): ?string
@@ -59,9 +50,9 @@ class ContentFile extends AbstractContent implements ContentFileContract
     {
         return $this->model->getLanguage();
     }
-    
+
     public function getStickToNext(): bool
     {
-        return $this->model->getStickToNext() ?? false;
+        return $this->model->getStickToNext();
     }
 }

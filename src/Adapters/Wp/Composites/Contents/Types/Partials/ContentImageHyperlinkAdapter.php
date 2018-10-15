@@ -24,21 +24,21 @@ class ContentImageHyperlinkAdapter implements HyperlinkContract
 
     public function getTitle(): ?string
     {
-        return $this->image->getTitle();
+        return optional($this->image)->getTitle() ?: null;
     }
 
     public function getUrl(): ?string
     {
-        return $this->acfArray['link'] ?? null;
+        return array_get($this->acfArray, 'link') ?: null;
     }
 
     public function getRelationship(): ?string
     {
-        return $this->acfArray['rel'] ?? null;
+        return array_get($this->acfArray ,'rel') ?: null;
     }
 
     public function getTarget(): ?string
     {
-        return $this->acfArray['target'] ?? null;
+        return array_get($this->acfArray ,'target') ?: null;
     }
 }

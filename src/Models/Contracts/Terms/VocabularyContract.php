@@ -20,7 +20,5 @@ interface VocabularyContract
 
     public function getMultiSelect(): ?string;
 
-    public function getBrand(): ?BrandContract;
-
     public function getTerms(): ?Collection;
 }

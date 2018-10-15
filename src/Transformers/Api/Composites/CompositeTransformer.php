@@ -2,6 +2,8 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
+use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\AssociatedContentContract;
+use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentAudioTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
@@ -74,7 +76,7 @@ class CompositeTransformer extends TransformerAbstract
             'canonical_url'             => $composite->getCanonicalUrl(),
             'template'                  => $composite->getTemplate(),
             'estimated_reading_time'    => $composite->getEstimatedReadingTime(),
-            'estimated_listening_time'  => $composite->getEstimatedListeningTime(),
+            'audio'                     => $this->getAudio($composite),
         ];
     }
 
@@ -90,7 +92,8 @@ class CompositeTransformer extends TransformerAbstract
 
     public function includeCategory(CompositeContract $composite)
     {
-        return $this->item($composite->getCategory(), new CategoryTransformer());
+        $category = $composite->getCategory();
+        return $category ? $this->item($category, new CategoryTransformer()) : null;
     }
 
     public function includeTags(CompositeContract $composite)
@@ -117,6 +120,14 @@ class CompositeTransformer extends TransformerAbstract
             return with(new AuthorTransformer())->transform($author);
         }
 
+        return null;
+    }
+
+    private function getAudio(CompositeContract $composite)
+    {
+        if ($audio = $composite->getAudio()) {
+            return with(new ContentAudioTransformer())->transform($audio);
+        }
         return null;
     }
 
@@ -181,10 +192,16 @@ class CompositeTransformer extends TransformerAbstract
         return $this->collection($content, new CompositeTeaserTransformer());
     }
 
-    public function includeAssociatedContent(CompositeContract $composite){
-        if(!$composite->getParent()){
-            return null;
+    public function includeAssociatedContent(CompositeContract $composite)
+    {
+        if ($associatedContents = $composite->getAssociatedComposites()) {
+            return $this->collection($associatedContents->map(function (AssociatedContentContract $associatedContent) {
+                return $associatedContent->getAssociatedComposite();
+            })->reject(function ($composite) {
+                return is_null($composite);
+            }), new CompositeTeaserTransformer);
         }
-        return $this->collection($composite->getAssociatedComposites(), new CompositeTeaserTransformer());
+
+        return null;
     }
 }

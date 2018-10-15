@@ -12,13 +12,13 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\InfoBoxContra
  */
 class InfoBoxAdapter extends AbstractContentAdapter implements InfoBoxContract
 {
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
-        return $this->acfArray['title'] ?? '';
+        return array_get($this->acfArray, 'title') ?: null;
     }
 
-    public function getBody(): string
+    public function getBody(): ?string
     {
-        return $this->acfArray['body'] ?? '';
+        return array_get($this->acfArray, 'body') ?: null;
     }
 }

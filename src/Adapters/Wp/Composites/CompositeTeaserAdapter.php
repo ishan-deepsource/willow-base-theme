@@ -17,28 +17,28 @@ class CompositeTeaserAdapter extends AbstractTeaserAdapter
         parent::__construct($type);
     }
 
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
-        if ($title = $this->composite->getAcfFields()[$this->type . 'teaser_title'] ?? null) {
+        if ($title = array_get($this->composite->getAcfFields(), $this->type . 'teaser_title')) {
             return $title;
         }
 
-        if ($title = $this->composite->getAcfFields()['teaser_title'] ?? null) {
+        if ($title = array_get($this->composite->getAcfFields(), 'teaser_title')) {
             return $title;
         }
 
-        return $this->composite->getTitle() ?? '';
+        return optional($this->composite)->getTitle() ?: null;
     }
 
     public function getImage(): ?ImageContract
     {
-        if (($imageId = $this->composite->getAcfFields()[$this->type . 'teaser_image'] ?? null) &&
+        if (($imageId = array_get($this->composite->getAcfFields(), $this->type . 'teaser_image')) &&
             ($image = get_post($imageId))
         ) {
             return new Image(new ImageAdapter($image));
         }
 
-        if (($imageId = $this->composite->getAcfFields()['teaser_image'] ?? null) &&
+        if (($imageId = array_get($this->composite->getAcfFields(), 'teaser_image')) &&
             ($image = get_post($imageId))
         ) {
             return new Image(new ImageAdapter($image));
@@ -59,16 +59,16 @@ class CompositeTeaserAdapter extends AbstractTeaserAdapter
         return null;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
-        if ($description = $this->composite->getAcfFields()[$this->type . 'teaser_description'] ?? null) {
+        if ($description = array_get($this->composite->getAcfFields(), $this->type . 'teaser_description')) {
             return $description;
         }
 
-        if ($description = $this->composite->getAcfFields()['teaser_description'] ?? null) {
+        if ($description = array_get($this->composite->getAcfFields(), 'teaser_description')) {
             return $description;
         }
 
-        return $this->composite->getDescription() ?? '';
+        return optional($this->composite)->getDescription() ?: null;
     }
 }

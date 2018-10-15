@@ -12,18 +12,18 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\LinkContract;
  */
 class LinkAdapter extends AbstractContentAdapter implements LinkContract
 {
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
-        return $this->acfArray['title'] ?? '';
+        return array_get($this->acfArray, 'title') ?: null;
     }
 
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
-        return $this->acfArray['url'] ?? '';
+        return array_get($this->acfArray, 'url') ?: null;
     }
 
-    public function getTarget(): string
+    public function getTarget(): ?string
     {
-        return $this->acfArray['target'] ?? '';
+        return array_get($this->acfArray, 'target') ?: null;
     }
 }

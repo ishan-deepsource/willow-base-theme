@@ -91,15 +91,13 @@ class ContentImage extends AbstractContent implements ContentImageContract
         return $this->model->getLink();
     }
 
-    /*
     public function getColorPalette(): ?ColorPaletteContract
     {
         return $this->model->getColorPalette();
     }
-    */
 
-    public function getColorPaletteArray(): array
+    public function getDisplayHint(): ?string
     {
-        return $this->model->getColorPaletteArray();
+        return $this->model->getDisplayHint();
     }
 }

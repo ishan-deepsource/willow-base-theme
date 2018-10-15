@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
+use Bonnier\Willow\Base\Models\Base\Root\ColorPalette;
 use Bonnier\Willow\Base\Models\Base\Root\Hyperlink;
 use Bonnier\Willow\Base\Models\Contracts\Root\ColorPaletteContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\HyperlinkContract;
@@ -59,20 +60,16 @@ class ImageAdapter extends FileAdapter implements ImageContract
 
     public function getLink(): ?HyperlinkContract
     {
-        return new Hyperlink(new HyperlinkAdapter($this));
+        return null;
+    }
+
+    public function getDisplayHint(): ?string
+    {
+        return null;
     }
 
     public function getColorPalette(): ?ColorPaletteContract
     {
-        return new ColorPaletteAdapter($this->getId());
-    }
-
-    public function getColorPaletteArray(): array
-    {
-        return [
-            'colors' => $this->getColorPalette()->getColors(),
-            'average_luminance' => $this->getColorPalette()->getAverageLuminance(),
-            'dominant_colors' => $this->getColorPalette()->getDominantColors(),
-        ];
+        return new ColorPalette(new ColorPaletteAdapter($this->getId()));
     }
 }

@@ -23,11 +23,12 @@ class TextItem extends AbstractContent implements TextItemContract
     {
         parent::__construct($textItem);
     }
-    public function getBody(): string
+
+    public function getBody(): ?string
     {
         return $this->model->getBody();
     }
-    
+
     public function getStickToNext(): bool
     {
         return $this->model->getStickToNext();

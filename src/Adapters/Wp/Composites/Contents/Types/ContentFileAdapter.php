@@ -22,21 +22,25 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
     public function __construct(array $acfArray)
     {
         parent::__construct($acfArray);
-        if ($fileId = $acfArray['file']['id'] ?? null) {
+        if ($fileId = array_get($acfArray, 'file.id')) {
             $post = get_post($fileId);
             $this->file = $post ? new File(new FileAdapter($post)) : null;
+        }
+        if (!$this->file) {
+            throw new \InvalidArgumentException('Missing file');
         }
     }
 
     public function getId(): ?int
     {
-        return optional($this->file)->getId() ?? null;
+        return optional($this->file)->getId() ?: null;
     }
 
     public function getImages(): ?Collection
     {
-        return collect($this->acfArray['images'] ?? [])->map(function ($acfImage) {
-            return $acfImage['file'] ? new Image(new ImageAdapter(get_post($acfImage['file']))) : null;
+        return collect(array_get($this->acfArray, 'images', []))->map(function ($acfImage) {
+            $file = array_get($acfImage, 'file');
+            return $file ? new Image(new ImageAdapter(get_post($file))) : null;
         })->reject(function ($image) {
             return is_null($image);
         });
@@ -44,26 +48,26 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
 
     public function getCaption(): ?string
     {
-        return optional($this->file)->getCaption() ?? null;
+        return optional($this->file)->getCaption() ?: null;
     }
 
     public function getUrl() : ?string
     {
-        return optional($this->file)->getUrl() ?? null;
+        return optional($this->file)->getUrl() ?: null;
     }
 
     public function getTitle(): ?string
     {
-        return optional($this->file)->getTitle() ?? null;
+        return optional($this->file)->getTitle() ?: null;
     }
 
     public function getDescription(): ?string
     {
-        return optional($this->file)->getDescription() ?? null;
+        return optional($this->file)->getDescription() ?: null;
     }
 
     public function getLanguage(): ?string
     {
-        return optional($this->file)->getLanguage() ?? null;
+        return optional($this->file)->getLanguage() ?: null;
     }
 }

@@ -24,13 +24,7 @@ class ImageTransformer extends TransformerAbstract
             'focalpoint' => $image->getFocalPoint(),
             'aspectratio' => $image->getAspectRatio(),
             'link' => $this->transformLink($image),
-            /*'color_palette' => [
-              'colors' => $image->getColorPalette()->getColors(),
-              'average_luminance' => $image->getColorPalette()->getAverageLuminance(),
-              'dominant_colors' => $image->getColorPalette()->getDominantColors(),
-            ],
-            */
-            'color_palette_array' => $image->getColorPaletteArray(),
+            'color_palette' => $this->transformColorPalette($image),
         ];
     }
 
@@ -38,6 +32,15 @@ class ImageTransformer extends TransformerAbstract
     {
         if (($hyperlink = $image->getLink()) && !empty($hyperlink->getUrl())) {
             return with(new HyperlinkTransformer)->transform($hyperlink);
+        }
+
+        return null;
+    }
+
+    private function transformColorPalette(ImageContract $image)
+    {
+        if ($colorPalette = $image->getColorPalette()) {
+            return with(new ColorPaletteTransformer())->transform($colorPalette);
         }
 
         return null;

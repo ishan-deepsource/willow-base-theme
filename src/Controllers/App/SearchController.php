@@ -17,7 +17,7 @@ use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
 
-class SearchController extends WP_REST_Controller
+class SearchController extends BaseController
 {
     /* @var CxenseSearchRepository */
     protected $searchRepository;
@@ -38,7 +38,7 @@ class SearchController extends WP_REST_Controller
      */
     public function getSearchResults(WP_REST_Request $request)
     {
-        $locale = LanguageProvider::getCurrentLanguage();
+        $locale = $request->get_param('lang');
 
         $filters = json_decode($request->get_body());
 

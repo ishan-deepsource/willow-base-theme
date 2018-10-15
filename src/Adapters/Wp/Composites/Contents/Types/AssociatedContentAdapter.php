@@ -3,44 +3,45 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types;
 
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
+use Bonnier\Willow\Base\Models\Base\Composites\Composite;
+use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
+use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\AssociatedContentContract;
 
 /**
  * Class AssociatedContentAdapter
  *
  * @package \Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types
  */
-class AssociatedContentAdapter extends CompositeAdapter implements ContentContract
+class AssociatedContentAdapter extends AbstractContentAdapter implements AssociatedContentContract
 {
-    protected $acfArray;
-
-    public function __construct($acfArray) {
-        $this->acfArray = $acfArray;
-        parent::__construct($acfArray['composite'][0]);
+    public function __construct(array $acfArray)
+    {
+        parent::__construct($acfArray);
     }
 
-    public function getType() : string
+    public function getType(): ?string
     {
-        return $this->acfArray['acf_fc_layout'] ?? '';
+        return array_get($this->acfArray, 'acf_fc_layout') ?: null;
     }
 
-    public function isLocked() : bool
+    public function isLocked(): bool
     {
-        return $this->acfArray['locked_content'] ?? false;
+        return array_get($this->acfArray, 'locked_content', false);
     }
 
     public function getStickToNext(): bool
     {
-        return $this->acfArray['stick_to_next'] ?? false;
+        return array_get($this->acfArray, 'stick_to_next', false);
     }
 
-    public function getKind(): ?string
+    public function getAssociatedComposite(): ?CompositeContract
     {
-        return '';
-    }
+        if (($post = array_get($this->acfArray, 'composite.0')) && $post instanceof \WP_Post) {
+            return new Composite(new CompositeAdapter($post));
+        }
 
-    public function getAssociatedComposite(): ?\WP_Post
-    {
-        return $this->acfArray['composite'][0] ?? null;
+        return null;
     }
 }

@@ -32,4 +32,6 @@ interface PageContract
     public function getTeasers(): ?Collection;
 
     public function getCanonicalUrl(): ?string;
+
+    public function getContents(): ?Collection;
 }
