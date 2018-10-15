@@ -6,6 +6,7 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\AssociatedCon
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentAudioTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
 use Bonnier\Willow\Base\Traits\UrlTrait;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\WP\Cxense\Services\WidgetDocumentQuery;
@@ -179,13 +180,17 @@ class CompositeTransformer extends TransformerAbstract
             ->addParameter('pageType', 'article gallery story')
             ->setCategories()
             ->get();
-        $content = collect($result['matches'])->map(function (Document $cxArticle) {
-            $postId = intval($cxArticle->{'recs-articleid'});
-            $post = get_post($postId);
-            return $post && $post->post_status === 'publish' && $post->ID === $postId ?
-                new Composite(new CompositeAdapter($post)) :
-                null;
-        })->reject(function ($content) {
+        $content = collect($result['matches'])->reject(function (Document $cxArticle) use ($composite) {
+                return $composite->getCommercial() && $cxArticle->{'bod-commercial-label'};
+        })->map(
+            function (Document $cxArticle) use ($composite) {
+                $postId = intval($cxArticle->{'recs-articleid'});
+                $post = get_post($postId);
+                return $post && $post->post_status === 'publish' && $post->ID === $postId
+                ? new Composite(new CompositeAdapter($post)) :
+                    null;
+            }
+        )->reject(function ($content) {
             return is_null($content);
         })->toArray();
 
