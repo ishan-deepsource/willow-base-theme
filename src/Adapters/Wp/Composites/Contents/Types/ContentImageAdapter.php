@@ -88,8 +88,15 @@ class ContentImageAdapter extends AbstractContentAdapter implements ContentImage
         return new Hyperlink(new ContentImageHyperlinkAdapter($this, $this->acfArray));
     }
 
+    /*
     public function getColorPalette(): ?ColorPaletteContract
     {
         return new ColorPaletteAdapter($this->getId());
+    }
+    */
+
+    public function getColorPaletteArray(): array
+    {
+        return optional($this->image)->getColorPaletteArray() ?? [];
     }
 }

@@ -66,4 +66,13 @@ class ImageAdapter extends FileAdapter implements ImageContract
     {
         return new ColorPaletteAdapter($this->getId());
     }
+
+    public function getColorPaletteArray(): array
+    {
+        return [
+            'colors' => $this->getColorPalette()->getColors(),
+            'average_luminance' => $this->getColorPalette()->getAverageLuminance(),
+            'dominant_colors' => $this->getColorPalette()->getDominantColors(),
+        ];
+    }
 }

@@ -70,8 +70,15 @@ class Image implements ImageContract
         return $this->image->getLink();
     }
 
+    /*
     public function getColorPalette(): ?ColorPaletteContract
     {
         return $this->image->getColorPalette();
+    }
+    */
+
+    public function getColorPaletteArray(): array
+    {
+        return $this->image->getColorPaletteArray();
     }
 }
