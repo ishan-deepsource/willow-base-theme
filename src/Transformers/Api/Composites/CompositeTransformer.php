@@ -21,6 +21,7 @@ use Bonnier\Willow\Base\Transformers\Api\Root\ImageTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Category\CategoryTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Tag\TagTransformer;
+use Bonnier\WP\Cxense\WpCxense;
 use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 use WP_Post;
@@ -180,10 +181,12 @@ class CompositeTransformer extends TransformerAbstract
             ->addParameter('pageType', 'article gallery story')
             ->setCategories()
             ->get();
-        $content = collect($result['matches'])->reject(function (Document $cxArticle) use ($composite) {
-                return $composite->getCommercial() && $cxArticle->{'bod-commercial-label'};
-        })->map(
+        $content = collect($result['matches'])->map(
             function (Document $cxArticle) use ($composite) {
+                $locale = WpCxense::instance()->settings->getOrganisationPrefix(LanguageProvider::getCurrentLanguage('locale')) ?? 'da';
+                if ($composite->getCommercial()&& $cxArticle->{$locale. '-commercial-label'}) {
+                    return null;
+                }
                 $postId = intval($cxArticle->{'recs-articleid'});
                 $post = get_post($postId);
                 return $post && $post->post_status === 'publish' && $post->ID === $postId
