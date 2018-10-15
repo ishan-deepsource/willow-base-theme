@@ -184,7 +184,7 @@ class CompositeTransformer extends TransformerAbstract
         $content = collect($result['matches'])->map(
             function (Document $cxArticle) use ($composite) {
                 $locale = WpCxense::instance()->settings->getOrganisationPrefix(LanguageProvider::getCurrentLanguage('locale')) ?? 'da';
-                if ($composite->getCommercial()&& $cxArticle->{$locale. '-commercial-label'}) {
+                if ($composite->getCommercial() && $cxArticle->{$locale. '-commercial-label'}) {
                     return null;
                 }
                 $postId = intval($cxArticle->{'recs-articleid'});
