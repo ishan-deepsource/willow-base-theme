@@ -147,6 +147,7 @@ class Cleanup extends \WP_CLI_Command
      */
     private function resolveContent(string $url)
     {
+        // Simple array cache to avoid re-resolving for instance the frontpage 5.000 times.
         if (($content = $this->resolveCache[$url] ?? false) && $content !== false) {
             return $content;
         }
