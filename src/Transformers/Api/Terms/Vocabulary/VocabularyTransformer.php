@@ -27,13 +27,17 @@ class VocabularyTransformer extends TransformerAbstract
             'name' => $vocabulary->getName(),
             'taxonomy' => $vocabulary->getMachineName(),
             'multi_select' => $vocabulary->getMultiSelect() === '' ? false : true,
-            'terms' => $this->transformTerms($vocabulary->getTerms())->toArray(),
+            'terms' => $this->transformTerms($vocabulary->getTerms()),
         ];
     }
 
-    private function transformTerms(Collection $tags) {
-        return collect($tags)->map(function(TagContract $tag){
+    private function transformTerms(?Collection $tags)
+    {
+        if (!$tags) {
+            return null;
+        }
+        return $tags->map(function (TagContract $tag) {
             return with(new TagTransformer())->transform($tag);
-        });
+        })->toArray();
     }
 }
