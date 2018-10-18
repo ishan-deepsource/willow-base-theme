@@ -26,28 +26,34 @@ class ColorPaletteAdapter implements ColorPaletteContract
         $this->rawPalette = json_decode($this->rawPalette);
     }
 
-    public function getColors(): Collection
+    public function getColors(): ?Collection
     {
         // Only output the hex values
         if (isset($this->rawPalette->colors)) {
             return collect($this->rawPalette->colors)->pluck('hex');
         }
+
+        return null;
     }
 
-    public function getAverageLuminance(): float
+    public function getAverageLuminance(): ?float
     {
         // Only output the hex values
         if (isset($this->rawPalette->average_luminance)) {
             return $this->rawPalette->average_luminance;
         }
+
+        return null;
     }
 
-    public function getDominantColors(): Collection
+    public function getDominantColors(): ?Collection
     {
         if (isset($this->rawPalette->dominant_colors)) {
             return collect($this->rawPalette->dominant_colors)->map(function ($var) {
                 return $var->hex;
             });
         }
+
+        return null;
     }
 }
