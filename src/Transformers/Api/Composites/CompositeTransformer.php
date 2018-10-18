@@ -79,6 +79,7 @@ class CompositeTransformer extends TransformerAbstract
             'template'                  => $composite->getTemplate(),
             'estimated_reading_time'    => $composite->getEstimatedReadingTime(),
             'audio'                     => $this->getAudio($composite),
+            'word_count'                => $composite->getWordCount(),
         ];
     }
 
