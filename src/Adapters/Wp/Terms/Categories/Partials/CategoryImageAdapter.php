@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\Partials;
 
+use Bonnier\Willow\Base\Models\Contracts\Root\ColorPaletteContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\HyperlinkContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
@@ -71,6 +72,11 @@ class CategoryImageAdapter implements ImageContract
     }
 
     public function getLink(): ?HyperlinkContract
+    {
+        return null;
+    }
+
+    public function getColorPalette(): ?ColorPaletteContract
     {
         return null;
     }

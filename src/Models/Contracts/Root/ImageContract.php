@@ -13,4 +13,6 @@ interface ImageContract extends FileContract
     public function getAspectRatio(): float;
 
     public function getLink(): ?HyperlinkContract;
+
+    public function getColorPalette(): ?ColorPaletteContract;
 }

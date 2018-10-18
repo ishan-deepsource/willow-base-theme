@@ -11,6 +11,7 @@ use Bonnier\Willow\Base\Actions\Universal\PageTemplates;
 use Bonnier\Willow\Base\Actions\Universal\PolylangSubdomain;
 use Bonnier\Willow\Base\Actions\Universal\PolylangTranslations;
 use Bonnier\Willow\Base\Actions\Universal\Navigation;
+use Bonnier\Willow\Base\Actions\Backend\AddMedia;
 
 class ActionsBootstrap
 {
@@ -38,6 +39,7 @@ class ActionsBootstrap
             new PostSlugChange();
             new PreviewUrl();
             new EstimatedReadingTime();
+            new AddMedia();
         }
     }
 }

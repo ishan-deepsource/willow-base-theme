@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Models\Base\Root;
 
+use Bonnier\Willow\Base\Models\Contracts\Root\ColorPaletteContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\HyperlinkContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 
@@ -67,5 +68,10 @@ class Image implements ImageContract
     public function getLink(): ?HyperlinkContract
     {
         return $this->image->getLink();
+    }
+
+    public function getColorPalette(): ?ColorPaletteContract
+    {
+        return $this->image->getColorPalette();
     }
 }
