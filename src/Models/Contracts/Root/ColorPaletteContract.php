@@ -6,9 +6,9 @@ use Illuminate\Support\Collection;
 
 interface ColorPaletteContract
 {
-    public function getColors(): Collection;
+    public function getColors(): ?Collection;
 
-    public function getAverageLuminance(): float;
+    public function getAverageLuminance(): ?float;
 
-    public function getDominantColors(): Collection;
+    public function getDominantColors(): ?Collection;
 }

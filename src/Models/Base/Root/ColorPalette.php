@@ -18,17 +18,17 @@ class ColorPalette implements ColorPaletteContract
         $this->colorPalette = $colorPalette;
     }
 
-    public function getColors(): Collection
+    public function getColors(): ?Collection
     {
         return $this->colorPalette->getColors();
     }
 
-    public function getAverageLuminance(): float
+    public function getAverageLuminance(): ?float
     {
         return $this->colorPalette->getAverageLuminance();
     }
 
-    public function getDominantColors(): Collection
+    public function getDominantColors(): ?Collection
     {
         return $this->colorPalette->getDominantColors();
     }

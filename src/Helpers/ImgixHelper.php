@@ -13,6 +13,9 @@ class ImgixHelper
 {
     public static function getColorPalette(string $url)
     {
-        return file_get_contents($url . '?palette=json');
+        if (WP_ENV !== 'testing') {
+            return file_get_contents($url . '?palette=json');
+        }
+        return null;
     }
 }
