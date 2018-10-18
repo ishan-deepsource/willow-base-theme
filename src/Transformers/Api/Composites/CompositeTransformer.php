@@ -6,6 +6,7 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\AssociatedCon
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentAudioTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
 use Bonnier\Willow\Base\Traits\UrlTrait;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\WP\Cxense\Services\WidgetDocumentQuery;
@@ -20,6 +21,7 @@ use Bonnier\Willow\Base\Transformers\Api\Root\ImageTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Category\CategoryTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Tag\TagTransformer;
+use Bonnier\WP\Cxense\WpCxense;
 use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 use WP_Post;
@@ -77,6 +79,7 @@ class CompositeTransformer extends TransformerAbstract
             'template'                  => $composite->getTemplate(),
             'estimated_reading_time'    => $composite->getEstimatedReadingTime(),
             'audio'                     => $this->getAudio($composite),
+            'word_count'                => $composite->getWordCount(),
         ];
     }
 
@@ -179,13 +182,19 @@ class CompositeTransformer extends TransformerAbstract
             ->addParameter('pageType', 'article gallery story')
             ->setCategories()
             ->get();
-        $content = collect($result['matches'])->map(function (Document $cxArticle) {
-            $postId = intval($cxArticle->{'recs-articleid'});
-            $post = get_post($postId);
-            return $post && $post->post_status === 'publish' && $post->ID === $postId ?
-                new Composite(new CompositeAdapter($post)) :
-                null;
-        })->reject(function ($content) {
+        $content = collect($result['matches'])->map(
+            function (Document $cxArticle) use ($composite) {
+                $locale = WpCxense::instance()->settings->getOrganisationPrefix(LanguageProvider::getCurrentLanguage('locale')) ?? 'da';
+                if ($composite->getCommercial() && $cxArticle->{$locale. '-commercial-label'}) {
+                    return null;
+                }
+                $postId = intval($cxArticle->{'recs-articleid'});
+                $post = get_post($postId);
+                return $post && $post->post_status === 'publish' && $post->ID === $postId
+                ? new Composite(new CompositeAdapter($post)) :
+                    null;
+            }
+        )->reject(function ($content) {
             return is_null($content);
         })->toArray();
 

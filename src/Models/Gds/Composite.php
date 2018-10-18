@@ -176,4 +176,9 @@ class Composite implements CompositeContract
     {
         return $this->baseComposite->getAudio();
     }
+
+    public function getWordCount(): ?int
+    {
+        return $this->baseComposite->getWordCount();
+    }
 }
