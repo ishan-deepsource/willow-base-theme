@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Cxense\Search;
 
+use Bonnier\Willow\Base\Models\Contracts\Root\ColorPaletteContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\HyperlinkContract;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
@@ -96,6 +97,11 @@ class ContentImageAdapter implements ContentImageContract
     }
 
     public function getLink(): ?HyperlinkContract
+    {
+        return null;
+    }
+
+    public function getColorPalette(): ?ColorPaletteContract
     {
         return null;
     }

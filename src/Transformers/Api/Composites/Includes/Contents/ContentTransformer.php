@@ -17,11 +17,13 @@ use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\Para
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\QuoteTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\TextItemTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\VideoTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Root\ImageTransformer;
 use Bonnier\Willow\Base\Transformers\NullTransformer;
 use League\Fractal\TransformerAbstract;
 
 class ContentTransformer extends TransformerAbstract
 {
+
     protected $transformerMapping = [
         'image'                => ContentImageTransformer::class,
         'text_item'            => TextItemTransformer::class,

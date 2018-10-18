@@ -4,10 +4,12 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types;
 
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\Partials\ContentImageHyperlinkAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Root\ColorPaletteAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
 use Bonnier\Willow\Base\Models\Base\Root\Hyperlink;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\ColorPaletteContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\HyperlinkContract;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
@@ -88,6 +90,11 @@ class ContentImageAdapter extends AbstractContentAdapter implements ContentImage
     public function getLink(): ?HyperlinkContract
     {
         return new Hyperlink(new ContentImageHyperlinkAdapter($this, $this->acfArray));
+    }
+
+    public function getColorPalette(): ?ColorPaletteContract
+    {
+        return optional($this->image)->getColorPalette();
     }
 
     public function getDisplayHint(): ?string

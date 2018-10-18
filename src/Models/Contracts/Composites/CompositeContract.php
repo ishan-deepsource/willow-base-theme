@@ -71,4 +71,6 @@ interface CompositeContract
     public function getAssociatedComposites(): ?Collection;
 
     public function getAudio(): ?AudioContract;
+
+    public function getWordCount(): ?int;
 }

@@ -7,12 +7,35 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 
 class EstimatedReadingTime
 {
+    protected $charList = 'âÂéÉèÈêÊøØóÓòÒôÔäÄåÅöÖæÆ:/.';
+
     public function __construct()
     {
         add_filter('acf/save_post', [$this, 'addEstimatedReadingTime'], 20);
+        add_filter('acf/save_post', [$this, 'countNumberOfWords'], 20);
     }
 
-    public function addEstimatedReadingTime($postId) {
+    public function countNumberOfWords($postId)
+    {
+        $compositeAdapter = new CompositeAdapter(get_post($postId));
+        $totalWordCount = 0;
+
+        foreach ($compositeAdapter->getContents() as $item) {
+            switch ($item->getType()) {
+                case 'infobox':
+                case 'text_item':
+                    $totalWordCount = $totalWordCount + str_word_count($item->getBody(), 0, $this->charList);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        update_post_meta($postId, 'word_count', $totalWordCount);
+    }
+
+    public function addEstimatedReadingTime($postId)
+    {
         $wordsPerMinute = 180; // 180 words per 60 seconds
         $totalWordCount = 0;
         $imageCounter = 0;
@@ -22,26 +45,20 @@ class EstimatedReadingTime
 
         foreach ($compositeAdapter->getContents() as $item) {
             switch ($item->getType()) {
-                case 'file':
-                    break;
                 case 'gallery':
                     $imageCounter = $imageCounter + $item->getImages()->count();
                     break;
                 case 'image':
                     $imageCounter++;
                     break;
+                case 'text_item':
                 case 'infobox':
-                    $totalWordCount = $totalWordCount + str_word_count($item->getBody());
+                    $totalWordCount = $totalWordCount + str_word_count($item->getBody(), 0, $this->charList);
                     break;
                 case 'inserted_code':
-                    break;
                 case 'link':
-                    break;
-                case 'text_item':
-                    $totalWordCount = $totalWordCount + str_word_count($item->getBody());
-                    break;
                 case 'video':
-                    break;
+                case 'file':
                 default:
                     break;
             }
@@ -84,8 +101,8 @@ class EstimatedReadingTime
         $seconds = 0;
         $initialSecondsPerImage = 12;
 
-        for($i=0; $i<$amountOfImages; $i++) {
-            if($i<10) {
+        for ($i = 0; $i < $amountOfImages; $i++) {
+            if ($i < 10) {
                 $seconds = $seconds + ($initialSecondsPerImage - $i);
             } else {
                 $seconds = $seconds + 3; // After 10 images the average time pr images is estimated to 3 sec. (According to research made by Medium).

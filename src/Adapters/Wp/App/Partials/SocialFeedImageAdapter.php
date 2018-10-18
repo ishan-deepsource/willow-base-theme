@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\App\Partials;
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\ColorPaletteContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\HyperlinkContract;
 
 class SocialFeedImageAdapter implements ContentImageContract
@@ -89,6 +90,11 @@ class SocialFeedImageAdapter implements ContentImageContract
     }
 
     public function getLink(): ?HyperlinkContract
+    {
+        return null;
+    }
+
+    public function getColorPalette(): ?ColorPaletteContract
     {
         return null;
     }
