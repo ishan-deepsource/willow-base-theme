@@ -194,6 +194,6 @@ class PinterestCompositeAdapter implements CompositeContract
 
     public function getWordCount(): ?int
     {
-        return 0;
+        return null;
     }
 }
