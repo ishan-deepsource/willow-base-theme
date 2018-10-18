@@ -55,7 +55,7 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
         parent::__construct($page);
 
         $this->acfFields = get_fields($this->wpModel->ID);
-        $this->pageContents = $this->acfFields[AcfName::GROUP_PAGE_WIDGETS] ?? null;
+        $this->pageContents = array_get($this->acfFields, AcfName::GROUP_PAGE_WIDGETS) ?: null;
     }
 
     public function getAcfFields()

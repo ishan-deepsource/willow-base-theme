@@ -90,7 +90,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         if ($postId = data_get($this->wpModel, 'ID')) {
             $this->acfFields = get_fields($postId);
         }
-        $this->compositeContents = array_get($this->acfFields, 'composite_content', []);
+        $this->compositeContents = array_get($this->acfFields, 'composite_content') ?: null;
     }
 
     public function getAcfFields()
