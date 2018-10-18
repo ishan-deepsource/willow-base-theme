@@ -2,6 +2,9 @@
 
 namespace Bonnier\Willow\Base\Actions\Backend;
 
+use Bonnier\Willow\Base\Adapters\Wp\Root\ColorPaletteAdapter;
+use Bonnier\Willow\Base\Helpers\ImgixHelper;
+
 /**
  * Class AddMedia
  *
@@ -11,12 +14,18 @@ class AddMedia
 {
     public function __construct()
     {
-        add_filter('wp_update_attachment_metadata', [$this, 'wpUpdateAttachmentMetadata'], 120, 2);
+        add_filter('wp_update_attachment_metadata', [__CLASS__, 'wpUpdateAttachmentMetadata'], 120, 2);
     }
 
-    public function wpUpdateAttachmentMetadata($data, $attachment_id)
+    public static function wpUpdateAttachmentMetadata($data, $attachmentId)
     {
-        // Get imgix color palette and save it in post_meta
-        $data['imgix_palette'] = file_get_contents(wp_get_attachment_url($attachment_id) . '?palette=json');
+        // Get imgix color palette and save it in postmeta
+        
+        if ($imageUrl = wp_get_attachment_url($attachmentId)) {
+            $palette = ImgixHelper::getColorPalette($imageUrl);
+            update_post_meta($attachmentId, ColorPaletteAdapter::COLOR_PALETTE_META, $palette);
+        }
+
+        return $data;
     }
 }
