@@ -4,6 +4,9 @@ namespace Bonnier\Willow\Base\Commands;
 
 use Bonnier\Willow\Base\Controllers\App\RouteController;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
+use Bonnier\WP\Cache\Models\Post;
+use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
+use Bonnier\WP\Cxense\Models\Post as CxensePost;
 use Bonnier\WP\Redirect\Http\BonnierRedirect;
 use Illuminate\Support\Collection;
 use League\Csv\Exception;
@@ -14,7 +17,9 @@ class Cleanup extends \WP_CLI_Command
     const CMD_NAMESPACE = 'cleanup';
 
     protected $resolveCache;
-    protected $content;
+    protected $output;
+    protected $taxoFile;
+    protected $skipFile;
 
     public static function register()
     {
@@ -46,8 +51,18 @@ class Cleanup extends \WP_CLI_Command
      * default: ,
      * ---
      *
+     * [--output=<output>]
+     * : Whether or not to output skipped and taxonomy to csv files
+     * --
+     * ---
+     * default: false
+     * options:
+     *   - true
+     *   - false
+     * ---
+     *
      * ## EXAMPLES
-     *     wp willow cleanup delete list.csv --delimiter=';'
+     *     wp willow cleanup delete list.csv --delimiter=';' --output=true
      *
      * @param $args
      * @param $assocArgs
@@ -58,11 +73,19 @@ class Cleanup extends \WP_CLI_Command
     {
         list($file) = $args;
         $delimiter = $assocArgs['delimiter'] ?: ',';
+        $this->output = $assocArgs['output'] === 'true';
         if (!file_exists($file)) {
             $file = dirname(dirname(ABSPATH)) . $file;
             if (!file_exists($file)) {
                 \WP_CLI::error('File not found');
             }
+        }
+
+        if ($this->output) {
+            $this->taxoFile = sprintf('taxo-%s.csv', uniqid());
+            \WP_CLI::line(sprintf('Taxonomy urls will be saved to %s', $this->taxoFile));
+            $this->skipFile = sprintf('skip-%s.csv', uniqid());
+            \WP_CLI::line(sprintf('Skipped urls will be saved to %s', $this->skipFile));
         }
 
         $this->processCSV($file, $delimiter);
@@ -86,10 +109,8 @@ class Cleanup extends \WP_CLI_Command
      *
      * @throws \WP_CLI\ExitException
      */
-    private function processCSV(string $file, string $delimiter): Collection
+    private function processCSV(string $file, string $delimiter): void
     {
-        $urls = new Collection();
-
         $csv = Reader::createFromPath($file, 'r');
         try {
             $csv->setDelimiter($delimiter);
@@ -98,12 +119,16 @@ class Cleanup extends \WP_CLI_Command
             \WP_CLI::error($exception->getMessage());
         }
 
+        if ($this->output) {
+            file_put_contents($this->taxoFile, '"from","to","Name","Slug","Taxonomy"' . PHP_EOL);
+            file_put_contents($this->skipFile, '"from","to"' . PHP_EOL);
+        }
         $this->resolveCache = [];
+        $this->deactivateFilters();
         $progress = \WP_CLI\Utils\make_progress_bar(
             'Deleting content',
             count($csv)
         );
-        $this->content = [];
         foreach ($csv as $record) {
             $progress->tick();
 
@@ -111,32 +136,43 @@ class Cleanup extends \WP_CLI_Command
             // Either WP_Post or WP_Term (Pages, composites, categories or tags)
             $fromContent = $this->resolveContent($record['from'] ?? null);
             if (!$fromContent) {
+                if ($this->output) {
+                    file_put_contents(
+                        $this->skipFile,
+                        sprintf('"%s","%s"%s', $record['from'], $record['to'], PHP_EOL),
+                        FILE_APPEND
+                    );
+                }
                 continue;
             }
-            // Get the content that the to column matches
-            // Either WP_Post or WP_Term (Pages, composites, categories or tags)
-            $toContent = $this->resolveContent($record['to'] ?? null);
+            if ($fromContent instanceof \WP_Post) {
+                $fromTranslations = $this->getTranslations($fromContent);
+                $fromTranslations->put('da', $fromContent);
+                $toContent = $this->resolveContent($record['to'] ?? null);
+                $toTranslations = $this->getTranslations($toContent);
+                $toTranslations->put('da', $toContent);
 
-            // Get all translations for the content
-            // and push the danish content into the collection
-            $fromTranslations = $this->getTranslations($fromContent);
-            $fromTranslations->put('da', $fromContent);
-            $toTranslations = $this->getTranslations($toContent);
-            $toTranslations->put('da', $toContent);
-
-            // Foreach from content on all languages, handle the content
-            // and match it to the destination (to) content.
-            $fromTranslations->each(function ($content, $locale) use ($toTranslations) {
-                $this->handleContent($content, $toTranslations->get($locale), $locale);
-            });
+                $fromTranslations->each(function ($content, $locale) use ($toTranslations, $record) {
+                    $this->handleContent(
+                        $content,
+                        $toTranslations->get($locale),
+                        $locale,
+                        $record['to']
+                    );
+                });
+            } elseif ($this->output) {
+                file_put_contents($this->taxoFile, sprintf(
+                    '"%s","%s",""%s","%s","%s"%s',
+                    $record['from'],
+                    $record['to'],
+                    $fromContent->name,
+                    $fromContent->slug,
+                    $fromContent->taxonomy,
+                    PHP_EOL
+                ), FILE_APPEND);
+            }
         }
         $progress->finish();
-
-        \WP_CLI::line(sprintf('Processed %s entries', $urls->count()));
-        foreach ($this->content as $locale => $count) {
-            \WP_CLI::line(sprintf('Handled %s %s contents', $count, $locale));
-        }
-        return $urls;
     }
 
     /**
@@ -189,47 +225,44 @@ class Cleanup extends \WP_CLI_Command
      * Create a redirect and delete the "from"-content
      *
      * @param \WP_Post|\WP_Term|null $fromContent
-     * @param \WP_Post|\WP_Term|null$toContent
+     * @param \WP_Post|\WP_Term|null $toContent
      * @param string $locale
      */
-    private function handleContent($fromContent, $toContent, $locale)
+    private function handleContent($fromContent, $toContent, $locale, $daTo)
     {
+        $createRedirect = true;
         // If we cannot find a url, or the url is the frontpage
-        // skip
-        if ((!$fromUrl = $this->getUrl($fromContent)) || $fromUrl === '/') {
-            return;
+        // skip creating a redirect
+        if ((!$fromUrl = $this->getUrl($fromContent)) || $fromUrl === '/' || $this->isDraft($fromContent)) {
+            $createRedirect = false;
         }
-
+        $toUrl = null;
         // If we cannot find a destination URL, we'll redirect to the frontpage
-        if (!$toUrl = $this->getDestinationUrl($toContent, $fromContent, $fromUrl)) {
+        if ($locale === 'da') {
+            $toUrl = $daTo;
+        } elseif ($createRedirect && !$toUrl = $this->getDestinationUrl($toContent, $fromContent, $fromUrl)) {
             $toUrl = '/';
         }
 
         // If from and to are the same
-        // skip
-        if ($fromUrl === $toUrl) {
-            return;
+        // skip creating a redirect
+        if ($createRedirect && $fromUrl === $toUrl) {
+            $createRedirect = false;
         }
 
-        // Create a redirect through the BonnierRedirect plugin
-        BonnierRedirect::handleRedirect(
-            $fromUrl,
-            $toUrl,
-            $locale,
-            'cleanup-delete-script',
-            $fromContent->ID ?? $fromContent->term_id ?? 0,
-            301,
-            true
-        );
-
+        if ($createRedirect) {
+            // Create a redirect through the BonnierRedirect plugin
+            BonnierRedirect::handleRedirect(
+                $fromUrl,
+                $toUrl,
+                $locale,
+                'cleanup-delete-script',
+                $fromContent->ID ?? $fromContent->term_id ?? 0,
+                301,
+                true
+            );
+        }
         $this->deleteContent($fromContent);
-
-        // Just to have an idea of how much content was handled
-        if (!isset($this->content[$locale])) {
-            $this->content[$locale] = 1;
-        } else {
-            $this->content[$locale]++;
-        }
     }
 
     /**
@@ -315,15 +348,11 @@ class Cleanup extends \WP_CLI_Command
     /**
      * Delete the content
      *
-     * @param \WP_Post|\WP_Term|null $content
+     * @param \WP_Post $content
      */
-    private function deleteContent($content)
+    private function deleteContent(\WP_Post $content)
     {
-        if ($content instanceof \WP_Post) {
-            wp_delete_post($content->ID);
-        } elseif ($content instanceof \WP_Term) {
-            wp_delete_term($content->term_id, $content->taxonomy);
-        }
+        wp_trash_post($content->ID);
     }
 
     /**
@@ -349,5 +378,37 @@ class Cleanup extends \WP_CLI_Command
         }
 
         return new Collection();
+    }
+
+    /**
+     * Check whether the content is drafted or not
+     *
+     * @param \WP_Post|\WP_Term|null $content
+     *
+     * @return bool
+     */
+    private function isDraft($content)
+    {
+        if ($content instanceof \WP_Post) {
+            return in_array($content->post_status, [
+                'draft',
+                'private',
+                'trash',
+                'auto-draft'
+            ]);
+        }
+
+        return false;
+    }
+
+    private function deactivateFilters()
+    {
+        remove_action('wp_trash_post', [Post::class, 'removePost'], 10);
+        remove_action('publish_to_draft', [Post::class, 'removePost'], 10);
+        remove_action(WpComposite::SLUG_CHANGE_HOOK, [Post::class, 'urlChanged'], 10);
+        remove_action('publish_to_publish', [Post::class, 'updatePost'], 10);
+        remove_action('draft_to_publish', [Post::class, 'publishPost'], 10);
+        remove_action('untrashed_post', [Post::class, 'publishPost'], 10);
+        remove_action('transition_post_status', [CxensePost::class, 'post_status_changed'], 10);
     }
 }
