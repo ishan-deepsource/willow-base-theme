@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a22acc44c153f3db3987bb48a0421d48",
+    "content-hash": "082036447a3fd588fba1df4a7c150f96",
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
@@ -394,6 +394,42 @@
                 "wordpress"
             ],
             "time": "2018-08-23T11:54:17+00:00"
+        },
+        {
+            "name": "bonnier/wp-user-favourites",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BenjaminMedia/wp-user-favourites.git",
+                "reference": "d5775f86dc1bccb5c554ace2363363380d38bfbb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-user-favourites/zipball/d5775f86dc1bccb5c554ace2363363380d38bfbb",
+                "reference": "d5775f86dc1bccb5c554ace2363363380d38bfbb",
+                "shasum": ""
+            },
+            "require": {
+                "bonnier/willow-mu-plugins": "^1.2"
+            },
+            "require-dev": {
+                "johnpbloch/wordpress": "^4.9"
+            },
+            "type": "wordpress-plugin",
+            "autoload": {
+                "psr-4": {
+                    "Bonnier\\WP\\UserFavourites\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Bonnier Interactive",
+                    "email": "interactive@bonnier.dk"
+                }
+            ],
+            "description": "A plugin for marking articles as favourites.",
+            "time": "2018-10-18T13:34:01+00:00"
         },
         {
             "name": "composer/installers",
