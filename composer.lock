@@ -397,16 +397,16 @@
         },
         {
             "name": "bonnier/wp-user-favourites",
-            "version": "1.0.1",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-user-favourites.git",
-                "reference": "d5775f86dc1bccb5c554ace2363363380d38bfbb"
+                "reference": "6e268d1b0eec0e237f3979d2b7b0610c2c15c28e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-user-favourites/zipball/d5775f86dc1bccb5c554ace2363363380d38bfbb",
-                "reference": "d5775f86dc1bccb5c554ace2363363380d38bfbb",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-user-favourites/zipball/6e268d1b0eec0e237f3979d2b7b0610c2c15c28e",
+                "reference": "6e268d1b0eec0e237f3979d2b7b0610c2c15c28e",
                 "shasum": ""
             },
             "require": {
@@ -429,7 +429,7 @@
                 }
             ],
             "description": "A plugin for marking articles as favourites.",
-            "time": "2018-10-18T13:34:01+00:00"
+            "time": "2018-10-19T08:21:33+00:00"
         },
         {
             "name": "composer/installers",
@@ -4657,16 +4657,16 @@
         },
         {
             "name": "spatie/phpunit-snapshot-assertions",
-            "version": "1.3.1",
+            "version": "1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/phpunit-snapshot-assertions.git",
-                "reference": "ee2ce2e8bfd9683defb54a2c5154008157240dcc"
+                "reference": "0fefcadd42284c4913d285342dbe8215a2097adf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/phpunit-snapshot-assertions/zipball/ee2ce2e8bfd9683defb54a2c5154008157240dcc",
-                "reference": "ee2ce2e8bfd9683defb54a2c5154008157240dcc",
+                "url": "https://api.github.com/repos/spatie/phpunit-snapshot-assertions/zipball/0fefcadd42284c4913d285342dbe8215a2097adf",
+                "reference": "0fefcadd42284c4913d285342dbe8215a2097adf",
                 "shasum": ""
             },
             "require": {
@@ -4701,7 +4701,7 @@
                 "spatie",
                 "testing"
             ],
-            "time": "2018-06-08T22:20:36+00:00"
+            "time": "2018-10-18T17:30:38+00:00"
         },
         {
             "name": "symfony/browser-kit",

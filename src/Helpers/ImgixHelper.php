@@ -1,21 +1,35 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jonask
- * Date: 17/10/18
- * Time: 13:32
- */
 
 namespace Bonnier\Willow\Base\Helpers;
 
+use GuzzleHttp\Client;
 
 class ImgixHelper
 {
+    public static $client;
+
     public static function getColorPalette(string $url)
     {
-        if (WP_ENV !== 'testing') {
-            return file_get_contents($url . '?palette=json');
+        return self::get($url . '?palette=json');
+    }
+
+    private static function get($url)
+    {
+        throw_if(!self::$client, 'YOU SHALL NOT PASS');
+        try {
+            $response = self::getClient()->get($url);
+            return $response->getBody()->getContents();
+        } catch (\Exception $exception) {
         }
         return null;
+    }
+
+    private static function getClient(): Client
+    {
+        if (!self::$client) {
+            self::$client = new Client();
+        }
+
+        return self::$client;
     }
 }
