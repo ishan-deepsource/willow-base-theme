@@ -15,7 +15,6 @@ class ImgixHelper
 
     private static function get($url)
     {
-        throw_if(!self::$client, 'YOU SHALL NOT PASS');
         try {
             $response = self::getClient()->get($url);
             return $response->getBody()->getContents();
