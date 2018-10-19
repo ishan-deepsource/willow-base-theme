@@ -53,6 +53,7 @@ class CategoryTransformer extends TransformerAbstract
             'language' => $category->getLanguage(),
             'count' => $category->getCount(),
             'canonical_url' => $category->getCanonicalUrl(),
+            'language_urls'  => $category->getLanguageUrls(),
         ];
     }
 

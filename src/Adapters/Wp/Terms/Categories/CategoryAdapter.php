@@ -170,4 +170,11 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
     {
         return $this->getFullUrl(get_category_link($this->getId()));
     }
+
+    public function getLanguageUrls(): ?Collection
+    {
+        return collect(LanguageProvider::getTermTranslations($this->getId()))->map(function ($termId) {
+            return get_category_link($termId);
+        });
+    }
 }

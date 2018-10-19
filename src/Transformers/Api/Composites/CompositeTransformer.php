@@ -80,6 +80,7 @@ class CompositeTransformer extends TransformerAbstract
             'estimated_reading_time'    => $composite->getEstimatedReadingTime(),
             'audio'                     => $this->getAudio($composite),
             'word_count'                => $composite->getWordCount(),
+            'language_urls'              => $composite->getLanguageUrls(),
         ];
     }
 

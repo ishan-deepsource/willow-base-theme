@@ -26,4 +26,6 @@ interface TagContract
     public function getTeaser(string $type): ?TeaserContract;
 
     public function getTeasers(): ?Collection;
+
+    public function getLanguageUrls(): ?Collection;
 }

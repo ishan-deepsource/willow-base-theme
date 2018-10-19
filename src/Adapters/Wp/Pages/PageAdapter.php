@@ -19,6 +19,7 @@ use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Traits\DateTimeZoneTrait;
 use Bonnier\Willow\Base\Traits\UrlTrait;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Helpers\AcfName;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\SeoText;
 use DateTime;
@@ -161,5 +162,12 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
         }
 
         return $this->contentFactory = new PageContentFactory($class);
+    }
+
+    public function getLanguageUrls(): ?Collection
+    {
+        return collect(LanguageProvider::getPostTranslations($this->getId()))->map(function ($termId) {
+            return get_permalink($termId);
+        });
     }
 }

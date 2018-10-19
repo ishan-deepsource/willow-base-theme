@@ -35,6 +35,7 @@ class TagTransformer extends TransformerAbstract
             'language' => $tag->getLanguage(),
             'count' => $tag->getCount(),
             'canonical_url' => $tag->getCanonicalUrl(),
+            'language_urls'  => $tag->getLanguageUrls(),
         ];
     }
 

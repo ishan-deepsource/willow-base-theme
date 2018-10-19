@@ -35,6 +35,7 @@ class PageTransformer extends TransformerAbstract
             'updated_at' => $page->getUpdatedAt(),
             'is_front_page' => $page->isFrontPage(),
             'canonical_url' => $page->getCanonicalUrl(),
+            'language_urls' => $page->getLanguageUrls(),
         ];
     }
 

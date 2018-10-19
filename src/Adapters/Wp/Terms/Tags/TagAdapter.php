@@ -144,4 +144,11 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
         }
         return null;
     }
+
+    public function getLanguageUrls(): ?Collection
+    {
+        return collect(LanguageProvider::getTermTranslations($this->getId()))->map(function ($termId) {
+            return get_term_link($termId);
+        });
+    }
 }
