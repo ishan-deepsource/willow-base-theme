@@ -13,17 +13,17 @@ class ImageTransformer extends TransformerAbstract
     public function transform(ImageContract $image)
     {
         return [
-            'id' => $image->getId(),
-            'url' => $this->getPath($image->getUrl()),
-            'title' => $image->getTitle(),
-            'description' => $image->getDescription(),
-            'caption' => $image->getCaption(),
-            'alt' => $image->getAlt(),
-            'copyright' => $image->getCopyright(),
-            'language' => $image->getLanguage(),
-            'focalpoint' => $image->getFocalPoint(),
-            'aspectratio' => $image->getAspectRatio(),
-            'link' => $this->transformLink($image),
+            'id'            => $image->getId(),
+            'url'           => $this->getPath($image->getUrl()),
+            'title'         => $image->getTitle(),
+            'description'   => $image->getDescription(),
+            'caption'       => $image->getCaption(),
+            'alt'           => $image->getAlt(),
+            'copyright'     => $image->getCopyright(),
+            'language'      => $image->getLanguage(),
+            'focalpoint'    => $image->getFocalPoint(),
+            'aspectratio'   => $image->getAspectRatio(),
+            'link'          => $this->transformLink($image),
             'color_palette' => $this->transformColorPalette($image),
         ];
     }

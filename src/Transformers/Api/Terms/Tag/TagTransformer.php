@@ -28,14 +28,14 @@ class TagTransformer extends TransformerAbstract
     public function transform(TagContract $tag)
     {
         return [
-            'id' => $tag->getId(),
-            'name' => $tag->getName(),
-            'slug' => $tag->getSlug(),
-            'url' => $this->getPath($tag->getUrl()),
-            'language' => $tag->getLanguage(),
-            'count' => $tag->getCount(),
+            'id'            => $tag->getId(),
+            'name'          => $tag->getName(),
+            'slug'          => $tag->getSlug(),
+            'url'           => $this->getPath($tag->getUrl()),
+            'language'      => $tag->getLanguage(),
+            'count'         => $tag->getCount(),
             'canonical_url' => $tag->getCanonicalUrl(),
-            'language_urls'  => $tag->getLanguageUrls(),
+            'language_urls' => $tag->getLanguageUrls(),
         ];
     }
 

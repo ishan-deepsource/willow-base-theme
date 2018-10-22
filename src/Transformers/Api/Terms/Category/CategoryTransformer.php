@@ -47,13 +47,13 @@ class CategoryTransformer extends TransformerAbstract
     public function transform(CategoryContract $category)
     {
         return [
-            'id' => $category->getId(),
-            'name' => $category->getName(),
-            'url' => $this->getPath($category->getUrl()),
-            'language' => $category->getLanguage(),
-            'count' => $category->getCount(),
+            'id'            => $category->getId(),
+            'name'          => $category->getName(),
+            'url'           => $this->getPath($category->getUrl()),
+            'language'      => $category->getLanguage(),
+            'count'         => $category->getCount(),
             'canonical_url' => $category->getCanonicalUrl(),
-            'language_urls'  => $category->getLanguageUrls(),
+            'language_urls' => $category->getLanguageUrls(),
         ];
     }
 

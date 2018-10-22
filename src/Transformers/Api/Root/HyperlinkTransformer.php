@@ -10,10 +10,10 @@ class HyperlinkTransformer extends TransformerAbstract
     public function transform(HyperlinkContract $hyperlink)
     {
         return [
-            'title' => $hyperlink->getTitle(),
-            'url' => $hyperlink->getUrl(),
-            'rel' => $hyperlink->getRelationship(),
-            'target' => $hyperlink->getTarget(),
+            'title'     => $hyperlink->getTitle(),
+            'url'       => $hyperlink->getUrl(),
+            'rel'       => $hyperlink->getRelationship(),
+            'target'    => $hyperlink->getTarget(),
         ];
     }
 }
