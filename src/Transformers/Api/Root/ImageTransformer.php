@@ -39,7 +39,7 @@ class ImageTransformer extends TransformerAbstract
 
     private function transformColorPalette(ImageContract $image)
     {
-        if ($colorPalette = $image->getColorPalette()) {
+        if (($colorPalette = $image->getColorPalette()) && $colorPalette->getColors()) {
             return with(new ColorPaletteTransformer())->transform($colorPalette);
         }
 

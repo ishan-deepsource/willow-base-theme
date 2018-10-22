@@ -58,7 +58,8 @@
         "bonnier/wp-bonnier-some": "^2.0",
         "bonnier/wp-focal-point": "^1.1",
         "league/csv": "^9.1",
-        "wpackagist-plugin/wp-rest-filter": "^1.2"
+        "wpackagist-plugin/wp-rest-filter": "^1.2",
+        "bonnier/wp-user-favourites": "^1.0"
     },
     "autoload": {
         "psr-4": {

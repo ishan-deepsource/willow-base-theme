@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a22acc44c153f3db3987bb48a0421d48",
+    "content-hash": "082036447a3fd588fba1df4a7c150f96",
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
@@ -394,6 +394,42 @@
                 "wordpress"
             ],
             "time": "2018-08-23T11:54:17+00:00"
+        },
+        {
+            "name": "bonnier/wp-user-favourites",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BenjaminMedia/wp-user-favourites.git",
+                "reference": "6e268d1b0eec0e237f3979d2b7b0610c2c15c28e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-user-favourites/zipball/6e268d1b0eec0e237f3979d2b7b0610c2c15c28e",
+                "reference": "6e268d1b0eec0e237f3979d2b7b0610c2c15c28e",
+                "shasum": ""
+            },
+            "require": {
+                "bonnier/willow-mu-plugins": "^1.2"
+            },
+            "require-dev": {
+                "johnpbloch/wordpress": "^4.9"
+            },
+            "type": "wordpress-plugin",
+            "autoload": {
+                "psr-4": {
+                    "Bonnier\\WP\\UserFavourites\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Bonnier Interactive",
+                    "email": "interactive@bonnier.dk"
+                }
+            ],
+            "description": "A plugin for marking articles as favourites.",
+            "time": "2018-10-19T08:21:33+00:00"
         },
         {
             "name": "composer/installers",
@@ -4621,16 +4657,16 @@
         },
         {
             "name": "spatie/phpunit-snapshot-assertions",
-            "version": "1.3.1",
+            "version": "1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/phpunit-snapshot-assertions.git",
-                "reference": "ee2ce2e8bfd9683defb54a2c5154008157240dcc"
+                "reference": "0fefcadd42284c4913d285342dbe8215a2097adf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/phpunit-snapshot-assertions/zipball/ee2ce2e8bfd9683defb54a2c5154008157240dcc",
-                "reference": "ee2ce2e8bfd9683defb54a2c5154008157240dcc",
+                "url": "https://api.github.com/repos/spatie/phpunit-snapshot-assertions/zipball/0fefcadd42284c4913d285342dbe8215a2097adf",
+                "reference": "0fefcadd42284c4913d285342dbe8215a2097adf",
                 "shasum": ""
             },
             "require": {
@@ -4665,7 +4701,7 @@
                 "spatie",
                 "testing"
             ],
-            "time": "2018-06-08T22:20:36+00:00"
+            "time": "2018-10-18T17:30:38+00:00"
         },
         {
             "name": "symfony/browser-kit",
