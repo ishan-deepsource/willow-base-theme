@@ -195,4 +195,9 @@ class InstagramCompositeAdapter implements CompositeContract
     {
         return null;
     }
+
+    public function getLanguageUrls(): ?Collection
+    {
+        return null;
+    }
 }
