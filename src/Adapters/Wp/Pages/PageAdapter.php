@@ -166,8 +166,8 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
 
     public function getLanguageUrls(): ?Collection
     {
-        return collect(LanguageProvider::getPostTranslations($this->getId()))->map(function ($termId) {
-            return get_permalink($termId);
+        return collect(LanguageProvider::getPostTranslations($this->getId()))->map(function ($postId) {
+            return get_permalink($postId);
         });
     }
 }
