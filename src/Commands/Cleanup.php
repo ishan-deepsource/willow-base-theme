@@ -20,6 +20,7 @@ class Cleanup extends \WP_CLI_Command
     protected $output;
     protected $taxoFile;
     protected $skipFile;
+    protected $doneFile;
 
     public static function register()
     {
@@ -86,6 +87,8 @@ class Cleanup extends \WP_CLI_Command
             \WP_CLI::line(sprintf('Taxonomy urls will be saved to %s', $this->taxoFile));
             $this->skipFile = sprintf('skip-%s.csv', uniqid());
             \WP_CLI::line(sprintf('Skipped urls will be saved to %s', $this->skipFile));
+            $this->doneFile = sprintf('done-%s.csv', uniqid());
+            \WP_CLI::line(sprintf('Done urls will be saved to %s', $this->doneFile));
         }
 
         $this->processCSV($file, $delimiter);
@@ -122,6 +125,7 @@ class Cleanup extends \WP_CLI_Command
         if ($this->output) {
             file_put_contents($this->taxoFile, '"from","to","Name","Slug","Taxonomy"' . PHP_EOL);
             file_put_contents($this->skipFile, '"from","to"' . PHP_EOL);
+            file_put_contents($this->doneFile, '"WP ID","Name","Locale","from","to"' . PHP_EOL);
         }
         $this->resolveCache = [];
         $this->deactivateFilters();
@@ -261,6 +265,27 @@ class Cleanup extends \WP_CLI_Command
                 301,
                 true
             );
+            if ($this->output) {
+                file_put_contents($this->doneFile, sprintf(
+                    '"%s","%s","%s","%s","%s"%s',
+                    $fromContent->ID ?? 0,
+                    $fromContent->post_title ?? '',
+                    $locale,
+                    $fromUrl,
+                    $toUrl,
+                    PHP_EOL
+                ), FILE_APPEND);
+            }
+        } elseif ($this->output) {
+            file_put_contents($this->doneFile, sprintf(
+                '"%s","%s","%s","%s","%s"%s',
+                $fromContent->ID ?? 0,
+                $fromContent->post_title ?? '',
+                $locale,
+                '',
+                '',
+                PHP_EOL
+            ), FILE_APPEND);
         }
         $this->deleteContent($fromContent);
     }
