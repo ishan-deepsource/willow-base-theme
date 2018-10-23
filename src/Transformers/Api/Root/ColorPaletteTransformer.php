@@ -10,9 +10,9 @@ class ColorPaletteTransformer extends TransformerAbstract
     public function transform(ColorPaletteContract $colorPalette)
     {
         return [
-            'colors' => $colorPalette->getColors(),
+            'colors'            => $colorPalette->getColors(),
             'average_luminance' => $colorPalette->getAverageLuminance(),
-            'dominant_colors' => $colorPalette->getDominantColors(),
+            'dominant_colors'   => $colorPalette->getDominantColors(),
         ];
     }
 }

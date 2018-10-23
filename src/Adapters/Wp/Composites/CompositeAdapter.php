@@ -355,4 +355,11 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     {
         return intval(get_post_meta($this->getId(), 'word_count', true)) ?: null;
     }
+
+    public function getLanguageUrls(): ?Collection
+    {
+        return collect(LanguageProvider::getPostTranslations($this->getId()))->map(function ($compositeId) {
+            return get_permalink($compositeId);
+        });
+    }
 }

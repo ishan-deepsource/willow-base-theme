@@ -203,4 +203,9 @@ class DocumentAdapter implements CompositeContract
         // todo find the right field
         return null;
     }
+
+    public function getLanguageUrls(): ?Collection
+    {
+        return null;
+    }
 }
