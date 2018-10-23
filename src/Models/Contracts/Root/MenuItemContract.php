@@ -14,6 +14,12 @@ interface MenuItemContract
 
     public function getTarget(): ?string;
 
+    public function getClass(): ?string;
+
+    public function getLinkRelationship(): ?string;
+
+    public function getDescription(): ?string;
+
     public function getType(): ?string;
 
     public function getChildren(): Collection;

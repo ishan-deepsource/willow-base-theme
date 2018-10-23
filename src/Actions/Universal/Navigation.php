@@ -11,8 +11,13 @@ class Navigation
 {
     const HEADER_MENU_LOCATION = 'header-primary';
     const HEADER_MENU_SUBSCRIPTION_LOCATION = 'header-secondary';
+    const HEADER_MENU_TERTIARY_LOCATION = 'header-tertiary';
     const FOOTER_MENU_LOCATION = 'footer-primary';
     const DEFAULT_MENU_MAPPING = [
+        'Tertiary Header Navigation' => [
+            'location' => self::HEADER_MENU_TERTIARY_LOCATION,
+            'items' => []
+        ],
         'Secondary Header Navigation' => [
             'location' => self::HEADER_MENU_SUBSCRIPTION_LOCATION,
             'items'    => [
@@ -42,6 +47,7 @@ class Navigation
     {
         register_nav_menu(static::HEADER_MENU_LOCATION, 'Primary Header Menu');
         register_nav_menu(static::HEADER_MENU_SUBSCRIPTION_LOCATION, 'Secondary Header Menu');
+        register_nav_menu(static::HEADER_MENU_TERTIARY_LOCATION, 'Tertiary Header Menu');
         register_nav_menu(static::FOOTER_MENU_LOCATION, 'Primary Footer Menu');
 
         $this->existingMenus = collect(wp_get_nav_menus());
