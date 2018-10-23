@@ -73,4 +73,6 @@ interface CompositeContract
     public function getAudio(): ?AudioContract;
 
     public function getWordCount(): ?int;
+
+    public function getLanguageUrls(): ?Collection;
 }

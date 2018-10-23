@@ -34,4 +34,6 @@ interface PageContract
     public function getCanonicalUrl(): ?string;
 
     public function getContents(): ?Collection;
+
+    public function getLanguageUrls(): ?Collection;
 }

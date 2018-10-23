@@ -96,4 +96,9 @@ class Category implements CategoryContract
     {
         return $this->category->getCanonicalUrl();
     }
+
+    public function getLanguageUrls(): ?Collection
+    {
+        return $this->category->getLanguageUrls();
+    }
 }

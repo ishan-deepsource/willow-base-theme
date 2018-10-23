@@ -25,16 +25,17 @@ class PageTransformer extends TransformerAbstract
     public function transform(PageContract $page)
     {
         return [
-            'id' => $page->getId(),
-            'title' => $page->getTitle(),
-            'content' => $page->getContent(),
-            'status' => $page->getStatus(),
-            'author' => $this->getAuthor($page),
-            'template' => $page->getTemplate(),
-            'published_at' => $page->getPublishedAt(),
-            'updated_at' => $page->getUpdatedAt(),
+            'id'            => $page->getId(),
+            'title'         => $page->getTitle(),
+            'content'       => $page->getContent(),
+            'status'        => $page->getStatus(),
+            'author'        => $this->getAuthor($page),
+            'template'      => $page->getTemplate(),
+            'published_at'  => $page->getPublishedAt(),
+            'updated_at'    => $page->getUpdatedAt(),
             'is_front_page' => $page->isFrontPage(),
             'canonical_url' => $page->getCanonicalUrl(),
+            'language_urls' => $page->getLanguageUrls(),
         ];
     }
 
