@@ -40,6 +40,25 @@ class MenuItemAdapter implements MenuItemContract
         return data_get($this->menuItem, 'target') ?: null;
     }
 
+    public function getClass(): ?string
+    {
+        if ($classes = data_get($this->menuItem, 'classes') ?: null) {
+            return implode(' ', $classes) ?: null;
+        }
+
+        return null;
+    }
+
+    public function getLinkRelationship(): ?string
+    {
+        return data_get($this->menuItem, 'xfn') ?: null;
+    }
+
+    public function getDescription(): ?string
+    {
+        return data_get($this->menuItem, 'description') ?: null;
+    }
+
     public function getType(): ?string
     {
         return data_get($this->menuItem, 'object') ?: null;

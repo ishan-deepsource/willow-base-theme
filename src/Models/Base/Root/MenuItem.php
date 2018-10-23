@@ -34,6 +34,21 @@ class MenuItem implements MenuItemContract
         return $this->menuItem->getTarget();
     }
 
+    public function getClass(): ?string
+    {
+        return $this->menuItem->getClass();
+    }
+
+    public function getLinkRelationship(): ?string
+    {
+        return $this->menuItem->getLinkRelationship();
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->menuItem->getDescription();
+    }
+
     public function getType(): ?string
     {
         return $this->menuItem->getType();

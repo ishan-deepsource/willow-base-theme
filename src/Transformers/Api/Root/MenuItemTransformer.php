@@ -22,6 +22,9 @@ class MenuItemTransformer extends TransformerAbstract
             'url' => $this->getPath($menuItem->getUrl()),
             'title' => $menuItem->getTitle(),
             'target' => $menuItem->getTarget(),
+            'class' => $menuItem->getClass(),
+            'link_relationship' => $menuItem->getLinkRelationship(),
+            'description' => $menuItem->getDescription(),
             'type' => $menuItem->getType(),
             'children' => $menuItem->getChildren()->map(function (MenuItemContract $childMenuItem) {
                 return with(new MenuItemTransformer)->transform($childMenuItem);
