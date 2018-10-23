@@ -359,7 +359,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     public function getLanguageUrls(): ?Collection
     {
         return collect(LanguageProvider::getPostTranslations($this->getId()))->map(function ($compositeId) {
-            return get_permalink($compositeId);
+            return $this->stripApi(get_permalink($compositeId));
         });
     }
 }

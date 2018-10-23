@@ -28,6 +28,11 @@ trait UrlTrait
     {
         $path = parse_url($url, PHP_URL_PATH);
         $url = preg_replace('#/$#', $path, LanguageProvider::getHomeUrl());
+        return $this->stripApi($url);
+    }
+
+    protected function stripApi($url)
+    {
         return preg_replace('#://api\.#', '://', $url);
     }
 }
