@@ -148,7 +148,7 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
     public function getLanguageUrls(): ?Collection
     {
         return collect(LanguageProvider::getTermTranslations($this->getId()))->map(function ($termId) {
-            return get_term_link($termId);
+            return $this->stripApi(get_term_link($termId));
         });
     }
 }
