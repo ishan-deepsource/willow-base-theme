@@ -56,7 +56,7 @@ class MenuItemAdapter implements MenuItemContract
 
     public function getDescription(): ?string
     {
-        if ($this->menuItem instanceof \WP_Post && $description = data_get($this->menuItem, 'post_content')) {
+        if ($this->menuItem instanceof \WP_Post && $description = trim(data_get($this->menuItem, 'post_content'))) {
                 return $description;
         }
         return data_get($this->menuItem, 'description') ?: null;
