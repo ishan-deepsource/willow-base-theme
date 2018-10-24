@@ -58,10 +58,13 @@ class Navigation
 
     private function createDefaultMenus()
     {
-        collect(self::DEFAULT_MENU_MAPPING)->each(function ($menuMapping, $menuName) {
-            if (! $this->existingMenus->pluck('name')->contains($menuName)) {
-                $this->createMenuWithItems($menuMapping, $menuName);
-            }
+        collect(LanguageProvider::getLanguageList())->each(function ($language) {
+            collect(self::DEFAULT_MENU_MAPPING)->each(function ($menuMapping, $menuName) use ($language) {
+                $menuName = sprintf('%s - %s', $menuName, $language->name);
+                if (! $this->existingMenus->pluck('name')->contains($menuName)) {
+                    $this->createMenuWithItems($menuMapping, $menuName);
+                }
+            });
         });
     }
 
