@@ -107,17 +107,15 @@ class MenuController extends BaseController
     private function getNavMenuItemChildren($parentId, $navMenuItems, $depth = true): \Illuminate\Support\Collection
     {
         return collect($navMenuItems)
-            ->reduce(function ($children, $navMenuItem) use ($navMenuItems, $depth, $parentId) {
-                if ($navMenuItem->menu_item_parent == $parentId) {
-                    $children->push($navMenuItem);
+            ->reduce(function (\Illuminate\Support\Collection $children, $item) use ($parentId, $navMenuItems, $depth) {
+                if ($item->menu_item_parent == $parentId) {
                     if ($depth) {
-                        if ($subChildren = $this->getNavMenuItemChildren($navMenuItem->ID, $navMenuItems)) {
-                            $children->merge($subChildren);
-                        }
+                        $item->children = $this->getNavMenuItemChildren($item->ID, $navMenuItems);
                     }
+                    $children->push($item);
                 }
                 return $children;
-            }, collect([]));
+            }, collect());
     }
 
     private function getMenuItems($menuId)
@@ -132,6 +130,7 @@ class MenuController extends BaseController
                 return null;
             }
             // Set the children
+
             $rawMenuItem->children = $this->getNavMenuItemChildren($rawMenuItem->ID, $rawMenuItems);
             // Wrap in adapter
             return new MenuItem(new MenuItemAdapter($rawMenuItem));
