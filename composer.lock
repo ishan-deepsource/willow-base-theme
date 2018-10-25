@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
-            "version": "2.1.1",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-cxense.git",
-                "reference": "519f8a7874314e28c210b2a14b9d545f5462f08e"
+                "reference": "afcd994d1f5dbea1321e25f885498d4e4212c0c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/519f8a7874314e28c210b2a14b9d545f5462f08e",
-                "reference": "519f8a7874314e28c210b2a14b9d545f5462f08e",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/afcd994d1f5dbea1321e25f885498d4e4212c0c1",
+                "reference": "afcd994d1f5dbea1321e25f885498d4e4212c0c1",
                 "shasum": ""
             },
             "require": {
@@ -50,7 +50,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-08-17T07:57:14+00:00"
+            "time": "2018-10-24T08:33:40+00:00"
         },
         {
             "name": "benjaminmedia/wp-site-manager",
@@ -801,7 +801,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.7.10",
+            "version": "v5.7.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -845,7 +845,7 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v5.7.10",
+            "version": "v5.7.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
