@@ -19,50 +19,46 @@ class PageTemplates
 
     private function __construct()
     {
-        $defaultPageTemplates = [
+        $this->pageTemplates = [
             'frontpage' => 'Frontpage',
             'cookiepolicy' => 'Cookie Politik',
         ];
-        $brandPageTemplates = [];
-        $defaultCompositeTemplates = [];
-        $brandCompositeTemplates = [];
+        $this->compositeTemplates = [];
         if (($site = WpSiteManager::instance()->settings()->getSite()) &&
             $brand = data_get($site, 'brand.brand_code')) {
             switch ($brand) {
                 case 'BOB':
-                    $brandPageTemplates = [
+                    $this->pageTemplates = array_merge($this->pageTemplates, [
                         'authorlist' => 'Author List',
                         'architonic' => 'Architonic iFrame',
-                    ];
-                    $brandCompositeTemplates = [
+                        ]);
+                    $this->compositeTemplates = array_merge($this->compositeTemplates, [
                         'bodum-stempel' => 'Bodum Stempel',
                         'bodum-pour-over' => 'Bodum Pour over',
                         'bodum-vacuum' => 'Bodum Vacuum',
-                    ];
+                    ]);
                     break;
                 case 'ILL':
-                    $brandCompositeTemplates = [
+                    $this->compositeTemplates = array_merge($this->compositeTemplates, [
                         'gradient' => 'Gradient',
                         'colorblock' => 'Farveblok',
-                    ];
+                    ]);
                     break;
                 default:
-                    $brandPageTemplates = [
+                    $this->pageTemplates = array_merge($this->pageTemplates, [
                         'authorlist' => 'Author List',
                         'architonic' => 'Architonic iFrame',
-                    ];
-                    $brandCompositeTemplates = [
+                    ]);
+                    $this->compositeTemplates = array_merge($this->compositeTemplates, [
                         'bodum-stempel' => 'Bodum Stempel',
                         'bodum-pour-over' => 'Bodum Pour over',
                         'bodum-vacuum' => 'Bodum Vacuum',
                         'gradient' => 'Gradient',
                         'colorblock' => 'Farveblok',
-                    ];
+                    ]);
                     break;
             }
         }
-        $this->pageTemplates = array_merge($defaultPageTemplates, $brandPageTemplates);
-        $this->compositeTemplates = array_merge($defaultCompositeTemplates, $brandCompositeTemplates);
         $postType = WpComposite::POST_TYPE;
         // Adds our template to the page dropdown for v4.7+
         add_filter('theme_page_templates', [$this, 'addTemplatesToMetaBox']);
