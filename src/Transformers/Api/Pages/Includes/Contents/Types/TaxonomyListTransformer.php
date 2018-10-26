@@ -24,8 +24,8 @@ class TaxonomyListTransformer extends TransformerAbstract
     ];
 
     protected $transformerMappping = [
-        Category::class => CategoryTransformer::class,
-        Tag::class => TagTransformer::class,
+        'category' => CategoryTransformer::class,
+        'tag' => TagTransformer::class,
     ];
 
     public function transform(TaxonomyListContract $taxonomyList)
@@ -56,10 +56,10 @@ class TaxonomyListTransformer extends TransformerAbstract
      */
     public function includeTaxonomyList(TaxonomyListContract $taxonomyList)
     {
-        $taxonomyList = $taxonomyList->getTaxonomyList();
-        $transformerClass = collect($this->transformerMappping)->get(get_class($taxonomyList->first()), NullTransformer::class);
-        if ($taxonomyList && !$taxonomyList->isEmpty()) {
-            return $this->collection($taxonomyList, new $transformerClass);
+        $transformerClass = collect($this->transformerMappping)->get($taxonomyList->getTaxonomy(), NullTransformer::class);
+        if (optional($taxonomyList->getTaxonomyList())->isNotEmpty()) {
+            return $this->collection($taxonomyList->getTaxonomyList(), new $transformerClass);
         }
+        return null;
     }
 }
