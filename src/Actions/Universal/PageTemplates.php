@@ -108,7 +108,7 @@ class PageTemplates
 
         // Now add our template to the list of templates by merging our templates
         // with the existing templates array from the cache.
-        $templates = array_merge(array_merge($templates, $this->pageTemplates), $this->compositeTemplates);
+        $templates = array_merge($templates, $this->pageTemplates);
 
         // Add the modified cache to allow WordPress to pick it up for listing
         // available templates
