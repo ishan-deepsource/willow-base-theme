@@ -186,4 +186,9 @@ class Composite implements CompositeContract
     {
         return $this->composite->getLanguageUrls();
     }
+
+    public function getExcludePlatforms(): ?Collection
+    {
+        return $this->composite->getExcludePlatforms();
+    }
 }

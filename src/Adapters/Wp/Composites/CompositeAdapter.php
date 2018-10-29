@@ -362,4 +362,9 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
             return $this->stripApi(get_permalink($compositeId));
         });
     }
+
+    public function getExcludePlatforms(): ?Collection
+    {
+        return collect(data_get($this->wpModel, 'exclude_platforms') ?: null);
+    }
 }

@@ -201,4 +201,9 @@ class PinterestCompositeAdapter implements CompositeContract
     {
         return null;
     }
+
+    public function getExcludePlatforms(): ?Collection
+    {
+        return null;
+    }
 }
