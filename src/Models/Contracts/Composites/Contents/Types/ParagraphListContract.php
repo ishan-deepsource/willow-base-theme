@@ -14,6 +14,8 @@ interface ParagraphListContract extends ContentContract
 
     public function getImage(): ?ImageContract;
 
+    public function isCollapsible(): bool;
+
     public function getDisplayHint(): ?string;
 
     public function getItems(): Collection;

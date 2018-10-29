@@ -39,6 +39,11 @@ class ParagraphList extends AbstractContent implements ParagraphListContract
         return $this->model->getImage();
     }
 
+    public function isCollapsible(): bool
+    {
+        return $this->model->isCollapsible();
+    }
+
     public function getDisplayHint(): ?string
     {
         return $this->model->getDisplayHint();

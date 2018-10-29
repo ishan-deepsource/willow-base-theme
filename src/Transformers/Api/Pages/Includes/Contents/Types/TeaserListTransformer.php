@@ -11,6 +11,15 @@ use League\Fractal\TransformerAbstract;
 
 class TeaserListTransformer extends TransformerAbstract
 {
+    protected $availableIncludes = [
+        'teasers'
+    ];
+
+    protected $defaultIncludes = [
+        'teasers'
+    ];
+
+
     public function transform(TeaserListContract $teaserList)
     {
         return [
@@ -21,7 +30,7 @@ class TeaserListTransformer extends TransformerAbstract
             'link' => $this->transformLink($teaserList),
             'link_label' => $teaserList->getLinkLabel(),
             'display_hint' => $teaserList->getDisplayHint(),
-            'teasers' => $this->transformTeasers($teaserList),
+
         ];
     }
 
@@ -43,14 +52,13 @@ class TeaserListTransformer extends TransformerAbstract
         return null;
     }
 
-    private function transformTeasers(TeaserListContract $teaserList)
+    public function includeTeasers(TeaserListContract $teaserList)
     {
         if (optional($teaserList->getTeasers())->isNotEmpty()) {
-            return $teaserList->getTeasers()->map(function (CompositeContract $composite) {
-                return with(new CompositeTeaserTransformer)->transform($composite);
-            });
+            return $this->collection($teaserList->getTeasers(), new CompositeTeaserTransformer);
         }
 
         return null;
     }
+
 }

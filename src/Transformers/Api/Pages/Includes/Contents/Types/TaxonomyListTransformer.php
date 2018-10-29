@@ -15,10 +15,17 @@ use League\Fractal\TransformerAbstract;
 
 class TaxonomyListTransformer extends TransformerAbstract
 {
-    protected $taxonomyTransformerMap = [
-        Category::class => CategoryTransformer::class,
-        Tag::class => TagTransformer::class,
-        Vocabulary::class => VocabularyTransformer::class,
+    protected $availableIncludes = [
+        'taxonomy_list'
+    ];
+
+    protected $defaultIncludes = [
+        'taxonomy_list'
+    ];
+
+    protected $transformerMappping = [
+        'category' => CategoryTransformer::class,
+        'tag' => TagTransformer::class,
     ];
 
     public function transform(TaxonomyListContract $taxonomyList)
@@ -30,7 +37,6 @@ class TaxonomyListTransformer extends TransformerAbstract
             'label' => $taxonomyList->getLabel(),
             'display_hint' => $taxonomyList->getDisplayHint(),
             'taxonomy' => $taxonomyList->getTaxonomy(),
-            'taxonomy_list' => $this->transformList($taxonomyList),
         ];
     }
 
@@ -43,16 +49,17 @@ class TaxonomyListTransformer extends TransformerAbstract
         return null;
     }
 
-    private function transformList(TaxonomyListContract $taxonomyList)
-    {
-        if ($taxonomies = $taxonomyList->getTaxonomyList()) {
-            return $taxonomies->map(function ($taxonomy) {
-                $transformer = collect($this->taxonomyTransformerMap)
-                    ->get(get_class($taxonomy), NullTransformer::class);
-                return with(new $transformer)->transform($taxonomy);
-            });
-        }
 
+    /**
+     * @param TaxonomyListContract $taxonomyList
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeTaxonomyList(TaxonomyListContract $taxonomyList)
+    {
+        $transformerClass = collect($this->transformerMappping)->get($taxonomyList->getTaxonomy(), NullTransformer::class);
+        if (optional($taxonomyList->getTaxonomyList())->isNotEmpty()) {
+            return $this->collection($taxonomyList->getTaxonomyList(), new $transformerClass);
+        }
         return null;
     }
 }

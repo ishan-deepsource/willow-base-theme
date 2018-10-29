@@ -15,6 +15,14 @@ use League\Fractal\TransformerAbstract;
 
 class ContentTransformer extends TransformerAbstract
 {
+    protected $defaultIncludes = [
+        'content'
+    ];
+
+    protected $availableIncludes = [
+        'content'
+    ];
+
     protected $transformerMapping = [
         'teaser_list' => TeaserListTransformer::class,
         'featured_content' => FeaturedContentTransformer::class,
@@ -23,12 +31,18 @@ class ContentTransformer extends TransformerAbstract
         'banner_placement' => BannerPlacementTransformer::class,
         AcfName::WIDGET_TAXONOMY_TEASER_LIST => TaxonomyListTransformer::class,
     ];
+
     public function transform(ContentContract $content)
     {
-        $transformerClass = collect($this->transformerMapping)->get($content->getType(), NullTransformer::class);
-        $transformedData = with(new $transformerClass())->transform($content);
-        return array_merge([
+        return [
             'type'   => $content->getType(),
-        ], $transformedData);
+        ];
     }
+
+    public function includeContent(ContentContract $content)
+    {
+        $transformerClass = collect($this->transformerMapping)->get($content->getType(), NullTransformer::class);
+        return $this->item($content, new $transformerClass);
+    }
+
 }

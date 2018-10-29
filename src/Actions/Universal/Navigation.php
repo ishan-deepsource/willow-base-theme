@@ -2,6 +2,8 @@
 
 namespace Bonnier\Willow\Base\Actions\Universal;
 
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
+
 /**
  * Class HeaderNavigation
  *
@@ -52,13 +54,22 @@ class Navigation
 
         $this->existingMenus = collect(wp_get_nav_menus());
 
-        $this->createDefaultMenus();
+        if (($languages = LanguageProvider::getLanguageList()) && !empty($languages)) {
+            collect($languages)->each(function ($language) {
+                $this->createDefaultMenus($language->name);
+            });
+        } else {
+            $this->createDefaultMenus();
+        }
         $this->assignDefaultMenuLocations();
     }
 
-    private function createDefaultMenus()
+    private function createDefaultMenus(string $language = null)
     {
-        collect(self::DEFAULT_MENU_MAPPING)->each(function ($menuMapping, $menuName) {
+        collect(self::DEFAULT_MENU_MAPPING)->each(function ($menuMapping, $menuName) use ($language) {
+            if ($language) {
+                $menuName = sprintf('%s - %s', $menuName, $language);
+            }
             if (! $this->existingMenus->pluck('name')->contains($menuName)) {
                 $this->createMenuWithItems($menuMapping, $menuName);
             }

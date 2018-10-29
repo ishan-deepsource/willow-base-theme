@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Actions\Universal;
 
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
+use Bonnier\WP\SiteManager\WpSiteManager;
 
 /**
  * Class PageTemplates
@@ -20,15 +21,45 @@ class PageTemplates
     {
         $this->pageTemplates = [
             'frontpage' => 'Frontpage',
-            'authorlist' => 'Author List',
-            'architonic' => 'Architonic iFrame',
             'cookiepolicy' => 'Cookie Politik',
         ];
-        $this->compositeTemplates = [
-            'bodum-stempel' => 'Bodum Stempel',
-            'bodum-pour-over' => 'Bodum Pour over',
-            'bodum-vacuum' => 'Bodum Vacuum'
-        ];
+        $this->compositeTemplates = [];
+        $brand = null;
+        if (($site = WpSiteManager::instance()->settings()->getSite())) {
+            $brand = data_get($site, 'brand.brand_code');
+        }
+        switch ($brand) {
+            case 'BOB':
+                $this->pageTemplates = array_merge($this->pageTemplates, [
+                    'authorlist' => 'Author List',
+                    'architonic' => 'Architonic iFrame',
+                    ]);
+                $this->compositeTemplates = array_merge($this->compositeTemplates, [
+                    'bodum-stempel' => 'Bodum Stempel',
+                    'bodum-pour-over' => 'Bodum Pour over',
+                    'bodum-vacuum' => 'Bodum Vacuum',
+                ]);
+                break;
+            case 'ILL':
+                $this->compositeTemplates = array_merge($this->compositeTemplates, [
+                    'gradient' => 'Gradient',
+                    'colorblock' => 'Farveblok',
+                ]);
+                break;
+            default:
+                $this->pageTemplates = array_merge($this->pageTemplates, [
+                    'authorlist' => 'Author List',
+                    'architonic' => 'Architonic iFrame',
+                ]);
+                $this->compositeTemplates = array_merge($this->compositeTemplates, [
+                    'bodum-stempel' => 'Bodum Stempel',
+                    'bodum-pour-over' => 'Bodum Pour over',
+                    'bodum-vacuum' => 'Bodum Vacuum',
+                    'gradient' => 'Gradient',
+                    'colorblock' => 'Farveblok',
+                ]);
+                break;
+        }
         $postType = WpComposite::POST_TYPE;
         // Adds our template to the page dropdown for v4.7+
         add_filter('theme_page_templates', [$this, 'addTemplatesToMetaBox']);
@@ -62,7 +93,6 @@ class PageTemplates
      */
     public function registerProjectTemplates($atts)
     {
-
         // Create the key used for the themes cache
         $cache_key = 'page_templates-' . md5(get_theme_root() . '/' . get_stylesheet());
 
