@@ -15,6 +15,7 @@ class Navigation
     const HEADER_MENU_SUBSCRIPTION_LOCATION = 'header-secondary';
     const HEADER_MENU_TERTIARY_LOCATION = 'header-tertiary';
     const FOOTER_MENU_LOCATION = 'footer-primary';
+    const APP_MENU_LOCATION = 'app-primary';
     const DEFAULT_MENU_MAPPING = [
         'Tertiary Header Navigation' => [
             'location' => self::HEADER_MENU_TERTIARY_LOCATION,
@@ -37,7 +38,11 @@ class Navigation
         'Primary Footer Navigation'   => [
             'location' => self::FOOTER_MENU_LOCATION,
             'items'    => []
-        ]
+        ],
+        'Primary App Navigation'   => [
+            'location' => self::APP_MENU_LOCATION,
+            'items'    => []
+        ],
     ];
 
     protected $existingMenus;
@@ -51,6 +56,7 @@ class Navigation
         register_nav_menu(static::HEADER_MENU_SUBSCRIPTION_LOCATION, 'Secondary Header Menu');
         register_nav_menu(static::HEADER_MENU_TERTIARY_LOCATION, 'Tertiary Header Menu');
         register_nav_menu(static::FOOTER_MENU_LOCATION, 'Primary Footer Menu');
+        register_nav_menu(static::APP_MENU_LOCATION, 'Primary App Menu');
 
         $this->existingMenus = collect(wp_get_nav_menus());
 
