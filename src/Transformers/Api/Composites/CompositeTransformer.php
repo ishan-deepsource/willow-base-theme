@@ -81,6 +81,7 @@ class CompositeTransformer extends TransformerAbstract
             'audio'                     => $this->getAudio($composite),
             'word_count'                => $composite->getWordCount(),
             'language_urls'             => $composite->getLanguageUrls(),
+            'exclude_platforms'         => $composite->getExcludePlatforms(),
         ];
     }
 

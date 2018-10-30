@@ -75,4 +75,6 @@ interface CompositeContract
     public function getWordCount(): ?int;
 
     public function getLanguageUrls(): ?Collection;
+
+    public function getExcludePlatforms(): ?Collection;
 }
