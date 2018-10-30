@@ -365,6 +365,9 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getExcludePlatforms(): ?Collection
     {
-        return collect(data_get($this->wpModel, 'exclude_platforms') ?: null);
+        if ($excludePlatforms = data_get($this->wpModel, 'exclude_platforms')) {
+            return collect($excludePlatforms);
+        }
+        return null;
     }
 }
