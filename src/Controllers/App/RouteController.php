@@ -157,6 +157,11 @@ class RouteController extends BaseController
         }
 
         if (($composite = $this->findContenthubComposite($path, $status))) {
+            $excludePlatforms = data_get($composite, 'exclude_platforms');
+            if (collect($excludePlatforms)->contains('web')) {
+                return null;
+            }
+
             return $composite;
         }
 
