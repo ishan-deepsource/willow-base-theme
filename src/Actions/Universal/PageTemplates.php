@@ -41,6 +41,9 @@ class PageTemplates
                 ]);
                 break;
             case 'ILL':
+                $this->pageTemplates = array_merge($this->pageTemplates, [
+                    'profile' => 'Profile Page',
+                ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'gradient' => 'Gradient',
                     'colorblock' => 'Farveblok',
@@ -50,6 +53,7 @@ class PageTemplates
                 $this->pageTemplates = array_merge($this->pageTemplates, [
                     'authorlist' => 'Author List',
                     'architonic' => 'Architonic iFrame',
+                    'profile' => 'Profile Page',
                 ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'bodum-stempel' => 'Bodum Stempel',
