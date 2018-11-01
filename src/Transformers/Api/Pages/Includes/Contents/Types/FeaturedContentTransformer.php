@@ -10,14 +10,30 @@ use League\Fractal\TransformerAbstract;
 
 class FeaturedContentTransformer extends TransformerAbstract
 {
+    protected $defaultIncludes = [
+        'teaser'
+    ];
+
+    protected $availableIncludes = [
+        'teaser'
+    ];
+
     public function transform(FeaturedContentContract $featuredContent)
     {
         return [
             'image' => $this->transformImage($featuredContent),
             'video' => $this->transformVideo($featuredContent),
-            'display_hint' => $featuredContent->getDisplayHint(),
-            'teaser' => $this->transformTeaser($featuredContent)
+            'display_hint' => $featuredContent->getDisplayHint()
         ];
+    }
+
+    public function includeTeaser(FeaturedContentContract $featuredContent)
+    {
+        if ($composite = $featuredContent->getComposite()) {
+            return $this->item($composite, new CompositeTeaserTransformer());
+        }
+
+        return null;
     }
 
     private function transformImage(FeaturedContentContract $featuredContent)
@@ -33,15 +49,6 @@ class FeaturedContentTransformer extends TransformerAbstract
     {
         if ($video = $featuredContent->getVideo()) {
             return with(new NativeVideoTransformer)->transform($video);
-        }
-
-        return null;
-    }
-
-    private function transformTeaser(FeaturedContentContract $featuredContent)
-    {
-        if ($composite = $featuredContent->getComposite()) {
-            return with(new CompositeTeaserTransformer)->transform($composite);
         }
 
         return null;
