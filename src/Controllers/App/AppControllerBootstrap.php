@@ -12,7 +12,7 @@ use WP_REST_Controller;
  */
 class AppControllerBootstrap
 {
-    protected $apiControllers = array(
+    protected $apiControllers = [
         RouteController::class,
         TranslationController::class,
         MenuController::class,
@@ -22,7 +22,7 @@ class AppControllerBootstrap
         TestController::class,
         SitemapController::class,
         SettingsController::class,
-    );
+    ];
 
     /**
      * ControllerBootstrap constructor.
