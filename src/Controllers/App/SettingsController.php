@@ -24,7 +24,10 @@ class SettingsController extends \WP_REST_Controller
     public function getNativeVersion(\WP_REST_Request $request)
     {
         return new \WP_REST_Response([
-            'supported_version' => '1.0.0',
+            'supported_version' => [
+                'android' => '1.0.0',
+                'ios' => '1.0.0'
+            ],
         ]);
     }
 }
