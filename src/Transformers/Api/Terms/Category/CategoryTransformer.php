@@ -9,6 +9,7 @@ use Bonnier\Willow\Base\Models\Base\Terms\Category;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Root\Contents\ContentTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Category\Partials\CategoryDetailsTransformer;
 use League\Fractal\ParamBag;
@@ -31,7 +32,8 @@ class CategoryTransformer extends TransformerAbstract
         'teasers',
         'content-teasers',
         'siblings',
-        'parent'
+        'parent',
+        'contents',
     ];
 
     /**
@@ -89,7 +91,7 @@ class CategoryTransformer extends TransformerAbstract
     public function includeParent(CategoryContract $category)
     {
         if ($parent = $category->getParent()) {
-            return $this->item($category->getParent(), new CategoryTransformer());
+            return $this->item($parent, new CategoryTransformer());
         }
         return null;
     }
@@ -138,5 +140,10 @@ class CategoryTransformer extends TransformerAbstract
                 return $this->collection($siblings, new CategoryTransformer());
             }
         );
+    }
+
+    public function includeContents(CategoryContract $page)
+    {
+        return $this->collection($page->getContents(), new ContentTransformer());
     }
 }

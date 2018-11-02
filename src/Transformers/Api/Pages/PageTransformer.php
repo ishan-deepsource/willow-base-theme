@@ -3,8 +3,8 @@
 namespace Bonnier\Willow\Base\Transformers\Api\Pages;
 
 use Bonnier\Willow\Base\Models\Contracts\Pages\PageContract;
-use Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents\ContentTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\AuthorTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Root\Contents\ContentTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TeaserTransformer;
 use League\Fractal\TransformerAbstract;
 

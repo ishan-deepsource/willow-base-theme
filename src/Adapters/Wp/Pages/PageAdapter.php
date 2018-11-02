@@ -155,6 +155,13 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
         return $this->contents;
     }
 
+    public function getLanguageUrls(): ?Collection
+    {
+        return collect(LanguageProvider::getPostTranslations($this->getId()))->map(function ($postId) {
+            return $this->stripApi(get_permalink($postId));
+        });
+    }
+
     private function getContentFactory($class)
     {
         if ($this->contentFactory) {
@@ -162,12 +169,5 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
         }
 
         return $this->contentFactory = new PageContentFactory($class);
-    }
-
-    public function getLanguageUrls(): ?Collection
-    {
-        return collect(LanguageProvider::getPostTranslations($this->getId()))->map(function ($postId) {
-            return $this->stripApi(get_permalink($postId));
-        });
     }
 }

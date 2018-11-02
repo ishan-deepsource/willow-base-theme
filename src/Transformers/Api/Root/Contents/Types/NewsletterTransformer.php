@@ -1,6 +1,6 @@
 <?php
 
-namespace Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents\Types;
+namespace Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types;
 
 use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\Types\NewsletterContract;
 use League\Fractal\TransformerAbstract;

@@ -61,7 +61,7 @@ class Category implements CategoryContract
     {
         return $this->category->getLanguage();
     }
-    
+
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection
     {
         return $this->category->getContentTeasers($page, $perPage, $orderBy, $order, $offset);
@@ -86,7 +86,7 @@ class Category implements CategoryContract
     {
         return $this->category->getBody();
     }
-  
+
     public function getParent(): ?CategoryContract
     {
         return $this->category->getParent();
@@ -95,6 +95,11 @@ class Category implements CategoryContract
     public function getCanonicalUrl(): ?string
     {
         return $this->category->getCanonicalUrl();
+    }
+
+    public function getContents(): ?Collection
+    {
+        return $this->category->getContents();
     }
 
     public function getLanguageUrls(): ?Collection
