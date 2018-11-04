@@ -273,26 +273,13 @@ class RouteController extends BaseController
 
     private function findWaRedirect($path)
     {
-        $redirectUrl = $this->waRedirectRepository->findWaRedirect($path);
-        $redirectPath = parse_url($redirectUrl, PHP_URL_PATH);
-        ddHtml($redirectUrl);
-        if ($redirectPath !== $path) {
+        $redirect = $this->waRedirectRepository->resolve($path);
+        if ($redirect) {
             return (object)[
-                'to' => $redirectPath,
+                'to' => $redirect->to,
                 'code' => 301
             ];
         }
-    }
-
-    private function recursiveRedirectResolve($url)
-    {
-        $location = collect(get_headers($url))->filter(function ($header) {
-            return str_contains($header, 'Location:');
-        })->last();
-        if ($location) {
-            $destination = str_replace('Location: ', '', $location);
-            return $this->recursiveRedirectResolve($destination);
-        }
-        return $url;
+        return null;
     }
 }

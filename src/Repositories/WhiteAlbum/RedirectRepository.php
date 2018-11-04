@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Repositories\WhiteAlbum;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\TransferStats;
 
 /**
  * Class RedirectRepository
@@ -34,37 +35,51 @@ class RedirectRepository
     }
 
     /**
+     * @return \GuzzleHttp\Client
+     */
+    public function getClient(): \GuzzleHttp\Client
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param \GuzzleHttp\Client $client
+     *
+     * @return RedirectRepository
+     */
+    public function setClient(\GuzzleHttp\Client $client): RedirectRepository
+    {
+        $this->client = $client;
+        return $this;
+    }
+
+    /**
      * @param $path
      *
      * @return mixed
      */
-    public function findWaRedirect($path)
+    public function resolve($path)
     {
-        if ($existingRedirect = $this->findRelsovedRedirectInDb($path)) {
-            if ($existingRedirect->code = 404) {
-                return null;
-            }
-            return $existingRedirect->to;
-        }
-        $redirectUrl = $this->recursiveRedirectResolve($path);
-        $redirectPath = parse_url($redirectUrl, PHP_URL_PATH);
-        if ($redirectPath && $redirectPath !== $path) {
-            return $redirectUrl;
+        $redirect = $this->findRelsovedRedirectInDb($path) ?: $this->recursiveRedirectResolve($path);
+        if ($redirect && $redirect->to !== $path && in_array($redirect->code, [301, 302, 200])) {
+            return $redirect;
         }
     }
 
-    private function recursiveRedirectResolve($url, $originalUrl = null)
+    private function recursiveRedirectResolve($url)
     {
+        $destination = null;
         try {
-            $response = $this->client->head($url);
+            $response = $this->client->head($url, [
+                'on_stats' => function (TransferStats $stats) use (&$destination) {
+                    $destination = $stats->getEffectiveUri();
+                }
+            ]);
         } catch (\Exception $exception) {
             $response = $exception->getResponse();
         }
-        if ($location = $response->getHeader('Location')) {
-            return $this->recursiveRedirectResolve($location, $originalUrl ?: $url);
-        }
-        $this->storeResolvedRedirect($originalUrl ?: $url, $url, $response->getStatusCode());
-        return $url;
+        $this->storeResolvedRedirect($url, $destination->getPath(), $response->getStatusCode());
+        return $this->findRelsovedRedirectInDb($url);
     }
 
     public function createRouteResolvesTable()
@@ -111,8 +126,10 @@ class RedirectRepository
             return $wpdb->get_row(
                 $wpdb->prepare(
                     "SELECT * FROM `$table` WHERE `from_hash` = MD5(%s) AND `locale` = %s",
-                    $path,
-                    $this->locale
+                    [
+                        $path,
+                        $this->locale
+                    ]
                 )
             );
         } catch (\Exception $e) {
