@@ -177,7 +177,7 @@ class CompositeTransformer extends TransformerAbstract
 
     private function relatedFromCxense(CompositeContract $composite)
     {
-        //Cache is handled inside cxense plugin
+        // Cache is handled inside cxense plugin
         $result = WidgetDocumentQuery::make()
             ->addContext('url', $this->getFullUrl($composite->getLink()))
             ->byRelated()
@@ -186,7 +186,9 @@ class CompositeTransformer extends TransformerAbstract
             ->get();
         $content = collect($result['matches'])->map(
             function (Document $cxArticle) use ($composite) {
-                $locale = WpCxense::instance()->settings->getOrganisationPrefix(LanguageProvider::getCurrentLanguage('locale')) ?? 'da';
+                $locale = WpCxense::instance()
+                        ->settings
+                        ->getOrganisationPrefix(LanguageProvider::getCurrentLanguage('locale')) ?? 'da';
                 if ($composite->getCommercial() && $cxArticle->{$locale. '-commercial-label'}) {
                     return null;
                 }
@@ -205,11 +207,9 @@ class CompositeTransformer extends TransformerAbstract
 
     public function includeAssociatedContent(CompositeContract $composite)
     {
-        if ($associatedContents = $composite->getAssociatedComposites()) {
-            return $this->collection($associatedContents->map(function (AssociatedContentContract $associatedContent) {
-                return $associatedContent->getAssociatedComposite();
-            })->reject(function ($composite) {
-                return is_null($composite);
+        if (($associatedContents = $composite->getAssociatedComposites()) && $associatedContents->isNotEmpty()) {
+            return $this->collection($associatedContents->map(function (AssociatedContentContract $content) {
+                return $content->getAssociatedComposite();
             }), new CompositeTeaserTransformer);
         }
 
