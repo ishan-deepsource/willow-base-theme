@@ -20,7 +20,8 @@ class AppControllerBootstrap
         SearchController::class,
         PermissionTextTest::class,
         TestController::class,
-        SitemapController::class
+        SitemapController::class,
+        SettingsController::class,
     ];
 
     /**
