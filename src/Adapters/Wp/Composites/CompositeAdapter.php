@@ -324,19 +324,19 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getAssociatedComposites(): ?Collection
     {
-        $associatedComposites = get_field('composite_content', $this->getParent());
-        if (! $associatedComposites) {
-            return null;
-        }
-
-        return collect($associatedComposites)->map(function ($acfContentArray) {
-            if (array_get($acfContentArray, 'acf_fc_layout') === 'associated_composite') {
-                return new AssociatedContent(new AssociatedContentAdapter($acfContentArray));
+        if ($storyCompositeId = get_post_meta($this->getId(), 'story_parent', true)) {
+            if ($associatedComposites = get_field('composite_content', $storyCompositeId)) {
+                return collect($associatedComposites)->map(function ($acfArray) {
+                    if (array_get($acfArray, 'acf_fc_layout') === 'associated_composite') {
+                        return new AssociatedContent(new AssociatedContentAdapter($acfArray));
+                    }
+                    return null;
+                })->reject(function ($associatedContent) {
+                    return is_null($associatedContent);
+                });
             }
-            return null;
-        })->reject(function ($associatedContent) {
-            return is_null($associatedContent);
-        });
+        }
+        return null;
     }
 
     public function getAudio(): ?AudioContract
