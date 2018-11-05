@@ -100,4 +100,9 @@ class CategoryAdapter implements CategoryContract
     {
         return null;
     }
+
+    public function getContents(): ?Collection
+    {
+        return null;
+    }
 }

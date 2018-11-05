@@ -1,6 +1,6 @@
 <?php
 
-namespace Bonnier\Willow\Base\Transformers\Api\Pages\Includes\Contents\Types;
+namespace Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types;
 
 use Bonnier\Willow\Base\Models\Base\Terms\Category;
 use Bonnier\Willow\Base\Models\Base\Terms\Tag;

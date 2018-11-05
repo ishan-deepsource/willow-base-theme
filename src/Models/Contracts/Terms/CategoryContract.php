@@ -23,7 +23,7 @@ interface CategoryContract
     public function getDescription(): ?string;
 
     public function getLanguage(): ?string;
-    
+
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection;
 
     public function getCount(): ?int;
@@ -35,6 +35,8 @@ interface CategoryContract
     public function getParent(): ?CategoryContract;
 
     public function getCanonicalUrl(): ?string;
+
+    public function getContents(): ?Collection;
 
     public function getLanguageUrls(): ?Collection;
 }
