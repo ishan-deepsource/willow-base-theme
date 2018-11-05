@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Controllers\App;
 
+use Bonnier\Willow\Base\Repositories\WhiteAlbum\RedirectRepository;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\WP\Redirect\Http\BonnierRedirect;
@@ -33,8 +34,15 @@ class RouteController extends BaseController
     const STATUS_SCHEDULED = 'future';
     const STATUS_DRAFT = 'draft';
 
+    /* @var \Bonnier\Willow\Base\Repositories\WhiteAlbum\RedirectRepository */
+    protected $waRedirectRepository;
+
     public function register_routes()
     {
+        $this->waRedirectRepository = new RedirectRepository(
+            parse_url(LanguageProvider::getHomeUrl(), PHP_URL_HOST),
+            LanguageProvider::getCurrentLanguage()
+        );
         register_rest_route('app', '/resolve', [
             'methods' => \WP_REST_Server::READABLE,
             'callback' => [$this, 'resolve']
@@ -270,28 +278,13 @@ class RouteController extends BaseController
 
     private function findWaRedirect($path)
     {
-        $domain = parse_url(LanguageProvider::getHomeUrl(), PHP_URL_HOST);
-        $oldDomain = 'old.' .$domain;
-        $url = sprintf('http://%s%s', $oldDomain, $path);
-        $redirectUrl = $this->recursiveRedirectResolve($url);
-        $redirectPath = parse_url($redirectUrl, PHP_URL_PATH);
-        if ($redirectPath !== $path) {
+        $redirect = $this->waRedirectRepository->resolve($path);
+        if ($redirect) {
             return (object)[
-                'to' => $redirectPath,
+                'to' => $redirect->to,
                 'code' => 301
             ];
         }
-    }
-
-    private function recursiveRedirectResolve($url)
-    {
-        $location = collect(get_headers($url))->filter(function ($header) {
-            return str_contains($header, 'Location:');
-        })->last();
-        if ($location) {
-            $destination = str_replace('Location: ', '', $location);
-            return $this->recursiveRedirectResolve($destination);
-        }
-        return $url;
+        return null;
     }
 }
