@@ -56,10 +56,12 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
     {
         parent::__construct($wpModel);
         $this->meta = $this->getMeta();
-        if ($this->wpModel) {
-            $this->acfFields = get_fields(sprintf('%s_%s', $this->wpModel->taxonomy, $this->wpModel->term_id));
-            $this->categoryContents = array_get($this->acfFields, AcfName::GROUP_PAGE_WIDGETS) ?: null;
-        }
+        $this->acfFields = get_fields(sprintf(
+            '%s_%s',
+            $this->wpModel->taxonomy ?? null,
+            $this->wpModel->term_id ?? null
+        ));
+        $this->categoryContents = array_get($this->acfFields, AcfName::GROUP_PAGE_WIDGETS) ?: null;
     }
 
     public function getId(): ?int
