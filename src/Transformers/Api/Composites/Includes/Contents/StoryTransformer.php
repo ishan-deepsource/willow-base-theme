@@ -19,7 +19,11 @@ class StoryTransformer extends TransformerAbstract
 
     private function transformTeaser(StoryContract $story)
     {
-        return with(new CompositeTeaserTransformer)->transform($story->getTeaser());
+        if ($teaser = $story->getTeaser()) {
+            return with(new CompositeTeaserTransformer)->transform($teaser);
+        }
+
+        return null;
     }
 
     private function transformArticles(StoryContract $story)
@@ -27,7 +31,7 @@ class StoryTransformer extends TransformerAbstract
         if ($articles = $story->getArticles()) {
             return $articles->map(function (CompositeContract $composite) {
                 return with(new CompositeTeaserTransformer)->transform($composite);
-            });
+            })->values()->toArray();
         }
 
         return null;
