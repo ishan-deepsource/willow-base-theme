@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Models\Gds;
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
+use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\StoryContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AudioContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
@@ -162,9 +163,9 @@ class Composite implements CompositeContract
         return $this->baseComposite->getEstimatedReadingTime();
     }
 
-    public function getAssociatedComposites(): ?Collection
+    public function getStory(): ?StoryContract
     {
-        return $this->baseComposite->getAssociatedComposites();
+        return $this->baseComposite->getStory();
     }
 
     public function getParent(): ?int
