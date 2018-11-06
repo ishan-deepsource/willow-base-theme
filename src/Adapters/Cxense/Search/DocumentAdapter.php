@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Cxense\Search;
 
+use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\StoryContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AudioContract;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\Willow\Base\Adapters\Cxense\Search\Partials\DocumentTeaserAdapter;
@@ -186,10 +187,10 @@ class DocumentAdapter implements CompositeContract
         return null;
     }
 
-    public function getAssociatedComposites(): ?Collection
+    public function getStory(): ?StoryContract
     {
         // todo find the right field
-        return collect([]);
+        return null;
     }
 
     public function getAudio(): ?AudioContract

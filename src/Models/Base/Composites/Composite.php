@@ -3,11 +3,11 @@
 namespace Bonnier\Willow\Base\Models\Base\Composites;
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
+use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\StoryContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AudioContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
-use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
 use DateTime;
@@ -162,9 +162,9 @@ class Composite implements CompositeContract
         return $this->composite->getEstimatedReadingTime();
     }
 
-    public function getAssociatedComposites(): ?Collection
+    public function getStory(): ?StoryContract
     {
-        return $this->composite->getAssociatedComposites();
+        return $this->composite->getStory();
     }
 
     public function getParent(): ?int

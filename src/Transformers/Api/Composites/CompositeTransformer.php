@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\AssociatedContentContract;
+use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\StoryTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentAudioTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
 use Bonnier\Willow\Base\Traits\UrlTrait;
@@ -44,7 +45,7 @@ class CompositeTransformer extends TransformerAbstract
         'teasers',
         'tags',
         'vocabularies',
-        'associated_content'
+        'story'
     ];
 
     protected $defaultIncludes = [
@@ -205,12 +206,10 @@ class CompositeTransformer extends TransformerAbstract
         return $this->collection($content, new CompositeTeaserTransformer());
     }
 
-    public function includeAssociatedContent(CompositeContract $composite)
+    public function includeStory(CompositeContract $composite)
     {
-        if (($associatedContents = $composite->getAssociatedComposites()) && $associatedContents->isNotEmpty()) {
-            return $this->collection($associatedContents->map(function (AssociatedContentContract $content) {
-                return $content->getAssociatedComposite();
-            }), new CompositeTeaserTransformer);
+        if ($story = $composite->getStory()) {
+            return $this->item($story, new StoryTransformer);
         }
 
         return null;

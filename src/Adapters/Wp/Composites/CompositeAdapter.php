@@ -3,7 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Composites;
 
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
-use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\AssociatedContentAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\StoryAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentAudioAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentImageAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
@@ -13,6 +13,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Vocabulary\VocabularyAdapter;
 use Bonnier\Willow\Base\Factories\CompositeContentFactory;
 use Bonnier\Willow\Base\Factories\Contracts\ModelFactoryContract;
+use Bonnier\Willow\Base\Models\Base\Composites\Contents\Story;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\AssociatedContent;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentAudio;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentFile;
@@ -35,6 +36,7 @@ use Bonnier\Willow\Base\Models\Base\Terms\Tag;
 use Bonnier\Willow\Base\Models\Base\Terms\Vocabulary;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
+use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\StoryContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentFileContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AudioContract;
@@ -322,19 +324,12 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         return intval(get_post_meta($this->getId(), 'reading_time', true)) ?: 0;
     }
 
-    public function getAssociatedComposites(): ?Collection
+    public function getStory(): ?StoryContract
     {
-        if ($storyCompositeId = get_post_meta($this->getId(), 'story_parent', true)) {
-            if ($associatedComposites = get_field('composite_content', $storyCompositeId)) {
-                return collect($associatedComposites)->map(function ($acfArray) {
-                    if (array_get($acfArray, 'acf_fc_layout') === 'associated_composite') {
-                        return new AssociatedContent(new AssociatedContentAdapter($acfArray));
-                    }
-                    return null;
-                })->reject(function ($associatedContent) {
-                    return is_null($associatedContent);
-                });
-            }
+        if (($storyCompositeId = get_post_meta($this->getId(), 'story_parent', true)) &&
+            $storyComposite = get_post($storyCompositeId)
+        ) {
+            return new Story(new StoryAdapter($storyComposite));
         }
         return null;
     }

@@ -22,8 +22,7 @@ class CompositeTeaserTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'vocabularies',
-        'associated'
+        'vocabularies'
     ];
 
     /**
@@ -89,12 +88,5 @@ class CompositeTeaserTransformer extends TransformerAbstract
     public function includeVocabularies(CompositeContract $composite)
     {
         return $this->collection($composite->getVocabularies(), new VocabularyTransformer());
-    }
-
-    public function includeAssociated(CompositeContract $composite){
-        if(!$composite->getKind() || ($composite->getKind() !== 'Story')){
-            return [];
-        }
-        return $this->collection($composite->getAssociatedComposites(), new CompositeTeaserTransformer());
     }
 }
