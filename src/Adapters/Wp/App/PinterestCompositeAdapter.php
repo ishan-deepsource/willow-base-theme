@@ -7,6 +7,7 @@ use Bonnier\Willow\Base\Adapters\Wp\App\Partials\SocialFeedTeaserAdapter;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentImage;
 use Bonnier\Willow\Base\Models\Base\Root\Teaser;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
+use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\StoryContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AudioContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
@@ -182,7 +183,7 @@ class PinterestCompositeAdapter implements CompositeContract
         return null;
     }
 
-    public function getAssociatedComposites(): ?Collection
+    public function getStory(): ?StoryContract
     {
         return null;
     }

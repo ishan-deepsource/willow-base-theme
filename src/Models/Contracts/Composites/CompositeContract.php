@@ -2,11 +2,11 @@
 
 namespace Bonnier\Willow\Base\Models\Contracts\Composites;
 
+use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\StoryContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AudioContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
-use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
 use DateTime;
@@ -68,7 +68,7 @@ interface CompositeContract
 
     public function getEstimatedReadingTime(): ?int;
 
-    public function getAssociatedComposites(): ?Collection;
+    public function getStory(): ?StoryContract;
 
     public function getAudio(): ?AudioContract;
 

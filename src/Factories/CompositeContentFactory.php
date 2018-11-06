@@ -3,7 +3,6 @@
 namespace Bonnier\Willow\Base\Factories;
 
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
-use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeTeaserAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\AssociatedContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentAudioAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentFileAdapter;
