@@ -7,41 +7,29 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
+use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\AssociatedCompositesContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\AssociatedContentContract;
+use Illuminate\Support\Collection;
 
 /**
  * Class AssociatedContentAdapter
  *
  * @package \Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types
  */
-class AssociatedContentAdapter extends AbstractContentAdapter implements AssociatedContentContract
+class AssociatedCompositesAdapter extends AbstractContentAdapter implements AssociatedCompositesContract
 {
     public function __construct(array $acfArray)
     {
         parent::__construct($acfArray);
     }
 
-    public function getType(): ?string
+    public function getComposites(): ?Collection
     {
-        return array_get($this->acfArray, 'acf_fc_layout') ?: null;
-    }
+        $composites = collect(array_get($this->acfArray, 'composites', []))
+            ->map(function (\WP_Post $composite) {
+                return new Composite(new CompositeAdapter($composite));
+            });
 
-    public function isLocked(): bool
-    {
-        return array_get($this->acfArray, 'locked_content', false);
-    }
-
-    public function getStickToNext(): bool
-    {
-        return array_get($this->acfArray, 'stick_to_next', false);
-    }
-
-    public function getAssociatedComposite(): ?CompositeContract
-    {
-        if (($post = array_get($this->acfArray, 'composite.0')) && $post instanceof \WP_Post) {
-            return new Composite(new CompositeAdapter($post));
-        }
-
-        return null;
+        return $composites->isNotEmpty() ? $composites : null;
     }
 }
