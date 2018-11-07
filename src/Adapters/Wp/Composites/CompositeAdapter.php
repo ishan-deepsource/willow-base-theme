@@ -14,6 +14,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Terms\Vocabulary\VocabularyAdapter;
 use Bonnier\Willow\Base\Factories\CompositeContentFactory;
 use Bonnier\Willow\Base\Factories\Contracts\ModelFactoryContract;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Story;
+use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\AssociatedComposites;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\AssociatedContent;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentAudio;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentFile;
@@ -68,20 +69,20 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     protected $contents;
 
     protected $contentModelsMapping = [
-        'file'                 => ContentFile::class,
-        'gallery'              => Gallery::class,
-        'image'                => ContentImage::class,
-        'infobox'              => InfoBox::class,
-        'inserted_code'        => InsertedCode::class,
-        'link'                 => Link::class,
-        'text_item'            => TextItem::class,
-        'video'                => Video::class,
-        'audio'                => ContentAudio::class,
-        'quote'                => Quote::class,
-        'associated_composite' => AssociatedContent::class,
-        'paragraph_list'       => ParagraphList::class,
-        'hotspot_image'        => HotspotImage::class,
-        'lead_paragraph'       => LeadParagraph::class,
+        'file'                  => ContentFile::class,
+        'gallery'               => Gallery::class,
+        'image'                 => ContentImage::class,
+        'infobox'               => InfoBox::class,
+        'inserted_code'         => InsertedCode::class,
+        'link'                  => Link::class,
+        'text_item'             => TextItem::class,
+        'video'                 => Video::class,
+        'audio'                 => ContentAudio::class,
+        'quote'                 => Quote::class,
+        'associated_composites' => AssociatedComposites::class,
+        'paragraph_list'        => ParagraphList::class,
+        'hotspot_image'         => HotspotImage::class,
+        'lead_paragraph'        => LeadParagraph::class,
     ];
 
     protected $acfFields;

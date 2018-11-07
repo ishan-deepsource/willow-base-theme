@@ -25,17 +25,15 @@ class StoryAdapter implements StoryContract
     public function getArticles(): ?Collection
     {
         $articles = collect(get_field('composite_content', $this->composite->ID) ?? [])
-            ->map(function ($content) {
-                if (array_get($content, 'acf_fc_layout') === 'associated_composite' &&
-                    ($composite = array_get($content, 'composite.0')) &&
-                    $composite instanceof \WP_Post) {
-                    return new Composite(new CompositeAdapter($composite));
+            ->reduce(function (Collection $articles, array $content) {
+                if (array_get($content, 'acf_fc_layout') === 'associated_composites') {
+                    return $articles->merge(collect(array_get($content, 'composites', []))
+                        ->map(function (\WP_Post $composite) {
+                            return new Composite(new CompositeAdapter($composite));
+                        }));
                 }
-                return null;
-            })
-            ->reject(function ($content) {
-                return is_null($content);
-            });
+                return $articles;
+            }, new Collection());
 
         return $articles->isNotEmpty() ? $articles : null;
     }

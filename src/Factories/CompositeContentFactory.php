@@ -2,8 +2,7 @@
 
 namespace Bonnier\Willow\Base\Factories;
 
-use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
-use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\AssociatedContentAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\AssociatedCompositesAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentAudioAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentFileAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentImageAdapter;
@@ -22,20 +21,20 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\VideoAdapter;
 class CompositeContentFactory extends AbstractModelFactory
 {
     protected $adapterMapping = [
-        'file'                 => ContentFileAdapter::class,
-        'gallery'              => GalleryAdapter::class,
-        'image'                => ContentImageAdapter::class,
-        'infobox'              => InfoBoxAdapter::class,
-        'inserted_code'        => InsertedCodeAdapter::class,
-        'link'                 => LinkAdapter::class,
-        'text_item'            => TextItemAdapter::class,
-        'video'                => VideoAdapter::class,
-        'audio'                => ContentAudioAdapter::class,
-        'quote'                => QuoteAdapter::class,
-        'associated_composite' => AssociatedContentAdapter::class,
-        'paragraph_list'       => ParagraphListAdapter::class,
-        'hotspot_image'        => HotspotImageAdapter::class,
-        'lead_paragraph'       => LeadParagraphAdapter::class,
+        'file'                  => ContentFileAdapter::class,
+        'gallery'               => GalleryAdapter::class,
+        'image'                 => ContentImageAdapter::class,
+        'infobox'               => InfoBoxAdapter::class,
+        'inserted_code'         => InsertedCodeAdapter::class,
+        'link'                  => LinkAdapter::class,
+        'text_item'             => TextItemAdapter::class,
+        'video'                 => VideoAdapter::class,
+        'audio'                 => ContentAudioAdapter::class,
+        'quote'                 => QuoteAdapter::class,
+        'associated_composites' => AssociatedCompositesAdapter::class,
+        'paragraph_list'        => ParagraphListAdapter::class,
+        'hotspot_image'         => HotspotImageAdapter::class,
+        'lead_paragraph'        => LeadParagraphAdapter::class,
     ];
 
     public function getAdapter($model)
