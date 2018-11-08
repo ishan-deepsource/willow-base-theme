@@ -50,8 +50,7 @@ class ParagraphListAdapter extends AbstractContentAdapter implements ParagraphLi
         })->reject(function (ParagraphListItemContract $item) {
             return is_null($item->getDescription()) &&
                 is_null($item->getImage()) &&
-                is_null($item->getTitle()) &&
-                is_null($item->getCustomBullet());
+                is_null($item->getTitle());
         });
     }
 }
