@@ -13,6 +13,7 @@ use WP_REST_Controller;
 class AppControllerBootstrap
 {
     protected $apiControllers = [
+        ContentController::class,
         RouteController::class,
         TranslationController::class,
         MenuController::class,

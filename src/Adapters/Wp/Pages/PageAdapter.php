@@ -4,7 +4,6 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Pages;
 
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
-use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\TeaserListAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
 use Bonnier\Willow\Base\Factories\PageContentFactory;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\BannerPlacement;
