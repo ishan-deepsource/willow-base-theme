@@ -16,11 +16,6 @@ class ParagraphListItemAdapter implements ParagraphListItemContract
         $this->item = $item;
     }
 
-    public function getCustomBullet(): ?string
-    {
-        return array_get($this->item, 'custom_bullet') ?: null;
-    }
-
     public function getTitle(): ?string
     {
         return array_get($this->item, 'title') ?: null;

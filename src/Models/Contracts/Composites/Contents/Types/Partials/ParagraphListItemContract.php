@@ -6,8 +6,6 @@ use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 
 interface ParagraphListItemContract
 {
-    public function getCustomBullet(): ?string;
-
     public function getTitle(): ?string;
 
     public function getDescription(): ?string;

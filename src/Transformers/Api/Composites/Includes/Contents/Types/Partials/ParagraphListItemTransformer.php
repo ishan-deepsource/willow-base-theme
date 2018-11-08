@@ -14,7 +14,6 @@ class ParagraphListItemTransformer extends TransformerAbstract
             'title' => $paragraphListItem->getTitle(),
             'description' => $paragraphListItem->getDescription(),
             'image' => $this->transformImage($paragraphListItem),
-            'custom_bullet' => $paragraphListItem->getCustomBullet(),
         ];
     }
 

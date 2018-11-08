@@ -14,11 +14,6 @@ class ParagraphListItem implements ParagraphListItemContract
         $this->item = $item;
     }
 
-    public function getCustomBullet(): ?string
-    {
-        return $this->item->getCustomBullet();
-    }
-
     public function getTitle(): ?string
     {
         return $this->item->getTitle();
