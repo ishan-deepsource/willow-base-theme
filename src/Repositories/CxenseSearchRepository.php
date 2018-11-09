@@ -47,6 +47,8 @@ class CxenseSearchRepository
             'filter_exclude' => [
                 $this->orgPrefix . '-pagetype' => [
                     'tag',
+                    'category',
+                    'panel'
                 ],
             ],
             'facets' => $this->getSearchableTaxonomies(),
