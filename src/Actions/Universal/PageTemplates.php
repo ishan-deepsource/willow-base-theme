@@ -43,6 +43,7 @@ class PageTemplates
             case 'ILL':
                 $this->pageTemplates = array_merge($this->pageTemplates, [
                     'profile' => 'Profile Page',
+                    'signup' => 'Signup Page',
                 ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'gradient' => 'Gradient',
