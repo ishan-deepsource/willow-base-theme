@@ -28,4 +28,9 @@ class SeoText extends AbstractContent implements SeoTextContract
     {
         return $this->model->getImage();
     }
+
+    public function getImagePosition(): ?string
+    {
+        return $this->model->getImagePosition();
+    }
 }
