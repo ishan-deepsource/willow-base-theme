@@ -43,6 +43,7 @@ class PageTemplates
             case 'ILL':
                 $this->pageTemplates = array_merge($this->pageTemplates, [
                     'profile' => 'Profile Page',
+                    'favourites' => 'Favourites Page',
                     'signup' => 'Signup Page',
                 ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
@@ -55,6 +56,7 @@ class PageTemplates
                     'authorlist' => 'Author List',
                     'architonic' => 'Architonic iFrame',
                     'profile' => 'Profile Page',
+                    'favourites' => 'Favourites Page',
                     'signup' => 'Signup Page',
                 ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
