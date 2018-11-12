@@ -28,4 +28,9 @@ class SeoTextAdapter extends AbstractContentAdapter implements SeoTextContract
 
         return null;
     }
+
+    public function getImagePosition(): ?string
+    {
+        return array_get($this->acfArray, 'image_position') ?: null;
+    }
 }

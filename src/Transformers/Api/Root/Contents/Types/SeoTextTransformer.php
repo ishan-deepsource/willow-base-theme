@@ -14,6 +14,7 @@ class SeoTextTransformer extends TransformerAbstract
             'title' => $seoText->getTitle(),
             'description' => $seoText->getDescription(),
             'image' => $this->transformImage($seoText),
+            'image_position' => $seoText->getImagePosition(),
         ];
     }
 
