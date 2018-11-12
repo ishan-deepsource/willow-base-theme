@@ -55,6 +55,7 @@ class PageTemplates
                     'authorlist' => 'Author List',
                     'architonic' => 'Architonic iFrame',
                     'profile' => 'Profile Page',
+                    'signup' => 'Signup Page',
                 ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'bodum-stempel' => 'Bodum Stempel',
