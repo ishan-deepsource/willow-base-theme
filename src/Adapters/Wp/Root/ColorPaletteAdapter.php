@@ -23,7 +23,11 @@ class ColorPaletteAdapter implements ColorPaletteContract
             update_post_meta($attachmentId, self::COLOR_PALETTE_META, $this->rawPalette);
         }
 
-        $this->rawPalette = json_decode($this->rawPalette);
+        // WordPress might have saved a serialized meta field
+        // and will then return an object instead of a json encoded string.
+        if (is_string($this->rawPalette)) {
+            $this->rawPalette = json_decode($this->rawPalette);
+        }
     }
 
     public function getColors(): ?Collection
