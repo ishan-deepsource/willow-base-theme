@@ -45,6 +45,7 @@ class PageTemplates
                     'profile' => 'Profile Page',
                     'favourites' => 'Favourites Page',
                     'signup' => 'Signup Page',
+                    'login' => 'Login Page',
                 ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'gradient' => 'Gradient',
@@ -58,6 +59,7 @@ class PageTemplates
                     'profile' => 'Profile Page',
                     'favourites' => 'Favourites Page',
                     'signup' => 'Signup Page',
+                    'login' => 'Login Page',
                 ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'bodum-stempel' => 'Bodum Stempel',
