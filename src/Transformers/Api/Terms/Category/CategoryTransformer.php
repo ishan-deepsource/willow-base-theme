@@ -137,7 +137,7 @@ class CategoryTransformer extends TransformerAbstract
                     } catch (OverrideModelMissingContractException $e) {
                     }
                 }
-                return $this->collection($siblings, new CategoryTransformer());
+                return $this->collection(collect($siblings)->rejectNullValues(), new CategoryTransformer());
             }
         );
     }
