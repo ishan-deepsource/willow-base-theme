@@ -198,7 +198,7 @@ class PinterestCompositeAdapter implements CompositeContract
         return null;
     }
 
-    public function getLanguageUrls(): ?Collection
+    public function getTranslations(): ?Collection
     {
         return null;
     }

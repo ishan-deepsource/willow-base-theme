@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
+use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeTranslationContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\AssociatedContentContract;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\StoryTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentAudioTransformer;
@@ -81,7 +82,7 @@ class CompositeTransformer extends TransformerAbstract
             'estimated_reading_time'    => $composite->getEstimatedReadingTime(),
             'audio'                     => $this->getAudio($composite),
             'word_count'                => $composite->getWordCount(),
-            'language_urls'             => $composite->getLanguageUrls(),
+            'translations'              => $this->getTranslations($composite),
             'exclude_platforms'         => $composite->getExcludePlatforms(),
         ];
     }
@@ -110,6 +111,24 @@ class CompositeTransformer extends TransformerAbstract
     public function includeTeasers(CompositeContract $composite)
     {
         return $this->collection($composite->getTeasers(), new TeaserTransformer());
+    }
+
+    public function includeRelated(CompositeContract $composite, ParamBag $paramBag)
+    {
+        if (($tag = $paramBag->get('tag')) && !empty($tag)) {
+            return $this->relatedFromTags($tag[0]);
+        }
+
+        return $this->relatedFromCxense($composite);
+    }
+
+    public function includeStory(CompositeContract $composite)
+    {
+        if ($story = $composite->getStory()) {
+            return $this->item($story, new StoryTransformer);
+        }
+
+        return null;
     }
 
     private function getCommercial(CompositeContract $composite)
@@ -146,13 +165,15 @@ class CompositeTransformer extends TransformerAbstract
         return null;
     }
 
-    public function includeRelated(CompositeContract $composite, ParamBag $paramBag)
+    private function getTranslations(CompositeContract $composite)
     {
-        if (($tag = $paramBag->get('tag')) && !empty($tag)) {
-            return $this->relatedFromTags($tag[0]);
+        if ($translations = $composite->getTranslations()) {
+            return $translations->mapWithKeys(function (CompositeTranslationContract $translation, string $locale) {
+                return [
+                    $locale => with(new CompositeTranslationTransformer)->transform($translation)
+                ];
+            });
         }
-
-        return $this->relatedFromCxense($composite);
     }
 
     private function relatedFromTags(string $tag)
@@ -204,14 +225,5 @@ class CompositeTransformer extends TransformerAbstract
         })->toArray();
 
         return $this->collection($content, new CompositeTeaserTransformer());
-    }
-
-    public function includeStory(CompositeContract $composite)
-    {
-        if ($story = $composite->getStory()) {
-            return $this->item($story, new StoryTransformer);
-        }
-
-        return null;
     }
 }

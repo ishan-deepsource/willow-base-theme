@@ -13,9 +13,9 @@ use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Vocabulary\VocabularyAdapter;
 use Bonnier\Willow\Base\Factories\CompositeContentFactory;
 use Bonnier\Willow\Base\Factories\Contracts\ModelFactoryContract;
+use Bonnier\Willow\Base\Models\Base\Composites\CompositeTranslation;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Story;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\AssociatedComposites;
-use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\AssociatedContent;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentAudio;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentFile;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentImage;
@@ -352,11 +352,28 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         return intval(get_post_meta($this->getId(), 'word_count', true)) ?: null;
     }
 
-    public function getLanguageUrls(): ?Collection
+    public function getTranslations(): ?Collection
     {
-        return collect(LanguageProvider::getPostTranslations($this->getId()))->map(function ($compositeId) {
-            return $this->stripApi(get_permalink($compositeId));
+        $postTranslations = LanguageProvider::getPostTranslations($this->getId());
+        $translations = collect($postTranslations)->mapWithKeys(function (int $compositeId, string $locale) {
+            if ($compositeId === $this->getId()) {
+                $composite = $this->wpModel;
+            } else {
+                $composite = get_post($compositeId);
+            }
+            if ($composite instanceof \WP_Post) {
+                return [$locale => new CompositeTranslation(new CompositeTranslationAdapter($composite))];
+            }
+            return null;
+        })->reject(function ($translation) {
+            return is_null($translation);
         });
+
+        if ($translations->isNotEmpty()) {
+            return $translations;
+        }
+
+        return null;
     }
 
     public function getExcludePlatforms(): ?Collection

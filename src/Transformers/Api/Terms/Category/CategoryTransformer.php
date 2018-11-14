@@ -7,6 +7,7 @@ use Bonnier\Willow\Base\Factories\WPModelFactory;
 use Bonnier\Willow\Base\Helpers\Cache;
 use Bonnier\Willow\Base\Models\Base\Terms\Category;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
+use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryTranslationContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\ContentTransformer;
@@ -34,6 +35,7 @@ class CategoryTransformer extends TransformerAbstract
         'siblings',
         'parent',
         'contents',
+        'ancestor',
     ];
 
     /**
@@ -55,7 +57,7 @@ class CategoryTransformer extends TransformerAbstract
             'language'      => $category->getLanguage(),
             'count'         => $category->getCount(),
             'canonical_url' => $category->getCanonicalUrl(),
-            'language_urls' => $category->getLanguageUrls(),
+            'translations'  => $this->getTranslations($category),
         ];
     }
 
@@ -93,6 +95,15 @@ class CategoryTransformer extends TransformerAbstract
         if ($parent = $category->getParent()) {
             return $this->item($parent, new CategoryTransformer());
         }
+        return null;
+    }
+
+    public function includeAncestor(CategoryContract $category)
+    {
+        if ($ancestor = $category->getAncestor()) {
+            return $this->item($ancestor, new CategoryTransformer);
+        }
+
         return null;
     }
 
@@ -137,7 +148,12 @@ class CategoryTransformer extends TransformerAbstract
                     } catch (OverrideModelMissingContractException $e) {
                     }
                 }
-                return $this->collection(collect($siblings)->rejectNullValues(), new CategoryTransformer());
+                return $this->collection(
+                    collect($siblings)->reject(function ($sibling) {
+                        return is_null($sibling);
+                    }),
+                    new CategoryTransformer()
+                );
             }
         );
     }
@@ -145,5 +161,16 @@ class CategoryTransformer extends TransformerAbstract
     public function includeContents(CategoryContract $page)
     {
         return $this->collection($page->getContents(), new ContentTransformer());
+    }
+
+    private function getTranslations(CategoryContract $category)
+    {
+        if ($translations = $category->getTranslations()) {
+            return $translations->mapWithKeys(function (CategoryTranslationContract $translation, string $locale) {
+                return [$locale => with(new CategoryTranslationTransformer)->transform($translation)];
+            });
+        }
+
+        return null;
     }
 }

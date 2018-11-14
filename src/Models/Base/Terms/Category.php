@@ -92,6 +92,11 @@ class Category implements CategoryContract
         return $this->category->getParent();
     }
 
+    public function getAncestor(): ?CategoryContract
+    {
+        return $this->category->getAncestor();
+    }
+
     public function getCanonicalUrl(): ?string
     {
         return $this->category->getCanonicalUrl();
@@ -102,8 +107,8 @@ class Category implements CategoryContract
         return $this->category->getContents();
     }
 
-    public function getLanguageUrls(): ?Collection
+    public function getTranslations(): ?Collection
     {
-        return $this->category->getLanguageUrls();
+        return $this->category->getTranslations();
     }
 }

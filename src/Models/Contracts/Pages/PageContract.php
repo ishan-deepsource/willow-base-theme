@@ -35,5 +35,5 @@ interface PageContract
 
     public function getContents(): ?Collection;
 
-    public function getLanguageUrls(): ?Collection;
+    public function getTranslations(): ?Collection;
 }

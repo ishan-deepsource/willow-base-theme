@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Transformers\Api\Terms\Tag;
 
 use Bonnier\Willow\Base\Models\Contracts\Terms\TagContract;
+use Bonnier\Willow\Base\Models\Contracts\Terms\TagTranslationContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TeaserTransformer;
@@ -35,7 +36,7 @@ class TagTransformer extends TransformerAbstract
             'language'      => $tag->getLanguage(),
             'count'         => $tag->getCount(),
             'canonical_url' => $tag->getCanonicalUrl(),
-            'language_urls' => $tag->getLanguageUrls(),
+            'translations'  => $this->getTranslations($tag),
         ];
     }
 
@@ -55,5 +56,16 @@ class TagTransformer extends TransformerAbstract
     public function includeTeasers(TagContract $tag)
     {
         return $this->collection($tag->getTeasers(), new TeaserTransformer());
+    }
+
+    private function getTranslations(TagContract $tag)
+    {
+        if ($translations = $tag->getTranslations()) {
+            return $translations->mapWithKeys(function (TagTranslationContract $translation, string $locale) {
+                return [$locale => with(new TagTranslationTransformer)->transform($translation)];
+            });
+        }
+
+        return null;
     }
 }
