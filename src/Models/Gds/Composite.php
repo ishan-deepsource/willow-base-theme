@@ -183,9 +183,9 @@ class Composite implements CompositeContract
         return $this->baseComposite->getWordCount();
     }
 
-    public function getLanguageUrls(): ?Collection
+    public function getTranslations(): ?Collection
     {
-        return $this->baseComposite->getLanguageUrls();
+        return $this->baseComposite->getTranslations();
     }
 
     public function getExcludePlatforms(): ?Collection
