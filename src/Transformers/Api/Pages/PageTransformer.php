@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Transformers\Api\Pages;
 
 use Bonnier\Willow\Base\Models\Contracts\Pages\PageContract;
+use Bonnier\Willow\Base\Models\Contracts\Pages\PageTranslationContract;
 use Bonnier\Willow\Base\Transformers\Api\Root\AuthorTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\ContentTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TeaserTransformer;
@@ -35,7 +36,7 @@ class PageTransformer extends TransformerAbstract
             'updated_at'    => $page->getUpdatedAt(),
             'is_front_page' => $page->isFrontPage(),
             'canonical_url' => $page->getCanonicalUrl(),
-            'language_urls' => $page->getLanguageUrls(),
+            'translations'  => $this->getTranslations($page),
         ];
     }
 
@@ -53,6 +54,17 @@ class PageTransformer extends TransformerAbstract
     {
         if ($author = $page->getAuthor()) {
             return with(new AuthorTransformer())->transform($author);
+        }
+
+        return null;
+    }
+
+    private function getTranslations(PageContract $page)
+    {
+        if ($translations = $page->getTranslations()) {
+            return $translations->mapWithKeys(function (PageTranslationContract $translation, string $locale) {
+                return [$locale => with(new PageTranslationTransformer)->transform($translation)];
+            });
         }
 
         return null;

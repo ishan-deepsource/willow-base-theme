@@ -91,12 +91,17 @@ class CategoryAdapter implements CategoryContract
         return null;
     }
 
+    public function getAncestor(): ?CategoryContract
+    {
+        return null;
+    }
+
     public function getCanonicalUrl(): ?string
     {
         return null;
     }
 
-    public function getLanguageUrls(): ?Collection
+    public function getTranslations(): ?Collection
     {
         return null;
     }

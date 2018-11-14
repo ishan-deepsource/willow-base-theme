@@ -34,9 +34,11 @@ interface CategoryContract
 
     public function getParent(): ?CategoryContract;
 
+    public function getAncestor(): ?CategoryContract;
+
     public function getCanonicalUrl(): ?string;
 
     public function getContents(): ?Collection;
 
-    public function getLanguageUrls(): ?Collection;
+    public function getTranslations(): ?Collection;
 }

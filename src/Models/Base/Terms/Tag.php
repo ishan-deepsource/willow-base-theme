@@ -65,8 +65,8 @@ class Tag implements TagContract
         return $this->tag->getTeasers();
     }
 
-    public function getLanguageUrls(): ?Collection
+    public function getTranslations(): ?Collection
     {
-        return $this->tag->getLanguageUrls();
+        return $this->tag->getTranslations();
     }
 }

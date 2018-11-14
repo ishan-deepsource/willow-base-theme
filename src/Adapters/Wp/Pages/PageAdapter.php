@@ -11,6 +11,7 @@ use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\FeaturedContent;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\Newsletter;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TaxonomyList;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TeaserList;
+use Bonnier\Willow\Base\Models\Base\Pages\PageTranslation;
 use Bonnier\Willow\Base\Models\Base\Root\Author;
 use Bonnier\Willow\Base\Models\Base\Root\Teaser;
 use Bonnier\Willow\Base\Models\Contracts\Pages\PageContract;
@@ -154,11 +155,28 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
         return $this->contents;
     }
 
-    public function getLanguageUrls(): ?Collection
+    public function getTranslations(): ?Collection
     {
-        return collect(LanguageProvider::getPostTranslations($this->getId()))->map(function ($postId) {
-            return $this->stripApi(get_permalink($postId));
+        $pageTranslations = LanguageProvider::getPostTranslations($this->getId());
+        $translations = collect($pageTranslations)->mapWithKeys(function (int $pageId, string $locale) {
+            if ($pageId === $this->getId()) {
+                $page = $this->wpModel;
+            } else {
+                $page = get_post($pageId);
+            }
+            if ($page instanceof WP_Post) {
+                return [$locale => new PageTranslation(new PageTranslationAdapter($page))];
+            }
+            return null;
+        })->reject(function ($translation) {
+            return is_null($translation);
         });
+
+        if ($translations->isNotEmpty()) {
+            return $translations;
+        }
+
+        return null;
     }
 
     private function getContentFactory($class)
