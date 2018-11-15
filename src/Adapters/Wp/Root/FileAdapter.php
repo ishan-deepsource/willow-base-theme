@@ -4,7 +4,6 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
 use Bonnier\Willow\Base\Models\Contracts\Root\FileContract;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
-use WP_Post;
 
 /**
  * Class FileAdapter
@@ -14,17 +13,19 @@ use WP_Post;
 class FileAdapter implements FileContract
 {
     protected $file;
-    protected $meta;
+    protected $postMeta;
+    protected $attachmentMeta;
 
-    public function __construct(array $file, $meta)
+    public function __construct($file, $postMeta, $attachmentMeta)
     {
         $this->file = $file;
-        $this->meta = $meta;
+        $this->postMeta = $postMeta;
+        $this->attachmentMeta = $attachmentMeta;
     }
 
     public function getId(): ?int
     {
-        return data_get($this->file, 'ID') ?: null;
+        return array_get($this->file, 'ID', data_get($this->file, 'ID')) ?: null;
     }
 
     public function getUrl(): ?string
@@ -34,7 +35,9 @@ class FileAdapter implements FileContract
 
     public function getTitle(): ?string
     {
-        if (($title = data_get($this->file, 'post_title')) && $title !== $this->getId()) {
+        if (($title = array_get($this->file, 'title', data_get($this->file, 'post_title'))) &&
+            $title !== $this->getId()
+        ) {
             return $title;
         }
 
@@ -43,12 +46,12 @@ class FileAdapter implements FileContract
 
     public function getDescription(): ?string
     {
-        return data_get($this->file, 'post_content') ?: null;
+        return array_get($this->file, 'description', data_get($this->file, 'post_content')) ?: null;
     }
 
     public function getCaption(): ?string
     {
-        return data_get($this->file, 'post_excerpt') ?: null;
+        return array_get($this->file, 'caption', data_get($this->file, 'post_excerpt')) ?: null;
     }
 
     public function getLanguage(): ?string

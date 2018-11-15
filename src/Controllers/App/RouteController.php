@@ -64,19 +64,23 @@ class RouteController extends BaseController
         $resource = null;
 
         if ($content instanceof WP_Post && $content->post_type === 'contenthub_composite') {
-            $composite = new Composite(new CompositeAdapter($content));
+            $meta = get_post_meta($content->ID);
+            $composite = new Composite(new CompositeAdapter($content, $meta));
             $resource = new Item($composite, new CompositeTransformer());
             $resource->setMeta(['type' => 'composite']);
         } elseif ($content instanceof WP_Post && $content->post_type === 'page') {
-            $page = new Page(new PageAdapter($content));
+            $meta = get_post_meta($content->ID);
+            $page = new Page(new PageAdapter($content, $meta));
             $resource = new Item($page, new PageTransformer());
             $resource->setMeta(['type' => 'page']);
         } elseif ($content instanceof WP_Term && $content->taxonomy === 'category') {
-            $category = new Category(new CategoryAdapter($content));
+            $meta = get_term_meta($content->term_id);
+            $category = new Category(new CategoryAdapter($content, $meta));
             $resource = new Item($category, new CategoryTransformer());
             $resource->setMeta(['type' => $content->parent ? 'subcategory' : 'category']);
         } elseif ($content instanceof WP_Term && $content->taxonomy === 'post_tag') {
-            $tag = new Tag(new TagAdapter($content));
+            $meta = get_term_meta($content->term_id);
+            $tag = new Tag(new TagAdapter($content, $meta));
             $resource = new Item($tag, new TagTransformer());
             $resource->setMeta(['type' => 'tag']);
         } elseif ($content === 'search') {

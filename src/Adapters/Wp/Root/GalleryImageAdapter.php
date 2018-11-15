@@ -35,8 +35,9 @@ class GalleryImageAdapter implements GalleryImageContract
     public function getImage(): ?ImageContract
     {
         if ($image = array_get($this->galleryImage, 'image')) {
-            $meta = wp_get_attachment_metadata(array_get($image, 'ID'));
-            return new Image(new ImageAdapter($image, $meta));
+            $postMeta = get_post_meta(array_get($image, 'ID'));
+            $attachmentMeta = wp_get_attachment_metadata(array_get($image, 'ID'));
+            return new Image(new ImageAdapter($image, $postMeta, $attachmentMeta));
         }
 
         return null;

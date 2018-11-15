@@ -27,8 +27,9 @@ class ParagraphListAdapter extends AbstractContentAdapter implements ParagraphLi
     public function getImage(): ?ImageContract
     {
         if ($image = array_get($this->acfArray, 'image')) {
-            $meta = wp_get_attachment_metadata(array_get($image, 'ID'));
-            return new Image(new ImageAdapter($image, $meta));
+            $postMeta = get_post_meta(data_get($image, 'ID'));
+            $attachmentMeta = wp_get_attachment_metadata(data_get($image, 'ID'));
+            return new Image(new ImageAdapter($image, $postMeta, $attachmentMeta));
         }
 
         return null;

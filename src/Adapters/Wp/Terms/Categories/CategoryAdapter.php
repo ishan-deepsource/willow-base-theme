@@ -155,7 +155,8 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
                 ]
             ]
         ]))->map(function (\WP_Post $post) {
-            return new Composite(new CompositeAdapter($post));
+            $meta = get_post_meta($post->ID);
+            return new Composite(new CompositeAdapter($post, $meta));
         });
     }
 
@@ -194,8 +195,11 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     public function getParent(): ?CategoryContract
     {
-        if ($parent = intval(data_get($this->wpModel, 'parent'))) {
-            return new static(get_category($parent));
+        if (($parentId = intval(data_get($this->wpModel, 'parent'))) && $parent = get_category($parentId)) {
+            if ($parent instanceof \WP_Term) {
+                $meta = get_term_meta($parentId);
+                return new static($parent, $meta);
+            }
         }
 
         return null;

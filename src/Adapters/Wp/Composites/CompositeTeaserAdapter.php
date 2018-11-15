@@ -33,13 +33,15 @@ class CompositeTeaserAdapter extends AbstractTeaserAdapter
     public function getImage(): ?ImageContract
     {
         if ($image = array_get($this->composite->getAcfFields(), $this->type . 'teaser_image')) {
-            $meta = wp_get_attachment_metadata(array_get($image, 'ID'));
-            return new Image(new ImageAdapter($image, $meta));
+            $postMeta = get_post_meta(data_get($image, 'ID'));
+            $attachmentMeta = wp_get_attachment_metadata(data_get($image, 'ID'));
+            return new Image(new ImageAdapter($image, $postMeta, $attachmentMeta));
         }
 
         if ($image = array_get($this->composite->getAcfFields(), 'teaser_image')) {
-            $meta = wp_get_attachment_metadata(array_get($image, 'ID'));
-            return new Image(new ImageAdapter($image, $meta));
+            $postMeta = get_post_meta(data_get($image, 'ID'));
+            $attachmentMeta = wp_get_attachment_metadata(data_get($image, 'ID'));
+            return new Image(new ImageAdapter($image, $postMeta, $attachmentMeta));
         }
 
         if ($leadImage = $this->composite->getLeadImage()) {

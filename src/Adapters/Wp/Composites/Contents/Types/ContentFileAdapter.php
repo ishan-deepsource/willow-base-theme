@@ -23,8 +23,9 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
     {
         parent::__construct($acfArray);
         if ($file = array_get($acfArray, 'file')) {
-            $meta = wp_get_attachment_metadata(array_get($file, 'ID'));
-            $this->file = new File(new FileAdapter($file, $meta));
+            $postMeta = get_post_meta(array_get($file, 'ID'));
+            $attachmentMeta = wp_get_attachment_metadata(array_get($file, 'ID'));
+            $this->file = new File(new FileAdapter($file, $postMeta, $attachmentMeta));
         }
         if (!$this->file) {
             throw new \InvalidArgumentException('Missing file');
@@ -40,8 +41,9 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
     {
         return collect(array_get($this->acfArray, 'images', []))->map(function ($acfImage) {
             if ($file = array_get($acfImage, 'file')) {
-                $meta = wp_get_attachment_metadata(array_get($file, 'ID'));
-                return new Image(new ImageAdapter($file, $meta));
+                $postMeta = get_post_meta(data_get($file, 'ID'));
+                $attachmentMeta = wp_get_attachment_metadata(data_get($file, 'ID'));
+                return new Image(new ImageAdapter($file, $postMeta, $attachmentMeta));
             }
             return null;
         })->reject(function ($image) {

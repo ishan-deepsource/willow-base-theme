@@ -331,7 +331,8 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         if (($storyCompositeId = get_post_meta($this->getId(), 'story_parent', true)) &&
             $storyComposite = get_post($storyCompositeId)
         ) {
-            return new Story(new StoryAdapter($storyComposite));
+            $meta = get_post_meta($storyCompositeId);
+            return new Story(new StoryAdapter($storyComposite, $meta));
         }
         return null;
     }

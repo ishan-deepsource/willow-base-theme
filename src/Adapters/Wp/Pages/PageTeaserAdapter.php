@@ -32,16 +32,16 @@ class PageTeaserAdapter extends AbstractTeaserAdapter
 
     public function getImage(): ?ImageContract
     {
-        if (($imageId = array_get($this->page->getAcfFields(), $this->type . 'teaser_image')) &&
-            ($image = get_post($imageId))
-        ) {
-            return new Image(new ImageAdapter($image));
+        if ($image = array_get($this->page->getAcfFields(), $this->type . 'teaser_image')) {
+            $postMeta = get_post_meta(array_get($image, 'ID'));
+            $attachmentMeta = wp_get_attachment_metadata(array_get($image, 'ID'));
+            return new Image(new ImageAdapter($image, $postMeta, $attachmentMeta));
         }
 
-        if (($imageId = array_get($this->page->getAcfFields(), 'teaser_image')) &&
-            ($image = get_post($imageId))
-        ) {
-            return new Image(new ImageAdapter($image));
+        if ($image = array_get($this->page->getAcfFields(), 'teaser_image')) {
+            $postMeta = get_post_meta(array_get($image, 'ID'));
+            $attachmentMeta = wp_get_attachment_metadata(array_get($image, 'ID'));
+            return new Image(new ImageAdapter($image, $postMeta, $attachmentMeta));
         }
 
         return null;

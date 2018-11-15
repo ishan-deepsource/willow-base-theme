@@ -11,15 +11,17 @@ use Illuminate\Support\Collection;
 class StoryAdapter implements StoryContract
 {
     protected $composite;
+    protected $meta;
 
-    public function __construct(\WP_Post $composite)
+    public function __construct(\WP_Post $composite, ?array $meta)
     {
         $this->composite = $composite;
+        $this->meta = $meta;
     }
 
     public function getTeaser(): ?CompositeContract
     {
-        return new Composite(new CompositeAdapter($this->composite));
+        return new Composite(new CompositeAdapter($this->composite, $this->meta));
     }
 
     public function getArticles(): ?Collection
@@ -29,7 +31,8 @@ class StoryAdapter implements StoryContract
                 if (array_get($content, 'acf_fc_layout') === 'associated_composites') {
                     return $articles->merge(collect(array_get($content, 'composites', []))
                         ->map(function (\WP_Post $composite) {
-                            return new Composite(new CompositeAdapter($composite));
+                            $meta = get_post_meta($composite->ID);
+                            return new Composite(new CompositeAdapter($composite, $meta));
                         }));
                 }
                 return $articles;

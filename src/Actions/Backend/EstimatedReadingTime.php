@@ -43,7 +43,9 @@ class EstimatedReadingTime
         $imageCounter = 0;
         $readingTime = 0;
 
-        $compositeAdapter = new CompositeAdapter(get_post($postId));
+        $composite = get_post($postId);
+        $meta = get_post_meta($postId);
+        $compositeAdapter = new CompositeAdapter($composite, $meta);
 
         foreach ($compositeAdapter->getContents() as $item) {
             switch ($item->getType()) {

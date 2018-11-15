@@ -44,8 +44,12 @@ class AuthorAdapter implements AuthorContract
 
     public function getAvatar(): ?ImageContract
     {
-        $avatar = WpUserProfile::getAvatarFromUser($this->getId());
-        return $avatar ? new Image(new ImageAdapter($avatar)) : null;
+        if ($avatar = WpUserProfile::getAvatarFromUser($this->getId())) {
+            $postMeta = get_post_meta(data_get($avatar, 'ID'));
+            $attachmentMeta = wp_get_attachment_metadata(data_get($avatar, 'ID'));
+            return new Image(new ImageAdapter($avatar, $postMeta, $attachmentMeta));
+        }
+        return null;
     }
 
     public function getUrl(): ?string

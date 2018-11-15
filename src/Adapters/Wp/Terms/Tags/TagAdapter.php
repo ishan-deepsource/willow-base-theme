@@ -23,9 +23,9 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
 
     protected $meta;
 
-    public function __construct(WP_Term $wpModel)
+    public function __construct(WP_Term $wpModel, ?array $meta)
     {
-        parent::__construct($wpModel);
+        parent::__construct($wpModel, $meta);
         $this->meta = $this->getMeta();
     }
 
@@ -91,7 +91,8 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
                 ]
             ]
         ]))->map(function (\WP_Post $post) {
-            return new Composite(new CompositeAdapter($post));
+            $meta = get_post_meta($post->ID);
+            return new Composite(new CompositeAdapter($post, $meta));
         });
     }
 

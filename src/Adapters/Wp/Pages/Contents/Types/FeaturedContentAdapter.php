@@ -20,8 +20,9 @@ class FeaturedContentAdapter extends AbstractContentAdapter implements FeaturedC
     public function getImage(): ?ImageContract
     {
         if ($image = array_get($this->acfArray, 'image')) {
-            $meta = wp_get_attachment_metadata(array_get($image, 'ID'));
-            return new Image(new ImageAdapter($image, $meta));
+            $postMeta = get_post_meta(array_get($image, 'ID'));
+            $attachmentMeta = wp_get_attachment_metadata(array_get($image, 'ID'));
+            return new Image(new ImageAdapter($image, $postMeta, $attachmentMeta));
         }
 
         return null;
@@ -30,8 +31,9 @@ class FeaturedContentAdapter extends AbstractContentAdapter implements FeaturedC
     public function getVideo(): ?NativeVideoContract
     {
         if ($video = array_get($this->acfArray, 'video')) {
-            $meta = wp_get_attachment_metadata(array_get($video, 'ID'));
-            return new NativeVideo(new NativeVideoAdapter($video, $meta));
+            $postMeta = wp_get_attachment_metadata(array_get($video, 'ID'));
+            $attachmentMeta = get_post_meta(array_get($video, 'ID'));
+            return new NativeVideo(new NativeVideoAdapter($video, $postMeta, $attachmentMeta));
         }
 
         return null;

@@ -22,8 +22,10 @@ class SeoTextAdapter extends AbstractContentAdapter implements SeoTextContract
 
     public function getImage(): ?ImageContract
     {
-        if (($imageId = array_get($this->acfArray, 'image')) && $image = get_post($imageId)) {
-            return new Image(new ImageAdapter($image));
+        if ($image = array_get($this->acfArray, 'image')) {
+            $postMeta = get_post_meta(array_get($image, 'ID'));
+            $attachmentMeta = wp_get_attachment_metadata(array_get($image, 'ID'));
+            return new Image(new ImageAdapter($image, $postMeta, $attachmentMeta));
         }
 
         return null;

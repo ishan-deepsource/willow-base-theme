@@ -18,14 +18,16 @@ use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudioContract
 {
     protected $audio;
-    protected $meta;
+    protected $postMeta;
+    protected $attachmentMeta;
 
     public function __construct(?array $acfArray)
     {
         parent::__construct($acfArray);
         $post = array_get($this->acfArray, 'file');
-        $this->meta = wp_get_attachment_metadata(array_get($post, 'ID'));
-        $this->audio = $post ? new Audio(new AudioAdapter($post, $this->meta)) : null;
+        $this->postMeta = get_post_meta(array_get($post, 'ID'));
+        $this->attachmentMeta = wp_get_attachment_metadata(array_get($post, 'ID'));
+        $this->audio = $post ? new Audio(new AudioAdapter($post, $this->postMeta, $this->attachmentMeta)) : null;
     }
 
     public function isLead(): bool
@@ -71,8 +73,9 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
     public function getImage(): ?ImageContract
     {
         if (($image = array_get($this->acfArray, 'image'))) {
-            $meta = wp_get_attachment_metadata(array_get($image, 'ID'));
-            return new Image(new ImageAdapter($image, $meta));
+            $postMeta = get_post_meta(data_get($image, 'ID'));
+            $attachmentMeta = wp_get_attachment_metadata(data_get($image, 'ID'));
+            return new Image(new ImageAdapter($image, $postMeta, $attachmentMeta));
         }
 
         return null;
@@ -80,7 +83,7 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
 
     public function getDuration(): int
     {
-        $length = array_get($this->meta, 'length');
+        $length = array_get($this->attachmentMeta, 'length');
         return $length ? ceil($length / 60) : 0;
     }
 }

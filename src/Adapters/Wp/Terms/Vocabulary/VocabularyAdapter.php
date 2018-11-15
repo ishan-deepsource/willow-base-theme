@@ -53,7 +53,8 @@ class VocabularyAdapter implements VocabularyContract
         if ($machineName = $this->getMachineName()) {
             $term = wp_get_post_terms($this->composite->getId(), $machineName);
             return collect($term)->map(function (\WP_Term $tag) {
-                return new Tag(new TagAdapter($tag));
+                $meta = get_term_meta($tag->term_id);
+                return new Tag(new TagAdapter($tag, $meta));
             });
         }
 
