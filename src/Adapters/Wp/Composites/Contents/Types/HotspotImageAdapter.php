@@ -5,6 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\Partials\HotspotItemAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
+use Bonnier\Willow\Base\Factories\DataFactory;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Partials\HotspotItem;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\HotspotImageContract;
@@ -35,10 +36,9 @@ class HotspotImageAdapter extends AbstractContentAdapter implements HotspotImage
 
     public function getImage(): ?ImageContract
     {
-        if ($image = array_get($this->acfArray, 'image')) {
-            $postMeta = get_post_meta(data_get($image, 'ID'));
-            $attachmentMeta = wp_get_attachment_metadata(data_get($image, 'ID'));
-            return new Image(new ImageAdapter($image, $postMeta, $attachmentMeta));
+        if ($imageArray = array_get($this->acfArray, 'image')) {
+            $image = DataFactory::instance()->getPost($imageArray);
+            return new Image(new ImageAdapter($image));
         }
         return null;
     }

@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Categories;
 
 use Bonnier\Willow\Base\Factories\CategoryContentFactory;
+use Bonnier\Willow\Base\Factories\DataFactory;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\BannerPlacement;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\FeaturedContent;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\Newsletter;
@@ -53,11 +54,11 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
         AcfName::WIDGET_TAXONOMY_TEASER_LIST => TaxonomyList::class,
     ];
 
-    public function __construct(\WP_Term $wpModel, ?array $wpMeta)
+    public function __construct(\WP_Term $wpModel)
     {
-        parent::__construct($wpModel, $wpMeta);
+        parent::__construct($wpModel);
         $this->meta = $this->getMeta();
-        $this->acfFields = get_fields(sprintf(
+        $this->acfFields = DataFactory::instance()->getAcfData(sprintf(
             '%s_%s',
             $this->wpModel->taxonomy ?? null,
             $this->wpModel->term_id ?? null
@@ -155,8 +156,8 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
                 ]
             ]
         ]))->map(function (\WP_Post $post) {
-            $meta = get_post_meta($post->ID);
-            return new Composite(new CompositeAdapter($post, $meta));
+            $composite = DataFactory::instance()->getPost($post);
+            return new Composite(new CompositeAdapter($composite));
         });
     }
 
@@ -182,6 +183,7 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     private function getMeta()
     {
+        return null;
         if ($contentHubId = get_term_meta($this->getId(), 'content_hub_id', true)) {
             try {
                 $category = WpSiteManager::instance()->categories()->findByContentHubId($contentHubId) ?? null;

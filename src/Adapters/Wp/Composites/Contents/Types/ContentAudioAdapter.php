@@ -5,6 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AudioAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
+use Bonnier\Willow\Base\Factories\DataFactory;
 use Bonnier\Willow\Base\Models\Base\Root\Audio;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentAudioContract;
@@ -24,10 +25,11 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
     public function __construct(?array $acfArray)
     {
         parent::__construct($acfArray);
-        $post = array_get($this->acfArray, 'file');
-        $this->postMeta = get_post_meta(array_get($post, 'ID'));
-        $this->attachmentMeta = wp_get_attachment_metadata(array_get($post, 'ID'));
-        $this->audio = $post ? new Audio(new AudioAdapter($post, $this->postMeta, $this->attachmentMeta)) : null;
+        $postArray = array_get($this->acfArray, 'file');
+        if ($post = DataFactory::instance()->getPost($postArray)) {
+            $this->attachmentMeta = DataFactory::instance()->getAttachmentMeta($post);
+            $this->audio = new Audio(new AudioAdapter($post));
+        }
     }
 
     public function isLead(): bool
@@ -72,10 +74,9 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
 
     public function getImage(): ?ImageContract
     {
-        if (($image = array_get($this->acfArray, 'image'))) {
-            $postMeta = get_post_meta(data_get($image, 'ID'));
-            $attachmentMeta = wp_get_attachment_metadata(data_get($image, 'ID'));
-            return new Image(new ImageAdapter($image, $postMeta, $attachmentMeta));
+        if (($imageArray = array_get($this->acfArray, 'image'))) {
+            $image = DataFactory::instance()->getPost($imageArray);
+            return new Image(new ImageAdapter($image));
         }
 
         return null;

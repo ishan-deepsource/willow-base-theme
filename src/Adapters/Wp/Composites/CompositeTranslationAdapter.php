@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Composites;
 
+use Bonnier\Willow\Base\Factories\DataFactory;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeTranslationContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 
@@ -28,6 +29,6 @@ class CompositeTranslationAdapter implements CompositeTranslationContract
 
     public function getLink(): ?string
     {
-        return $this->getFullUrl(get_permalink($this->getId())) ?: null;
+        return $this->getFullUrl(DataFactory::instance()->getPermalink($this->getId())) ?: null;
     }
 }

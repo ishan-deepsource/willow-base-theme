@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Pages;
 
 use Bonnier\Willow\Base\Adapters\Wp\Root\AbstractTeaserAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
+use Bonnier\Willow\Base\Factories\DataFactory;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 
@@ -32,16 +33,14 @@ class PageTeaserAdapter extends AbstractTeaserAdapter
 
     public function getImage(): ?ImageContract
     {
-        if ($image = array_get($this->page->getAcfFields(), $this->type . 'teaser_image')) {
-            $postMeta = get_post_meta(array_get($image, 'ID'));
-            $attachmentMeta = wp_get_attachment_metadata(array_get($image, 'ID'));
-            return new Image(new ImageAdapter($image, $postMeta, $attachmentMeta));
+        if ($imageArray = array_get($this->page->getAcfFields(), $this->type . 'teaser_image')) {
+            $image = DataFactory::instance()->getPost($imageArray);
+            return new Image(new ImageAdapter($image));
         }
 
-        if ($image = array_get($this->page->getAcfFields(), 'teaser_image')) {
-            $postMeta = get_post_meta(array_get($image, 'ID'));
-            $attachmentMeta = wp_get_attachment_metadata(array_get($image, 'ID'));
-            return new Image(new ImageAdapter($image, $postMeta, $attachmentMeta));
+        if ($imageArray = array_get($this->page->getAcfFields(), 'teaser_image')) {
+            $image = DataFactory::instance()->getPost($imageArray);
+            return new Image(new ImageAdapter($image));
         }
 
         return null;

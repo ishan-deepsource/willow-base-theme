@@ -6,6 +6,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\NativeVideoAdapter;
+use Bonnier\Willow\Base\Factories\DataFactory;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Base\Root\NativeVideo;
@@ -19,10 +20,9 @@ class FeaturedContentAdapter extends AbstractContentAdapter implements FeaturedC
 {
     public function getImage(): ?ImageContract
     {
-        if ($image = array_get($this->acfArray, 'image')) {
-            $postMeta = get_post_meta(array_get($image, 'ID'));
-            $attachmentMeta = wp_get_attachment_metadata(array_get($image, 'ID'));
-            return new Image(new ImageAdapter($image, $postMeta, $attachmentMeta));
+        if ($imageArray = array_get($this->acfArray, 'image')) {
+            $image = DataFactory::instance()->getPost($imageArray);
+            return new Image(new ImageAdapter($image));
         }
 
         return null;
@@ -30,10 +30,9 @@ class FeaturedContentAdapter extends AbstractContentAdapter implements FeaturedC
 
     public function getVideo(): ?NativeVideoContract
     {
-        if ($video = array_get($this->acfArray, 'video')) {
-            $postMeta = wp_get_attachment_metadata(array_get($video, 'ID'));
-            $attachmentMeta = get_post_meta(array_get($video, 'ID'));
-            return new NativeVideo(new NativeVideoAdapter($video, $postMeta, $attachmentMeta));
+        if ($videoArray = array_get($this->acfArray, 'video')) {
+            $video = DataFactory::instance()->getPost($videoArray);
+            return new NativeVideo(new NativeVideoAdapter($video));
         }
 
         return null;
@@ -48,8 +47,7 @@ class FeaturedContentAdapter extends AbstractContentAdapter implements FeaturedC
     {
         if (($composites = SortBy::getComposites($this->acfArray)) && $composites->isNotEmpty()) {
             if ($composite = $composites->first()) {
-                $meta = wp_get_attachment_metadata($composite->ID);
-                return new Composite(new CompositeAdapter($composite, $meta));
+                return new Composite(new CompositeAdapter($composite));
             }
         }
 

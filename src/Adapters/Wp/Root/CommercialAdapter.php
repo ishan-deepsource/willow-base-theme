@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
+use Bonnier\Willow\Base\Factories\DataFactory;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
@@ -32,10 +33,9 @@ class CommercialAdapter implements CommercialContract
 
     public function getLogo(): ?ImageContract
     {
-        if ($logo = array_get($this->acFields, 'commercial_logo')) {
-            $postMeta = get_post_meta(data_get($logo, 'ID'));
-            $attachmentMeta = wp_get_attachment_metadata(data_get($logo, 'ID'));
-            return new Image(new ImageAdapter($logo, $postMeta, $attachmentMeta));
+        if ($imageArray = array_get($this->acFields, 'commercial_logo')) {
+            $image = DataFactory::instance()->getPost($imageArray);
+            return new Image(new ImageAdapter($image));
         }
         return null;
     }

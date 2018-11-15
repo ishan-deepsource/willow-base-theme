@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
 
+use Bonnier\Willow\Base\Factories\DataFactory;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\GalleryImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
@@ -34,10 +35,9 @@ class GalleryImageAdapter implements GalleryImageContract
 
     public function getImage(): ?ImageContract
     {
-        if ($image = array_get($this->galleryImage, 'image')) {
-            $postMeta = get_post_meta(array_get($image, 'ID'));
-            $attachmentMeta = wp_get_attachment_metadata(array_get($image, 'ID'));
-            return new Image(new ImageAdapter($image, $postMeta, $attachmentMeta));
+        if ($imageArray = array_get($this->galleryImage, 'image')) {
+            $image = DataFactory::instance()->getPost($imageArray);
+            return new Image(new ImageAdapter($image));
         }
 
         return null;

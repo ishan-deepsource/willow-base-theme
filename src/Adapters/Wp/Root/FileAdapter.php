@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
+use Bonnier\Willow\Base\Factories\DataFactory;
 use Bonnier\Willow\Base\Models\Contracts\Root\FileContract;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 
@@ -16,11 +17,11 @@ class FileAdapter implements FileContract
     protected $postMeta;
     protected $attachmentMeta;
 
-    public function __construct($file, $postMeta, $attachmentMeta)
+    public function __construct($file)
     {
         $this->file = $file;
-        $this->postMeta = $postMeta;
-        $this->attachmentMeta = $attachmentMeta;
+        $this->postMeta = DataFactory::instance()->getPostMeta($file);
+        $this->attachmentMeta = DataFactory::instance()->getAttachmentMeta($file);
     }
 
     public function getId(): ?int
@@ -56,6 +57,10 @@ class FileAdapter implements FileContract
 
     public function getLanguage(): ?string
     {
-        return LanguageProvider::getPostLanguage($this->getId()) ?: null;
+        if ($fileId = $this->getId()) {
+            return LanguageProvider::getPostLanguage($fileId) ?: null;
+        }
+
+        return null;
     }
 }

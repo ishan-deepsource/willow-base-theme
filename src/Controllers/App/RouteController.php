@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Controllers\App;
 
+use Bonnier\Willow\Base\Factories\DataFactory;
 use Bonnier\Willow\Base\Repositories\WhiteAlbum\RedirectRepository;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
@@ -64,23 +65,19 @@ class RouteController extends BaseController
         $resource = null;
 
         if ($content instanceof WP_Post && $content->post_type === 'contenthub_composite') {
-            $meta = get_post_meta($content->ID);
-            $composite = new Composite(new CompositeAdapter($content, $meta));
+            $composite = new Composite(new CompositeAdapter($content));
             $resource = new Item($composite, new CompositeTransformer());
             $resource->setMeta(['type' => 'composite']);
         } elseif ($content instanceof WP_Post && $content->post_type === 'page') {
-            $meta = get_post_meta($content->ID);
-            $page = new Page(new PageAdapter($content, $meta));
+            $page = new Page(new PageAdapter($content));
             $resource = new Item($page, new PageTransformer());
             $resource->setMeta(['type' => 'page']);
         } elseif ($content instanceof WP_Term && $content->taxonomy === 'category') {
-            $meta = get_term_meta($content->term_id);
-            $category = new Category(new CategoryAdapter($content, $meta));
+            $category = new Category(new CategoryAdapter($content));
             $resource = new Item($category, new CategoryTransformer());
             $resource->setMeta(['type' => $content->parent ? 'subcategory' : 'category']);
         } elseif ($content instanceof WP_Term && $content->taxonomy === 'post_tag') {
-            $meta = get_term_meta($content->term_id);
-            $tag = new Tag(new TagAdapter($content, $meta));
+            $tag = new Tag(new TagAdapter($content));
             $resource = new Item($tag, new TagTransformer());
             $resource->setMeta(['type' => 'tag']);
         } elseif ($content === 'search') {
@@ -113,7 +110,10 @@ class RouteController extends BaseController
         $path = parse_url(urldecode($path), PHP_URL_PATH);
 
         // Route resolving for previewing article drafts
-        if (($queryParams['preview'] ?? false) && ($queryParams['post_type'] ?? false) && ($queryParams['p'] ?? false)) {
+        if (($queryParams['preview'] ?? false) &&
+            ($queryParams['post_type'] ?? false) &&
+            ($queryParams['p'] ?? false)
+        ) {
             $posts =  get_posts([
                 'post_type' => $queryParams['post_type'],
                 'include' => $queryParams['p'], // Wordpress way of saying give me the content that match id
@@ -141,9 +141,9 @@ class RouteController extends BaseController
             }
             $frontpageID = get_option('page_on_front');
             if ($translations = LanguageProvider::getPostTranslations($frontpageID)) {
-                return get_post($translations[$locale] ?? null);
+                return DataFactory::instance()->getPost($translations[$locale] ?? null);
             }
-            return get_post($frontpageID);
+            return DataFactory::instance()->getPost($frontpageID);
         }
 
         // Route resolving for tag pages
@@ -197,7 +197,7 @@ class RouteController extends BaseController
         $parent_id = $page->post_parent;
 
         while ($parent_id) {
-            $parent = get_post($parent_id);
+            $parent = DataFactory::instance()->getPost($parent_id);
             if ($parent) {
                 if ($parent->post_status === $status) {
                     $parent_id = $parent->post_parent;
@@ -230,7 +230,7 @@ class RouteController extends BaseController
                     $content = $category;
                 }
             } elseif ($composite = get_page_by_path($part, OBJECT, WpComposite::POST_TYPE)) {
-                $cat = get_field('category', $composite->ID);
+                $cat = DataFactory::instance()->getAcfField($composite->ID, 'category');
                 if ($composite->post_status !== $status && $status !== 'all') {
                     return null;
                 } elseif ($content && !$content instanceof WP_Term) {

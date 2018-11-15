@@ -2,6 +2,8 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp;
 
+use Bonnier\Willow\Base\Factories\DataFactory;
+
 /**
  * Class AbstractWpAdapter
  *
@@ -16,12 +18,17 @@ abstract class AbstractWpAdapter
      * AbstractWpAdapter constructor.
      *
      * @param $wpModel
-     * @param $wpMeta
      */
-    public function __construct($wpModel, $wpMeta)
+    public function __construct($wpModel)
     {
         $this->wpModel = $wpModel;
-        $this->wpMeta = $wpMeta;
+        if ($this->wpModel) {
+            if ($this->wpModel instanceof \WP_Post || array_key_exists('ID', $this->wpModel)) {
+                $this->wpMeta = DataFactory::instance()->getPostMeta($this->wpModel);
+            } elseif ($this->wpModel instanceof \WP_Term || array_key_exists('term_id', $this->wpModel)) {
+                $this->wpMeta = DataFactory::instance()->getTermMeta($this->wpModel);
+            }
+        }
     }
 
     /**

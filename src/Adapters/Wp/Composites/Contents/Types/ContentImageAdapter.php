@@ -6,6 +6,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\Partials\ContentImageHyperlinkAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ColorPaletteAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
+use Bonnier\Willow\Base\Factories\DataFactory;
 use Bonnier\Willow\Base\Models\Base\Root\Hyperlink;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
@@ -25,10 +26,9 @@ class ContentImageAdapter extends AbstractContentAdapter implements ContentImage
     public function __construct(array $acfArray)
     {
         parent::__construct($acfArray);
-        if ($image = array_get($acfArray, 'file') ?? array_get($acfArray, 'image')) {
-            $postMeta = get_post_meta(data_get($image, 'ID'));
-            $attachmentMeta = wp_get_attachment_metadata(data_get($image, 'ID'));
-            $this->image = new Image(new ImageAdapter($image, $postMeta, $attachmentMeta));
+        if ($imageArray = array_get($acfArray, 'file') ?: array_get($acfArray, 'image')) {
+            $image = DataFactory::instance()->getPost($imageArray);
+            $this->image = new Image(new ImageAdapter($image));
         }
         if (!$this->image) {
             throw new \InvalidArgumentException('Missing image.');
