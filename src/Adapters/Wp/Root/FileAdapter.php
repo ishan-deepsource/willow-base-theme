@@ -14,10 +14,12 @@ use WP_Post;
 class FileAdapter implements FileContract
 {
     protected $file;
+    protected $meta;
 
-    public function __construct(WP_Post $file)
+    public function __construct(array $file, $meta)
     {
         $this->file = $file;
+        $this->meta = $meta;
     }
 
     public function getId(): ?int

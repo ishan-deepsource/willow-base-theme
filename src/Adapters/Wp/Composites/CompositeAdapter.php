@@ -87,9 +87,9 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     protected $acfFields;
 
-    public function __construct($wpModel)
+    public function __construct($wpModel, $wpMeta)
     {
-        parent::__construct($wpModel);
+        parent::__construct($wpModel, $wpMeta);
         if ($postId = data_get($this->wpModel, 'ID')) {
             $this->acfFields = get_fields($postId);
         }
@@ -251,7 +251,8 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     public function getCategory(): ?CategoryContract
     {
         if ($category = array_get($this->acfFields, 'category')) {
-            return new Category(new CategoryAdapter($category));
+            $meta = get_term_meta($category->term_id);
+            return new Category(new CategoryAdapter($category, $meta));
         }
 
         return null;

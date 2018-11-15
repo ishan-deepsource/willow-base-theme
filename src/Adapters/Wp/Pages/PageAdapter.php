@@ -50,9 +50,9 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
         AcfName::WIDGET_TAXONOMY_TEASER_LIST => TaxonomyList::class,
     ];
 
-    public function __construct(WP_Post $page)
+    public function __construct(WP_Post $page, ?array $meta)
     {
-        parent::__construct($page);
+        parent::__construct($page, $meta);
 
         $this->acfFields = get_fields($this->wpModel->ID);
         $this->pageContents = array_get($this->acfFields, AcfName::GROUP_PAGE_WIDGETS) ?: null;

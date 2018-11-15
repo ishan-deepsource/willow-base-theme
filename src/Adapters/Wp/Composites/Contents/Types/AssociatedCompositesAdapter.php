@@ -27,7 +27,8 @@ class AssociatedCompositesAdapter extends AbstractContentAdapter implements Asso
     {
         $composites = collect(array_get($this->acfArray, 'composites', []))
             ->map(function (\WP_Post $composite) {
-                return new Composite(new CompositeAdapter($composite));
+                $meta = get_post_meta($composite->ID);
+                return new Composite(new CompositeAdapter($composite, $meta));
             });
 
         return $composites->isNotEmpty() ? $composites : null;

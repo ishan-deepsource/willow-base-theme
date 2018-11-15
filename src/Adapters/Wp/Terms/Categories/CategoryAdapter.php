@@ -52,9 +52,9 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
         AcfName::WIDGET_TAXONOMY_TEASER_LIST => TaxonomyList::class,
     ];
 
-    public function __construct($wpModel)
+    public function __construct(\WP_Term $wpModel, ?array $wpMeta)
     {
-        parent::__construct($wpModel);
+        parent::__construct($wpModel, $wpMeta);
         $this->meta = $this->getMeta();
         $this->acfFields = get_fields(sprintf(
             '%s_%s',
@@ -77,7 +77,13 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
     public function getChildren(): ?Collection
     {
         return collect(get_categories('hide_empty=0&parent=' . $this->getId()))->transform(function ($categoryChild) {
-            return new self(get_category($categoryChild));
+            if (($category = get_category($categoryChild)) && $category instanceof \WP_Term) {
+                $meta = get_term_meta($category->term_id);
+                return new self($category, $meta);
+            }
+            return null;
+        })->reject(function ($child) {
+            return is_null($child);
         });
     }
 

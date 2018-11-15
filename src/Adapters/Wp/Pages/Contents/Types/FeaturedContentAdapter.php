@@ -28,8 +28,9 @@ class FeaturedContentAdapter extends AbstractContentAdapter implements FeaturedC
 
     public function getVideo(): ?NativeVideoContract
     {
-        if (($videoId = array_get($this->acfArray, 'video')) && $video = get_post($videoId)) {
-            return new NativeVideo(new NativeVideoAdapter($video));
+        if ($video = array_get($this->acfArray, 'video')) {
+            $meta = wp_get_attachment_metadata(array_get($video, 'ID'));
+            return new NativeVideo(new NativeVideoAdapter($video, $meta));
         }
 
         return null;
@@ -43,7 +44,10 @@ class FeaturedContentAdapter extends AbstractContentAdapter implements FeaturedC
     public function getComposite(): ?CompositeContract
     {
         if (($composites = SortBy::getComposites($this->acfArray)) && $composites->isNotEmpty()) {
-            return $composites->first();
+            if ($composite = $composites->first()) {
+                $meta = wp_get_attachment_metadata($composite->ID);
+                return new Composite(new CompositeAdapter($composite, $meta));
+            }
         }
 
         return null;

@@ -42,7 +42,8 @@ abstract class AbstractModelFactory implements ModelFactoryContract
     public function getModel($model)
     {
         $adapter = $this->getAdapter($model);
-        $baseModel = new $this->baseClass($this->instantiateAdapter($adapter, $model));
+        $meta = $this->getMeta($model);
+        $baseModel = new $this->baseClass($this->instantiateAdapter($adapter, $model, $meta));
         if ($overrideClass = $this->getOverrideClass()) {
             return new $overrideClass($baseModel);
         }
@@ -91,16 +92,26 @@ abstract class AbstractModelFactory implements ModelFactoryContract
     /**
      * @param $adapter
      * @param $model
+     * @param $meta
      *
      * @return mixed
      *
      * @throws MissingAdapterException
      */
-    protected function instantiateAdapter($adapter, $model)
+    protected function instantiateAdapter($adapter, $model, $meta)
     {
         if (!$adapter || !class_exists($adapter)) {
             throw new MissingAdapterException(sprintf('The adapter class \'%s\' does not exist', $adapter));
         }
-        return new $adapter($model);
+        return new $adapter($model, $meta);
+    }
+
+    private function getMeta($model)
+    {
+        if ($model instanceof \WP_Post) {
+            $this->meta = get_post_meta($model->ID);
+        } elseif ($model instanceof \WP_Term) {
+            $this->meta = get_term_meta($model->term_id);
+        }
     }
 }

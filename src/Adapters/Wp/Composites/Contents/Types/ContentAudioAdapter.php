@@ -18,12 +18,14 @@ use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudioContract
 {
     protected $audio;
+    protected $meta;
 
     public function __construct(?array $acfArray)
     {
         parent::__construct($acfArray);
-        $post = get_post(array_get($this->acfArray, 'file'));
-        $this->audio = $post ? new Audio(new AudioAdapter($post)) : null;
+        $post = array_get($this->acfArray, 'file');
+        $this->meta = wp_get_attachment_metadata(array_get($post, 'ID'));
+        $this->audio = $post ? new Audio(new AudioAdapter($post, $this->meta)) : null;
     }
 
     public function isLead(): bool
@@ -68,8 +70,9 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
 
     public function getImage(): ?ImageContract
     {
-        if (($imageId = array_get($this->acfArray, 'image')) && $image = get_post($imageId)) {
-            return new Image(new ImageAdapter($image));
+        if (($image = array_get($this->acfArray, 'image'))) {
+            $meta = wp_get_attachment_metadata(array_get($image, 'ID'));
+            return new Image(new ImageAdapter($image, $meta));
         }
 
         return null;
@@ -77,10 +80,7 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
 
     public function getDuration(): int
     {
-        if ($audioId = optional($this->audio)->getId()) {
-            $metaData = wp_get_attachment_metadata($audioId);
-            return $metaData['length'] ? ceil($metaData['length'] / 60) : 0;
-        }
-        return 0;
+        $length = array_get($this->meta, 'length');
+        return $length ? ceil($length / 60) : 0;
     }
 }

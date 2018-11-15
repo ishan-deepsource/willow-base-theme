@@ -35,8 +35,11 @@ class HotspotImageAdapter extends AbstractContentAdapter implements HotspotImage
 
     public function getImage(): ?ImageContract
     {
-        $image = array_get($this->acfArray, 'image.ID');
-        return $image ? new Image(new ImageAdapter(get_post($image))) : null;
+        if ($image = array_get($this->acfArray, 'image')) {
+            $meta = wp_get_attachment_metadata(array_get($image, 'ID'));
+            return new Image(new ImageAdapter($image, $meta));
+        }
+        return null;
     }
 
     public function getHotspots(): Collection

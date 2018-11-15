@@ -25,8 +25,9 @@ class ContentImageAdapter extends AbstractContentAdapter implements ContentImage
     public function __construct(array $acfArray)
     {
         parent::__construct($acfArray);
-        $post = get_post(array_get($acfArray, 'file') ?? array_get($acfArray, 'image'));
-        $this->image = $post ? new Image(new ImageAdapter($post)) : null;
+        $image = array_get($acfArray, 'file') ?? array_get($acfArray, 'image');
+        $meta = wp_get_attachment_metadata(array_get($image, 'ID'));
+        $this->image = $image ? new Image(new ImageAdapter($image, $meta)) : null;
         if (!$this->image) {
             throw new \InvalidArgumentException('Missing image.');
         }

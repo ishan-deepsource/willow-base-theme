@@ -22,9 +22,9 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
     public function __construct(array $acfArray)
     {
         parent::__construct($acfArray);
-        if ($fileId = array_get($acfArray, 'file.id')) {
-            $post = get_post($fileId);
-            $this->file = $post ? new File(new FileAdapter($post)) : null;
+        if ($file = array_get($acfArray, 'file')) {
+            $meta = wp_get_attachment_metadata(array_get($file, 'ID'));
+            $this->file = new File(new FileAdapter($file, $meta));
         }
         if (!$this->file) {
             throw new \InvalidArgumentException('Missing file');
@@ -39,8 +39,11 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
     public function getImages(): ?Collection
     {
         return collect(array_get($this->acfArray, 'images', []))->map(function ($acfImage) {
-            $file = array_get($acfImage, 'file');
-            return $file ? new Image(new ImageAdapter(get_post($file))) : null;
+            if ($file = array_get($acfImage, 'file')) {
+                $meta = wp_get_attachment_metadata(array_get($file, 'ID'));
+                return new Image(new ImageAdapter($file, $meta));
+            }
+            return null;
         })->reject(function ($image) {
             return is_null($image);
         });
