@@ -27,5 +27,5 @@ interface TagContract
 
     public function getTeasers(): ?Collection;
 
-    public function getLanguageUrls(): ?Collection;
+    public function getTranslations(): ?Collection;
 }

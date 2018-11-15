@@ -100,16 +100,16 @@
         },
         {
             "name": "bonnier/contenthub-editor",
-            "version": "3.23.0",
+            "version": "3.24.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-contenthub-editor.git",
-                "reference": "87b4061687cc52ab834dd2f4eeafc113059aba86"
+                "reference": "fa61eaeefd05aea71570cff0244f72c5d346e781"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/87b4061687cc52ab834dd2f4eeafc113059aba86",
-                "reference": "87b4061687cc52ab834dd2f4eeafc113059aba86",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/fa61eaeefd05aea71570cff0244f72c5d346e781",
+                "reference": "fa61eaeefd05aea71570cff0244f72c5d346e781",
                 "shasum": ""
             },
             "require": {
@@ -152,7 +152,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-11-09T12:25:37+00:00"
+            "time": "2018-11-13T19:38:35+00:00"
         },
         {
             "name": "bonnier/php-video-helper",
@@ -358,16 +358,16 @@
         },
         {
             "name": "bonnier/wp-focal-point",
-            "version": "1.1.1",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-focal-point.git",
-                "reference": "cb46d9b7b2c071eb0245061782911d9ad67fafe0"
+                "reference": "a1bb4a883233d9b79a8a1ccd05b8ec456b6b5f0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-focal-point/zipball/cb46d9b7b2c071eb0245061782911d9ad67fafe0",
-                "reference": "cb46d9b7b2c071eb0245061782911d9ad67fafe0",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-focal-point/zipball/a1bb4a883233d9b79a8a1ccd05b8ec456b6b5f0a",
+                "reference": "a1bb4a883233d9b79a8a1ccd05b8ec456b6b5f0a",
                 "shasum": ""
             },
             "require-dev": {
@@ -393,7 +393,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-08-23T11:54:17+00:00"
+            "time": "2018-11-13T15:24:45+00:00"
         },
         {
             "name": "bonnier/wp-user-favourites",

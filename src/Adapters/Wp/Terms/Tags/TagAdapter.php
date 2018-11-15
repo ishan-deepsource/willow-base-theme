@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Tags;
 
+use Bonnier\Willow\Base\Models\Base\Terms\TagTranslation;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
@@ -145,10 +146,27 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
         return null;
     }
 
-    public function getLanguageUrls(): ?Collection
+    public function getTranslations(): ?Collection
     {
-        return collect(LanguageProvider::getTermTranslations($this->getId()))->map(function ($termId) {
-            return $this->stripApi(get_term_link($termId));
+        $termTranslations = LanguageProvider::getTermTranslations($this->getId());
+        $translations = collect($termTranslations)->mapWithKeys(function (int $termId, string $locale) {
+            if ($termId === $this->getId()) {
+                $term = $this->wpModel;
+            } else {
+                $term = get_term($termId);
+            }
+            if ($term instanceof WP_Term) {
+                return [$locale => new TagTranslation(new TagTranslationAdapter($term))];
+            }
+            return null;
+        })->reject(function ($translation) {
+            return is_null($translation);
         });
+
+        if ($translations->isNotEmpty()) {
+            return $translations;
+        }
+
+        return null;
     }
 }

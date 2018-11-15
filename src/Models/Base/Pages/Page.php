@@ -82,8 +82,8 @@ class Page implements PageContract
         return $this->page->getContents();
     }
 
-    public function getLanguageUrls(): ?Collection
+    public function getTranslations(): ?Collection
     {
-        return $this->page->getLanguageUrls();
+        return $this->page->getTranslations();
     }
 }

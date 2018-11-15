@@ -9,6 +9,7 @@ use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\Newsletter;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\SeoText;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TaxonomyList;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TeaserList;
+use Bonnier\Willow\Base\Models\Base\Terms\CategoryTranslation;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Helpers\AcfName;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
@@ -200,6 +201,15 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
         return null;
     }
 
+    public function getAncestor(): ?CategoryContract
+    {
+        if (($ancestor = $this->findAncestor($this->wpModel)) && $ancestor->term_id !== $this->getId()) {
+            return new static($ancestor);
+        }
+
+        return null;
+    }
+
     public function getCanonicalUrl(): ?string
     {
         return $this->getFullUrl(get_category_link($this->getId()));
@@ -219,13 +229,27 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
         return $this->contents;
     }
 
-    public function getLanguageUrls(): ?Collection
+    public function getTranslations(): ?Collection
     {
-        if ($termId = $this->getId()) {
-            return collect(LanguageProvider::getTermTranslations($termId))->map(function ($termId) {
-                return $this->stripApi(get_category_link($termId));
-            });
+        $termTranslations = LanguageProvider::getTermTranslations($this->getId());
+        $translations = collect($termTranslations)->mapWithKeys(function (int $termId, string $locale) {
+            if ($termId === $this->getId()) {
+                $term = $this->wpModel;
+            } else {
+                $term = get_term($termId);
+            }
+            if ($term instanceof \WP_Term) {
+                return [$locale => new CategoryTranslation(new CategoryTranslationAdapter($term))];
+            }
+            return null;
+        })->reject(function ($translation) {
+            return is_null($translation);
+        });
+
+        if ($translations->isNotEmpty()) {
+            return $translations;
         }
+
         return null;
     }
 
@@ -236,5 +260,16 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
         }
 
         return $this->contentFactory = new CategoryContentFactory($class);
+    }
+
+    private function findAncestor(\WP_Term $category): ?\WP_Term
+    {
+        if (($parentId = data_get($category, 'parent')) && $parent = get_category($parentId)) {
+            if ($parent instanceof \WP_Term) {
+                return $this->findAncestor($parent);
+            }
+        }
+
+        return $category;
     }
 }
