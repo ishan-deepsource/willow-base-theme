@@ -17,7 +17,9 @@ class EstimatedReadingTime
 
     public function countNumberOfWords($postId)
     {
-        $compositeAdapter = new CompositeAdapter(get_post($postId));
+        $composite = get_post($postId);
+        $meta = get_post_meta(data_get($composite, 'ID'));
+        $compositeAdapter = new CompositeAdapter($composite, $meta);
         $totalWordCount = 0;
 
         foreach ($compositeAdapter->getContents() as $item) {
