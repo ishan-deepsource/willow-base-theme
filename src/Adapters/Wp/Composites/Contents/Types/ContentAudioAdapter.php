@@ -22,7 +22,7 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
     protected $postMeta;
     protected $attachmentMeta;
 
-    public function __construct(?array $acfArray)
+    public function __construct(array $acfArray)
     {
         parent::__construct($acfArray);
         $postArray = array_get($this->acfArray, 'file');
