@@ -35,10 +35,6 @@ class CxenseSearchRepository
     ) {
         $searchQuery = $searchQuery ?: '*';
 
-        if (isset($this->queryResults[$searchQuery])) {
-            return $this->queryResults[$searchQuery];
-        }
-
         $arguments = [
             'query' => $searchQuery,
             'page' => $page,
@@ -74,11 +70,16 @@ class CxenseSearchRepository
             $arguments['sorting'] = $customSorting;
         }
 
+        // Return stored result if fetched again with exact same arguments
+        if (isset($this->queryResults[md5(serialize($arguments))])) {
+            return $this->queryResults[md5(serialize($arguments))];
+        }
+
         $result = WpCxense::instance()->search_documents($arguments);
         $result->facets = $this->formatFacets($result->facets, $arguments);
         $result->matches = $this->formatSearchResults($result->matches);
 
-        return $this->queryResults[$searchQuery] = $result;
+        return $this->queryResults[md5(serialize($arguments))] = $result;
     }
 
     /**
