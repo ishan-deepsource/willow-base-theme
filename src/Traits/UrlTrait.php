@@ -24,10 +24,10 @@ trait UrlTrait
         return $url;
     }
 
-    protected function getFullUrl($url)
+    protected function getFullUrl($url, ?string $locale = null)
     {
         $path = parse_url($url, PHP_URL_PATH);
-        $url = preg_replace('#/$#', $path, LanguageProvider::getHomeUrl());
+        $url = preg_replace('#/$#', $path, LanguageProvider::getHomeUrl('', $locale));
         return $this->stripApi($url);
     }
 

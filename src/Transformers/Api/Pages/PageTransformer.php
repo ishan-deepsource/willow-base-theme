@@ -3,10 +3,11 @@
 namespace Bonnier\Willow\Base\Transformers\Api\Pages;
 
 use Bonnier\Willow\Base\Models\Contracts\Pages\PageContract;
-use Bonnier\Willow\Base\Models\Contracts\Pages\PageTranslationContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\TranslationContract;
 use Bonnier\Willow\Base\Transformers\Api\Root\AuthorTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\ContentTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TeaserTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Root\TranslationTransformer;
 use League\Fractal\TransformerAbstract;
 
 class PageTransformer extends TransformerAbstract
@@ -62,8 +63,8 @@ class PageTransformer extends TransformerAbstract
     private function getTranslations(PageContract $page)
     {
         if ($translations = $page->getTranslations()) {
-            return $translations->mapWithKeys(function (PageTranslationContract $translation, string $locale) {
-                return [$locale => with(new PageTranslationTransformer)->transform($translation)];
+            return $translations->mapWithKeys(function (TranslationContract $translation, string $locale) {
+                return [$locale => with(new TranslationTransformer)->transform($translation)];
             });
         }
 

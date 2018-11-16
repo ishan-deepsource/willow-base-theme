@@ -13,8 +13,8 @@ use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Vocabulary\VocabularyAdapter;
 use Bonnier\Willow\Base\Factories\CompositeContentFactory;
 use Bonnier\Willow\Base\Factories\Contracts\ModelFactoryContract;
+use Bonnier\Willow\Base\Models\Base\Root\Translation;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
-use Bonnier\Willow\Base\Models\Base\Composites\CompositeTranslation;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Story;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\AssociatedComposites;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentAudio;
@@ -365,7 +365,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
                 $composite = WpModelRepository::instance()->getPost($compositeId);
             }
             if ($composite instanceof \WP_Post) {
-                return [$locale => new CompositeTranslation(new CompositeTranslationAdapter($composite))];
+                return [$locale => new Translation(new CompositeTranslationAdapter($composite))];
             }
             return null;
         })->reject(function ($translation) {

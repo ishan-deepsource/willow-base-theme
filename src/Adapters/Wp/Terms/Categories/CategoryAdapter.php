@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Categories;
 
 use Bonnier\Willow\Base\Factories\CategoryContentFactory;
+use Bonnier\Willow\Base\Models\Base\Root\Translation;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\BannerPlacement;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\FeaturedContent;
@@ -10,7 +11,6 @@ use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\Newsletter;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\SeoText;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TaxonomyList;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TeaserList;
-use Bonnier\Willow\Base\Models\Base\Terms\CategoryTranslation;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Helpers\AcfName;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
@@ -80,8 +80,7 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
     {
         return collect(get_categories('hide_empty=0&parent=' . $this->getId()))->transform(function ($categoryChild) {
             if (($category = get_category($categoryChild)) && $category instanceof \WP_Term) {
-                $meta = get_term_meta($category->term_id);
-                return new self($category, $meta);
+                return new self($category);
             }
             return null;
         })->reject(function ($child) {
@@ -198,8 +197,7 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
     {
         if (($parentId = intval(data_get($this->wpModel, 'parent'))) && $parent = get_category($parentId)) {
             if ($parent instanceof \WP_Term) {
-                $meta = get_term_meta($parentId);
-                return new static($parent, $meta);
+                return new static($parent);
             }
         }
 
@@ -244,7 +242,7 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
                 $term = get_term($termId);
             }
             if ($term instanceof \WP_Term) {
-                return [$locale => new CategoryTranslation(new CategoryTranslationAdapter($term))];
+                return [$locale => new Translation(new CategoryTranslationAdapter($term))];
             }
             return null;
         })->reject(function ($translation) {
