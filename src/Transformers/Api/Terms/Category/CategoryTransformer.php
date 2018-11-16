@@ -6,12 +6,14 @@ use Bonnier\Willow\Base\Exceptions\Controllers\Api\OverrideModelMissingContractE
 use Bonnier\Willow\Base\Factories\WPModelFactory;
 use Bonnier\Willow\Base\Helpers\Cache;
 use Bonnier\Willow\Base\Models\Base\Terms\Category;
+use Bonnier\Willow\Base\Models\Contracts\Root\TranslationContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryTranslationContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\ContentTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TeaserTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Root\TranslationTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Category\Partials\CategoryDetailsTransformer;
 use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
@@ -166,8 +168,8 @@ class CategoryTransformer extends TransformerAbstract
     private function getTranslations(CategoryContract $category)
     {
         if ($translations = $category->getTranslations()) {
-            return $translations->mapWithKeys(function (CategoryTranslationContract $translation, string $locale) {
-                return [$locale => with(new CategoryTranslationTransformer)->transform($translation)];
+            return $translations->mapWithKeys(function (TranslationContract $translation, string $locale) {
+                return [$locale => with(new TranslationTransformer)->transform($translation)];
             });
         }
 

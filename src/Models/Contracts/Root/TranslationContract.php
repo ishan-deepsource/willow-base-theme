@@ -1,8 +1,8 @@
 <?php
 
-namespace Bonnier\Willow\Base\Models\Contracts\Terms;
+namespace Bonnier\Willow\Base\Models\Contracts\Root;
 
-interface TagTranslationContract
+interface TranslationContract
 {
     public function getId(): ?int;
     public function getTitle(): ?string;

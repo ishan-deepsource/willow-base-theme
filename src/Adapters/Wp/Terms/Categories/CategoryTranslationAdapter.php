@@ -2,10 +2,12 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Categories;
 
-use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryTranslationContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\TranslationContract;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Traits\UrlTrait;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 
-class CategoryTranslationAdapter implements CategoryTranslationContract
+class CategoryTranslationAdapter implements TranslationContract
 {
     use UrlTrait;
 
@@ -28,6 +30,8 @@ class CategoryTranslationAdapter implements CategoryTranslationContract
 
     public function getLink(): ?string
     {
-        return $this->getFullUrl(get_term_link($this->getId())) ?: null;
+        $permalink = WpModelRepository::instance()->getTermlink($this->getId());
+        $locale = LanguageProvider::getTermLanguage($this->getId());
+        return $this->getFullUrl($permalink, $locale) ?: null;
     }
 }

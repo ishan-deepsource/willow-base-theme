@@ -2,11 +2,12 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Terms\Tag;
 
+use Bonnier\Willow\Base\Models\Contracts\Root\TranslationContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\TagContract;
-use Bonnier\Willow\Base\Models\Contracts\Terms\TagTranslationContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TeaserTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Root\TranslationTransformer;
 use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 
@@ -61,8 +62,8 @@ class TagTransformer extends TransformerAbstract
     private function getTranslations(TagContract $tag)
     {
         if ($translations = $tag->getTranslations()) {
-            return $translations->mapWithKeys(function (TagTranslationContract $translation, string $locale) {
-                return [$locale => with(new TagTranslationTransformer)->transform($translation)];
+            return $translations->mapWithKeys(function (TranslationContract $translation, string $locale) {
+                return [$locale => with(new TranslationTransformer)->transform($translation)];
             });
         }
 
