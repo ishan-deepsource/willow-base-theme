@@ -2,7 +2,9 @@
 
 namespace Bonnier\Willow\Base\Controllers\App;
 
-use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
+use Bonnier\Willow\Base\Models\Base\Composites\Composite;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
 use Bonnier\WP\ContentHub\Editor\Helpers\SortBy;
 
@@ -21,7 +23,9 @@ class ContentController extends BaseController
         $composites = SortBy::getPopularComposites();
 
         if ($composites->isNotEmpty()) {
-            $composites = $composites->map(function (CompositeContract $composite) {
+            $composites = $composites->map(function (\WP_Post $post) {
+                $compositePost = WpModelRepository::instance()->getPost($post);
+                $composite = new Composite(new CompositeAdapter($compositePost));
                 return with(new CompositeTeaserTransformer)->transform($composite);
             });
         }
