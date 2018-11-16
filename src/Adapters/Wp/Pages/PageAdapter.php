@@ -5,7 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Pages;
 
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Factories\PageContentFactory;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\BannerPlacement;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\FeaturedContent;
@@ -56,7 +56,7 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
     {
         parent::__construct($page);
 
-        $this->acfFields = DataFactory::instance()->getAcfData($this->wpModel->ID);
+        $this->acfFields = WpModelRepository::instance()->getAcfData($this->wpModel->ID);
         $this->pageContents = array_get($this->acfFields, AcfName::GROUP_PAGE_WIDGETS) ?: null;
     }
 
@@ -163,7 +163,7 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
             if ($pageId === $this->getId()) {
                 $page = $this->wpModel;
             } else {
-                $page = DataFactory::instance()->getPost($pageId);
+                $page = WpModelRepository::instance()->getPost($pageId);
             }
             if ($page instanceof WP_Post) {
                 return [$locale => new PageTranslation(new PageTranslationAdapter($page))];

@@ -4,7 +4,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Pages;
 
 use Bonnier\Willow\Base\Adapters\Wp\Root\AbstractTeaserAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 
@@ -34,12 +34,12 @@ class PageTeaserAdapter extends AbstractTeaserAdapter
     public function getImage(): ?ImageContract
     {
         if ($imageArray = array_get($this->page->getAcfFields(), $this->type . 'teaser_image')) {
-            $image = DataFactory::instance()->getPost($imageArray);
+            $image = WpModelRepository::instance()->getPost($imageArray);
             return new Image(new ImageAdapter($image));
         }
 
         if ($imageArray = array_get($this->page->getAcfFields(), 'teaser_image')) {
-            $image = DataFactory::instance()->getPost($imageArray);
+            $image = WpModelRepository::instance()->getPost($imageArray);
             return new Image(new ImageAdapter($image));
         }
 

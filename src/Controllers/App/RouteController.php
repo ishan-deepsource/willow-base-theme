@@ -2,7 +2,7 @@
 
 namespace Bonnier\Willow\Base\Controllers\App;
 
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Repositories\WhiteAlbum\RedirectRepository;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
@@ -141,9 +141,9 @@ class RouteController extends BaseController
             }
             $frontpageID = get_option('page_on_front');
             if ($translations = LanguageProvider::getPostTranslations($frontpageID)) {
-                return DataFactory::instance()->getPost($translations[$locale] ?? null);
+                return WpModelRepository::instance()->getPost($translations[$locale] ?? null);
             }
-            return DataFactory::instance()->getPost($frontpageID);
+            return WpModelRepository::instance()->getPost($frontpageID);
         }
 
         // Route resolving for tag pages
@@ -197,7 +197,7 @@ class RouteController extends BaseController
         $parent_id = $page->post_parent;
 
         while ($parent_id) {
-            $parent = DataFactory::instance()->getPost($parent_id);
+            $parent = WpModelRepository::instance()->getPost($parent_id);
             if ($parent) {
                 if ($parent->post_status === $status) {
                     $parent_id = $parent->post_parent;
@@ -230,7 +230,7 @@ class RouteController extends BaseController
                     $content = $category;
                 }
             } elseif ($composite = get_page_by_path($part, OBJECT, WpComposite::POST_TYPE)) {
-                $cat = DataFactory::instance()->getAcfField($composite->ID, 'category');
+                $cat = WpModelRepository::instance()->getAcfField($composite->ID, 'category');
                 if ($composite->post_status !== $status && $status !== 'all') {
                     return null;
                 } elseif ($content && !$content instanceof WP_Term) {

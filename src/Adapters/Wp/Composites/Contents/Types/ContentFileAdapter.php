@@ -5,7 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\FileAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\File;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentFileContract;
@@ -24,7 +24,7 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
     {
         parent::__construct($acfArray);
         if ($fileArray = array_get($acfArray, 'file')) {
-            $file = DataFactory::instance()->getPost($fileArray);
+            $file = WpModelRepository::instance()->getPost($fileArray);
             $this->file = new File(new FileAdapter($file));
         }
         if (!$this->file) {
@@ -41,7 +41,7 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
     {
         return collect(array_get($this->acfArray, 'images', []))->map(function ($acfImage) {
             if ($fileArray = array_get($acfImage, 'file')) {
-                $file = DataFactory::instance()->getPost($fileArray);
+                $file = WpModelRepository::instance()->getPost($fileArray);
                 return new Image(new ImageAdapter($file));
             }
             return null;

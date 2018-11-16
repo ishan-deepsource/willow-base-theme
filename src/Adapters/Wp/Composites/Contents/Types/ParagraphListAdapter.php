@@ -5,7 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\Partials\ParagraphListItemAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Partials\ParagraphListItem;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ParagraphListContract;
@@ -28,7 +28,7 @@ class ParagraphListAdapter extends AbstractContentAdapter implements ParagraphLi
     public function getImage(): ?ImageContract
     {
         if ($imageArray = array_get($this->acfArray, 'image')) {
-            $image = DataFactory::instance()->getPost($imageArray);
+            $image = WpModelRepository::instance()->getPost($imageArray);
             return new Image(new ImageAdapter($image));
         }
 

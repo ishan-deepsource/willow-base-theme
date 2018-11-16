@@ -4,7 +4,7 @@ namespace Bonnier\Willow\Base\Controllers\Formatters\Api\Terms\Tag;
 
 use Bonnier\Willow\Base\Controllers\Formatters\Api\AbstractApiController;
 use Bonnier\Willow\Base\Controllers\Formatters\Api\ApiControllerContract;
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Terms\Tag;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Tag\TagTransformer;
 
@@ -22,6 +22,6 @@ class TagController extends AbstractApiController
 
     public function setModel($model): ApiControllerContract
     {
-        return parent::setModel(DataFactory::instance()->getTerm($model));
+        return parent::setModel(WpModelRepository::instance()->getTerm($model));
     }
 }

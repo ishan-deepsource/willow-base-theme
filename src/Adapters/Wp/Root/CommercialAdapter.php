@@ -2,7 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
@@ -34,7 +34,7 @@ class CommercialAdapter implements CommercialContract
     public function getLogo(): ?ImageContract
     {
         if ($imageArray = array_get($this->acFields, 'commercial_logo')) {
-            $image = DataFactory::instance()->getPost($imageArray);
+            $image = WpModelRepository::instance()->getPost($imageArray);
             return new Image(new ImageAdapter($image));
         }
         return null;

@@ -2,7 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Contracts\Root\FileContract;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 
@@ -20,8 +20,8 @@ class FileAdapter implements FileContract
     public function __construct($file)
     {
         $this->file = $file;
-        $this->postMeta = DataFactory::instance()->getPostMeta($file);
-        $this->attachmentMeta = DataFactory::instance()->getAttachmentMeta($file);
+        $this->postMeta = WpModelRepository::instance()->getPostMeta($file);
+        $this->attachmentMeta = WpModelRepository::instance()->getAttachmentMeta($file);
     }
 
     public function getId(): ?int

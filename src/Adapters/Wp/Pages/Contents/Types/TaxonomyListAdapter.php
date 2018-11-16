@@ -4,7 +4,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types;
 
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Factories\TaxonomyFactory;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Base\Terms\Category;
@@ -49,7 +49,7 @@ class TaxonomyListAdapter extends AbstractContentAdapter implements TaxonomyList
     public function getImage(): ?ImageContract
     {
         if ($imageArray = array_get($this->acfArray, AcfName::FIELD_IMAGE)) {
-            $image = DataFactory::instance()->getPost($imageArray);
+            $image = WpModelRepository::instance()->getPost($imageArray);
             return new Image(new ImageAdapter($image));
         }
 

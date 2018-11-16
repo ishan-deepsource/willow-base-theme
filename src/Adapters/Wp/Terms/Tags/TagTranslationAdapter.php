@@ -2,7 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Tags;
 
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Contracts\Terms\TagTranslationContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 
@@ -29,6 +29,6 @@ class TagTranslationAdapter implements TagTranslationContract
 
     public function getLink(): ?string
     {
-        return $this->getFullUrl(DataFactory::instance()->getTagLink($this->getId())) ?: null;
+        return $this->getFullUrl(WpModelRepository::instance()->getTagLink($this->getId())) ?: null;
     }
 }

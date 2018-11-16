@@ -3,7 +3,7 @@
 namespace Bonnier\Willow\Base\Controllers\App;
 
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
 use League\Fractal\Manager;
@@ -35,7 +35,7 @@ class TestController extends WP_REST_Controller
         ]);
 
         $posts = collect($query->get_posts())->map(function (WP_Post $post) {
-            $composite = DataFactory::instance()->getPost($post);
+            $composite = WpModelRepository::instance()->getPost($post);
             return new Composite(new CompositeAdapter($composite));
         });
 

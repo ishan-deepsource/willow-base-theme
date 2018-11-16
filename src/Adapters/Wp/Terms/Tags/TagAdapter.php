@@ -2,7 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Tags;
 
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Terms\TagTranslation;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
@@ -92,7 +92,7 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
                 ]
             ]
         ]))->map(function (\WP_Post $post) {
-            $composite = DataFactory::instance()->getPost($post);
+            $composite = WpModelRepository::instance()->getPost($post);
             return new Composite(new CompositeAdapter($composite));
         });
     }

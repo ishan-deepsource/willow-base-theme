@@ -3,7 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
 use Bonnier\Willow\Base\Actions\Backend\AddMedia;
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Helpers\ImgixHelper;
 use Bonnier\Willow\Base\Models\Contracts\Root\ColorPaletteContract;
 use Illuminate\Support\Collection;
@@ -16,7 +16,7 @@ class ColorPaletteAdapter implements ColorPaletteContract
 
     public function __construct($attachmentId)
     {
-        $meta = DataFactory::instance()->getPostMeta($attachmentId);
+        $meta = WpModelRepository::instance()->getPostMeta($attachmentId);
         $this->rawPalette = array_get($meta, self::COLOR_PALETTE_META);
 
         if (!$this->rawPalette && $imageUrl = wp_get_attachment_url($attachmentId)) {

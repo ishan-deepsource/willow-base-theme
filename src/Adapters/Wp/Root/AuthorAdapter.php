@@ -2,7 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
@@ -27,7 +27,7 @@ class AuthorAdapter implements AuthorContract
     public function __construct(WP_User $user = null)
     {
         $this->user = $user;
-        $this->meta = DataFactory::instance()->getUserMeta($this->user);
+        $this->meta = WpModelRepository::instance()->getUserMeta($this->user);
     }
 
     public function getId(): ?int
@@ -48,7 +48,7 @@ class AuthorAdapter implements AuthorContract
     public function getAvatar(): ?ImageContract
     {
         if ($imageId = array_get($this->meta, 'user_avatar')) {
-            $image = DataFactory::instance()->getPost($imageId);
+            $image = WpModelRepository::instance()->getPost($imageId);
             return new Image(new ImageAdapter($image));
         }
         return null;

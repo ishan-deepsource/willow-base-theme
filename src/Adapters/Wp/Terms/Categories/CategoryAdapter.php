@@ -3,7 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Categories;
 
 use Bonnier\Willow\Base\Factories\CategoryContentFactory;
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\BannerPlacement;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\FeaturedContent;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\Newsletter;
@@ -58,7 +58,7 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
     {
         parent::__construct($wpModel);
         $this->meta = $this->getMeta();
-        $this->acfFields = DataFactory::instance()->getAcfData(sprintf(
+        $this->acfFields = WpModelRepository::instance()->getAcfData(sprintf(
             '%s_%s',
             $this->wpModel->taxonomy ?? null,
             $this->wpModel->term_id ?? null
@@ -156,7 +156,7 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
                 ]
             ]
         ]))->map(function (\WP_Post $post) {
-            $composite = DataFactory::instance()->getPost($post);
+            $composite = WpModelRepository::instance()->getPost($post);
             return new Composite(new CompositeAdapter($composite));
         });
     }

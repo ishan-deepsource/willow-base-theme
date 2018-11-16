@@ -6,7 +6,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\Partials\ContentImageHyperlinkAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ColorPaletteAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Hyperlink;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageContract;
@@ -27,7 +27,7 @@ class ContentImageAdapter extends AbstractContentAdapter implements ContentImage
     {
         parent::__construct($acfArray);
         if ($imageArray = array_get($acfArray, 'file') ?: array_get($acfArray, 'image')) {
-            $image = DataFactory::instance()->getPost($imageArray);
+            $image = WpModelRepository::instance()->getPost($imageArray);
             $this->image = new Image(new ImageAdapter($image));
         }
         if (!$this->image) {

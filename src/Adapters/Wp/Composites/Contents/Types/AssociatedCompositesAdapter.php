@@ -4,7 +4,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types;
 
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
@@ -28,7 +28,7 @@ class AssociatedCompositesAdapter extends AbstractContentAdapter implements Asso
     {
         $composites = collect(array_get($this->acfArray, 'composites', []))
             ->map(function (\WP_Post $post) {
-                $composite = DataFactory::instance()->getPost($post);
+                $composite = WpModelRepository::instance()->getPost($post);
                 return new Composite(new CompositeAdapter($composite));
             });
 

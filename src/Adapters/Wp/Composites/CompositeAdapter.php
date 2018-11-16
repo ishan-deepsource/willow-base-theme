@@ -13,7 +13,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Vocabulary\VocabularyAdapter;
 use Bonnier\Willow\Base\Factories\CompositeContentFactory;
 use Bonnier\Willow\Base\Factories\Contracts\ModelFactoryContract;
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Composites\CompositeTranslation;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Story;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\AssociatedComposites;
@@ -92,7 +92,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     {
         parent::__construct($wpModel);
         if ($postId = data_get($this->wpModel, 'ID')) {
-            $this->acfFields = DataFactory::instance()->getAcfData($postId);
+            $this->acfFields = WpModelRepository::instance()->getAcfData($postId);
         }
         $this->compositeContents = array_get($this->acfFields, 'composite_content') ?: null;
     }
@@ -329,7 +329,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     public function getStory(): ?StoryContract
     {
         if (($storyCompositeId = intval(array_get($this->wpMeta, 'story_parent.0'))) &&
-            $storyComposite = DataFactory::instance()->getPost($storyCompositeId)
+            $storyComposite = WpModelRepository::instance()->getPost($storyCompositeId)
         ) {
             return new Story(new StoryAdapter($storyComposite));
         }
@@ -338,7 +338,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getAudio(): ?AudioContract
     {
-        if (($audio = DataFactory::instance()->getAcfField($this->getId(), 'audio')) &&
+        if (($audio = WpModelRepository::instance()->getAcfField($this->getId(), 'audio')) &&
             $file = array_get($audio, 'file')
         ) {
             return new ContentAudioAdapter([
@@ -362,7 +362,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
             if ($compositeId === $this->getId()) {
                 $composite = $this->wpModel;
             } else {
-                $composite = DataFactory::instance()->getPost($compositeId);
+                $composite = WpModelRepository::instance()->getPost($compositeId);
             }
             if ($composite instanceof \WP_Post) {
                 return [$locale => new CompositeTranslation(new CompositeTranslationAdapter($composite))];

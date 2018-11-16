@@ -6,7 +6,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\Partials\TeaserListHyperlink;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Base\Root\Hyperlink;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
@@ -38,7 +38,7 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
     public function getImage(): ?ImageContract
     {
         if ($imageArray = array_get($this->acfArray, 'image')) {
-            $image = DataFactory::instance()->getPost($imageArray);
+            $image = WpModelRepository::instance()->getPost($imageArray);
             return new Image(new ImageAdapter($image));
         }
 
@@ -69,7 +69,7 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
         if (!$this->teasers) {
             if ($composites = SortBy::getComposites($this->acfArray)) {
                 $this->teasers = $composites->map(function (\WP_Post $post) {
-                    $composite = DataFactory::instance()->getPost($post);
+                    $composite = WpModelRepository::instance()->getPost($post);
                     return new Composite(new CompositeAdapter($composite));
                 });
             }

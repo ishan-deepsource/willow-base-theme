@@ -3,7 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
 
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\GalleryImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
@@ -36,7 +36,7 @@ class GalleryImageAdapter implements GalleryImageContract
     public function getImage(): ?ImageContract
     {
         if ($imageArray = array_get($this->galleryImage, 'image')) {
-            $image = DataFactory::instance()->getPost($imageArray);
+            $image = WpModelRepository::instance()->getPost($imageArray);
             return new Image(new ImageAdapter($image));
         }
 

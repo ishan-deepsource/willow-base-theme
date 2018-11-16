@@ -5,7 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AudioAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Audio;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentAudioContract;
@@ -26,8 +26,8 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
     {
         parent::__construct($acfArray);
         $postArray = array_get($this->acfArray, 'file');
-        if ($post = DataFactory::instance()->getPost($postArray)) {
-            $this->attachmentMeta = DataFactory::instance()->getAttachmentMeta($post);
+        if ($post = WpModelRepository::instance()->getPost($postArray)) {
+            $this->attachmentMeta = WpModelRepository::instance()->getAttachmentMeta($post);
             $this->audio = new Audio(new AudioAdapter($post));
         }
     }
@@ -75,7 +75,7 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
     public function getImage(): ?ImageContract
     {
         if (($imageArray = array_get($this->acfArray, 'image'))) {
-            $image = DataFactory::instance()->getPost($imageArray);
+            $image = WpModelRepository::instance()->getPost($imageArray);
             return new Image(new ImageAdapter($image));
         }
 

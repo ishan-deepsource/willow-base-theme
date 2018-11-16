@@ -2,7 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp;
 
-use Bonnier\Willow\Base\Factories\DataFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 
 /**
  * Class AbstractWpAdapter
@@ -24,9 +24,9 @@ abstract class AbstractWpAdapter
         $this->wpModel = $wpModel;
         if ($this->wpModel) {
             if ($this->wpModel instanceof \WP_Post || array_key_exists('ID', $this->wpModel)) {
-                $this->wpMeta = DataFactory::instance()->getPostMeta($this->wpModel);
+                $this->wpMeta = WpModelRepository::instance()->getPostMeta($this->wpModel);
             } elseif ($this->wpModel instanceof \WP_Term || array_key_exists('term_id', $this->wpModel)) {
-                $this->wpMeta = DataFactory::instance()->getTermMeta($this->wpModel);
+                $this->wpMeta = WpModelRepository::instance()->getTermMeta($this->wpModel);
             }
         }
     }

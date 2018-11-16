@@ -1,10 +1,10 @@
 <?php
 
-namespace Bonnier\Willow\Base\Factories;
+namespace Bonnier\Willow\Base\Repositories;
 
 use Illuminate\Support\Collection;
 
-class DataFactory
+class WpModelRepository
 {
     private static $instance;
     /** @var Collection */
@@ -48,7 +48,7 @@ class DataFactory
     public static function instance()
     {
         if (!self::$instance) {
-            self::$instance = new DataFactory();
+            self::$instance = new WpModelRepository();
         }
 
         return self::$instance;
