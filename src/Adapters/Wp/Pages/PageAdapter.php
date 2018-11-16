@@ -5,6 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Pages;
 
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
+use Bonnier\Willow\Base\Models\Base\Root\Translation;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Factories\PageContentFactory;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\BannerPlacement;
@@ -12,7 +13,6 @@ use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\FeaturedContent;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\Newsletter;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TaxonomyList;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TeaserList;
-use Bonnier\Willow\Base\Models\Base\Pages\PageTranslation;
 use Bonnier\Willow\Base\Models\Base\Root\Author;
 use Bonnier\Willow\Base\Models\Base\Root\Teaser;
 use Bonnier\Willow\Base\Models\Contracts\Pages\PageContract;
@@ -166,7 +166,7 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
                 $page = WpModelRepository::instance()->getPost($pageId);
             }
             if ($page instanceof WP_Post) {
-                return [$locale => new PageTranslation(new PageTranslationAdapter($page))];
+                return [$locale => new Translation(new PageTranslationAdapter($page))];
             }
             return null;
         })->reject(function ($translation) {

@@ -2,11 +2,12 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Pages;
 
+use Bonnier\Willow\Base\Models\Contracts\Root\TranslationContract;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
-use Bonnier\Willow\Base\Models\Contracts\Pages\PageTranslationContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 
-class PageTranslationAdapter implements PageTranslationContract
+class PageTranslationAdapter implements TranslationContract
 {
     use UrlTrait;
 
@@ -29,6 +30,8 @@ class PageTranslationAdapter implements PageTranslationContract
 
     public function getLink(): ?string
     {
-        return $this->getFullUrl(WpModelRepository::instance()->getPermalink($this->getId())) ?: null;
+        $permalink = WpModelRepository::instance()->getPermalink($this->getId());
+        $locale = LanguageProvider::getPostLanguage($this->getId());
+        return $this->getFullUrl($permalink, $locale) ?: null;
     }
 }

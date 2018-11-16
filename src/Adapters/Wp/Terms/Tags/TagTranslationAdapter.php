@@ -2,11 +2,12 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Tags;
 
+use Bonnier\Willow\Base\Models\Contracts\Root\TranslationContract;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
-use Bonnier\Willow\Base\Models\Contracts\Terms\TagTranslationContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 
-class TagTranslationAdapter implements TagTranslationContract
+class TagTranslationAdapter implements TranslationContract
 {
     use UrlTrait;
 
@@ -29,6 +30,8 @@ class TagTranslationAdapter implements TagTranslationContract
 
     public function getLink(): ?string
     {
-        return $this->getFullUrl(WpModelRepository::instance()->getTagLink($this->getId())) ?: null;
+        $permalink = WpModelRepository::instance()->getTagLink($this->getId());
+        $locale = LanguageProvider::getTermLanguage($this->getId());
+        return $this->getFullUrl($permalink, $locale) ?: null;
     }
 }

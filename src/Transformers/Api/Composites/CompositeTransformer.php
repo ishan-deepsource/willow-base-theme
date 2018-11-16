@@ -2,11 +2,11 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
+use Bonnier\Willow\Base\Models\Contracts\Root\TranslationContract;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
-use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeTranslationContract;
-use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\AssociatedContentContract;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\StoryTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentAudioTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Root\TranslationTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
@@ -169,12 +169,13 @@ class CompositeTransformer extends TransformerAbstract
     private function getTranslations(CompositeContract $composite)
     {
         if ($translations = $composite->getTranslations()) {
-            return $translations->mapWithKeys(function (CompositeTranslationContract $translation, string $locale) {
+            return $translations->mapWithKeys(function (TranslationContract $translation, string $locale) {
                 return [
-                    $locale => with(new CompositeTranslationTransformer)->transform($translation)
+                    $locale => with(new TranslationTransformer)->transform($translation)
                 ];
             });
         }
+        return null;
     }
 
     private function relatedFromTags(string $tag)
