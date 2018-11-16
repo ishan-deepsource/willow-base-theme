@@ -17,7 +17,7 @@ class ColorPaletteAdapter implements ColorPaletteContract
     public function __construct($attachmentId)
     {
         $meta = WpModelRepository::instance()->getPostMeta($attachmentId);
-        $this->rawPalette = array_get($meta, self::COLOR_PALETTE_META);
+        $this->rawPalette = array_get($meta, sprintf('%s.0', self::COLOR_PALETTE_META));
 
         if (!$this->rawPalette && $imageUrl = wp_get_attachment_url($attachmentId)) {
             $this->rawPalette = ImgixHelper::getColorPalette($imageUrl);
