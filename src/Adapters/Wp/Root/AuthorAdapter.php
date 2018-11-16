@@ -47,7 +47,7 @@ class AuthorAdapter implements AuthorContract
 
     public function getAvatar(): ?ImageContract
     {
-        if ($imageId = array_get($this->meta, 'user_avatar')) {
+        if ($imageId = array_get($this->meta, 'user_avatar.0')) {
             $image = WpModelRepository::instance()->getPost($imageId);
             return new Image(new ImageAdapter($image));
         }
