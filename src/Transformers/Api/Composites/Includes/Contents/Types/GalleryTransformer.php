@@ -22,11 +22,23 @@ class GalleryTransformer extends TransformerAbstract
             'title' => $gallery->getTitle(),
             'description' => $gallery->getDescription(),
             'display_hint' => $gallery->getDisplayHint(),
-            'images' => $gallery->isLocked() ?
-                null :
-                $gallery->getImages()->map(function (GalleryImageContract $galleryImage) {
-                    return with(new GalleryImageTransformer())->transform($galleryImage);
-                }),
+            'images' => $this->getImages($gallery),
         ];
+    }
+
+    private function getImages(GalleryContract $gallery)
+    {
+        if ($gallery->isLocked() || $gallery->getImages()->isEmpty()) {
+            return null;
+        }
+
+        return $gallery->getImages()->map(function (GalleryImageContract $galleryImage) {
+            if ($galleryImage->getImage() && $galleryImage->getImage()->getUrl()) {
+                return with(new GalleryImageTransformer())->transform($galleryImage);
+            }
+            return null;
+        })->reject(function ($galleryImage) {
+            return is_null($galleryImage);
+        });
     }
 }
