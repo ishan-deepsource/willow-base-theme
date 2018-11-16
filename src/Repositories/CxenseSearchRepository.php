@@ -71,15 +71,16 @@ class CxenseSearchRepository
         }
 
         // Return stored result if fetched again with exact same arguments
-        if (isset($this->queryResults[md5(serialize($arguments))])) {
-            return $this->queryResults[md5(serialize($arguments))];
+        $queryResultsKey = md5(serialize($arguments));
+        if ($stored = $this->queryResults[$queryResultsKey] ?? null) {
+            return $stored;
         }
 
         $result = WpCxense::instance()->search_documents($arguments);
         $result->facets = $this->formatFacets($result->facets, $arguments);
         $result->matches = $this->formatSearchResults($result->matches);
 
-        return $this->queryResults[md5(serialize($arguments))] = $result;
+        return $this->queryResults[$queryResultsKey] = $result;
     }
 
     /**
