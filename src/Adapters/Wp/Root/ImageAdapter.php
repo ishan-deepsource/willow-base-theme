@@ -43,7 +43,7 @@ class ImageAdapter extends FileAdapter implements ImageContract
 
     public function getFocalPoint(): array
     {
-        if (($focalPoint = array_get($this->postMeta, '_focal_point') ?: null) &&
+        if (($focalPoint = array_get($this->postMeta, '_focal_point.0') ?: null) &&
             !empty($coords = explode(',', $focalPoint)) &&
             count($coords) == 2) {
             return [
