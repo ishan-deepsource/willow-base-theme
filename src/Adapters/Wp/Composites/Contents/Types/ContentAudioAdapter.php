@@ -5,6 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AudioAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Audio;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentAudioContract;
@@ -18,12 +19,17 @@ use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudioContract
 {
     protected $audio;
+    protected $postMeta;
+    protected $attachmentMeta;
 
     public function __construct(?array $acfArray)
     {
         parent::__construct($acfArray);
-        $post = get_post(array_get($this->acfArray, 'file'));
-        $this->audio = $post ? new Audio(new AudioAdapter($post)) : null;
+        $postArray = array_get($this->acfArray, 'file');
+        if ($post = WpModelRepository::instance()->getPost($postArray)) {
+            $this->attachmentMeta = WpModelRepository::instance()->getAttachmentMeta($post);
+            $this->audio = new Audio(new AudioAdapter($post));
+        }
     }
 
     public function isLead(): bool
@@ -68,7 +74,8 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
 
     public function getImage(): ?ImageContract
     {
-        if (($imageId = array_get($this->acfArray, 'image')) && $image = get_post($imageId)) {
+        if (($imageArray = array_get($this->acfArray, 'image'))) {
+            $image = WpModelRepository::instance()->getPost($imageArray);
             return new Image(new ImageAdapter($image));
         }
 
@@ -77,10 +84,7 @@ class ContentAudioAdapter extends AbstractContentAdapter implements ContentAudio
 
     public function getDuration(): int
     {
-        if ($audioId = optional($this->audio)->getId()) {
-            $metaData = wp_get_attachment_metadata($audioId);
-            return $metaData['length'] ? ceil($metaData['length'] / 60) : 0;
-        }
-        return 0;
+        $length = array_get($this->attachmentMeta, 'length');
+        return $length ? ceil($length / 60) : 0;
     }
 }

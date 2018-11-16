@@ -20,6 +20,7 @@ abstract class AbstractApiController implements ApiControllerContract
     protected $fractal;
     protected $response;
     protected $model;
+    protected $meta;
     protected $request;
     /* @var array must at least have a default => SomeTransformer::class for the given controller */
     protected $transformerMapping = [];

@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Categories;
 
 use Bonnier\Willow\Base\Factories\CategoryContentFactory;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\BannerPlacement;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\FeaturedContent;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\Newsletter;
@@ -53,11 +54,11 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
         AcfName::WIDGET_TAXONOMY_TEASER_LIST => TaxonomyList::class,
     ];
 
-    public function __construct($wpModel)
+    public function __construct(\WP_Term $wpModel)
     {
         parent::__construct($wpModel);
         $this->meta = $this->getMeta();
-        $this->acfFields = get_fields(sprintf(
+        $this->acfFields = WpModelRepository::instance()->getAcfData(sprintf(
             '%s_%s',
             $this->wpModel->taxonomy ?? null,
             $this->wpModel->term_id ?? null
@@ -78,7 +79,13 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
     public function getChildren(): ?Collection
     {
         return collect(get_categories('hide_empty=0&parent=' . $this->getId()))->transform(function ($categoryChild) {
-            return new self(get_category($categoryChild));
+            if (($category = get_category($categoryChild)) && $category instanceof \WP_Term) {
+                $meta = get_term_meta($category->term_id);
+                return new self($category, $meta);
+            }
+            return null;
+        })->reject(function ($child) {
+            return is_null($child);
         });
     }
 
@@ -149,7 +156,8 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
                 ]
             ]
         ]))->map(function (\WP_Post $post) {
-            return new Composite(new CompositeAdapter($post));
+            $composite = WpModelRepository::instance()->getPost($post);
+            return new Composite(new CompositeAdapter($composite));
         });
     }
 
@@ -175,6 +183,7 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     private function getMeta()
     {
+        return null;
         if ($contentHubId = get_term_meta($this->getId(), 'content_hub_id', true)) {
             try {
                 $category = WpSiteManager::instance()->categories()->findByContentHubId($contentHubId) ?? null;
@@ -188,8 +197,11 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     public function getParent(): ?CategoryContract
     {
-        if ($parent = intval(data_get($this->wpModel, 'parent'))) {
-            return new static(get_category($parent));
+        if (($parentId = intval(data_get($this->wpModel, 'parent'))) && $parent = get_category($parentId)) {
+            if ($parent instanceof \WP_Term) {
+                $meta = get_term_meta($parentId);
+                return new static($parent, $meta);
+            }
         }
 
         return null;

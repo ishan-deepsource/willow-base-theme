@@ -17,22 +17,33 @@ class ImageAdapter extends FileAdapter implements ImageContract
 {
     public function getUrl(): ?string
     {
-        return wp_get_attachment_image_url($this->getId(), 'original') ?: null;
+        if (defined('AWS_S3_DOMAIN') &&
+            ($s3Meta = array_get($this->postMeta, 'amazonS3_info.0')) &&
+            $s3Data = unserialize($s3Meta)
+        ) {
+            return sprintf('https://%s/%s', AWS_S3_DOMAIN, array_get($s3Data, 'key'));
+        }
+
+        if ($this->file instanceof \WP_Post) {
+            return wp_get_attachment_image_url($this->getId(), 'original') ?: null;
+        } else {
+            return array_get($this->file, 'url') ?: null;
+        }
     }
 
     public function getAlt(): ?string
     {
-        return get_post_meta($this->getId(), '_wp_attachment_image_alt', true) ?: null;
+        return array_get($this->file, 'alt') ?: null;
     }
 
     public function getCopyright(): ?string
     {
-        return get_post_meta($this->getId(), 'attachment_copyright', true) ?: null;
+        return array_get($this->postMeta, 'attachment_copyright.0') ?: null;
     }
 
     public function getFocalPoint(): array
     {
-        if (($focalPoint = get_post_meta($this->getId(), '_focal_point', true) ?: null) &&
+        if (($focalPoint = array_get($this->postMeta, '_focal_point') ?: null) &&
             !empty($coords = explode(',', $focalPoint)) &&
             count($coords) == 2) {
             return [
@@ -49,11 +60,10 @@ class ImageAdapter extends FileAdapter implements ImageContract
 
     public function getAspectRatio(): float
     {
-        if (($metadata = wp_get_attachment_metadata($this->getId())) &&
-            isset($metadata['width']) &&
-            isset($metadata['height'])
-        ) {
-            return $metadata['width'] / $metadata['height'];
+        $width = array_get($this->attachmentMeta, 'width');
+        $height = array_get($this->attachmentMeta, 'height');
+        if ($width && $height) {
+            return $width / $height;
         }
         return 0.0;
     }

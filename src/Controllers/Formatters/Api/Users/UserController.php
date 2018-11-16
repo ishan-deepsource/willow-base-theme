@@ -3,6 +3,8 @@
 namespace Bonnier\Willow\Base\Controllers\Formatters\Api\Users;
 
 use Bonnier\Willow\Base\Controllers\Formatters\Api\AbstractApiController;
+use Bonnier\Willow\Base\Controllers\Formatters\Api\ApiControllerContract;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Author;
 use Bonnier\Willow\Base\Transformers\Api\Root\AuthorTransformer;
 
@@ -12,4 +14,9 @@ class UserController extends AbstractApiController
         'default' => AuthorTransformer::class
     ];
     protected $baseModelClass = Author::class;
+
+    public function setModel($model): ApiControllerContract
+    {
+        return parent::setModel(WpModelRepository::instance()->getUser($model));
+    }
 }

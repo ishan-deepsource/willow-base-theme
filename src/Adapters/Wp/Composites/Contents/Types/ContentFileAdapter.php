@@ -5,6 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\FileAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\File;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentFileContract;
@@ -22,9 +23,9 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
     public function __construct(array $acfArray)
     {
         parent::__construct($acfArray);
-        if ($fileId = array_get($acfArray, 'file.id')) {
-            $post = get_post($fileId);
-            $this->file = $post ? new File(new FileAdapter($post)) : null;
+        if ($fileArray = array_get($acfArray, 'file')) {
+            $file = WpModelRepository::instance()->getPost($fileArray);
+            $this->file = new File(new FileAdapter($file));
         }
         if (!$this->file) {
             throw new \InvalidArgumentException('Missing file');
@@ -39,8 +40,11 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
     public function getImages(): ?Collection
     {
         return collect(array_get($this->acfArray, 'images', []))->map(function ($acfImage) {
-            $file = array_get($acfImage, 'file');
-            return $file ? new Image(new ImageAdapter(get_post($file))) : null;
+            if ($fileArray = array_get($acfImage, 'file')) {
+                $file = WpModelRepository::instance()->getPost($fileArray);
+                return new Image(new ImageAdapter($file));
+            }
+            return null;
         })->reject(function ($image) {
             return is_null($image);
         });

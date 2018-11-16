@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Controllers\App;
 
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
 use League\Fractal\Manager;
@@ -23,7 +24,7 @@ class TestController extends WP_REST_Controller
             'callback' => [$this, 'teasers']
         ]);
     }
-    
+
     public function teasers(WP_REST_Request $request): WP_REST_Response
     {
         $query = new WP_Query([
@@ -32,11 +33,12 @@ class TestController extends WP_REST_Controller
             'post_status' => 'publish',
             'posts_per_page' => $request->get_param('amount') ?? 1
         ]);
-        
+
         $posts = collect($query->get_posts())->map(function (WP_Post $post) {
-            return new Composite(new CompositeAdapter($post));
+            $composite = WpModelRepository::instance()->getPost($post);
+            return new Composite(new CompositeAdapter($composite));
         });
-        
+
         $manager = new Manager();
         $resource = new Collection($posts, new CompositeTeaserTransformer());
         return new WP_REST_Response($manager->createData($resource)->toArray());

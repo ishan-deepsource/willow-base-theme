@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Controllers\App;
 
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Repositories\WhiteAlbum\RedirectRepository;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
@@ -109,7 +110,10 @@ class RouteController extends BaseController
         $path = parse_url(urldecode($path), PHP_URL_PATH);
 
         // Route resolving for previewing article drafts
-        if (($queryParams['preview'] ?? false) && ($queryParams['post_type'] ?? false) && ($queryParams['p'] ?? false)) {
+        if (($queryParams['preview'] ?? false) &&
+            ($queryParams['post_type'] ?? false) &&
+            ($queryParams['p'] ?? false)
+        ) {
             $posts =  get_posts([
                 'post_type' => $queryParams['post_type'],
                 'include' => $queryParams['p'], // Wordpress way of saying give me the content that match id
@@ -137,9 +141,9 @@ class RouteController extends BaseController
             }
             $frontpageID = get_option('page_on_front');
             if ($translations = LanguageProvider::getPostTranslations($frontpageID)) {
-                return get_post($translations[$locale] ?? null);
+                return WpModelRepository::instance()->getPost($translations[$locale] ?? null);
             }
-            return get_post($frontpageID);
+            return WpModelRepository::instance()->getPost($frontpageID);
         }
 
         // Route resolving for tag pages
@@ -193,7 +197,7 @@ class RouteController extends BaseController
         $parent_id = $page->post_parent;
 
         while ($parent_id) {
-            $parent = get_post($parent_id);
+            $parent = WpModelRepository::instance()->getPost($parent_id);
             if ($parent) {
                 if ($parent->post_status === $status) {
                     $parent_id = $parent->post_parent;
@@ -226,7 +230,7 @@ class RouteController extends BaseController
                     $content = $category;
                 }
             } elseif ($composite = get_page_by_path($part, OBJECT, WpComposite::POST_TYPE)) {
-                $cat = get_field('category', $composite->ID);
+                $cat = WpModelRepository::instance()->getAcfField($composite->ID, 'category');
                 if ($composite->post_status !== $status && $status !== 'all') {
                     return null;
                 } elseif ($content && !$content instanceof WP_Term) {

@@ -5,6 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Vocabulary;
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\BrandAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagAdapter;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Brand;
 use Bonnier\Willow\Base\Models\Base\Terms\Tag;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
@@ -52,7 +53,8 @@ class VocabularyAdapter implements VocabularyContract
     {
         if ($machineName = $this->getMachineName()) {
             $term = wp_get_post_terms($this->composite->getId(), $machineName);
-            return collect($term)->map(function (\WP_Term $tag) {
+            return collect($term)->map(function (\WP_Term $term) {
+                $tag = WpModelRepository::instance()->getTerm($term);
                 return new Tag(new TagAdapter($tag));
             });
         }

@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types;
 
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\Types\SeoTextContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
@@ -22,7 +23,8 @@ class SeoTextAdapter extends AbstractContentAdapter implements SeoTextContract
 
     public function getImage(): ?ImageContract
     {
-        if (($imageId = array_get($this->acfArray, 'image')) && $image = get_post($imageId)) {
+        if ($imageArray = array_get($this->acfArray, 'image')) {
+            $image = WpModelRepository::instance()->getPost($imageArray);
             return new Image(new ImageAdapter($image));
         }
 

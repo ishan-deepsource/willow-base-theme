@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Actions\Backend;
 
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 
 
 class EstimatedReadingTime
@@ -17,7 +18,8 @@ class EstimatedReadingTime
 
     public function countNumberOfWords($postId)
     {
-        $compositeAdapter = new CompositeAdapter(get_post($postId));
+        $composite = WpModelRepository::instance()->getPost($postId);
+        $compositeAdapter = new CompositeAdapter($composite);
         $totalWordCount = 0;
 
         foreach ($compositeAdapter->getContents() as $item) {
@@ -41,7 +43,8 @@ class EstimatedReadingTime
         $imageCounter = 0;
         $readingTime = 0;
 
-        $compositeAdapter = new CompositeAdapter(get_post($postId));
+        $composite = WpModelRepository::instance()->getPost($postId);
+        $compositeAdapter = new CompositeAdapter($composite);
 
         foreach ($compositeAdapter->getContents() as $item) {
             switch ($item->getType()) {

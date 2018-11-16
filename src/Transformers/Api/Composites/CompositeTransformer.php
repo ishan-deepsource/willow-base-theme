@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeTranslationContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\AssociatedContentContract;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\StoryTransformer;
@@ -188,7 +189,8 @@ class CompositeTransformer extends TransformerAbstract
             ]);
             if ($query->post_count) {
                 return collect($query->posts)->map(function (WP_Post $post) {
-                    return new Composite(new CompositeAdapter($post));
+                    $composite = WpModelRepository::instance()->getPost($post);
+                    return new Composite(new CompositeAdapter($composite));
                 })->toArray();
             }
             return null;
@@ -215,10 +217,11 @@ class CompositeTransformer extends TransformerAbstract
                     return null;
                 }
                 $postId = intval($cxArticle->{'recs-articleid'});
-                $post = get_post($postId);
-                return $post && $post->post_status === 'publish' && $post->ID === $postId
-                ? new Composite(new CompositeAdapter($post)) :
-                    null;
+                $post = WpModelRepository::instance()->getPost($postId);
+                if ($post && $post->post_status === 'publish' && $post->ID === $postId) {
+                    return new Composite(new CompositeAdapter($post));
+                }
+                return null;
             }
         )->reject(function ($content) {
             return is_null($content);

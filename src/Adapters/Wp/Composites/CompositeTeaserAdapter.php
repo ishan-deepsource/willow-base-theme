@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites;
 
 use Bonnier\Willow\Base\Adapters\Wp\Root\AbstractTeaserAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 
@@ -32,15 +33,13 @@ class CompositeTeaserAdapter extends AbstractTeaserAdapter
 
     public function getImage(): ?ImageContract
     {
-        if (($imageId = array_get($this->composite->getAcfFields(), $this->type . 'teaser_image')) &&
-            ($image = get_post($imageId))
-        ) {
+        if ($imageArray = array_get($this->composite->getAcfFields(), $this->type . 'teaser_image')) {
+            $image = WpModelRepository::instance()->getPost($imageArray);
             return new Image(new ImageAdapter($image));
         }
 
-        if (($imageId = array_get($this->composite->getAcfFields(), 'teaser_image')) &&
-            ($image = get_post($imageId))
-        ) {
+        if ($imageArray = array_get($this->composite->getAcfFields(), 'teaser_image')) {
+            $image = WpModelRepository::instance()->getPost($imageArray);
             return new Image(new ImageAdapter($image));
         }
 
