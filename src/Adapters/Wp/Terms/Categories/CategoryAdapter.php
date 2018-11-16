@@ -183,7 +183,6 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     private function getMeta()
     {
-        return null;
         if ($contentHubId = get_term_meta($this->getId(), 'content_hub_id', true)) {
             try {
                 $category = WpSiteManager::instance()->categories()->findByContentHubId($contentHubId) ?? null;
