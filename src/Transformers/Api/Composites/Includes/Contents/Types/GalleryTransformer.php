@@ -39,6 +39,6 @@ class GalleryTransformer extends TransformerAbstract
             return null;
         })->reject(function ($galleryImage) {
             return is_null($galleryImage);
-        });
+        })->values(); // Return values to make sure that images are encoded as array and not object
     }
 }
