@@ -111,4 +111,9 @@ class Category implements CategoryContract
     {
         return $this->category->getTranslations();
     }
+
+    public function getContenthubId(): ?string
+    {
+        return $this->category->getContenthubId();
+    }
 }

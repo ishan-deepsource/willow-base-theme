@@ -182,7 +182,7 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     private function getMeta()
     {
-        if ($contentHubId = get_term_meta($this->getId(), 'content_hub_id', true)) {
+        if ($contentHubId = $this->getContenthubId()) {
             try {
                 $category = WpSiteManager::instance()->categories()->findByContentHubId($contentHubId) ?? null;
                 return data_get($category, 'data');
@@ -254,6 +254,11 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
         }
 
         return null;
+    }
+
+    public function getContenthubId(): ?string
+    {
+        return array_get($this->wpMeta, 'content_hub_id.0') ?: null;
     }
 
     private function getContentFactory($class)

@@ -211,7 +211,7 @@ class WpModelRepository
      */
     public function getTermMeta($wpTerm): ?array
     {
-        $wpTermId = is_int($wpTerm) ? $wpTerm : array_get($wpTerm, 'ID', data_get($wpTerm, 'ID'));
+        $wpTermId = is_int($wpTerm) ? $wpTerm : array_get($wpTerm, 'term_id', data_get($wpTerm, 'term_id'));
         if (!$wpTermId) {
             return null;
         }

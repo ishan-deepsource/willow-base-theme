@@ -60,6 +60,7 @@ class CategoryTransformer extends TransformerAbstract
             'count'         => $category->getCount(),
             'canonical_url' => $category->getCanonicalUrl(),
             'translations'  => $this->getTranslations($category),
+            'contenthub_id' => $category->getContenthubId(),
         ];
     }
 

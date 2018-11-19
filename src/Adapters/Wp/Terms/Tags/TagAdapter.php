@@ -136,9 +136,14 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
         ]);
     }
 
+    public function getContenthubId(): ?string
+    {
+        return array_get($this->wpMeta, 'content_hub_id.0') ?: null;
+    }
+
     private function getMeta()
     {
-        if ($contentHubId = get_term_meta($this->getId(), 'content_hub_id', true)) {
+        if ($contentHubId = $this->getContenthubId()) {
             try {
                 return WpSiteManager::instance()->tags()->findByContentHubId($contentHubId) ?? null;
             } catch (\Exception $exception) {
