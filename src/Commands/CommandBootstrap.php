@@ -13,6 +13,7 @@ class CommandBootstrap
                 define('PLL_ADMIN', true); // Tell Polylang to be in admin mode so that various term filters are loaded
             }
             Cleanup::register();
+            CxenseSync::register();
         }
     }
 }
