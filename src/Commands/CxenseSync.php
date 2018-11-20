@@ -13,6 +13,8 @@ use WP_CLI;
 class CxenseSync extends \WP_CLI_Command
 {
     const CMD_NAMESPACE = 'cxense';
+    const ALLOWED_ARGUMENTS = ['cleanup', 'sync'];
+
     const UPDATE_SLEEP_MSECS = 1000000; // 1 second
     const DELETE_SLEEP_MSECS = 1000000; // 1 second
     const GET_NEXT_PAGE_SLEEP_MSECS = 200000; // 0,2 second
@@ -32,9 +34,36 @@ class CxenseSync extends \WP_CLI_Command
         WP_CLI::add_command(static::CMD_NAMESPACE, __CLASS__);
     }
 
-    public function sync()
+    public function run($params)
     {
         global $polylang, $locale;
+
+        if (sizeof($params) == 0) {
+            WP_CLI::line('Run one of the follwoing:');
+            WP_CLI::line('');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' cleanup');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' sync');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' sync cleanup');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' cleanup sync');
+            WP_CLI::line('');
+            WP_CLI::line('\'cleanup\' will go through all content in Cxense.');
+            WP_CLI::line('If an article has different urls in Cxense and WP, the article will be deleted in Cxense,');
+            WP_CLI::line('and the WP article will (if it\'s published) be pushed to Cxense with correct url.');
+            WP_CLI::line('');
+            WP_CLI::line('\'sync\' will go through all published composites in WP and push them to Cxense.');
+            WP_CLI::line('This will create the data in Cxense or update it if the url was already in Cxense.');
+            WP_CLI::line('');
+            WP_CLI::line('Remember to run sync before cleanup if you are moving a site to a new address,');
+            WP_CLI::line('e.g. beta.illvid.dk to illvid.dk');
+            WP_CLI::line('');
+            WP_CLI::error('Argument is missing');
+        }
+
+        // Check for illegal arguments
+        if (sizeof(array_diff($params, self::ALLOWED_ARGUMENTS)) > 0) {
+            WP_CLI::error('You have entered illegal arguments. Run the following command for info: wp ' .
+                self::CMD_NAMESPACE . ' run');
+        }
 
         $this->inCxense = collect();
 
@@ -47,7 +76,9 @@ class CxenseSync extends \WP_CLI_Command
         $this->errorUrls = collect();
         $this->skipCount = 0;
 
-        collect($polylang->model->get_languages_list())->each(function (\PLL_Language $language) use (&$polylang, &$locale) {
+        collect($polylang->model->get_languages_list())->each(function (\PLL_Language $language) use (&$polylang,
+            &$locale, $params) {
+
             $locale = $language->locale;
             $polylang->curlang = $language;
             $this->searchRepository = new CxenseSearchRepository();
@@ -55,11 +86,25 @@ class CxenseSync extends \WP_CLI_Command
             WP_CLI::line('$language->locale: ' . $language->locale);
             WP_CLI::line('get_locale(): ' . get_locale());
 
-            self::cleanupCxense();
-            self::syncCompositesIntoCxense();
+            $this->runCommands($params);
         });
 
         WP_CLI::line('-- DONE --');
+    }
+
+    private function runCommands($commands)
+    {
+        foreach($commands as $command) {
+            if ($command === 'cleanup') {
+                WP_CLI::line('-- cleanup --');
+                $this->cleanupCxense();
+                continue;
+            }
+            if ($command === 'sync') {
+                WP_CLI::line('-- sync --');
+                $this->syncCompositesIntoCxense();
+            }
+        }
     }
 
     private function cleanupStat()
@@ -128,7 +173,7 @@ class CxenseSync extends \WP_CLI_Command
             $url = get_permalink($post->ID);
             WP_CLI::line('url: ' . $url);
 
-            // Check if the id is in Cxense
+            // Check if the id has been handled by cleanupCxense() earlier
             if ($this->inCxense->contains($post->ID)) {
                 $this->skipCount++;
                 return;
@@ -139,8 +184,7 @@ class CxenseSync extends \WP_CLI_Command
             if (!self::cxensePush($url)) {
                 WP_CLI::error('Error pushing to Cxense', false);
                 $this->errorUrls->push($url);
-            }
-            else{
+            } else {
                 $this->inCxense->push($post->ID);
             }
 
