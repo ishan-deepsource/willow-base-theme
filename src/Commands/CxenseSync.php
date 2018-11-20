@@ -239,7 +239,7 @@ class CxenseSync extends \WP_CLI_Command
     public static function cxenseDeleteUrl($contentUrl)
     {
         usleep(self::DELETE_SLEEP_MSECS);
-        return self::cxenseRequest(CXENSE_PROFILE_DELETE, $contentUrl);
+        return self::cxenseRequest(CxenseApi::CXENSE_PROFILE_DELETE, $contentUrl);
     }
 
     public static function cxensePush($contentUrl)
