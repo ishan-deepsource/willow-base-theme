@@ -2,7 +2,6 @@
 
 namespace Bonnier\Willow\Base\Controllers\App;
 
-use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\Willow\Base\Adapters\Cxense\Search\DocumentAdapter;
 use Bonnier\Willow\Base\Adapters\Cxense\Search\FacetCollectionAdapter;
@@ -13,7 +12,6 @@ use Bonnier\Willow\Base\Transformers\Api\Search\FacetCollectionTransformer;
 use Bonnier\Willow\Base\Transformers\Pagination\NumberedPagination;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
-use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -53,8 +51,8 @@ class SearchController extends BaseController
         }
 
         $response = Cache::remember(
-            'willow_search_' . $locale,
-            4 * HOUR_IN_SECONDS,
+            sprintf('willow_search_%s_%s', $locale, md5($request->get_body())),
+            2 * HOUR_IN_SECONDS,
             function () use ($locale, $filters) {
                 $searchResults = $this->searchRepository->getSearchResults(
                     $filters->query,
