@@ -19,6 +19,9 @@ class CxenseSync extends \WP_CLI_Command
     const DELETE_SLEEP_MSECS = 1000000; // 1 second
     const GET_NEXT_PAGE_SLEEP_MSECS = 200000; // 0,2 second
 
+    protected $onlyLocale;
+    protected $skipLocale;
+
     protected $searchRepository;
     protected $inCxense;
 
@@ -41,10 +44,15 @@ class CxenseSync extends \WP_CLI_Command
         if (sizeof($params) == 0) {
             WP_CLI::line('Run one of the follwoing:');
             WP_CLI::line('');
-            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' cleanup');
-            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' sync');
-            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' sync cleanup');
-            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' cleanup sync');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run cleanup');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run sync');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run sync cleanup');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run cleanup sync');
+            WP_CLI::line('');
+            WP_CLI::line('It is also possible to add only:locale or skip:locale, e.g.');
+            WP_CLI::line('');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run sync only:da_DK');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run cleanup skip:nb_NO');
             WP_CLI::line('');
             WP_CLI::line('\'cleanup\' will go through all content in Cxense.');
             WP_CLI::line('If an article has different urls in Cxense and WP, the article will be deleted in Cxense,');
@@ -58,6 +66,9 @@ class CxenseSync extends \WP_CLI_Command
             WP_CLI::line('');
             WP_CLI::error('Argument is missing');
         }
+
+        // Parse 'skip' and 'only' arguments
+        $params = $this->parseSkipAndOnlyArguments($params);
 
         // Check for illegal arguments
         if (sizeof(array_diff($params, self::ALLOWED_ARGUMENTS)) > 0) {
@@ -80,6 +91,15 @@ class CxenseSync extends \WP_CLI_Command
             &$locale, $params) {
 
             $locale = $language->locale;
+
+            if ($this->onlyLocale && $locale !== $this->onlyLocale) {
+                return;
+            }
+
+            if ($this->skipLocale && $locale === $this->skipLocale) {
+                return;
+            }
+
             $polylang->curlang = $language;
             $this->searchRepository = new CxenseSearchRepository();
 
@@ -92,9 +112,26 @@ class CxenseSync extends \WP_CLI_Command
         WP_CLI::line('-- DONE --');
     }
 
+    private function parseSkipAndOnlyArguments($params)
+    {
+        $returnParams = [];
+        foreach ($params as $param) {
+            if (substr($param, 0, 5) === 'only:') {
+                $this->onlyLocale = substr($param, 5, strlen($param) - 5);
+                continue;
+            }
+            if (substr($param, 0, 5) === 'skip:') {
+                $this->skipLocale = substr($param, 5, strlen($param) - 5);
+                continue;
+            }
+            $returnParams[] = $param;
+        }
+        return $returnParams;
+    }
+
     private function runCommands($commands)
     {
-        foreach($commands as $command) {
+        foreach ($commands as $command) {
             if ($command === 'cleanup') {
                 WP_CLI::line('-- cleanup --');
                 $this->cleanupCxense();
