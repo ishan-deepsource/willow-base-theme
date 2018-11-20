@@ -155,10 +155,10 @@ class RouteController extends BaseController
         }
 
         // Route resolving for all other content
-        return $this->resolvePath($path);
+        return $this->resolvePath($path, self::STATUS_PUBLISHED, $locale);
     }
 
-    private function resolvePath($path, string $status = self::STATUS_PUBLISHED)
+    private function resolvePath($path, string $status = self::STATUS_PUBLISHED, ?string $locale = null)
     {
         if ($page = $this->findPage($path, $status)) {
             return $page;
@@ -168,7 +168,7 @@ class RouteController extends BaseController
             return $category;
         }
 
-        if (($composite = $this->findContenthubComposite($path, $status))) {
+        if (($composite = $this->findContenthubComposite($path, $status, $locale))) {
             $excludePlatforms = data_get($composite, 'exclude_platforms');
             if (collect($excludePlatforms)->contains('web')) {
                 return null;
@@ -212,8 +212,11 @@ class RouteController extends BaseController
         return $page;
     }
 
-    public function findContenthubComposite(string $path, string $status = self::STATUS_PUBLISHED): ?WP_Post
-    {
+    public function findContenthubComposite(
+        string $path,
+        string $status = self::STATUS_PUBLISHED,
+        ?string $locale = null
+    ): ?WP_Post {
         $parts = preg_split('#/#', $path, -1, PREG_SPLIT_NO_EMPTY);
 
         $content = null;
@@ -229,7 +232,7 @@ class RouteController extends BaseController
                 } else {
                     $content = $category;
                 }
-            } elseif ($composite = get_page_by_path($part, OBJECT, WpComposite::POST_TYPE)) {
+            } elseif ($composite = $this->getComposite($part, $locale)) {
                 $cat = WpModelRepository::instance()->getAcfField($composite->ID, 'category');
                 if ($composite->post_status !== $status && $status !== 'all') {
                     return null;
@@ -249,6 +252,23 @@ class RouteController extends BaseController
             } else {
                 return null;
             }
+        }
+
+        return null;
+    }
+
+    private function getComposite(string $slug, ?string $locale = null)
+    {
+        $currentLang = $locale ?? LanguageProvider::getCurrentLanguage();
+        $posts = get_posts([
+            'name' => $slug,
+            'post_type' => WpComposite::POST_TYPE,
+        ]);
+        if (!empty($posts)) {
+            $post = collect($posts)->first(function (WP_Post $post) use ($currentLang) {
+                return $currentLang === LanguageProvider::getPostLanguage($post->ID);
+            });
+            return $post;
         }
 
         return null;
