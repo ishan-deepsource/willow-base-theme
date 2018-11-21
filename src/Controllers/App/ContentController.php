@@ -27,7 +27,7 @@ class ContentController extends BaseController
                 $compositePost = WpModelRepository::instance()->getPost($post);
                 $composite = new Composite(new CompositeAdapter($compositePost));
                 return with(new CompositeTeaserTransformer)->transform($composite);
-            });
+            })->values();
         }
 
         return new \WP_REST_Response(['data' => $composites->toArray()]);
