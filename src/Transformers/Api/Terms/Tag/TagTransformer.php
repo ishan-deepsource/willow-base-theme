@@ -38,6 +38,7 @@ class TagTransformer extends TransformerAbstract
             'count'         => $tag->getCount(),
             'canonical_url' => $tag->getCanonicalUrl(),
             'translations'  => $this->getTranslations($tag),
+            'contenthub_id' => $tag->getContenthubId(),
         ];
     }
 

@@ -110,4 +110,9 @@ class CategoryAdapter implements CategoryContract
     {
         return null;
     }
+
+    public function getContenthubId(): ?string
+    {
+        return null;
+    }
 }

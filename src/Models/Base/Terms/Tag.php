@@ -69,4 +69,9 @@ class Tag implements TagContract
     {
         return $this->tag->getTranslations();
     }
+
+    public function getContenthubId(): ?string
+    {
+        return $this->tag->getContenthubId();
+    }
 }

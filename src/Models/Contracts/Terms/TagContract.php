@@ -28,4 +28,6 @@ interface TagContract
     public function getTeasers(): ?Collection;
 
     public function getTranslations(): ?Collection;
+
+    public function getContenthubId(): ?string;
 }

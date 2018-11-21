@@ -41,4 +41,6 @@ interface CategoryContract
     public function getContents(): ?Collection;
 
     public function getTranslations(): ?Collection;
+
+    public function getContenthubId(): ?string;
 }
