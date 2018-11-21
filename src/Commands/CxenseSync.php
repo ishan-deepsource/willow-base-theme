@@ -21,6 +21,7 @@ class CxenseSync extends \WP_CLI_Command
 
     protected $onlyLocale;
     protected $skipLocale;
+    protected $wait;
 
     protected $searchRepository;
     protected $inCxense;
@@ -41,6 +42,18 @@ class CxenseSync extends \WP_CLI_Command
     {
         global $polylang, $locale;
 
+        $this->inCxense = collect();
+        $this->wait = false;
+
+        // CleanUp stats
+        $this->deletedDidNotExist = 0;
+        $this->deletedDifferentUrl = 0;
+
+        // Sync stats
+        $this->pushCount = 0;
+        $this->errorUrls = collect();
+        $this->skipCount = 0;
+
         if (sizeof($params) == 0) {
             WP_CLI::line('Run one of the follwoing:');
             WP_CLI::line('');
@@ -53,6 +66,11 @@ class CxenseSync extends \WP_CLI_Command
             WP_CLI::line('');
             WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run sync only:da_DK');
             WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run cleanup skip:nb_NO');
+            WP_CLI::line('');
+            WP_CLI::line('Add \'wait\' to be prompted to press enter before each update/delete call to Cxense.');
+            WP_CLI::line('When prompted you can write \'go\' to disable the prompting without restarting. E.g.');
+            WP_CLI::line('');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run cleanup wait');
             WP_CLI::line('');
             WP_CLI::line('\'cleanup\' will go through all content in Cxense.');
             WP_CLI::line('If an article has different urls in Cxense and WP, the article will be deleted in Cxense,');
@@ -68,24 +86,13 @@ class CxenseSync extends \WP_CLI_Command
         }
 
         // Parse 'skip' and 'only' arguments
-        $params = $this->parseSkipAndOnlyArguments($params);
+        $params = $this->parseArguments($params);
 
         // Check for illegal arguments
         if (sizeof(array_diff($params, self::ALLOWED_ARGUMENTS)) > 0) {
             WP_CLI::error('You have entered illegal arguments. Run the following command for info: wp ' .
                 self::CMD_NAMESPACE . ' run');
         }
-
-        $this->inCxense = collect();
-
-        // CleanUp stats
-        $this->deletedDidNotExist = 0;
-        $this->deletedDifferentUrl = 0;
-
-        // Sync stats
-        $this->pushCount = 0;
-        $this->errorUrls = collect();
-        $this->skipCount = 0;
 
         collect($polylang->model->get_languages_list())->each(function (\PLL_Language $language) use (&$polylang,
             &$locale, $params) {
@@ -112,7 +119,7 @@ class CxenseSync extends \WP_CLI_Command
         WP_CLI::line('-- DONE --');
     }
 
-    private function parseSkipAndOnlyArguments($params)
+    private function parseArguments($params)
     {
         $returnParams = [];
         foreach ($params as $param) {
@@ -122,6 +129,10 @@ class CxenseSync extends \WP_CLI_Command
             }
             if (substr($param, 0, 5) === 'skip:') {
                 $this->skipLocale = substr($param, 5, strlen($param) - 5);
+                continue;
+            }
+            if ($param === 'wait') {
+                $this->wait = true;
                 continue;
             }
             $returnParams[] = $param;
@@ -163,7 +174,7 @@ class CxenseSync extends \WP_CLI_Command
                 // Delete in Cxense
                 WP_CLI::line();
                 WP_CLI::line('Delete in Cxense - No such post');
-                self::cxenseDeleteUrl($cxenseUrl);
+                $this->cxenseDeleteUrl($cxenseUrl);
                 $this->deletedDidNotExist++;
 
                 $this->cleanupStat();
@@ -179,13 +190,14 @@ class CxenseSync extends \WP_CLI_Command
                 WP_CLI::line('postId: ' . $postId);
                 WP_CLI::line('Cxense-url: ' . $cxenseUrl);
                 WP_CLI::line('WP-url:     ' . $permalink);
-                self::cxenseDeleteUrl($cxenseUrl);
+
+                $this->cxenseDeleteUrl($cxenseUrl);
                 $this->deletedDifferentUrl++;
 
                 // Push the correct url to Cxense if the post is published
                 if ($post->status === 'publish') {
                     WP_CLI::line('Pushing permalink to Cxense');
-                    self::cxensePush($permalink);
+                    $this->cxensePush($permalink);
                 }
 
                 $this->cleanupStat();
@@ -218,7 +230,7 @@ class CxenseSync extends \WP_CLI_Command
 
             // Insert into Cxense
             $this->pushCount++;
-            if (!self::cxensePush($url)) {
+            if (!$this->cxensePush($url)) {
                 WP_CLI::error('Error pushing to Cxense', false);
                 $this->errorUrls->push($url);
             } else {
@@ -273,15 +285,28 @@ class CxenseSync extends \WP_CLI_Command
         }
     }
 
-    public static function cxenseDeleteUrl($contentUrl)
+    private function wait()
+    {
+        if ($this->wait) {
+            $handle = fopen("php://stdin", "r");
+            $line = rtrim(fgets($handle));
+            if ($line === 'go') {
+                $this->wait = false;
+            }
+        }
+    }
+
+    public function cxenseDeleteUrl($contentUrl)
     {
         usleep(self::DELETE_SLEEP_MSECS);
+        $this->wait();
         return self::cxenseRequest(CxenseApi::CXENSE_PROFILE_DELETE, $contentUrl);
     }
 
-    public static function cxensePush($contentUrl)
+    public function cxensePush($contentUrl)
     {
         usleep(self::UPDATE_SLEEP_MSECS);
+        $this->wait();
         return self::cxenseRequest(CxenseApi::CXENSE_PROFILE_PUSH, $contentUrl);
     }
 
