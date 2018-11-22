@@ -28,7 +28,7 @@ class CategoryImageAdapter implements ImageContract
 
     public function getUrl(): ?string
     {
-        return data_get($this->meta, 'image_url.' . LanguageProvider::getCurrentLanguage()) ?: null;
+        return data_get($this->meta, 'image_url.0') ?: null;
     }
 
     public function getTitle(): ?string
