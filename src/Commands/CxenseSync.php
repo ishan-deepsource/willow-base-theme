@@ -13,11 +13,10 @@ use WP_CLI;
 class CxenseSync extends \WP_CLI_Command
 {
     const CMD_NAMESPACE = 'cxense';
-    const ALLOWED_ARGUMENTS = ['cleanup', 'sync'];
+    const ALLOWED_COMMANDS = ['cleanup', 'sync', 'info'];
 
-    const UPDATE_SLEEP_MSECS = 1000000; // 1 second
-    const DELETE_SLEEP_MSECS = 1000000; // 1 second
-    const GET_NEXT_PAGE_SLEEP_MSECS = 200000; // 0,2 second
+    protected $sleepSearch;
+    protected $sleepRequest;
 
     protected $onlyLocale;
     protected $skipLocale;
@@ -44,6 +43,8 @@ class CxenseSync extends \WP_CLI_Command
 
         $this->inCxense = collect();
         $this->wait = false;
+        $this->sleepSearch = 200000; // 0,2 second
+        $this->sleepRequest = 1000000; // 1 second
 
         // CleanUp stats
         $this->deletedDidNotExist = 0;
@@ -62,6 +63,13 @@ class CxenseSync extends \WP_CLI_Command
             WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run sync cleanup');
             WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run cleanup sync');
             WP_CLI::line('');
+            WP_CLI::line('\'cleanup\' will go through all content in Cxense.');
+            WP_CLI::line('If an article has different urls in Cxense and WP, the article will be deleted in Cxense,');
+            WP_CLI::line('and the WP article will (if it\'s published) be pushed to Cxense with correct url.');
+            WP_CLI::line('');
+            WP_CLI::line('\'sync\' will go through all published composites in WP and push them to Cxense.');
+            WP_CLI::line('This will create the data in Cxense or update it if the url was already in Cxense.');
+            WP_CLI::line('');
             WP_CLI::line('It is also possible to add only:locale or skip:locale, e.g.');
             WP_CLI::line('');
             WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run sync only:da_DK');
@@ -72,12 +80,12 @@ class CxenseSync extends \WP_CLI_Command
             WP_CLI::line('');
             WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run cleanup wait');
             WP_CLI::line('');
-            WP_CLI::line('\'cleanup\' will go through all content in Cxense.');
-            WP_CLI::line('If an article has different urls in Cxense and WP, the article will be deleted in Cxense,');
-            WP_CLI::line('and the WP article will (if it\'s published) be pushed to Cxense with correct url.');
+            WP_CLI::line('Add \'sleep-search:2000000\' to sleep 2 seconds when getting a page from Cxense.');
+            WP_CLI::line('Add \'sleep-request:2000000\' to sleep 2 seconds when pushing to / deleting from Cxense.');
             WP_CLI::line('');
-            WP_CLI::line('\'sync\' will go through all published composites in WP and push them to Cxense.');
-            WP_CLI::line('This will create the data in Cxense or update it if the url was already in Cxense.');
+            WP_CLI::line('Use \'info\' to get info about a locale. E.g.');
+            WP_CLI::line('');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run info only:da_DK');
             WP_CLI::line('');
             WP_CLI::line('Remember to run sync before cleanup if you are moving a site to a new address,');
             WP_CLI::line('e.g. beta.illvid.dk to illvid.dk');
@@ -89,10 +97,14 @@ class CxenseSync extends \WP_CLI_Command
         $params = $this->parseArguments($params);
 
         // Check for illegal arguments
-        if (sizeof(array_diff($params, self::ALLOWED_ARGUMENTS)) > 0) {
+        if (sizeof(array_diff($params, self::ALLOWED_COMMANDS)) > 0) {
             WP_CLI::error('You have entered illegal arguments. Run the following command for info: wp ' .
                 self::CMD_NAMESPACE . ' run');
         }
+
+        WP_CLI::line('Sleep search:  ' . $this->sleepSearch/1000000);
+        WP_CLI::line('Sleep request: ' . $this->sleepRequest/1000000);
+        sleep(1);
 
         collect($polylang->model->get_languages_list())->each(function (\PLL_Language $language) use (&$polylang,
             &$locale, $params) {
@@ -135,6 +147,14 @@ class CxenseSync extends \WP_CLI_Command
                 $this->wait = true;
                 continue;
             }
+            if (substr($param, 0, 13) === 'sleep-search:') {
+                $this->sleepSearch = substr($param, 13, strlen($param) - 13);
+                continue;
+            }
+            if (substr($param, 0, 14) === 'sleep-request:') {
+                $this->sleepSearch = substr($param, 14, strlen($param) - 14);
+                continue;
+            }
             $returnParams[] = $param;
         }
         return $returnParams;
@@ -152,7 +172,29 @@ class CxenseSync extends \WP_CLI_Command
                 WP_CLI::line('-- sync --');
                 $this->syncCompositesIntoCxense();
             }
+            if ($command === 'info') {
+                $this->info();
+            }
         }
+    }
+
+    private function info()
+    {
+        $searchResults = $this->doCxenseSearch('*', 1, 1);
+        WP_CLI::line('Total in Cxense:    ' . $searchResults->totalCount);
+
+        $args = [
+            'post_type' => WpComposite::POST_TYPE,
+            'posts_per_page' => 10,
+            'paged' => 1,
+            'order' => 'ASC',
+            'orderby' => 'ID'
+        ];
+        $posts = new \WP_Query($args);
+        WP_CLI::line('Total in Wordpress: ' . $posts->found_posts);
+        WP_CLI::line();
+
+        usleep($this->sleepSearch);
     }
 
     private function cleanupStat()
@@ -170,10 +212,13 @@ class CxenseSync extends \WP_CLI_Command
             $postId = $obj->getField('recs-articleid');
             $cxenseUrl = $obj->getField('url');
 
-            if (!$post=get_post($postId)) {
+            if ($postId && !$post = get_post($postId)) {
                 // Delete in Cxense
                 WP_CLI::line();
                 WP_CLI::line('Delete in Cxense - No such post');
+                WP_CLI::line('postId: ' . $postId);
+                WP_CLI::line('Cxense-url: ' . $cxenseUrl);
+                WP_CLI::line('Cxense-id: ' . $obj->id);
                 $this->cxenseDeleteUrl($cxenseUrl);
                 $this->deletedDidNotExist++;
 
@@ -182,7 +227,6 @@ class CxenseSync extends \WP_CLI_Command
             }
 
             $permalink = get_permalink($postId);
-
             if ($permalink !== $cxenseUrl) {
                 // Delete in Cxense
                 WP_CLI::line();
@@ -253,6 +297,7 @@ class CxenseSync extends \WP_CLI_Command
     private function doCxenseSearch($query, $page = 1, $perPage = 100) {
         WP_CLI::line();
         WP_CLI::line('Page: ' . $page);
+
         return $this->searchRepository->getSearchResults(
             $query,
             $page,
@@ -278,7 +323,7 @@ class CxenseSync extends \WP_CLI_Command
                 $callback($obj);
             });
 
-            usleep(self::GET_NEXT_PAGE_SLEEP_MSECS);
+            usleep($this->sleepSearch);
 
             $page++;
             $searchResults = $this->doCxenseSearch($query, $page, $perPage);
@@ -298,14 +343,14 @@ class CxenseSync extends \WP_CLI_Command
 
     public function cxenseDeleteUrl($contentUrl)
     {
-        usleep(self::DELETE_SLEEP_MSECS);
+        usleep($this->sleepRequest);
         $this->wait();
         return self::cxenseRequest(CxenseApi::CXENSE_PROFILE_DELETE, $contentUrl);
     }
 
     public function cxensePush($contentUrl)
     {
-        usleep(self::UPDATE_SLEEP_MSECS);
+        usleep($this->sleepRequest);
         $this->wait();
         return self::cxenseRequest(CxenseApi::CXENSE_PROFILE_PUSH, $contentUrl);
     }
