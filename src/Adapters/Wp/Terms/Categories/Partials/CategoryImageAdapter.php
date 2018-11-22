@@ -63,12 +63,15 @@ class CategoryImageAdapter implements ImageContract
 
     public function getFocalPoint(): array
     {
-        return ['x' => 0.5, 'y' => 0.5];
+        return [
+            'x' => floatval(0.5),
+            'y' => floatval(0.5)
+        ];
     }
 
     public function getAspectRatio(): float
     {
-        return 0.0;
+        return floatval(0.0);
     }
 
     public function getLink(): ?HyperlinkContract
