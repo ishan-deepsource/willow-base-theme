@@ -47,14 +47,14 @@ class ImageAdapter extends FileAdapter implements ImageContract
             !empty($coords = explode(',', $focalPoint)) &&
             count($coords) == 2) {
             return [
-                'x' => $coords[0],
-                'y' => $coords[1]
+                'x' => floatval($coords[0]),
+                'y' => floatval($coords[1]),
             ];
         }
 
         return [
-            'x' => 0.5,
-            'y' => 0.5
+            'x' => floatval(0.5),
+            'y' => floatval(0.5)
         ];
     }
 
