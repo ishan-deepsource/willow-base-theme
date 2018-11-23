@@ -212,7 +212,12 @@ class CxenseSync extends \WP_CLI_Command
             $postId = $obj->getField('recs-articleid');
             $cxenseUrl = $obj->getField('url');
 
-            if ($postId && !$post = get_post($postId)) {
+            // Skip cleaning for non-composites
+            if (!$postId) {
+                return;
+            }
+
+            if (!$post = get_post($postId)) {
                 // Delete in Cxense
                 WP_CLI::line();
                 WP_CLI::line('Delete in Cxense - No such post');
