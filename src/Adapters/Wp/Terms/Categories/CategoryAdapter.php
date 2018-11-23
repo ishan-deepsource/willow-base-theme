@@ -38,7 +38,6 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 {
     use UrlTrait;
 
-    protected $meta;
     protected $acfFields;
     protected $categoryContents;
     protected $contents;
@@ -57,7 +56,6 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
     public function __construct(\WP_Term $wpModel)
     {
         parent::__construct($wpModel);
-        $this->meta = $this->getMeta();
         $this->acfFields = WpModelRepository::instance()->getAcfData(sprintf(
             '%s_%s',
             $this->wpModel->taxonomy ?? null,
@@ -90,27 +88,27 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     public function getTitle(): ?string
     {
-        return data_get($this->meta, 'title.' . LanguageProvider::getCurrentLanguage()) ?: null;
+        return data_get($this->wpMeta, 'meta_title.0') ?: null;
     }
 
     public function getDescription(): ?string
     {
-        return data_get($this->meta, 'description.' . LanguageProvider::getCurrentLanguage()) ?: null;
+        return data_get($this->wpModel, 'description') ?: null;
     }
 
     public function getBody(): ?string
     {
-        return data_get($this->meta, 'body.' . LanguageProvider::getCurrentLanguage()) ?: null;
+        return data_get($this->wpMeta, 'body.0') ?: null;
     }
 
     public function getMetaDescription(): ?string
     {
-        return data_get($this->meta, 'meta_description.' . LanguageProvider::getCurrentLanguage()) ?: null;
+        return data_get($this->wpMeta, 'meta_description.0') ?: null;
     }
 
     public function getImage(): ?ImageContract
     {
-        return new Image(new CategoryImageAdapter($this->meta));
+        return new Image(new CategoryImageAdapter($this->wpMeta));
     }
 
     public function getUrl(): ?string
@@ -167,7 +165,7 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     public function getTeaser(string $type): ?TeaserContract
     {
-        return new Teaser(new CategoryTeaserAdapter($this->meta, $type));
+        return new Teaser(new CategoryTeaserAdapter($this->wpMeta, $type));
     }
 
     public function getTeasers(): ?Collection
@@ -178,19 +176,6 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
             $this->getTeaser('facebook'),
             $this->getTeaser('twitter'),
         ]);
-    }
-
-    private function getMeta()
-    {
-        if ($contentHubId = $this->getContenthubId()) {
-            try {
-                $category = WpSiteManager::instance()->categories()->findByContentHubId($contentHubId) ?? null;
-                return data_get($category, 'data');
-            } catch (\Exception $exception) {
-                return null;
-            }
-        }
-        return null;
     }
 
     public function getParent(): ?CategoryContract

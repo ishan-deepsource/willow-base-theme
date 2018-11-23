@@ -66,8 +66,8 @@ class ContentImageAdapter implements ContentImageContract
     public function getFocalPoint(): array
     {
         return [
-            'x' => 0.5,
-            'y' => 0.5
+            'x' => floatval(0.5),
+            'y' => floatval(0.5),
         ];
     }
 

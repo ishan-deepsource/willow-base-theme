@@ -20,7 +20,7 @@ class CategoryTeaserAdapter extends AbstractTeaserAdapter
 
     public function getTitle(): ?string
     {
-        return data_get($this->meta, 'meta_title.' . LanguageProvider::getCurrentLanguage()) ?: null;
+        return data_get($this->meta, 'meta_title.0') ?: null;
     }
 
     public function getImage(): ?ImageContract
@@ -30,6 +30,6 @@ class CategoryTeaserAdapter extends AbstractTeaserAdapter
 
     public function getDescription(): ?string
     {
-        return data_get($this->meta, 'meta_description.' . LanguageProvider::getCurrentLanguage()) ?: null;
+        return data_get($this->meta, 'meta_description.0') ?: null;
     }
 }
