@@ -11,4 +11,19 @@ use Bonnier\Willow\Base\Models\Contracts\Root\AudioContract;
  */
 class AudioAdapter extends FileAdapter implements AudioContract
 {
+    public function getUrl(): ?string
+    {
+        if (defined('AWS_S3_DOMAIN') &&
+            ($s3Meta = array_get($this->postMeta, 'amazonS3_info.0')) &&
+            $s3Data = unserialize($s3Meta)
+        ) {
+            return sprintf('https://%s/%s', AWS_S3_DOMAIN, array_get($s3Data, 'key'));
+        }
+
+        if ($this->file instanceof \WP_Post) {
+            return wp_get_attachment_image_url($this->getId(), 'original') ?: null;
+        } else {
+            return array_get($this->file, 'url') ?: null;
+        }
+    }
 }
