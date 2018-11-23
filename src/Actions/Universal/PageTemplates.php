@@ -22,6 +22,7 @@ class PageTemplates
         $this->pageTemplates = [
             'frontpage' => 'Frontpage',
             'cookiepolicy' => 'Cookie Politik',
+            '404-page' => '404 template',
         ];
         $this->compositeTemplates = [];
         $brand = null;
