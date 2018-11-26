@@ -4,7 +4,6 @@ namespace Bonnier\Willow\Base\Adapters\Cxense\Search;
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\StoryContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AudioContract;
-use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\Willow\Base\Adapters\Cxense\Search\Partials\DocumentTeaserAdapter;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ContentImage;
@@ -29,7 +28,7 @@ use Illuminate\Support\Collection;
  */
 class DocumentAdapter implements CompositeContract
 {
-    use DateTimeZoneTrait, UrlTrait;
+    use DateTimeZoneTrait;
 
     protected $document;
 
@@ -98,7 +97,7 @@ class DocumentAdapter implements CompositeContract
 
     public function getLink(): ?string
     {
-        return $this->getPath($this->document->getField('url'));
+        return parse_url($this->document->getField('url'), PHP_URL_PATH);
     }
 
     public function getCommercial(): ?CommercialContract
