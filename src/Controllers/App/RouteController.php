@@ -251,8 +251,14 @@ class RouteController extends BaseController
 
         $content = null;
 
-        foreach ($parts as $part) {
-            if ($category = get_category_by_slug($part)) {
+        $lastPartIndex = count($parts) - 1;
+
+        foreach ($parts as $index => $part) {
+            // The last part of the path, should be the postname of the composite
+            // We need to skip checking if the last part is a category, in the case
+            // the category slug and the composite slug are the same. For instance
+            // https://willow-site.com/top-category/subject/subject
+            if ($index < $lastPartIndex && $category = get_category_by_slug($part)) {
                 if ($content && !$content instanceof WP_Term) {
                     return null;
                 } elseif ($content && $category->parent !== $content->term_id) {
