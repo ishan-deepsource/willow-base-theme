@@ -17,7 +17,8 @@ class ImgixHelper
     {
         try {
             $response = self::getClient()->get($url);
-            return $response->getBody()->getContents();
+            $data = json_decode($response->getBody()->getContents());
+            return json_last_error() === JSON_ERROR_NONE ? $data : null;
         } catch (\Exception $exception) {
         }
         return null;
