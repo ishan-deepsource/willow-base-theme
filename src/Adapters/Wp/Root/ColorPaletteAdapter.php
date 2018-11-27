@@ -2,7 +2,6 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
-use Bonnier\Willow\Base\Actions\Backend\AddMedia;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Helpers\ImgixHelper;
 use Bonnier\Willow\Base\Models\Contracts\Root\ColorPaletteContract;
@@ -12,30 +11,33 @@ class ColorPaletteAdapter implements ColorPaletteContract
 {
     const COLOR_PALETTE_META = 'imgix_palette';
 
-    private $rawPalette;
+    private $colorPalette;
 
     public function __construct($attachmentId)
     {
         $meta = WpModelRepository::instance()->getPostMeta($attachmentId);
-        $this->rawPalette = array_get($meta, sprintf('%s.0', self::COLOR_PALETTE_META));
+        $paletteString = array_get($meta, sprintf('%s.0', self::COLOR_PALETTE_META));
 
-        if (!$this->rawPalette && $imageUrl = wp_get_attachment_url($attachmentId)) {
-            $this->rawPalette = ImgixHelper::getColorPalette($imageUrl);
-            update_post_meta($attachmentId, self::COLOR_PALETTE_META, $this->rawPalette);
+        if (is_serialized_string($paletteString)) {
+            $this->colorPalette = unserialize($paletteString);
+        } elseif (is_string($paletteString)) {
+            $palette = json_decode($paletteString);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $this->colorPalette = $palette;
+            }
         }
 
-        // WordPress might have saved a serialized meta field
-        // and will then return an object instead of a json encoded string.
-        if (is_string($this->rawPalette)) {
-            $this->rawPalette = json_decode($this->rawPalette);
+        if (!$this->colorPalette && $imageUrl = wp_get_attachment_url($attachmentId)) {
+            $this->colorPalette = ImgixHelper::getColorPalette($imageUrl);
+            update_post_meta($attachmentId, self::COLOR_PALETTE_META, serialize($this->colorPalette));
         }
     }
 
     public function getColors(): ?Collection
     {
         // Only output the hex values
-        if (isset($this->rawPalette->colors)) {
-            return collect($this->rawPalette->colors)->pluck('hex');
+        if (isset($this->colorPalette->colors)) {
+            return collect($this->colorPalette->colors)->pluck('hex');
         }
 
         return null;
@@ -44,8 +46,8 @@ class ColorPaletteAdapter implements ColorPaletteContract
     public function getAverageLuminance(): ?float
     {
         // Only output the hex values
-        if (isset($this->rawPalette->average_luminance)) {
-            return $this->rawPalette->average_luminance;
+        if (isset($this->colorPalette->average_luminance)) {
+            return $this->colorPalette->average_luminance;
         }
 
         return null;
@@ -53,8 +55,8 @@ class ColorPaletteAdapter implements ColorPaletteContract
 
     public function getDominantColors(): ?Collection
     {
-        if (isset($this->rawPalette->dominant_colors)) {
-            return collect($this->rawPalette->dominant_colors)->map(function ($var) {
+        if (isset($this->colorPalette->dominant_colors)) {
+            return collect($this->colorPalette->dominant_colors)->map(function ($var) {
                 return $var->hex;
             });
         }

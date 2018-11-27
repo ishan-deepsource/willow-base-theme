@@ -23,7 +23,7 @@ class AddMedia
         
         if ($imageUrl = wp_get_attachment_url($attachmentId)) {
             $palette = ImgixHelper::getColorPalette($imageUrl);
-            update_post_meta($attachmentId, ColorPaletteAdapter::COLOR_PALETTE_META, $palette);
+            update_post_meta($attachmentId, ColorPaletteAdapter::COLOR_PALETTE_META, serialize($palette));
         }
 
         return $data;
