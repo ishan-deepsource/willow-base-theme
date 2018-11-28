@@ -218,7 +218,7 @@ class CxenseSync extends \WP_CLI_Command
 
         $onlyCxenseUrls = $cxenseUrls->diff($wpUrls);
         WP_CLI::line('Urls only in Cxense - ' . $onlyCxenseUrls->count());
-        $cxenseUrls->diff($wpUrls)->each(function ($url) {
+        $onlyCxenseUrls->each(function ($url) {
             WP_CLI::line($url);
         });
         WP_CLI::line();
