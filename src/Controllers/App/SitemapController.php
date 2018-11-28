@@ -121,12 +121,27 @@ class SitemapController extends WP_REST_Controller
             function () use ($type, $page, $perPage) {
                 $offset = ($page - 1) * $perPage;
                 if (in_array($type, self::POST_TYPES)) {
-                    $contents = get_posts([
+                    $args = [
                         'post_type' => $type,
                         'posts_per_page' => $perPage,
                         'offset' => $offset,
                         'post_status' => 'publish',
-                    ]);
+                    ];
+                    if ($type === 'page') {
+                        $args['meta_query'] = [
+                            'relation' => 'OR',
+                            [
+                                'key' => 'sitemap',
+                                'value' => '1',
+                                'compare' => '=',
+                            ],
+                            [
+                                'key' => 'sitemap',
+                                'compare' => 'NOT EXISTS',
+                            ],
+                        ];
+                    }
+                    $contents = get_posts($args);
                 } else {
                     $contents = get_terms([
                         'taxonomy' => $type,
