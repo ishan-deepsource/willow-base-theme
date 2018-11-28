@@ -13,17 +13,18 @@ use WP_CLI;
 class CxenseSync extends \WP_CLI_Command
 {
     const CMD_NAMESPACE = 'cxense';
-    const ALLOWED_COMMANDS = ['cleanup', 'sync', 'info'];
+    const ALLOWED_COMMANDS = ['cleanup', 'sync', 'info', 'wp-urls', 'cxense-urls', 'urls'];
 
+    protected $searchRepository;
+
+    protected $inCxense;
+    protected $wait;
     protected $sleepSearch;
     protected $sleepRequest;
+    protected $syncStartId;
 
     protected $onlyLocale;
     protected $skipLocale;
-    protected $wait;
-
-    protected $searchRepository;
-    protected $inCxense;
 
     protected $deletedDidNotExist;
     protected $deletedDifferentUrl;
@@ -45,6 +46,7 @@ class CxenseSync extends \WP_CLI_Command
         $this->wait = false;
         $this->sleepSearch = 200000; // 0,2 second
         $this->sleepRequest = 1000000; // 1 second
+        $this->syncStartId = null;
 
         // CleanUp stats
         $this->deletedDidNotExist = 0;
@@ -75,6 +77,10 @@ class CxenseSync extends \WP_CLI_Command
             WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run sync only:da_DK');
             WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run cleanup skip:nb_NO');
             WP_CLI::line('');
+            WP_CLI::line('Add \'sync-start-id:5000\' to get sync to skip all composites with an id lower than 5000');
+            WP_CLI::line('');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run sync sync-start-id:5000 only:da_DK');
+            WP_CLI::line('');
             WP_CLI::line('Add \'wait\' to be prompted to press enter before each update/delete call to Cxense.');
             WP_CLI::line('When prompted you can write \'go\' to disable the prompting without restarting. E.g.');
             WP_CLI::line('');
@@ -86,6 +92,15 @@ class CxenseSync extends \WP_CLI_Command
             WP_CLI::line('Use \'info\' to get info about a locale. E.g.');
             WP_CLI::line('');
             WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run info only:da_DK');
+            WP_CLI::line('');
+            WP_CLI::line('Use \'cxense-urls\' or \'wp-urls\' to get all cxense or wordpress urls. E.g.');
+            WP_CLI::line('');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run cxense-urls only:da_DK');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run wp-urls only:da_DK');
+            WP_CLI::line('');
+            WP_CLI::line('Use \'urls\' get the difference and intersection of the urls in cxense and wordpress.');
+            WP_CLI::line('');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run urls only:da_DK');
             WP_CLI::line('');
             WP_CLI::line('Remember to run sync before cleanup if you are moving a site to a new address,');
             WP_CLI::line('e.g. beta.illvid.dk to illvid.dk');
@@ -148,11 +163,15 @@ class CxenseSync extends \WP_CLI_Command
                 continue;
             }
             if (substr($param, 0, 13) === 'sleep-search:') {
-                $this->sleepSearch = substr($param, 13, strlen($param) - 13);
+                $this->sleepSearch = (int)substr($param, 13, strlen($param) - 13);
                 continue;
             }
             if (substr($param, 0, 14) === 'sleep-request:') {
-                $this->sleepSearch = substr($param, 14, strlen($param) - 14);
+                $this->sleepRequest = (int)substr($param, 14, strlen($param) - 14);
+                continue;
+            }
+            if (substr($param, 0, 14) === 'sync-start-id:') {
+                $this->syncStartId = (int)substr($param, 14, strlen($param) - 14);
                 continue;
             }
             $returnParams[] = $param;
@@ -171,11 +190,94 @@ class CxenseSync extends \WP_CLI_Command
             if ($command === 'sync') {
                 WP_CLI::line('-- sync --');
                 $this->syncCompositesIntoCxense();
+                continue;
             }
             if ($command === 'info') {
                 $this->info();
+                continue;
+            }
+            if ($command === 'cxense-urls') {
+                $this->cxenseUrls();
+                continue;
+            }
+            if ($command === 'wp-urls') {
+                $this->wpUrls();
+                continue;
+            }
+            if ($command === 'urls') {
+                $this->urls();
+                continue;
             }
         }
+    }
+
+    private function urls()
+    {
+        $cxenseUrls = $this->cxenseUrls();
+        $wpUrls = $this->wpUrls();
+
+        $onlyCxenseUrls = $cxenseUrls->diff($wpUrls);
+        WP_CLI::line('Urls only in Cxense - ' . $onlyCxenseUrls->count());
+        $cxenseUrls->diff($wpUrls)->each(function ($url) {
+            WP_CLI::line($url);
+        });
+        WP_CLI::line();
+
+        $onlyWpUrls = $wpUrls->diff($cxenseUrls);
+        WP_CLI::line('Urls only in Wordpress - ' . $onlyWpUrls->count());
+        $onlyWpUrls->each(function ($url) {
+            WP_CLI::line($url);
+        });
+        WP_CLI::line();
+
+        $intersect = $cxenseUrls->intersect($wpUrls);
+        WP_CLI::line('Urls in both Cxense and Wordpress - ' . $intersect->count());
+        $intersect->each(function ($url) {
+            WP_CLI::line($url);
+        });
+        WP_CLI::line();
+    }
+
+    private function cxenseUrls()
+    {
+        $urls = collect();
+
+        $this->cxense_map_all(function ($obj) use (&$urls) {
+            $cxenseUrl = $obj->getField('url');
+            $urls->push($cxenseUrl);
+        });
+
+        WP_CLI::line('Cxense urls:');
+        $urls->sort()->unique()->each(function ($url) {
+            WP_CLI::line($url);
+        });
+
+        WP_CLI::line('Cxense urls count:        ' . $urls->count());
+        WP_CLI::line('Cxense urls unique count: ' . $urls->unique()->count());
+        WP_CLI::line();
+
+        return $urls;
+    }
+
+    private function wpUrls()
+    {
+        $urls = collect();
+
+        WpComposite::map_all(function (\WP_Post $post) use (&$urls) {
+            $wpUrl = get_permalink($post->ID);
+            $urls->push($wpUrl);
+        });
+
+        WP_CLI::line('Wordpress urls:');
+        $urls->sort()->unique()->each(function ($url) {
+            WP_CLI::line($url);
+        });
+
+        WP_CLI::line('WP urls count:        ' . $urls->count());
+        WP_CLI::line('WP urls unique count: ' . $urls->unique()->count());
+        WP_CLI::line();
+
+        return $urls;
     }
 
     private function info()
@@ -277,6 +379,12 @@ class CxenseSync extends \WP_CLI_Command
                 return;
             }
 
+            // Check if this id should be skipped
+            if ($this->syncStartId && $this->syncStartId > $post->ID) {
+                WP_CLI::line('Skipping all ids lower than: ' . $this->syncStartId);
+                return;
+            }
+
             // Insert into Cxense
             $this->pushCount++;
             if (!$this->cxensePush($url)) {
@@ -293,7 +401,7 @@ class CxenseSync extends \WP_CLI_Command
             WP_CLI::line();
         });
 
-        if ($this->errorUrls->count()>0) {
+        if ($this->errorUrls->count() > 0) {
             WP_CLI::line('ErrorUrls:');
             var_dump($this->errorUrls);
         }
