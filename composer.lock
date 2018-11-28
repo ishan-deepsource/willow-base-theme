@@ -100,16 +100,16 @@
         },
         {
             "name": "bonnier/contenthub-editor",
-            "version": "3.28.0",
+            "version": "3.29.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-contenthub-editor.git",
-                "reference": "b671144c2dd499e10ea9307cc763527b9de151a5"
+                "reference": "eb547e232271ec8674ca70cc5fbd99a136d921c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/b671144c2dd499e10ea9307cc763527b9de151a5",
-                "reference": "b671144c2dd499e10ea9307cc763527b9de151a5",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/eb547e232271ec8674ca70cc5fbd99a136d921c2",
+                "reference": "eb547e232271ec8674ca70cc5fbd99a136d921c2",
                 "shasum": ""
             },
             "require": {
@@ -152,7 +152,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-11-22T22:26:54+00:00"
+            "time": "2018-11-28T09:48:22+00:00"
         },
         {
             "name": "bonnier/php-video-helper",
@@ -203,16 +203,16 @@
         },
         {
             "name": "bonnier/willow-mu-plugins",
-            "version": "1.2.4",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/willow-mu-plugins.git",
-                "reference": "0a23a876e596e6205ae1ff8ca79431f30a375922"
+                "reference": "2148d13f225e373a76123b3aef91412836787cb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/0a23a876e596e6205ae1ff8ca79431f30a375922",
-                "reference": "0a23a876e596e6205ae1ff8ca79431f30a375922",
+                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/2148d13f225e373a76123b3aef91412836787cb5",
+                "reference": "2148d13f225e373a76123b3aef91412836787cb5",
                 "shasum": ""
             },
             "require": {
@@ -242,7 +242,7 @@
                 }
             ],
             "description": "A collection of Must Use WordPress Plugins for Willow",
-            "time": "2018-11-22T08:48:55+00:00"
+            "time": "2018-11-28T12:56:12+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-cache",
