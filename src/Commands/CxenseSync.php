@@ -243,8 +243,7 @@ class CxenseSync extends \WP_CLI_Command
         $urls = collect();
 
         $this->cxense_map_all(function ($obj) use (&$urls) {
-            $cxenseUrl = $obj->getField('url');
-            $urls->push($cxenseUrl);
+            $urls->push($obj->getField('url'));
         });
 
         WP_CLI::line('Cxense urls:');
@@ -264,8 +263,7 @@ class CxenseSync extends \WP_CLI_Command
         $urls = collect();
 
         WpComposite::map_all(function (\WP_Post $post) use (&$urls) {
-            $wpUrl = get_permalink($post->ID);
-            $urls->push($wpUrl);
+            $urls->push(get_permalink($post->ID));
         });
 
         WP_CLI::line('Wordpress urls:');
