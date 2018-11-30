@@ -93,6 +93,14 @@ class RouteController extends BaseController
         }
 
         if ($resource) {
+            if ($resource->getMeta()['type'] !== 'redirect' && $redirectPath = $this->shouldPathRedirect($path)) {
+                $resource = new Item(null, new NullTransformer());
+                $resource->setMeta([
+                    'type' => 'redirect',
+                    'location' => $redirectPath,
+                    'status' => 301,
+                ]);
+            }
             $manager = new Manager();
             $data = $manager->createData($resource)->toArray();
             return new WP_REST_Response($data);
@@ -101,6 +109,22 @@ class RouteController extends BaseController
                 'status' => 404,
             ], 404);
         }
+    }
+
+    private function shouldPathRedirect($path)
+    {
+        $newPath = strtolower(rtrim($path, '/'));
+
+        // We need to URL decode the strings, because urlencoded characters
+        // will be uppercase, and that will make the urls differ, even though
+        // they are actually the same. For instance /?preview=true will be
+        // converted to %3Fpreview%3Dtrue, and the encoded charachters will
+        // then be lowercased, which will not match the actual path.
+        if (urldecode($newPath) === urldecode($path)) {
+            return false;
+        }
+
+        return $newPath;
     }
 
     private function resolveContent($path, $locale)
