@@ -197,21 +197,21 @@ class CxenseSync extends \WP_CLI_Command
                 continue;
             }
             if ($command === 'cxense-urls') {
-                $this->cxenseUrls();
+                $this->outputCxenseUrls();
                 continue;
             }
             if ($command === 'wp-urls') {
-                $this->wpUrls();
+                $this->outputwpUrls();
                 continue;
             }
             if ($command === 'urls') {
-                $this->urls();
+                $this->outputUrls();
                 continue;
             }
         }
     }
 
-    private function urls()
+    private function outputUrls()
     {
         $cxenseUrls = $this->cxenseUrls();
         $wpUrls = $this->wpUrls();
@@ -238,6 +238,17 @@ class CxenseSync extends \WP_CLI_Command
         WP_CLI::line();
     }
 
+    private function cxenseObjects()
+    {
+        $objects = collect();
+
+        $this->cxense_map_all(function ($obj) use (&$objects) {
+            $objects->push($obj);
+        });
+
+        return $objects;
+    }
+
     private function cxenseUrls()
     {
         $urls = collect();
@@ -246,16 +257,21 @@ class CxenseSync extends \WP_CLI_Command
             $urls->push($obj->getField('url'));
         });
 
+        return $urls;
+    }
+
+    private function outputCxenseUrls()
+    {
+        $cxenseUrls = $this->cxenseUrls();
+
         WP_CLI::line('Cxense urls:');
-        $urls->sort()->unique()->each(function ($url) {
+        $cxenseUrls->sort()->unique()->each(function ($url) {
             WP_CLI::line($url);
         });
 
-        WP_CLI::line('Cxense urls count:        ' . $urls->count());
-        WP_CLI::line('Cxense urls unique count: ' . $urls->unique()->count());
+        WP_CLI::line('Cxense urls count:        ' . $cxenseUrls->count());
+        WP_CLI::line('Cxense urls unique count: ' . $cxenseUrls->unique()->count());
         WP_CLI::line();
-
-        return $urls;
     }
 
     private function wpUrls()
@@ -266,6 +282,13 @@ class CxenseSync extends \WP_CLI_Command
             $urls->push(get_permalink($post->ID));
         });
 
+        return $urls;
+    }
+
+    private function outputWpUrls()
+    {
+        $urls = $this->wpUrls();
+
         WP_CLI::line('Wordpress urls:');
         $urls->sort()->unique()->each(function ($url) {
             WP_CLI::line($url);
@@ -274,8 +297,6 @@ class CxenseSync extends \WP_CLI_Command
         WP_CLI::line('WP urls count:        ' . $urls->count());
         WP_CLI::line('WP urls unique count: ' . $urls->unique()->count());
         WP_CLI::line();
-
-        return $urls;
     }
 
     private function info()
@@ -306,8 +327,7 @@ class CxenseSync extends \WP_CLI_Command
 
     private function cleanupCxense()
     {
-        // Iterate over Cxense urls and delete (in cxense) those with ids not in the composites
-        $this->cxense_map_all(function ($obj) {
+        $this->cxenseObjects()->each(function($obj){
             print ". ";
             $postId = $obj->getField('recs-articleid');
             $cxenseUrl = $obj->getField('url');
@@ -452,14 +472,14 @@ class CxenseSync extends \WP_CLI_Command
         }
     }
 
-    public function cxenseDeleteUrl($contentUrl)
+    private function cxenseDeleteUrl($contentUrl)
     {
         usleep($this->sleepRequest);
         $this->wait();
         return self::cxenseRequest(CxenseApi::CXENSE_PROFILE_DELETE, $contentUrl);
     }
 
-    public function cxensePush($contentUrl)
+    private function cxensePush($contentUrl)
     {
         usleep($this->sleepRequest);
         $this->wait();
