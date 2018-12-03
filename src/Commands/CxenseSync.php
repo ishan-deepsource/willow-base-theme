@@ -22,6 +22,7 @@ class CxenseSync extends \WP_CLI_Command
     protected $sleepSearch;
     protected $sleepRequest;
     protected $syncStartId;
+    protected $syncSkipIds;
 
     protected $onlyLocale;
     protected $skipLocale;
@@ -47,6 +48,7 @@ class CxenseSync extends \WP_CLI_Command
         $this->sleepSearch = 200000; // 0,2 second
         $this->sleepRequest = 1000000; // 1 second
         $this->syncStartId = null;
+        $this->syncSkipIds = collect();
 
         // CleanUp stats
         $this->deletedDidNotExist = 0;
@@ -172,6 +174,13 @@ class CxenseSync extends \WP_CLI_Command
             }
             if (substr($param, 0, 14) === 'sync-start-id:') {
                 $this->syncStartId = (int)substr($param, 14, strlen($param) - 14);
+                continue;
+            }
+            if (substr($param, 0, 14) === 'sync-skip-ids:') {
+                $this->syncSkipIds = collect(explode(',', substr($param, 14, strlen($param) - 14)))
+                ->map(function ($id) {
+                    return intval($id);
+                });
                 continue;
             }
             $returnParams[] = $param;
@@ -397,9 +406,16 @@ class CxenseSync extends \WP_CLI_Command
                 return;
             }
 
-            // Check if this id should be skipped
+            // Check if this id should be skipped (the user has provided sync-start-id argument)
             if ($this->syncStartId && $this->syncStartId > $post->ID) {
                 WP_CLI::line('Skipping all ids lower than: ' . $this->syncStartId);
+                return;
+            }
+
+            // Check if this id should be skipped (the user has provided sync-skip-ids argument)
+            if ($this->syncSkipIds->contains($post->ID)) {
+                WP_CLI::line('Skipping id: ' . $post->ID);
+                $this->skipCount++;
                 return;
             }
 
