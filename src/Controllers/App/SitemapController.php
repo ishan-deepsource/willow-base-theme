@@ -129,15 +129,23 @@ class SitemapController extends WP_REST_Controller
                     ];
                     if ($type === 'page') {
                         $args['meta_query'] = [
-                            'relation' => 'OR',
+                            'relation' => 'AND',
                             [
-                                'key' => 'sitemap',
-                                'value' => '1',
-                                'compare' => '=',
+                                'relation' => 'OR',
+                                [
+                                    'key' => 'sitemap',
+                                    'value' => '1',
+                                    'compare' => '=',
+                                ],
+                                [
+                                    'key' => 'sitemap',
+                                    'compare' => 'NOT EXISTS',
+                                ],
                             ],
                             [
-                                'key' => 'sitemap',
-                                'compare' => 'NOT EXISTS',
+                                'key' => '_wp_page_template',
+                                'value' => '404-page',
+                                'compare' => '!=',
                             ],
                         ];
                     }

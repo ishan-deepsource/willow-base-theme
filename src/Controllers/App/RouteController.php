@@ -64,7 +64,12 @@ class RouteController extends BaseController
         } elseif ($content instanceof WP_Post && $content->post_type === 'page') {
             $page = new Page(new PageAdapter($content));
             $resource = new Item($page, new PageTransformer());
-            $resource->setMeta(['type' => 'page']);
+            $meta = ['type' => 'page'];
+            if ($page->getTemplate() === '404-page') {
+                $meta['type'] = '404';
+                $meta['status'] = 404;
+            }
+            $resource->setMeta($meta);
         } elseif ($content instanceof WP_Term && $content->taxonomy === 'category') {
             $category = new Category(new CategoryAdapter($content));
             $resource = new Item($category, new CategoryTransformer());
@@ -96,12 +101,41 @@ class RouteController extends BaseController
             }
             $manager = new Manager();
             $data = $manager->createData($resource)->toArray();
+            if (array_get($data, 'data.template') === '404-page') {
+                return $this->return404Page($data);
+            }
             return new WP_REST_Response($data);
         } else {
-            return new WP_REST_Response([
-                'status' => 404,
-            ], 404);
+            return $this->return404Page();
         }
+    }
+
+    private function return404Page(?array $data = [])
+    {
+        if (empty($data)) {
+            $post = collect(
+                get_posts([
+                    'post_type' => 'page',
+                    'meta_key' => '_wp_page_template',
+                    'meta_value' => '404-page',
+                ])
+            )->first(function (WP_Post $post) {
+                return LanguageProvider::getPostLanguage($post->ID) === LanguageProvider::getCurrentLanguage();
+            });
+            if ($post instanceof WP_Post) {
+                $page = new Page(new PageAdapter($post));
+                $resource = new Item($page, new PageTransformer);
+            } else {
+                $resource = new Item(null, new NullTransformer);
+            }
+            $resource->setMeta([
+                'type' => '404',
+                'status' => 404
+            ]);
+            $manager = new Manager();
+            $data = $manager->createData($resource)->toArray();
+        }
+        return new WP_REST_Response($data, 404);
     }
 
     private function shouldPathRedirect($path)
