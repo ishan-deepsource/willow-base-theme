@@ -24,7 +24,6 @@ use Bonnier\Willow\Base\Transformers\NullTransformer;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
 use WP_Post;
-use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Term;
@@ -54,13 +53,7 @@ class RouteController extends BaseController
     {
         $locale = $request->get_param('lang');
         $path = $request->get_param('path');
-        $content = Cache::remember(
-            'path-resolve:' . $path . '-' . $locale,
-            2 * 3600,
-            function () use ($path, $locale) {
-                return $this->resolveContent($path, $locale);
-            }
-        );
+        $content = $this->resolveContent($path, $locale);
 
         $resource = null;
 
