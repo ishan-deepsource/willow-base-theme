@@ -113,12 +113,16 @@ class RouteController extends BaseController
     private function return404Page(?array $data = [])
     {
         if (empty($data)) {
-            $posts = get_posts([
-                'post_type' => 'page',
-                'meta_key' => '_wp_page_template',
-                'meta_value' => '404-page',
-            ]);
-            if ($posts && ($post = array_get($posts, 0)) && $post instanceof WP_Post) {
+            $post = collect(
+                get_posts([
+                    'post_type' => 'page',
+                    'meta_key' => '_wp_page_template',
+                    'meta_value' => '404-page',
+                ])
+            )->first(function (WP_Post $post) {
+                return LanguageProvider::getPostLanguage($post->ID) === LanguageProvider::getCurrentLanguage();
+            });
+            if ($post instanceof WP_Post) {
                 $page = new Page(new PageAdapter($post));
                 $resource = new Item($page, new PageTransformer);
             } else {
