@@ -13,17 +13,19 @@ use WP_CLI;
 class CxenseSync extends \WP_CLI_Command
 {
     const CMD_NAMESPACE = 'cxense';
-    const ALLOWED_COMMANDS = ['cleanup', 'sync', 'info'];
+    const ALLOWED_COMMANDS = ['cleanup', 'sync', 'info', 'wp-urls', 'cxense-urls', 'urls'];
 
+    protected $searchRepository;
+
+    protected $inCxense;
+    protected $wait;
     protected $sleepSearch;
     protected $sleepRequest;
+    protected $syncStartId;
+    protected $syncSkipIds;
 
     protected $onlyLocale;
     protected $skipLocale;
-    protected $wait;
-
-    protected $searchRepository;
-    protected $inCxense;
 
     protected $deletedDidNotExist;
     protected $deletedDifferentUrl;
@@ -45,6 +47,8 @@ class CxenseSync extends \WP_CLI_Command
         $this->wait = false;
         $this->sleepSearch = 200000; // 0,2 second
         $this->sleepRequest = 1000000; // 1 second
+        $this->syncStartId = null;
+        $this->syncSkipIds = collect();
 
         // CleanUp stats
         $this->deletedDidNotExist = 0;
@@ -75,6 +79,10 @@ class CxenseSync extends \WP_CLI_Command
             WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run sync only:da_DK');
             WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run cleanup skip:nb_NO');
             WP_CLI::line('');
+            WP_CLI::line('Add \'sync-start-id:5000\' to get sync to skip all composites with an id lower than 5000');
+            WP_CLI::line('');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run sync sync-start-id:5000 only:da_DK');
+            WP_CLI::line('');
             WP_CLI::line('Add \'wait\' to be prompted to press enter before each update/delete call to Cxense.');
             WP_CLI::line('When prompted you can write \'go\' to disable the prompting without restarting. E.g.');
             WP_CLI::line('');
@@ -86,6 +94,15 @@ class CxenseSync extends \WP_CLI_Command
             WP_CLI::line('Use \'info\' to get info about a locale. E.g.');
             WP_CLI::line('');
             WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run info only:da_DK');
+            WP_CLI::line('');
+            WP_CLI::line('Use \'cxense-urls\' or \'wp-urls\' to get all cxense or wordpress urls. E.g.');
+            WP_CLI::line('');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run cxense-urls only:da_DK');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run wp-urls only:da_DK');
+            WP_CLI::line('');
+            WP_CLI::line('Use \'urls\' get the difference and intersection of the urls in cxense and wordpress.');
+            WP_CLI::line('');
+            WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run urls only:da_DK');
             WP_CLI::line('');
             WP_CLI::line('Remember to run sync before cleanup if you are moving a site to a new address,');
             WP_CLI::line('e.g. beta.illvid.dk to illvid.dk');
@@ -148,11 +165,22 @@ class CxenseSync extends \WP_CLI_Command
                 continue;
             }
             if (substr($param, 0, 13) === 'sleep-search:') {
-                $this->sleepSearch = substr($param, 13, strlen($param) - 13);
+                $this->sleepSearch = (int)substr($param, 13, strlen($param) - 13);
                 continue;
             }
             if (substr($param, 0, 14) === 'sleep-request:') {
-                $this->sleepSearch = substr($param, 14, strlen($param) - 14);
+                $this->sleepRequest = (int)substr($param, 14, strlen($param) - 14);
+                continue;
+            }
+            if (substr($param, 0, 14) === 'sync-start-id:') {
+                $this->syncStartId = (int)substr($param, 14, strlen($param) - 14);
+                continue;
+            }
+            if (substr($param, 0, 14) === 'sync-skip-ids:') {
+                $this->syncSkipIds = collect(explode(',', substr($param, 14, strlen($param) - 14)))
+                ->map(function ($id) {
+                    return intval($id);
+                });
                 continue;
             }
             $returnParams[] = $param;
@@ -171,11 +199,113 @@ class CxenseSync extends \WP_CLI_Command
             if ($command === 'sync') {
                 WP_CLI::line('-- sync --');
                 $this->syncCompositesIntoCxense();
+                continue;
             }
             if ($command === 'info') {
                 $this->info();
+                continue;
+            }
+            if ($command === 'cxense-urls') {
+                $this->outputCxenseUrls();
+                continue;
+            }
+            if ($command === 'wp-urls') {
+                $this->outputwpUrls();
+                continue;
+            }
+            if ($command === 'urls') {
+                $this->outputUrls();
+                continue;
             }
         }
+    }
+
+    private function outputUrls()
+    {
+        $cxenseUrls = $this->cxenseUrls();
+        $wpUrls = $this->wpUrls();
+
+        $onlyCxenseUrls = $cxenseUrls->diff($wpUrls);
+        WP_CLI::line('Urls only in Cxense - ' . $onlyCxenseUrls->count());
+        $onlyCxenseUrls->each(function ($url) {
+            WP_CLI::line($url);
+        });
+        WP_CLI::line();
+
+        $onlyWpUrls = $wpUrls->diff($cxenseUrls);
+        WP_CLI::line('Urls only in Wordpress - ' . $onlyWpUrls->count());
+        $onlyWpUrls->each(function ($url) {
+            WP_CLI::line($url);
+        });
+        WP_CLI::line();
+
+        $intersect = $cxenseUrls->intersect($wpUrls);
+        WP_CLI::line('Urls in both Cxense and Wordpress - ' . $intersect->count());
+        $intersect->each(function ($url) {
+            WP_CLI::line($url);
+        });
+        WP_CLI::line();
+    }
+
+    private function cxenseObjects()
+    {
+        $objects = collect();
+
+        $this->cxense_map_all(function ($obj) use (&$objects) {
+            $objects->push($obj);
+        });
+
+        return $objects;
+    }
+
+    private function cxenseUrls()
+    {
+        $urls = collect();
+
+        $this->cxense_map_all(function ($obj) use (&$urls) {
+            $urls->push($obj->getField('url'));
+        });
+
+        return $urls;
+    }
+
+    private function outputCxenseUrls()
+    {
+        $cxenseUrls = $this->cxenseUrls();
+
+        WP_CLI::line('Cxense urls:');
+        $cxenseUrls->sort()->unique()->each(function ($url) {
+            WP_CLI::line($url);
+        });
+
+        WP_CLI::line('Cxense urls count:        ' . $cxenseUrls->count());
+        WP_CLI::line('Cxense urls unique count: ' . $cxenseUrls->unique()->count());
+        WP_CLI::line();
+    }
+
+    private function wpUrls()
+    {
+        $urls = collect();
+
+        WpComposite::map_all(function (\WP_Post $post) use (&$urls) {
+            $urls->push(get_permalink($post->ID));
+        });
+
+        return $urls;
+    }
+
+    private function outputWpUrls()
+    {
+        $urls = $this->wpUrls();
+
+        WP_CLI::line('Wordpress urls:');
+        $urls->sort()->unique()->each(function ($url) {
+            WP_CLI::line($url);
+        });
+
+        WP_CLI::line('WP urls count:        ' . $urls->count());
+        WP_CLI::line('WP urls unique count: ' . $urls->unique()->count());
+        WP_CLI::line();
     }
 
     private function info()
@@ -206,8 +336,7 @@ class CxenseSync extends \WP_CLI_Command
 
     private function cleanupCxense()
     {
-        // Iterate over Cxense urls and delete (in cxense) those with ids not in the composites
-        $this->cxense_map_all(function ($obj) {
+        $this->cxenseObjects()->each(function($obj){
             print ". ";
             $postId = $obj->getField('recs-articleid');
             $cxenseUrl = $obj->getField('url');
@@ -277,6 +406,19 @@ class CxenseSync extends \WP_CLI_Command
                 return;
             }
 
+            // Check if this id should be skipped (the user has provided sync-start-id argument)
+            if ($this->syncStartId && $this->syncStartId > $post->ID) {
+                WP_CLI::line('Skipping all ids lower than: ' . $this->syncStartId);
+                return;
+            }
+
+            // Check if this id should be skipped (the user has provided sync-skip-ids argument)
+            if ($this->syncSkipIds->contains($post->ID)) {
+                WP_CLI::line('Skipping id: ' . $post->ID);
+                $this->skipCount++;
+                return;
+            }
+
             // Insert into Cxense
             $this->pushCount++;
             if (!$this->cxensePush($url)) {
@@ -293,7 +435,7 @@ class CxenseSync extends \WP_CLI_Command
             WP_CLI::line();
         });
 
-        if ($this->errorUrls->count()>0) {
+        if ($this->errorUrls->count() > 0) {
             WP_CLI::line('ErrorUrls:');
             var_dump($this->errorUrls);
         }
@@ -346,14 +488,14 @@ class CxenseSync extends \WP_CLI_Command
         }
     }
 
-    public function cxenseDeleteUrl($contentUrl)
+    private function cxenseDeleteUrl($contentUrl)
     {
         usleep($this->sleepRequest);
         $this->wait();
         return self::cxenseRequest(CxenseApi::CXENSE_PROFILE_DELETE, $contentUrl);
     }
 
-    public function cxensePush($contentUrl)
+    private function cxensePush($contentUrl)
     {
         usleep($this->sleepRequest);
         $this->wait();

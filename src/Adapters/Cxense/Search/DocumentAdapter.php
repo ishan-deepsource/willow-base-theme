@@ -97,7 +97,7 @@ class DocumentAdapter implements CompositeContract
 
     public function getLink(): ?string
     {
-        return $this->document->getField('url');
+        return parse_url($this->document->getField('url'), PHP_URL_PATH);
     }
 
     public function getCommercial(): ?CommercialContract
