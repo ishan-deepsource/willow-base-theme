@@ -113,15 +113,23 @@ class RouteController extends BaseController
 
     private function shouldPathRedirect($path)
     {
-        $newPath = strtolower(rtrim($path, '/'));
+        $cleanPath = parse_url($path, PHP_URL_PATH);
+        if ($cleanPath === '/') {
+            return false;
+        }
+        $newPath = mb_strtolower(rtrim($cleanPath, '/'));
 
         // We need to URL decode the strings, because urlencoded characters
         // will be uppercase, and that will make the urls differ, even though
         // they are actually the same. For instance /?preview=true will be
         // converted to %3Fpreview%3Dtrue, and the encoded charachters will
         // then be lowercased, which will not match the actual path.
-        if (urldecode($newPath) === urldecode($path)) {
+        if (urldecode($newPath) === urldecode($cleanPath)) {
             return false;
+        }
+
+        if ($query = parse_url($path, PHP_URL_QUERY)) {
+            $newPath .= sprintf('?%s', $query);
         }
 
         return $newPath;
