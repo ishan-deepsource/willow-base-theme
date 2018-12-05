@@ -43,14 +43,18 @@ class SitemapController extends WP_REST_Controller
 
     public function register_routes()
     {
-        register_rest_route('app', '/sitemaps', [
-            'methods' => WP_REST_Server::READABLE,
-            'callback' => [$this, 'sitemaps'],
-        ]);
-        register_rest_route('app', '/sitemaps/(?P<type>[a-zA-Z0-9-_]+)', [
-            'methods' => WP_REST_Server::READABLE,
-            'callback' => [$this, 'content']
-        ]);
+        register_rest_route(
+            'app', '/sitemaps', [
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => [$this, 'sitemaps'],
+            ]
+        );
+        register_rest_route(
+            'app', '/sitemaps/(?P<type>[a-zA-Z0-9-_]+)', [
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => [$this, 'content']
+            ]
+        );
     }
 
     public function sitemaps(WP_REST_Request $request)
@@ -59,41 +63,49 @@ class SitemapController extends WP_REST_Controller
         if ($queryPerPage = $request->get_param('per_page')) {
             $perPage = intval($queryPerPage);
         }
-        $posts = collect(self::POST_TYPES)->map(function (string $postType) use ($perPage) {
-            $lastModPost = get_posts([
-                'post_type' => $postType,
-                'numberposts' => 1,
-                'orderby' => 'modified',
-                'order' => 'DESC',
-                'post_status' => 'publish'
-            ]);
-            $lastMod = (new DateTime($lastModPost[0]->post_modified_gmt))->format('c');
-            $pages = ceil(intval(wp_count_posts($postType)->publish) / $perPage);
-            $urls = [];
-            for ($i = 1; $i <= $pages; $i++) {
-                $urls[] = $postType . '-' . $i;
+        $posts = collect(self::POST_TYPES)->map(
+            function (string $postType) use ($perPage) {
+                $lastModPost = get_posts(
+                    [
+                        'post_type' => $postType,
+                        'numberposts' => 1,
+                        'orderby' => 'modified',
+                        'order' => 'DESC',
+                        'post_status' => 'publish'
+                    ]
+                );
+                $lastMod = (new DateTime($lastModPost[0]->post_modified_gmt))->format('c');
+                $pages = ceil(intval(wp_count_posts($postType)->publish) / $perPage);
+                $urls = [];
+                for ($i = 1; $i <= $pages; $i++) {
+                    $urls[] = $postType . '-' . $i;
+                }
+                return [
+                    'type' => $postType,
+                    'lastmod' => $lastMod,
+                    'urls' => $urls
+                ];
             }
-            return [
-                'type' => $postType,
-                'lastmod' => $lastMod,
-                'urls' => $urls
-            ];
-        });
+        );
 
-        $terms = collect(self::TAXONOMIES)->map(function (string $term) use ($posts, $perPage) {
-            $pages = ceil(intval(wp_count_terms($term)) / $perPage);
-            $urls = [];
-            for ($i = 1; $i <= $pages; $i++) {
-                $urls[] = $term . '-' . $i;
+        $terms = collect(self::TAXONOMIES)->map(
+            function (string $term) use ($posts, $perPage) {
+                $pages = ceil(intval(wp_count_terms($term)) / $perPage);
+                $urls = [];
+                for ($i = 1; $i <= $pages; $i++) {
+                    $urls[] = $term . '-' . $i;
+                }
+                return [
+                    'type' => $term,
+                    'lastmod' => $posts->first(
+                        function (array $post) {
+                            return $post['type'] === WpComposite::POST_TYPE;
+                        }
+                    )['lastmod'],
+                    'urls' => $urls
+                ];
             }
-            return [
-                'type' => $term,
-                'lastmod' => $posts->first(function (array $post) {
-                    return $post['type'] === WpComposite::POST_TYPE;
-                })['lastmod'],
-                'urls' => $urls
-            ];
-        });
+        );
 
         return new WP_REST_Response(['data' => $posts->merge($terms)]);
     }
@@ -107,13 +119,15 @@ class SitemapController extends WP_REST_Controller
         $type = $request->get_param('type');
         $page = $request->get_param('page') ?? 1;
         if (!in_array($type, array_merge(self::POST_TYPES, self::TAXONOMIES))) {
-            return new WP_REST_Response([
-                'code' => 'no_sitemap_found',
-                'message' => 'No sitemap was found for this type',
-                'data' => [
-                    'status' => 404
-                ]
-            ], 404);
+            return new WP_REST_Response(
+                [
+                    'code' => 'no_sitemap_found',
+                    'message' => 'No sitemap was found for this type',
+                    'data' => [
+                        'status' => 404
+                    ]
+                ], 404
+            );
         }
         $data = Cache::remember(
             sprintf('sitemap-%s-%s', $type, $page),
@@ -143,25 +157,36 @@ class SitemapController extends WP_REST_Controller
                                 ],
                             ],
                             [
-                                'key' => '_wp_page_template',
-                                'value' => '404-page',
-                                'compare' => '!=',
+                                'relation' => 'OR',
+                                [
+                                    'key' => '_wp_page_template',
+                                    'value' => '404-page',
+                                    'compare' => '!=',
+                                ],
+                                [
+                                    'key' => '_wp_page_template',
+                                    'compare' => 'NOT EXISTS',
+                                ],
                             ],
                         ];
                     }
                     $contents = get_posts($args);
                 } else {
-                    $contents = get_terms([
-                        'taxonomy' => $type,
-                        'hide_empty' => false,
-                        'number' => $perPage,
-                        'offset' => $offset
-                    ]);
+                    $contents = get_terms(
+                        [
+                            'taxonomy' => $type,
+                            'hide_empty' => false,
+                            'number' => $perPage,
+                            'offset' => $offset
+                        ]
+                    );
                 }
-                $sitemapCollection = collect($contents)->map(function ($content) use ($type) {
-                    $class = collect(self::ADAPTER_MAPPING)->get($type);
-                    return new SitemapItem(new $class($content));
-                });
+                $sitemapCollection = collect($contents)->map(
+                    function ($content) use ($type) {
+                        $class = collect(self::ADAPTER_MAPPING)->get($type);
+                        return new SitemapItem(new $class($content));
+                    }
+                );
 
                 $sitemap = new SitemapCollection(new SitemapCollectionAdapter($type, $sitemapCollection));
 
