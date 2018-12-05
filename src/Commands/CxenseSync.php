@@ -83,6 +83,8 @@ class CxenseSync extends \WP_CLI_Command
             WP_CLI::line('');
             WP_CLI::line('wp ' . self::CMD_NAMESPACE . ' run sync sync-start-id:5000 only:da_DK');
             WP_CLI::line('');
+            WP_CLI::line('Add \'sync-skip-ids:100,200\' to get sync to skip composites with ids 100 and 200');
+            WP_CLI::line('');
             WP_CLI::line('Add \'wait\' to be prompted to press enter before each update/delete call to Cxense.');
             WP_CLI::line('When prompted you can write \'go\' to disable the prompting without restarting. E.g.');
             WP_CLI::line('');
@@ -441,7 +443,8 @@ class CxenseSync extends \WP_CLI_Command
         }
     }
 
-    private function doCxenseSearch($query, $page = 1, $perPage = 100) {
+    private function doCxenseSearch($query, $page = 1, $perPage = 100)
+    {
         WP_CLI::line();
         WP_CLI::line('Page: ' . $page);
 
@@ -504,20 +507,18 @@ class CxenseSync extends \WP_CLI_Command
 
     public static function cxenseRequest($apiPath, $contentUrl)
     {
-        if (WpCxense::instance()->settings->getEnabled()) {
-            try {
-                return CxenseApi::request($apiPath, ['url' => $contentUrl]);
-            } catch (Exception $e) {
-                if ($e instanceof HttpException) {
-                    error_log('WP cXense: Failed calling cXense api: ' . $apiPath . ' response code: ' .
-                        $e->getCode() . ' error: ' . $e->getMessage());
-                }
+        try {
+            return CxenseApi::request($apiPath, ['url' => $contentUrl]);
+        } catch (Exception $e) {
+            if ($e instanceof HttpException) {
+                error_log('WP cXense: Failed calling cXense api: ' . $apiPath . ' response code: ' .
+                    $e->getCode() . ' error: ' . $e->getMessage());
+            }
 
-                if ($e->getCode() == CxenseApi::EXCEPTION_USER_NOT_DEFINED) {
-                    error_log('PHP Warning: To use CXense push you must define constants CXENSE_USER_NAME and CXENSE_API_KEY');
-                } elseif ($e->getCode() == CxenseApi::EXCEPTION_UNAUTHORIZED) {
-                    error_log('PHP Warning: Could not authorize with defined CXENSE_USER_NAME and CXENSE_API_KEY');
-                }
+            if ($e->getCode() == CxenseApi::EXCEPTION_USER_NOT_DEFINED) {
+                error_log('PHP Warning: To use CXense push you must define constants CXENSE_USER_NAME and CXENSE_API_KEY');
+            } elseif ($e->getCode() == CxenseApi::EXCEPTION_UNAUTHORIZED) {
+                error_log('PHP Warning: Could not authorize with defined CXENSE_USER_NAME and CXENSE_API_KEY');
             }
         }
     }
