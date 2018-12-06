@@ -17,7 +17,7 @@ class AuthorFix extends WP_CLI_Command
     }
 
     /**
-     * Prints a greeting.
+     * Sets all posts by default user to be by the user of your choice
      *
      * ## OPTIONS
      *
@@ -59,7 +59,15 @@ class AuthorFix extends WP_CLI_Command
             }
         }
     }
-
+    /**
+     * Sets all posts by default user to be by the editor user for each language
+     * ---
+     *
+     * ## EXAMPLES
+     *
+     *     wp contenteditor author fixAll
+     *
+     */
     public function fixAll()
     {
         $users = [
