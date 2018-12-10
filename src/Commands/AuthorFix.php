@@ -2,7 +2,6 @@
 
 namespace Bonnier\Willow\Base\Commands;
 
-use Bonnier\WP\ContentHub\Editor\Commands\CmdManager;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use WP_CLI;
 use WP_CLI_Command;
@@ -13,7 +12,7 @@ class AuthorFix extends WP_CLI_Command
 
     public static function register()
     {
-        WP_CLI::add_command(CmdManager::CORE_CMD_NAMESPACE  . ' ' . static::CMD_NAMESPACE, __CLASS__);
+        WP_CLI::add_command(CommandBootstrap::CORE_CMD_NAMESPACE  . ' ' . static::CMD_NAMESPACE, __CLASS__);
     }
 
     /**
@@ -36,7 +35,7 @@ class AuthorFix extends WP_CLI_Command
     {
         if (count($args) < 2) {
             WP_CLI::error('please provide both locale and author example:');
-            WP_CLI::error(sprintf('%s author fix da 3', CmdManager::CORE_CMD_NAMESPACE));
+            WP_CLI::error(sprintf('%s author fix da 3', CommandBootstrap::CORE_CMD_NAMESPACE));
         }
 
         $locale = $args[0];
@@ -86,7 +85,7 @@ class AuthorFix extends WP_CLI_Command
             WP_CLI::line(sprintf('starting author fix for %s (%s)', $user->display_name, strtoupper($lang)));
             WP_CLI::runcommand(sprintf(
                 '%s fix %s %d',
-                CmdManager::CORE_CMD_NAMESPACE  . ' ' . static::CMD_NAMESPACE,
+                CommandBootstrap::CORE_CMD_NAMESPACE  . ' ' . static::CMD_NAMESPACE,
                 $lang,
                 $user->ID
             ));
