@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Factories;
 
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\BannerPlacementAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\CommercialSpotAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\FeaturedContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\NewsletterAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\NullContentAdapter;
@@ -20,6 +21,7 @@ class CategoryContentFactory extends AbstractModelFactory
         AcfName::WIDGET_NEWSLETTER => NewsletterAdapter::class,
         AcfName::WIDGET_BANNER_PLACEMENT => BannerPlacementAdapter::class,
         AcfName::WIDGET_TAXONOMY_TEASER_LIST => TaxonomyListAdapter::class,
+        AcfName::WIDGET_COMMERCIAL_SPOT => CommercialSpotAdapter::class,
     ];
 
     public function getAdapter($model)
