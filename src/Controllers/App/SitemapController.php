@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Controllers\App;
 
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\Willow\Base\Adapters\Wp\Root\SitemapCategoryAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\SitemapCollectionAdapter;
@@ -14,12 +15,10 @@ use Bonnier\Willow\Base\Transformers\Api\Root\SitemapTransformer;
 use DateTime;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
-use WP_Post;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
-use WP_Term;
 
 class SitemapController extends WP_REST_Controller
 {
@@ -71,11 +70,12 @@ class SitemapController extends WP_REST_Controller
                         'numberposts' => 1,
                         'orderby' => 'modified',
                         'order' => 'DESC',
-                        'post_status' => 'publish'
+                        'post_status' => 'publish',
+                        'lang' => LanguageProvider::getCurrentLanguage(),
                     ]
                 );
                 $lastMod = (new DateTime($lastModPost[0]->post_modified_gmt))->format('c');
-                $pages = ceil(intval(wp_count_posts($postType)->publish) / $perPage);
+                $pages = ceil($this->getTotalPostCount($postType) / $perPage);
                 $urls = [];
                 for ($i = 1; $i <= $pages; $i++) {
                     $urls[] = $postType . '-' . $i;
@@ -140,6 +140,7 @@ class SitemapController extends WP_REST_Controller
                         'posts_per_page' => $perPage,
                         'offset' => $offset,
                         'post_status' => 'publish',
+                        'lang' => LanguageProvider::getCurrentLanguage(),
                     ];
                     if ($type === 'page') {
                         $args['meta_query'] = [
@@ -198,5 +199,15 @@ class SitemapController extends WP_REST_Controller
         );
 
         return new WP_REST_Response($data);
+    }
+
+    private function getTotalPostCount($postType) {
+        return with(new \WP_Query([
+            'fields' => 'ids',
+            'post_type' => $postType,
+            'posts_per_page' => 1,
+            'post_status' => 'publish',
+            'lang' => LanguageProvider::getCurrentLanguage(),
+        ]))->found_posts;
     }
 }
