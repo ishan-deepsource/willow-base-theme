@@ -45,8 +45,8 @@ class FeaturedContentAdapter extends AbstractContentAdapter implements FeaturedC
 
     public function getComposite(): ?CompositeContract
     {
-        if (($composites = SortBy::getComposites($this->acfArray)) && $composites->isNotEmpty()) {
-            if ($composite = $composites->first()) {
+        if (($result = SortBy::getComposites($this->acfArray)) && $result['composites']->isNotEmpty()) {
+            if ($composite = $result['composites']->first()) {
                 return new Composite(new CompositeAdapter($composite));
             }
         }

@@ -2,9 +2,10 @@
 
 namespace Bonnier\Willow\Base\Transformers\Pagination;
 
+use Illuminate\Contracts\Support\Arrayable;
 use League\Fractal\Pagination\PaginatorInterface;
 
-class NumberedPagination implements PaginatorInterface
+class NumberedPagination implements PaginatorInterface, Arrayable
 {
     protected $currentPage;
     protected $perPage;
@@ -136,5 +137,20 @@ class NumberedPagination implements PaginatorInterface
     public function getUrl($page)
     {
         return '';
+    }
+
+    public function toArray()
+    {
+        return [
+            'total' => $this->getTotal(),
+            'count' => $this->getCount(),
+            'per_page' => $this->getPerPage(),
+            'current_page' => $this->getCurrentPage(),
+            'total_pages' => $this->getLastPage(),
+            'links' => [
+                'previous' => '',
+                'next' => '',
+            ],
+        ];
     }
 }

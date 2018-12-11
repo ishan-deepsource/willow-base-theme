@@ -20,9 +20,9 @@ class ContentController extends BaseController
 
     public function popular()
     {
-        $composites = SortBy::getPopularComposites();
+        $result = SortBy::getPopularComposites();
 
-        if ($composites->isNotEmpty()) {
+        if (($composites = $result['composites'] ?? null) && $composites->isNotEmpty()) {
             $composites = $composites->map(function (\WP_Post $post) {
                 $compositePost = WpModelRepository::instance()->getPost($post);
                 $composite = new Composite(new CompositeAdapter($compositePost));

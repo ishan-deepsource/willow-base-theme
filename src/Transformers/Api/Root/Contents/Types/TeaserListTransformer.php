@@ -7,6 +7,8 @@ use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\Types\TeaserListContract
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\HyperlinkTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\ImageTransformer;
+use Bonnier\Willow\Base\Transformers\Pagination\NumberedPagination;
+use Bonnier\Willow\Base\Transformers\Pagination\StringCursor;
 use League\Fractal\TransformerAbstract;
 
 class TeaserListTransformer extends TransformerAbstract
@@ -30,7 +32,7 @@ class TeaserListTransformer extends TransformerAbstract
             'link' => $this->transformLink($teaserList),
             'link_label' => $teaserList->getLinkLabel(),
             'display_hint' => $teaserList->getDisplayHint(),
-
+            'can_paginate' => $teaserList->canPaginate(),
         ];
     }
 
@@ -55,7 +57,26 @@ class TeaserListTransformer extends TransformerAbstract
     public function includeTeasers(TeaserListContract $teaserList)
     {
         if (optional($teaserList->getTeasers())->isNotEmpty()) {
-            return $this->collection($teaserList->getTeasers(), new CompositeTeaserTransformer);
+            $resource = $this->collection($teaserList->getTeasers(), new CompositeTeaserTransformer);
+            if ($teaserList->canPaginate()) {
+                $paginator = new NumberedPagination(
+                    $teaserList->getPage(),
+                    $teaserList->getTeasersPerPage(),
+                    $teaserList->getTotalTeasers(),
+                    $teaserList->getTeasers()->count(),
+                    $teaserList->getTotalPages()
+                );
+                $cursor = new StringCursor();
+                $cursor->setCount($teaserList->getTeasers()->count());
+                $cursor->setNext($teaserList->getNextCursor());
+                $cursor->setPrev($teaserList->getPreviousCursor());
+                $cursor->setCurrent($teaserList->getCurrentCursor());
+                $resource->setMeta([
+                    'pagination' => $paginator->toArray(),
+                    'cursor' => $cursor->toArray(),
+                ]);
+            }
+            return $resource;
         }
 
         return null;

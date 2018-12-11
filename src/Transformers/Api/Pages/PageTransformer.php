@@ -8,6 +8,7 @@ use Bonnier\Willow\Base\Transformers\Api\Root\AuthorTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\ContentTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TranslationTransformer;
+use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 
 class PageTransformer extends TransformerAbstract
@@ -46,9 +47,10 @@ class PageTransformer extends TransformerAbstract
         return $this->collection($page->getTeasers(), new TeaserTransformer());
     }
 
-    public function includeContents(PageContract $page)
+    public function includeContents(PageContract $page, ParamBag $paramBag)
     {
-        return $this->collection($page->getContents(), new ContentTransformer());
+        $currentPage = intval($paramBag->get('page')[0]) ?: 1;
+        return $this->collection($page->getContents($currentPage), new ContentTransformer());
     }
 
     private function getAuthor(PageContract $page)

@@ -23,6 +23,7 @@ class AppControllerBootstrap
         TestController::class,
         SitemapController::class,
         SettingsController::class,
+        WidgetController::class,
     ];
 
     /**
