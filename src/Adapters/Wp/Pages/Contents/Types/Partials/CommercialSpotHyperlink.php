@@ -10,7 +10,7 @@ class CommercialSpotHyperlink implements HyperlinkContract
     protected $label;
     protected $link;
 
-    public function __construct(?string $link, ?string $label)
+    public function __construct(string $link, string $label)
     {
         $this->link = $link;
         $this->label = $label;
