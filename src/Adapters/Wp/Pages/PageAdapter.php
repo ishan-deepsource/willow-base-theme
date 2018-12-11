@@ -5,6 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Pages;
 
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
+use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\CommercialSpot;
 use Bonnier\Willow\Base\Models\Base\Root\Translation;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Factories\PageContentFactory;
@@ -50,6 +51,7 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
         AcfName::WIDGET_NEWSLETTER => Newsletter::class,
         AcfName::WIDGET_BANNER_PLACEMENT => BannerPlacement::class,
         AcfName::WIDGET_TAXONOMY_TEASER_LIST => TaxonomyList::class,
+        AcfName::WIDGET_COMMERCIAL_SPOT => CommercialSpot::class,
     ];
 
     public function __construct(WP_Post $page)
