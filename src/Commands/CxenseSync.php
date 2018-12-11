@@ -495,20 +495,27 @@ class CxenseSync extends \WP_CLI_Command
     {
         usleep($this->sleepRequest);
         $this->wait();
-        return self::cxenseRequest(CxenseApi::CXENSE_PROFILE_DELETE, $contentUrl);
+
+        return self::cxenseRequest(CxenseApi::CXENSE_PROFILE_DELETE, [
+            'siteId' => WpCxense::instance()->settings->getSiteId(),
+            'url' => $contentUrl
+        ]);
     }
 
     private function cxensePush($contentUrl)
     {
         usleep($this->sleepRequest);
         $this->wait();
-        return self::cxenseRequest(CxenseApi::CXENSE_PROFILE_PUSH, $contentUrl);
+
+        return self::cxenseRequest(CxenseApi::CXENSE_PROFILE_PUSH, [
+            'url' => $contentUrl
+        ]);
     }
 
-    public static function cxenseRequest($apiPath, $contentUrl)
+    public static function cxenseRequest($apiPath, $args)
     {
         try {
-            return CxenseApi::request($apiPath, ['url' => $contentUrl]);
+            return CxenseApi::request($apiPath, $args);
         } catch (Exception $e) {
             if ($e instanceof HttpException) {
                 error_log('WP cXense: Failed calling cXense api: ' . $apiPath . ' response code: ' .
