@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Controllers\App;
 
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\TeaserListAdapter;
+use Bonnier\Willow\Base\Controllers\Formatters\Api\AbstractApiController;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TeaserList;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\TeaserListTransformer;
 use Bonnier\WP\ContentHub\Editor\Helpers\AcfName;
@@ -46,7 +47,11 @@ class WidgetController extends \WP_REST_Controller
 
             $resource = new Item($teaserList, new TeaserListTransformer);
 
-            return new \WP_REST_Response(with(new Manager)->createData($resource)->toArray());
+            $manager = new Manager();
+            $manager->parseIncludes($request->get_param(AbstractApiController::INCLUDES_QUERY_PARAM) ?? '');
+            $manager->parseExcludes($request->get_param(AbstractApiController::EXCLUDES_QUERY_PARAM) ?? '');
+
+            return new \WP_REST_Response($manager->createData($resource)->toArray());
         }
         return new \WP_REST_Response(null, 404);
     }
