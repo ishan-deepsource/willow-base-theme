@@ -8,25 +8,32 @@
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
-            "version": "2.2.0",
+            "version": "2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-cxense.git",
-                "reference": "bc476e967193f9b772cf876093f0a82b5225357c"
+                "reference": "2288b09295a017d0a526a054dbc898d86deeffbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/bc476e967193f9b772cf876093f0a82b5225357c",
-                "reference": "bc476e967193f9b772cf876093f0a82b5225357c",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/2288b09295a017d0a526a054dbc898d86deeffbe",
+                "reference": "2288b09295a017d0a526a054dbc898d86deeffbe",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6"
+                "bonnier/willow-mu-plugins": "^1.1",
+                "illuminate/support": "^5.6",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "johnpbloch/wordpress": "^4.9",
+                "lucatume/wp-browser": "^2.1",
+                "phpunit/phpunit": "7.1.*"
             },
             "type": "wordpress-plugin",
             "autoload": {
                 "psr-4": {
-                    "Bonnier\\WP\\Cxense\\": "src/Bonnier/WP/Cxense/"
+                    "Bonnier\\WP\\Cxense\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -35,19 +42,15 @@
                     "name": "Bonnier Publications",
                     "email": "interactive@bonnier.dk",
                     "homepage": "http://bonnierpublications.com"
-                },
-                {
-                    "name": "Alf Henderson",
-                    "email": "alf.henderson@bonnier.dk"
                 }
             ],
-            "description": "Log in users from the WA platform",
+            "description": "This plugin integrates your site with cXense by adding meta tags and calling the cXense api",
             "homepage": "https://github.com/BenjaminMedia/wp-cxense",
             "keywords": [
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-08-14T14:29:04+00:00"
+            "time": "2018-12-11T13:54:18+00:00"
         },
         {
             "name": "benjaminmedia/wp-site-manager",
