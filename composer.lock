@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
-            "version": "2.1.2",
+            "version": "2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-cxense.git",
-                "reference": "afcd994d1f5dbea1321e25f885498d4e4212c0c1"
+                "reference": "2288b09295a017d0a526a054dbc898d86deeffbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/afcd994d1f5dbea1321e25f885498d4e4212c0c1",
-                "reference": "afcd994d1f5dbea1321e25f885498d4e4212c0c1",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/2288b09295a017d0a526a054dbc898d86deeffbe",
+                "reference": "2288b09295a017d0a526a054dbc898d86deeffbe",
                 "shasum": ""
             },
             "require": {
@@ -50,7 +50,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-10-24T08:33:40+00:00"
+            "time": "2018-12-11T13:54:18+00:00"
         },
         {
             "name": "benjaminmedia/wp-site-manager",
@@ -949,7 +949,7 @@
                 }
             ],
             "support": {
-                "source": "https://github.com/junaidbhura/composer-wp-pro-plugins/tree/1.0.5",
+                "source": "https://github.com/junaidbhura/composer-wp-pro-plugins/tree/master",
                 "issues": "https://github.com/junaidbhura/composer-wp-pro-plugins/issues"
             },
             "time": "2018-10-30T08:48:45+00:00"

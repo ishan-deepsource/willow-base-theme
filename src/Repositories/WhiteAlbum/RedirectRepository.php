@@ -78,7 +78,7 @@ class RedirectRepository
         } catch (\Exception $exception) {
             $response = $exception->getResponse();
         }
-        $this->storeResolvedRedirect($url, $destination->getPath(), $response->getStatusCode());
+        $this->storeResolvedRedirect($url, $destination->getPath() ?: '/', $response->getStatusCode());
         return $this->findRelsovedRedirectInDb($url);
     }
 
