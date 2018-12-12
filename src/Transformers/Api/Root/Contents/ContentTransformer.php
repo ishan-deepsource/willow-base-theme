@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Transformers\Api\Root\Contents;
 
 use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\ContentContract;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\BannerPlacementTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\CommercialSpotTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\FeaturedContentTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\NewsletterTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\SeoTextTransformer;
@@ -30,6 +31,7 @@ class ContentTransformer extends TransformerAbstract
         'newsletter' => NewsletterTransformer::class,
         'banner_placement' => BannerPlacementTransformer::class,
         AcfName::WIDGET_TAXONOMY_TEASER_LIST => TaxonomyListTransformer::class,
+        AcfName::WIDGET_COMMERCIAL_SPOT => CommercialSpotTransformer::class,
     ];
 
     public function transform(ContentContract $content)
