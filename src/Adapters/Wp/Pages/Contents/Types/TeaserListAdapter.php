@@ -19,6 +19,17 @@ use Illuminate\Support\Collection;
 class TeaserListAdapter extends AbstractContentAdapter implements TeaserListContract
 {
     protected $teasers;
+    protected $page;
+    protected $totalPages;
+    protected $totalTeasers;
+    protected $perPage;
+    protected $parentId;
+
+    public function __construct(array $acfArray)
+    {
+        parent::__construct($acfArray);
+        $this->page = 1;
+    }
 
     public function getTitle(): ?string
     {
@@ -64,11 +75,19 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
         return array_get($this->acfArray, 'display_hint') ?: null;
     }
 
+    public function canPaginate(): bool
+    {
+        return array_get($this->acfArray, 'pagination') ?: false;
+    }
+
     public function getTeasers(): ?Collection
     {
         if (!$this->teasers) {
-            if ($composites = SortBy::getComposites($this->acfArray)) {
-                $this->teasers = $composites->map(function (\WP_Post $post) {
+            if ($result = SortBy::getComposites($this->acfArray, $this->page)) {
+                $this->totalPages = $result['pages'] ?? 0;
+                $this->totalTeasers = $result['total'] ?? 0;
+                $this->perPage = $result['per_page'] ?? 0;
+                $this->teasers = $result['composites']->map(function (\WP_Post $post) {
                     $composite = WpModelRepository::instance()->getPost($post);
                     return new Composite(new CompositeAdapter($composite));
                 });
@@ -76,5 +95,72 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
         }
 
         return $this->teasers;
+    }
+
+    public function setPage(int $page): TeaserListContract
+    {
+        if ($this->canPaginate()) {
+            $this->page = $page;
+        }
+        return $this;
+    }
+
+    public function getPage(): int
+    {
+        return $this->page;
+    }
+
+    public function getTotalTeasers(): ?int
+    {
+        return $this->totalTeasers;
+    }
+
+    public function getTotalPages(): ?int
+    {
+        return $this->totalPages;
+    }
+
+    public function getTeasersPerPage(): ?int
+    {
+        return $this->perPage;
+    }
+
+    public function getNextCursor(): ?string
+    {
+        if ($this->page >= $this->totalPages) {
+            return null;
+        }
+
+        return base64_encode(json_encode([
+            'parent_id' => $this->parentId,
+            'page' => $this->page + 1,
+        ]));
+    }
+
+    public function getPreviousCursor(): ?string
+    {
+        if ($this->page <= 1) {
+            return null;
+        }
+
+        return base64_encode(json_encode([
+            'parent_id' => $this->parentId,
+            'page' => $this->page - 1,
+        ]));
+    }
+
+    public function getCurrentCursor(): ?string
+    {
+        return base64_encode(json_encode([
+            'parent_id' => $this->parentId,
+            'page' => $this->page,
+        ]));
+    }
+
+    public function setParentId(int $parentId): ?TeaserListContract
+    {
+        $this->parentId = $parentId;
+
+        return $this;
     }
 }

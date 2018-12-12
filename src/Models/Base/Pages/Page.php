@@ -77,9 +77,9 @@ class Page implements PageContract
         return $this->page->getCanonicalUrl();
     }
 
-    public function getContents(): ?Collection
+    public function getContents(int $page = 1): ?Collection
     {
-        return $this->page->getContents();
+        return $this->page->getContents($page);
     }
 
     public function getTranslations(): ?Collection

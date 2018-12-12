@@ -50,8 +50,59 @@ class TeaserList extends AbstractContent implements TeaserListContract
         return $this->model->getDisplayHint();
     }
 
+    public function canPaginate(): bool
+    {
+        return $this->model->canPaginate();
+    }
+
     public function getTeasers(): ?Collection
     {
         return $this->model->getTeasers();
+    }
+
+    public function setPage(int $page): TeaserListContract
+    {
+        $this->model->setPage($page);
+        return $this;
+    }
+
+    public function getPage(): int
+    {
+        return $this->model->getPage();
+    }
+
+    public function getTotalTeasers(): ?int
+    {
+        return $this->model->getTotalTeasers();
+    }
+
+    public function getTotalPages(): ?int
+    {
+        return $this->model->getTotalPages();
+    }
+
+    public function getTeasersPerPage(): ?int
+    {
+        return $this->model->getTeasersPerPage();
+    }
+
+    public function getNextCursor(): ?string
+    {
+        return $this->model->getNextCursor();
+    }
+
+    public function getPreviousCursor(): ?string
+    {
+        return $this->model->getPreviousCursor();
+    }
+
+    public function getCurrentCursor(): ?string
+    {
+        return $this->model->getCurrentCursor();
+    }
+
+    public function setParentId(int $parentId): ?TeaserListContract
+    {
+        return $this->model->setParentId($parentId);
     }
 }

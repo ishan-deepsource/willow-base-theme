@@ -2,15 +2,16 @@
 
 namespace Bonnier\Willow\Base\Transformers\Pagination;
 
+use Illuminate\Contracts\Support\Arrayable;
 use League\Fractal\Pagination\CursorInterface;
 
-class StringCursor implements CursorInterface
+class StringCursor implements CursorInterface, Arrayable
 {
     protected $current;
     protected $next;
     protected $prev;
     protected $count;
-    
+
     /**
      * @param mixed $current
      *
@@ -21,7 +22,7 @@ class StringCursor implements CursorInterface
         $this->current = $current;
         return $this;
     }
-    
+
     /**
      * @param mixed $next
      *
@@ -32,7 +33,7 @@ class StringCursor implements CursorInterface
         $this->next = $next;
         return $this;
     }
-    
+
     /**
      * @param mixed $prev
      *
@@ -43,7 +44,7 @@ class StringCursor implements CursorInterface
         $this->prev = $prev;
         return $this;
     }
-    
+
     /**
      * @param mixed $count
      *
@@ -54,7 +55,7 @@ class StringCursor implements CursorInterface
         $this->count = $count;
         return $this;
     }
-    
+
     /**
      * @return mixed
      */
@@ -62,7 +63,7 @@ class StringCursor implements CursorInterface
     {
         return $this->current;
     }
-    
+
     /**
      * @return mixed
      */
@@ -70,7 +71,7 @@ class StringCursor implements CursorInterface
     {
         return $this->next;
     }
-    
+
     /**
      * @return mixed
      */
@@ -78,12 +79,22 @@ class StringCursor implements CursorInterface
     {
         return $this->prev;
     }
-    
+
     /**
      * @return mixed
      */
     public function getCount()
     {
         return $this->count;
+    }
+
+    public function toArray()
+    {
+        return [
+            'current' => $this->getCurrent(),
+            'prev' => $this->getPrev(),
+            'next' => $this->getNext(),
+            'count' => $this->getCount(),
+        ];
     }
 }

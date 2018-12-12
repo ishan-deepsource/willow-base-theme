@@ -16,5 +16,15 @@ interface TeaserListContract extends ContentContract
     public function getLink(): ?HyperlinkContract;
     public function getLinkLabel(): ?string;
     public function getDisplayHint(): ?string;
+    public function canPaginate(): bool;
     public function getTeasers(): ?Collection;
+    public function setPage(int $page): TeaserListContract;
+    public function getPage(): int;
+    public function getTotalTeasers(): ?int;
+    public function getTotalPages(): ?int;
+    public function getTeasersPerPage(): ?int;
+    public function getNextCursor(): ?string;
+    public function getPreviousCursor(): ?string;
+    public function getCurrentCursor(): ?string;
+    public function setParentId(int $parentId): ?TeaserListContract;
 }

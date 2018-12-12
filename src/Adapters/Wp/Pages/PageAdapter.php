@@ -7,6 +7,7 @@ use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\CommercialSpot;
 use Bonnier\Willow\Base\Models\Base\Root\Translation;
+use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\Types\TeaserListContract;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Factories\PageContentFactory;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\BannerPlacement;
@@ -144,12 +145,17 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
         return $this->getFullUrl(get_permalink($this->getId()));
     }
 
-    public function getContents(): ?Collection
+    public function getContents(int $page = 1): ?Collection
     {
         if (!$this->contents) {
-            $this->contents = collect($this->pageContents)->map(function ($acfContentArray) {
+            $this->contents = collect($this->pageContents)->map(function ($acfContentArray) use ($page) {
                 $class = collect($this->contentModelsMapping)->get(array_get($acfContentArray, 'acf_fc_layout'));
-                return $this->getContentFactory($class)->getModel($acfContentArray);
+                $model = $this->getContentFactory($class)->getModel($acfContentArray);
+                if ($model instanceof TeaserListContract) {
+                    $model->setParentId($this->getId());
+                    $model->setPage($page);
+                }
+                return $model;
             })->reject(function ($content) {
                 return is_null($content);
             });
