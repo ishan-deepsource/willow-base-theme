@@ -46,4 +46,9 @@ class CommercialSpotAdapter extends AbstractContentAdapter implements Commercial
 
         return null;
     }
+
+    public function getLabel(): ?string
+    {
+        return array_get($this->acfArray, 'label') ?: null;
+    }
 }
