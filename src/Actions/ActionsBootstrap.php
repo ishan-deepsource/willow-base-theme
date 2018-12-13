@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Actions;
 
+use Bonnier\Willow\Base\Actions\Backend\Locale;
 use Bonnier\Willow\Base\Actions\Backend\PostSlugChange;
 use Bonnier\Willow\Base\Actions\Backend\PreviewUrl;
 use Bonnier\Willow\Base\Actions\Backend\EstimatedReadingTime;
@@ -40,6 +41,7 @@ class ActionsBootstrap
             new PreviewUrl();
             new EstimatedReadingTime();
             new AddMedia();
+            new Locale();
         }
     }
 }
