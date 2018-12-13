@@ -33,4 +33,9 @@ class CommercialSpot extends AbstractContent implements CommercialSpotContract
     {
         return $this->model->getLink();
     }
+
+    public function getLabel(): ?string
+    {
+        return $this->model->getLabel();
+    }
 }

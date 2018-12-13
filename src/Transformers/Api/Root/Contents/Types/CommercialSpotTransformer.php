@@ -17,6 +17,7 @@ class CommercialSpotTransformer extends TransformerAbstract
             'description' => $commercialSpot->getDescription(),
             'image' => $this->transformImage($commercialSpot),
             'link' => $this->transformLink($commercialSpot),
+            'label' => $commercialSpot->getLabel(),
         ];
     }
 
