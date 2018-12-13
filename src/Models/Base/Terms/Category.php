@@ -102,9 +102,9 @@ class Category implements CategoryContract
         return $this->category->getCanonicalUrl();
     }
 
-    public function getContents(): ?Collection
+    public function getContents(int $page = 1): ?Collection
     {
-        return $this->category->getContents();
+        return $this->category->getContents($page);
     }
 
     public function getTranslations(): ?Collection

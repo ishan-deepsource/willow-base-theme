@@ -153,7 +153,8 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
                 $model = $this->getContentFactory($class)->getModel($acfContentArray);
                 if ($model instanceof TeaserListContract) {
                     $model->setParentId($this->getId());
-                    $model->setPage($page);
+                    $model->setParentType('page');
+                    $model->setCurrentPage($page);
                 }
                 return $model;
             })->reject(function ($content) {

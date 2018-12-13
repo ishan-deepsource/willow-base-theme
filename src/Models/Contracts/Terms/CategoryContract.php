@@ -38,7 +38,7 @@ interface CategoryContract
 
     public function getCanonicalUrl(): ?string;
 
-    public function getContents(): ?Collection;
+    public function getContents(int $page): ?Collection;
 
     public function getTranslations(): ?Collection;
 
