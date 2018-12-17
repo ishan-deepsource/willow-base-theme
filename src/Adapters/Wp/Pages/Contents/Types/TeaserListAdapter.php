@@ -23,6 +23,7 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
     protected $page;
     protected $totalPages;
     protected $totalTeasers;
+    protected $teaserCount;
     protected $perPage;
     protected $parentId;
     protected $parentType;
@@ -89,6 +90,7 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
                 $this->setTotalPages($result['pages'] ?? 0);
                 $this->setTotalItems($result['total'] ?? 0);
                 $this->setItemsPerPage($result['per_page'] ?? 0);
+                $this->setItemCount($result['composites']->count());
                 $this->teasers = $result['composites']->map(function (\WP_Post $post) {
                     $composite = WpModelRepository::instance()->getPost($post);
                     return new Composite(new CompositeAdapter($composite));
@@ -110,6 +112,18 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
     public function getTeasersPerPage(): ?int
     {
         return $this->perPage;
+    }
+
+    public function getItemCount(): ?int
+    {
+        return $this->teaserCount;
+    }
+
+    public function setItemCount(int $items): WidgetPaginationContract
+    {
+        $this->teaserCount = $items;
+
+        return $this;
     }
 
     public function getNextCursor(): ?string

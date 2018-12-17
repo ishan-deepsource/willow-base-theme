@@ -101,6 +101,16 @@ class TeaserList extends AbstractContent implements TeaserListContract
         return $this->model->setItemsPerPage($items);
     }
 
+    public function getItemCount(): ?int
+    {
+        return $this->model->getItemCount();
+    }
+
+    public function setItemCount(int $items): WidgetPaginationContract
+    {
+        return $this->model->setItemCount($items);
+    }
+
     public function getNextCursor(): ?string
     {
         return $this->model->getNextCursor();

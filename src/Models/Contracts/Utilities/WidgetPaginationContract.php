@@ -12,6 +12,8 @@ interface WidgetPaginationContract
     public function setTotalPages(int $pages): WidgetPaginationContract;
     public function getItemsPerPage(): ?int;
     public function setItemsPerPage(int $items): WidgetPaginationContract;
+    public function getItemCount(): ?int;
+    public function setItemCount(int $items): WidgetPaginationContract;
     public function getNextCursor(): ?string;
     public function getPreviousCursor(): ?string;
     public function getCurrentCursor(): ?string;
