@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Transformers\Pagination;
 
+use Bonnier\Willow\Base\Models\Contracts\Utilities\WidgetPaginationContract;
 use Illuminate\Contracts\Support\Arrayable;
 use League\Fractal\Pagination\PaginatorInterface;
 
@@ -29,6 +30,17 @@ class NumberedPagination implements PaginatorInterface, Arrayable
         $this->total = $total;
         $this->count = $count;
         $this->lastPage = $lastPage;
+    }
+
+    public static function createFromWidget(WidgetPaginationContract $widget): NumberedPagination
+    {
+        return new self(
+            $widget->getCurrentPage(),
+            $widget->getItemsPerPage(),
+            $widget->getTotalItems(),
+            $widget->getItemCount(),
+            $widget->getTotalPages()
+        );
     }
 
     /**

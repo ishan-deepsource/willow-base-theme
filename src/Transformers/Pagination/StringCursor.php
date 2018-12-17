@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Transformers\Pagination;
 
+use Bonnier\Willow\Base\Models\Contracts\Utilities\WidgetPaginationContract;
 use Illuminate\Contracts\Support\Arrayable;
 use League\Fractal\Pagination\CursorInterface;
 
@@ -11,6 +12,16 @@ class StringCursor implements CursorInterface, Arrayable
     protected $next;
     protected $prev;
     protected $count;
+
+    public static function createFromWidget(WidgetPaginationContract $widget)
+    {
+        $cursor = new self();
+        $cursor->setCount($widget->getItemCount());
+        $cursor->setNext($widget->getNextCursor());
+        $cursor->setPrev($widget->getPreviousCursor());
+        $cursor->setCurrent($widget->getCurrentCursor());
+        return $cursor;
+    }
 
     /**
      * @param mixed $current

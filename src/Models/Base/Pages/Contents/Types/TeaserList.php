@@ -6,6 +6,7 @@ use Bonnier\Willow\Base\Models\Base\Pages\Contents\AbstractContent;
 use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\Types\TeaserListContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\HyperlinkContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
+use Bonnier\Willow\Base\Models\Contracts\Utilities\WidgetPaginationContract;
 use Illuminate\Support\Collection;
 
 /**
@@ -60,20 +61,24 @@ class TeaserList extends AbstractContent implements TeaserListContract
         return $this->model->getTeasers();
     }
 
-    public function setPage(int $page): TeaserListContract
+    public function getCurrentPage(): int
     {
-        $this->model->setPage($page);
-        return $this;
+        return $this->model->getCurrentPage();
     }
 
-    public function getPage(): int
+    public function setCurrentPage(int $page): WidgetPaginationContract
     {
-        return $this->model->getPage();
+        return $this->model->setCurrentPage($page);
     }
 
-    public function getTotalTeasers(): ?int
+    public function getTotalItems(): ?int
     {
-        return $this->model->getTotalTeasers();
+        return $this->model->getTotalItems();
+    }
+
+    public function setTotalItems(int $items): WidgetPaginationContract
+    {
+        return $this->model->setTotalItems($items);
     }
 
     public function getTotalPages(): ?int
@@ -81,9 +86,29 @@ class TeaserList extends AbstractContent implements TeaserListContract
         return $this->model->getTotalPages();
     }
 
-    public function getTeasersPerPage(): ?int
+    public function setTotalPages(int $pages): WidgetPaginationContract
     {
-        return $this->model->getTeasersPerPage();
+        return $this->model->setTotalPages($pages);
+    }
+
+    public function getItemsPerPage(): ?int
+    {
+        return $this->model->getItemsPerPage();
+    }
+
+    public function setItemsPerPage(int $items): WidgetPaginationContract
+    {
+        return $this->model->setItemsPerPage($items);
+    }
+
+    public function getItemCount(): ?int
+    {
+        return $this->model->getItemCount();
+    }
+
+    public function setItemCount(int $items): WidgetPaginationContract
+    {
+        return $this->model->setItemCount($items);
     }
 
     public function getNextCursor(): ?string
@@ -101,8 +126,23 @@ class TeaserList extends AbstractContent implements TeaserListContract
         return $this->model->getCurrentCursor();
     }
 
-    public function setParentId(int $parentId): ?TeaserListContract
+    public function getParentId(): ?int
+    {
+        return $this->model->getParentId();
+    }
+
+    public function setParentId(int $parentId): WidgetPaginationContract
     {
         return $this->model->setParentId($parentId);
+    }
+
+    public function getParentType(): ?string
+    {
+        return $this->model->getParentType();
+    }
+
+    public function setParentType(string $type): WidgetPaginationContract
+    {
+        return $this->model->setParentType($type);
     }
 }

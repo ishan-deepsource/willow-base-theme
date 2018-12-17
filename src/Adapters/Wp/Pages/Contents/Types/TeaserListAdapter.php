@@ -6,6 +6,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\Partials\TeaserListHyperlink;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
+use Bonnier\Willow\Base\Models\Contracts\Utilities\WidgetPaginationContract;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Base\Root\Hyperlink;
@@ -22,8 +23,10 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
     protected $page;
     protected $totalPages;
     protected $totalTeasers;
+    protected $teaserCount;
     protected $perPage;
     protected $parentId;
+    protected $parentType;
 
     public function __construct(array $acfArray)
     {
@@ -84,9 +87,10 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
     {
         if (!$this->teasers) {
             if ($result = SortBy::getComposites($this->acfArray, $this->page)) {
-                $this->totalPages = $result['pages'] ?? 0;
-                $this->totalTeasers = $result['total'] ?? 0;
-                $this->perPage = $result['per_page'] ?? 0;
+                $this->setTotalPages($result['pages'] ?? 0);
+                $this->setTotalItems($result['total'] ?? 0);
+                $this->setItemsPerPage($result['per_page'] ?? 0);
+                $this->setItemCount($result['composites']->count());
                 $this->teasers = $result['composites']->map(function (\WP_Post $post) {
                     $composite = WpModelRepository::instance()->getPost($post);
                     return new Composite(new CompositeAdapter($composite));
@@ -105,24 +109,21 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
         return $this;
     }
 
-    public function getPage(): int
-    {
-        return $this->page;
-    }
-
-    public function getTotalTeasers(): ?int
-    {
-        return $this->totalTeasers;
-    }
-
-    public function getTotalPages(): ?int
-    {
-        return $this->totalPages;
-    }
-
     public function getTeasersPerPage(): ?int
     {
         return $this->perPage;
+    }
+
+    public function getItemCount(): ?int
+    {
+        return $this->teaserCount;
+    }
+
+    public function setItemCount(int $items): WidgetPaginationContract
+    {
+        $this->teaserCount = $items;
+
+        return $this;
     }
 
     public function getNextCursor(): ?string
@@ -133,6 +134,7 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
 
         return base64_encode(json_encode([
             'parent_id' => $this->parentId,
+            'parent_type' => $this->parentType,
             'page' => $this->page + 1,
         ]));
     }
@@ -145,6 +147,7 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
 
         return base64_encode(json_encode([
             'parent_id' => $this->parentId,
+            'parent_type' => $this->parentType,
             'page' => $this->page - 1,
         ]));
     }
@@ -153,13 +156,79 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
     {
         return base64_encode(json_encode([
             'parent_id' => $this->parentId,
+            'parent_type' => $this->parentType,
             'page' => $this->page,
         ]));
     }
 
-    public function setParentId(int $parentId): ?TeaserListContract
+    public function setParentId(int $parentId): WidgetPaginationContract
     {
         $this->parentId = $parentId;
+
+        return $this;
+    }
+
+    public function getCurrentPage(): int
+    {
+        return $this->page;
+    }
+
+    public function setCurrentPage(int $page): WidgetPaginationContract
+    {
+        $this->page = $page;
+
+        return $this;
+    }
+
+    public function getTotalItems(): ?int
+    {
+        return $this->totalTeasers;
+    }
+
+    public function setTotalItems(int $items): WidgetPaginationContract
+    {
+        $this->totalTeasers = $items;
+
+        return $this;
+    }
+
+    public function getTotalPages(): ?int
+    {
+        return $this->totalPages;
+    }
+
+    public function setTotalPages(int $pages): WidgetPaginationContract
+    {
+        $this->totalPages = $pages;
+
+        return $this;
+    }
+
+    public function getItemsPerPage(): ?int
+    {
+        return $this->perPage;
+    }
+
+    public function setItemsPerPage(int $items): WidgetPaginationContract
+    {
+        $this->perPage = $items;
+
+        return $this;
+    }
+
+    public function getParentId(): ?int
+    {
+        return $this->parentId;
+    }
+
+    public function getParentType(): ?string
+    {
+        return $this->parentType;
+    }
+
+    public function setParentType(string $type): WidgetPaginationContract
+    {
+        $this->parentType = $type;
 
         return $this;
     }

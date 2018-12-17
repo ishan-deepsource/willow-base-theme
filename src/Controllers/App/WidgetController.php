@@ -28,13 +28,20 @@ class WidgetController extends \WP_REST_Controller
         }
 
         $parentId = data_get($data, 'parent_id');
+        $parentType = data_get($data, 'parent_type');
         $page = data_get($data, 'page');
 
-        if (!$parentId || !$page) {
+        if (!$parentId || !$page || !$parentType) {
             return new \WP_REST_Response(null, 404);
         }
 
-        if ($acfData = get_field(AcfName::GROUP_PAGE_WIDGETS, $parentId)) {
+        $postId = $parentId;
+
+        if ($parentType === 'category') {
+            $postId = sprintf('term_%s', $parentId);
+        }
+
+        if ($acfData = get_field(AcfName::GROUP_PAGE_WIDGETS, $postId)) {
             $acfArray = collect($acfData)->first(function ($acfArray) {
                 return $acfArray['acf_fc_layout'] == 'teaser_list' && ($acfArray['pagination'] ?? false);
             });
@@ -43,7 +50,8 @@ class WidgetController extends \WP_REST_Controller
             }
             $teaserList = new TeaserList(new TeaserListAdapter($acfArray));
             $teaserList->setParentId($parentId)
-                ->setPage($page);
+                ->setParentType($parentType)
+                ->setCurrentPage($page);
 
             $resource = new Item($teaserList, new TeaserListTransformer);
 
