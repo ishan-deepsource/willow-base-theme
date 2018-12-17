@@ -60,9 +60,9 @@ class TeaserListTransformer extends TransformerAbstract
             $resource = $this->collection($teaserList->getTeasers(), new CompositeTeaserTransformer);
             if ($teaserList->canPaginate()) {
                 $paginator = new NumberedPagination(
-                    $teaserList->getPage(),
-                    $teaserList->getTeasersPerPage(),
-                    $teaserList->getTotalTeasers(),
+                    $teaserList->getCurrentPage(),
+                    $teaserList->getItemsPerPage(),
+                    $teaserList->getTotalItems(),
                     $teaserList->getTeasers()->count(),
                     $teaserList->getTotalPages()
                 );

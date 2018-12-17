@@ -133,6 +133,6 @@ class TeaserList extends AbstractContent implements TeaserListContract
 
     public function setParentType(string $type): WidgetPaginationContract
     {
-        return $this->model->setParentId($type);
+        return $this->model->setParentType($type);
     }
 }
