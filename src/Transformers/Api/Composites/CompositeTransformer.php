@@ -85,6 +85,7 @@ class CompositeTransformer extends TransformerAbstract
             'word_count'                => $composite->getWordCount(),
             'translations'              => $this->getTranslations($composite),
             'exclude_platforms'         => $composite->getExcludePlatforms(),
+            'ctm_disabled'              => $composite->getCtmDisabled(),
         ];
     }
 
