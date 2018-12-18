@@ -214,4 +214,9 @@ class DocumentAdapter implements CompositeContract
     {
         return null;
     }
+
+    public function getCtmDisabled(): Bool
+    {
+        return false;
+    }
 }

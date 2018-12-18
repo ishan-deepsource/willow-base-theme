@@ -77,4 +77,6 @@ interface CompositeContract
     public function getTranslations(): ?Collection;
 
     public function getExcludePlatforms(): ?Collection;
+
+    public function getCtmDisabled(): Bool;
 }

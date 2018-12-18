@@ -386,4 +386,9 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         }
         return null;
     }
+
+    public function getCtmDisabled(): Bool
+    {
+        return data_get($this->wpModel, 'disable_ctm', false);
+    }
 }

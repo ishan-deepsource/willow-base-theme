@@ -207,4 +207,9 @@ class PinterestCompositeAdapter implements CompositeContract
     {
         return null;
     }
+
+    public function getCtmDisabled(): Bool
+    {
+        return false;
+    }
 }
