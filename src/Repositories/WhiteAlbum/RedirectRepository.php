@@ -3,7 +3,9 @@
 namespace Bonnier\Willow\Base\Repositories\WhiteAlbum;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\TransferStats;
+use Psr\Http\Message\UriInterface;
 
 /**
  * Class RedirectRepository
@@ -35,19 +37,19 @@ class RedirectRepository
     }
 
     /**
-     * @return \GuzzleHttp\Client
+     * @return Client
      */
-    public function getClient(): \GuzzleHttp\Client
+    public function getClient(): Client
     {
         return $this->client;
     }
 
     /**
-     * @param \GuzzleHttp\Client $client
+     * @param Client $client
      *
      * @return RedirectRepository
      */
-    public function setClient(\GuzzleHttp\Client $client): RedirectRepository
+    public function setClient(Client $client): RedirectRepository
     {
         $this->client = $client;
         return $this;
@@ -64,10 +66,12 @@ class RedirectRepository
         if ($redirect && $redirect->to !== $path && in_array($redirect->code, [301, 302, 200])) {
             return $redirect;
         }
+        return null;
     }
 
     private function recursiveRedirectResolve($url)
     {
+        /** @var null|UriInterface $destination */
         $destination = null;
         try {
             $response = $this->client->head($url, [
@@ -75,10 +79,14 @@ class RedirectRepository
                     $destination = $stats->getEffectiveUri();
                 }
             ]);
-        } catch (\Exception $exception) {
+        } catch (RequestException $exception) {
             $response = $exception->getResponse();
         }
-        $this->storeResolvedRedirect($url, $destination->getPath() ?: '/', $response->getStatusCode());
+        $this->storeResolvedRedirect(
+            $url,
+            ($destination->getPath() ?? '/') ?: '/',
+            $response->getStatusCode() ?? 301
+        );
         return $this->findRelsovedRedirectInDb($url);
     }
 
@@ -116,7 +124,7 @@ class RedirectRepository
     /**
      * @param $path
      *
-     * @return array|null|object|void
+     * @return array|null|object
      */
     private function findRelsovedRedirectInDb($path)
     {
