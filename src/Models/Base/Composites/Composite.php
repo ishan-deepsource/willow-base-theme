@@ -191,4 +191,9 @@ class Composite implements CompositeContract
     {
         return $this->composite->getExcludePlatforms();
     }
+
+    public function getCtmDisabled(): bool
+    {
+        return $this->composite->getCtmDisabled();
+    }
 }
