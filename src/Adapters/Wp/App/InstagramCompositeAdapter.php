@@ -207,7 +207,7 @@ class InstagramCompositeAdapter implements CompositeContract
         return null;
     }
 
-    public function getCtmDisabled(): Bool
+    public function getCtmDisabled(): bool
     {
         return false;
     }
