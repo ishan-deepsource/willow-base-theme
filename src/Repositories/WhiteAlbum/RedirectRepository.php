@@ -84,8 +84,8 @@ class RedirectRepository
         }
         $this->storeResolvedRedirect(
             $url,
-            ($destination->getPath() ?? '/') ?: '/',
-            $response->getStatusCode() ?? 301
+            optional($destination)->getPath() ?: '/',
+            optional($response)->getStatusCode() ?? 301
         );
         return $this->findRelsovedRedirectInDb($url);
     }
