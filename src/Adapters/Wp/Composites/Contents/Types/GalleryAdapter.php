@@ -30,7 +30,10 @@ class GalleryAdapter extends AbstractContentAdapter implements GalleryContract
     public function getImages(): Collection
     {
         $collection = collect(array_get($this->acfArray, 'images', []))->map(function ($acfImage) {
-            return new GalleryImage(new GalleryImageAdapter($acfImage));
+            if (is_array($acfImage)) {
+                return new GalleryImage(new GalleryImageAdapter($acfImage));
+            }
+            return null;
         })->reject(function ($image) {
             return is_null($image);
         });
