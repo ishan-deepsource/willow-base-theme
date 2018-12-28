@@ -291,12 +291,13 @@ class RouteController extends BaseController
 
     private function getComposite(string $slug, ?string $locale = null, $status = self::STATUS_PUBLISHED)
     {
-        return get_posts([
-                'name' => $slug,
-                'post_type' => WpComposite::POST_TYPE,
-                'post_status' => $status,
-                'lang' => $locale ?? LanguageProvider::getCurrentLanguage(),
-            ])[0] ?? null;
+        $query = new \WP_Query([
+            'name' => $slug,
+            'post_type' => WpComposite::POST_TYPE,
+            'post_status' => $status,
+            'lang' => $locale ?? LanguageProvider::getCurrentLanguage(),
+        ]);
+        return $query->posts[0] ?? null;
     }
 
     private function findRedirect($path)
