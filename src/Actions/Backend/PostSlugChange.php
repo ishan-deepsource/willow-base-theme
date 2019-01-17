@@ -59,7 +59,7 @@ class PostSlugChange
             $categoryId = $post->post_category[0] ?? null;
             $category = get_category($categoryId);
             $redirectTo = ! is_wp_error($category) && $category->term_id && $categoryId != get_option('default_category') ?
-                '/' . $category->slug : // Redirect to category page
+                parse_url(get_category_link($category), PHP_URL_PATH) : // Redirect to category page
                 '/'; // Redirect to front page
         }
         $this->createRedirect($post, get_permalink(), $redirectTo, sprintf('post-status-change:%s', $newStatus));
