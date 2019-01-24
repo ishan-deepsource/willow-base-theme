@@ -28,7 +28,7 @@ class ActionsBootstrap
         new LocalizeApi();
         new Navigation();
         new PolylangTranslations();
-        PageTemplates::get_instance();
+        new PageTemplates();
         if (!is_admin()) {
             new ImgixSettings();
         }
