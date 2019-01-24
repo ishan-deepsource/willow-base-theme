@@ -125,7 +125,7 @@ class PageTemplates
     {
         try {
             if ($site = WpSiteManager::instance()->settings()->getSite()) {
-                return $site->brand->brand_code;
+                return data_get($site, 'brand.brand_code');
             }
         } catch (SiteNotFoundException $exception) {
             return null;
