@@ -90,15 +90,10 @@ class SitemapController extends WP_REST_Controller
 
         $terms = collect(self::TAXONOMIES)->map(
             function (string $term) use ($posts, $perPage) {
-                $args = [];
-                // Get an array of post tag term ids that needs to be excluded,
-                // since they are attached to less than five composites.
-                if ($term === 'post_tag') {
-                    $args = [
-                        'exclude' => $this->getExcludedPostTagsIds(),
-                    ];
-                }
-                $pages = ceil(intval(wp_count_terms($term, $args)) / $perPage);
+                $termsCount = wp_count_terms($term, [
+                    'exclude' => $this->getExcludedPostTagsIds($term),
+                ]);
+                $pages = ceil(intval($termsCount) / $perPage);
                 $urls = [];
                 for ($i = 1; $i <= $pages; $i++) {
                     $urls[] = $term . '-' . $i;
@@ -134,7 +129,8 @@ class SitemapController extends WP_REST_Controller
                     'data' => [
                         'status' => 404
                     ]
-                ], 404
+                ],
+                404
             );
         }
         $data = Cache::remember(
@@ -181,15 +177,12 @@ class SitemapController extends WP_REST_Controller
                     }
                     $contents = get_posts($args);
                 } else {
-                    $args = [
+                    $contents = get_terms([
                         'taxonomy' => $type,
                         'number' => $perPage,
                         'offset' => $offset,
-                    ];
-                    if ($type === 'post_tag') {
-                        $args['exclude'] = $this->getExcludedPostTagsIds();
-                    }
-                    $contents = get_terms($args);
+                        'exclude' => $this->getExcludedPostTagsIds($type),
+                    ]);
                 }
                 $sitemapCollection = collect($contents)->map(
                     function ($content) use ($type) {
@@ -214,13 +207,18 @@ class SitemapController extends WP_REST_Controller
      * Get an array of post tags term ids,
      * that have less than five posts attached to it.
      *
+     * @param string $taxonomy
      * @return array
      */
-    private function getExcludedPostTagsIds()
+    private function getExcludedPostTagsIds(string $taxonomy)
     {
-        return collect(get_terms('post_tag'))->reject(function (\WP_Term $tag) {
-            return $tag->count >= 5;
-        })->pluck('term_id')->toArray();
+        if ($taxonomy === 'post_tag') {
+            return collect(get_terms($taxonomy))->reject(function (\WP_Term $tag) {
+                return $tag->count >= 5;
+            })->pluck('term_id')->toArray();
+        }
+
+        return [];
     }
 
     private function getTotalPostCount($postType)
