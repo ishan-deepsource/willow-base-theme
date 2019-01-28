@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "958784a8b79ca9e7d8919fce2d4c5410",
+    "content-hash": "320770beca4f3dc5eb740fcb41b99559",
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
@@ -54,16 +54,16 @@
         },
         {
             "name": "benjaminmedia/wp-site-manager",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-site-manager.git",
-                "reference": "79c132ece9dc67df103935691b8e8d4b312cdf33"
+                "reference": "b9a4be15b8ae24a7adf01588788852e3239e2eaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-site-manager/zipball/79c132ece9dc67df103935691b8e8d4b312cdf33",
-                "reference": "79c132ece9dc67df103935691b8e8d4b312cdf33",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-site-manager/zipball/b9a4be15b8ae24a7adf01588788852e3239e2eaa",
+                "reference": "b9a4be15b8ae24a7adf01588788852e3239e2eaa",
                 "shasum": ""
             },
             "require": {
@@ -96,20 +96,20 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-08-13T13:18:57+00:00"
+            "time": "2019-01-24T12:38:22+00:00"
         },
         {
             "name": "bonnier/contenthub-editor",
-            "version": "4.7.2",
+            "version": "4.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-contenthub-editor.git",
-                "reference": "be60e3469456e5a5b1688f1753b7e18fcad59ec2"
+                "reference": "6f8952cf3cf1f782bcdfbe32be7db779376bef4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/be60e3469456e5a5b1688f1753b7e18fcad59ec2",
-                "reference": "be60e3469456e5a5b1688f1753b7e18fcad59ec2",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/6f8952cf3cf1f782bcdfbe32be7db779376bef4a",
+                "reference": "6f8952cf3cf1f782bcdfbe32be7db779376bef4a",
                 "shasum": ""
             },
             "require": {
@@ -152,7 +152,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2019-01-25T09:26:55+00:00"
+            "time": "2019-01-28T09:47:31+00:00"
         },
         {
             "name": "bonnier/php-video-helper",
@@ -799,7 +799,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.7.21",
+            "version": "v5.7.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -843,7 +843,7 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v5.7.20",
+            "version": "v5.7.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
@@ -2014,16 +2014,16 @@
         },
         {
             "name": "composer/ca-bundle",
-            "version": "1.1.3",
+            "version": "1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "8afa52cd417f4ec417b4bfe86b68106538a87660"
+                "reference": "558f321c52faeb4828c03e7dc0cfe39a09e09a2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/8afa52cd417f4ec417b4bfe86b68106538a87660",
-                "reference": "8afa52cd417f4ec417b4bfe86b68106538a87660",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/558f321c52faeb4828c03e7dc0cfe39a09e09a2d",
+                "reference": "558f321c52faeb4828c03e7dc0cfe39a09e09a2d",
                 "shasum": ""
             },
             "require": {
@@ -2066,7 +2066,7 @@
                 "ssl",
                 "tls"
             ],
-            "time": "2018-10-18T06:09:13+00:00"
+            "time": "2019-01-28T09:30:10+00:00"
         },
         {
             "name": "composer/composer",
@@ -5378,7 +5378,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
+                    "email": "backendtea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
