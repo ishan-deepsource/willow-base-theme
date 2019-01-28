@@ -90,7 +90,15 @@ class SitemapController extends WP_REST_Controller
 
         $terms = collect(self::TAXONOMIES)->map(
             function (string $term) use ($posts, $perPage) {
-                $pages = ceil(intval(wp_count_terms($term)) / $perPage);
+                $args = [];
+                // Get an array of post tag term ids that needs to be excluded,
+                // since they are attached to less than five composites.
+                if ($term === 'post_tag') {
+                    $args = [
+                        'exclude' => $this->getExcludedPostTagsIds(),
+                    ];
+                }
+                $pages = ceil(intval(wp_count_terms($term, $args)) / $perPage);
                 $urls = [];
                 for ($i = 1; $i <= $pages; $i++) {
                     $urls[] = $term . '-' . $i;
@@ -173,14 +181,15 @@ class SitemapController extends WP_REST_Controller
                     }
                     $contents = get_posts($args);
                 } else {
-                    $contents = get_terms(
-                        [
-                            'taxonomy' => $type,
-                            'hide_empty' => false,
-                            'number' => $perPage,
-                            'offset' => $offset
-                        ]
-                    );
+                    $args = [
+                        'taxonomy' => $type,
+                        'number' => $perPage,
+                        'offset' => $offset,
+                    ];
+                    if ($type === 'post_tag') {
+                        $args['exclude'] = $this->getExcludedPostTagsIds();
+                    }
+                    $contents = get_terms($args);
                 }
                 $sitemapCollection = collect($contents)->map(
                     function ($content) use ($type) {
@@ -201,7 +210,21 @@ class SitemapController extends WP_REST_Controller
         return new WP_REST_Response($data);
     }
 
-    private function getTotalPostCount($postType) {
+    /**
+     * Get an array of post tags term ids,
+     * that have less than five posts attached to it.
+     *
+     * @return array
+     */
+    private function getExcludedPostTagsIds()
+    {
+        return collect(get_terms('post_tag'))->reject(function (\WP_Term $tag) {
+            return $tag->count >= 5;
+        })->pluck('term_id')->toArray();
+    }
+
+    private function getTotalPostCount($postType)
+    {
         return with(new \WP_Query([
             'fields' => 'ids',
             'post_type' => $postType,
