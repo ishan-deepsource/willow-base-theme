@@ -100,16 +100,16 @@
         },
         {
             "name": "bonnier/contenthub-editor",
-            "version": "4.9.0",
+            "version": "4.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-contenthub-editor.git",
-                "reference": "4c7e8cd9de1556c95772002306d433d6ba780200"
+                "reference": "390e3080adc19c54a7b496c57957f0ae33d7c589"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/4c7e8cd9de1556c95772002306d433d6ba780200",
-                "reference": "4c7e8cd9de1556c95772002306d433d6ba780200",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/390e3080adc19c54a7b496c57957f0ae33d7c589",
+                "reference": "390e3080adc19c54a7b496c57957f0ae33d7c589",
                 "shasum": ""
             },
             "require": {
@@ -152,7 +152,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2019-01-31T14:15:08+00:00"
+            "time": "2019-02-06T08:39:32+00:00"
         },
         {
             "name": "bonnier/php-video-helper",
@@ -1501,7 +1501,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
