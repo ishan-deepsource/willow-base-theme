@@ -37,7 +37,6 @@ class ActionsBootstrap
     private function loadBackendActions()
     {
         if (is_admin()) {
-            new PostSlugChange();
             new PreviewUrl();
             new EstimatedReadingTime();
             new AddMedia();

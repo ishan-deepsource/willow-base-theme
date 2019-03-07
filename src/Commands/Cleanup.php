@@ -7,7 +7,6 @@ use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\Cache\Models\Post;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\WP\Cxense\Models\Post as CxensePost;
-use Bonnier\WP\Redirect\Http\BonnierRedirect;
 use Illuminate\Support\Collection;
 use League\Csv\Exception;
 use League\Csv\Reader;
@@ -107,8 +106,6 @@ class Cleanup extends \WP_CLI_Command
      *
      * @param string $file
      * @param string $delimiter
-     *
-     * @return Collection
      *
      * @throws \WP_CLI\ExitException
      */
