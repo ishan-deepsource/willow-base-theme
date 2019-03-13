@@ -55,6 +55,12 @@ class RouteController extends BaseController
         $locale = $request->get_param('lang');
         $path = $request->get_param('path');
         $content = $this->resolveContent($path, $locale);
+        if (is_null($content) && $redirect = $this->findRedirect($path)) {
+            $content = [
+                'type' => 'redirect',
+                'redirect' => $redirect
+            ];
+        }
 
         $resource = null;
 
@@ -233,13 +239,6 @@ class RouteController extends BaseController
 
         if (($composite = $this->findContenthubComposite($path, $status, $locale))) {
             return collect(data_get($composite, 'exclude_platforms'))->contains('web') ? null : $composite;
-        }
-
-        if ($redirect = $this->findRedirect($path)) {
-            return [
-                'type' => 'redirect',
-                'redirect' => $redirect
-            ];
         }
 
         return null;
