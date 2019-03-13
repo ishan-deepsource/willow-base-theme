@@ -145,6 +145,8 @@ class SitemapController extends WP_REST_Controller
                         'offset' => $offset,
                         'post_status' => 'publish',
                         'lang' => LanguageProvider::getCurrentLanguage(),
+                        'orderby' => ['post_modified' => 'DESC', 'ID' => 'DESC'],
+
                     ];
                     if ($type === 'page') {
                         $args['meta_query'] = [
@@ -172,6 +174,20 @@ class SitemapController extends WP_REST_Controller
                                     'key' => '_wp_page_template',
                                     'compare' => 'NOT EXISTS',
                                 ],
+                            ],
+                        ];
+                    }
+                    if ($type === WpComposite::POST_TYPE) {
+                        $args['meta_query'] = [
+                            'relation' => 'OR',
+                            [
+                                'key' => 'sitemap',
+                                'value' => '0',
+                                'compare' => '=',
+                            ],
+                            [
+                                'key' => 'sitemap',
+                                'compare' => 'NOT EXISTS',
                             ],
                         ];
                     }
