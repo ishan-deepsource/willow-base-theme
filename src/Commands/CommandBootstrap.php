@@ -15,6 +15,7 @@ class CommandBootstrap
             Cleanup::register();
             AuthorFix::register();
             CxenseSync::register();
+            Sitemap::register();
         }
     }
 }
