@@ -38,7 +38,7 @@ class SitemapController extends WP_REST_Controller
         'category' => SitemapCategoryAdapter::class,
     ];
 
-    const PER_PAGE = 500;
+    const PER_PAGE = 100;
 
     public function register_routes()
     {
