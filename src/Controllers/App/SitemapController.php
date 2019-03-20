@@ -38,7 +38,7 @@ class SitemapController extends WP_REST_Controller
         'category' => SitemapCategoryAdapter::class,
     ];
 
-    const PER_PAGE = 500;
+    const PER_PAGE = 100;
 
     public function register_routes()
     {
@@ -145,6 +145,8 @@ class SitemapController extends WP_REST_Controller
                         'offset' => $offset,
                         'post_status' => 'publish',
                         'lang' => LanguageProvider::getCurrentLanguage(),
+                        'orderby' => ['post_modified' => 'DESC', 'ID' => 'DESC'],
+
                     ];
                     if ($type === 'page') {
                         $args['meta_query'] = [
@@ -172,6 +174,15 @@ class SitemapController extends WP_REST_Controller
                                     'key' => '_wp_page_template',
                                     'compare' => 'NOT EXISTS',
                                 ],
+                            ],
+                        ];
+                    }
+                    if ($type === WpComposite::POST_TYPE) {
+                        $args['meta_query'] = [
+                            [
+                                'key' => 'sitemap',
+                                'value' => '1',
+                                'compare' => '!=',
                             ],
                         ];
                     }
