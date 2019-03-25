@@ -12,5 +12,6 @@ interface FeaturedContentContract extends ContentContract
     public function getImage(): ?ImageContract;
     public function getVideo(): ?NativeVideoContract;
     public function getDisplayHint(): ?string;
+    public function getLabel(): ?string;
     public function getComposite(): ?CompositeContract;
 }
