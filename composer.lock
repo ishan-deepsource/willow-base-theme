@@ -100,16 +100,16 @@
         },
         {
             "name": "bonnier/contenthub-editor",
-            "version": "4.11.0",
+            "version": "4.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-contenthub-editor.git",
-                "reference": "1f8e46a13d98cbbfea785c0ad9f59c364a2655df"
+                "reference": "dd598ad52448a4e3679b1765b0dd6cf592b29872"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/1f8e46a13d98cbbfea785c0ad9f59c364a2655df",
-                "reference": "1f8e46a13d98cbbfea785c0ad9f59c364a2655df",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/dd598ad52448a4e3679b1765b0dd6cf592b29872",
+                "reference": "dd598ad52448a4e3679b1765b0dd6cf592b29872",
                 "shasum": ""
             },
             "require": {
@@ -152,7 +152,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2019-03-13T09:12:31+00:00"
+            "time": "2019-03-13T10:52:15+00:00"
         },
         {
             "name": "bonnier/php-video-helper",
