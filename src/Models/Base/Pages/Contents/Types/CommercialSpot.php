@@ -24,6 +24,11 @@ class CommercialSpot extends AbstractContent implements CommercialSpotContract
         return $this->model->getDescription();
     }
 
+    public function getDisplayFormat(): ?string
+    {
+        return $this->model->getDisplayFormat();
+    }
+
     public function getImage(): ?ImageContract
     {
         return $this->model->getImage();

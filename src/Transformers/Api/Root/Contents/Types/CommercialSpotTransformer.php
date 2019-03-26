@@ -15,6 +15,7 @@ class CommercialSpotTransformer extends TransformerAbstract
         return [
             'title' => $commercialSpot->getTitle(),
             'description' => $commercialSpot->getDescription(),
+            'display_hint' => $commercialSpot->getDisplayFormat(),
             'image' => $this->transformImage($commercialSpot),
             'link' => $this->transformLink($commercialSpot),
             'label' => $commercialSpot->getLabel(),
