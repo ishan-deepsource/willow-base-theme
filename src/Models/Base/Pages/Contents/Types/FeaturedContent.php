@@ -31,6 +31,11 @@ class FeaturedContent extends AbstractContent implements FeaturedContentContract
         return $this->model->getDisplayHint();
     }
 
+    public function getLabel(): ?string
+    {
+        return $this->model->getLabel();
+    }
+
     public function getComposite(): ?CompositeContract
     {
         return $this->model->getComposite();

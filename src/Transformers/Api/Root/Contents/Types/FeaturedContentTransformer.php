@@ -23,6 +23,7 @@ class FeaturedContentTransformer extends TransformerAbstract
         return [
             'image' => $this->transformImage($featuredContent),
             'video' => $this->transformVideo($featuredContent),
+            'label' => $featuredContent->getLabel(),
             'display_hint' => $featuredContent->getDisplayHint()
         ];
     }
