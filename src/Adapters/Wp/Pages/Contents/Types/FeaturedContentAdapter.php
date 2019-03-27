@@ -53,4 +53,9 @@ class FeaturedContentAdapter extends AbstractContentAdapter implements FeaturedC
 
         return null;
     }
+
+    public function getLabel(): ?string
+    {
+        return array_get($this->acfArray, 'label') ?: null;
+    }
 }
