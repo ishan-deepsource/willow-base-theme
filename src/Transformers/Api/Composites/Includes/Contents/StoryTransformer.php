@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents;
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\StoryContract;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
 use League\Fractal\TransformerAbstract;
 
 class StoryTransformer extends TransformerAbstract
@@ -11,6 +12,7 @@ class StoryTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'teaser',
         'articles',
+        'vocabularies',
     ];
 
     protected $defaultIncludes = [
@@ -31,5 +33,10 @@ class StoryTransformer extends TransformerAbstract
     public function includeArticles(StoryContract $story)
     {
         return $this->collection($story->getArticles(), new CompositeTeaserTransformer);
+    }
+
+    public function includeVocabularies(StoryContract $story)
+    {
+        return $this->collection($story->getTeaser()->getVocabularies(), new VocabularyTransformer());
     }
 }
