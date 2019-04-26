@@ -100,16 +100,16 @@
         },
         {
             "name": "bonnier/contenthub-editor",
-            "version": "5.1.0",
+            "version": "5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-contenthub-editor.git",
-                "reference": "1fc86364435e3e3bf6bdf007f15011a94762c3da"
+                "reference": "53c7977f701282005d0ef11e2e4c24239568000a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/1fc86364435e3e3bf6bdf007f15011a94762c3da",
-                "reference": "1fc86364435e3e3bf6bdf007f15011a94762c3da",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/53c7977f701282005d0ef11e2e4c24239568000a",
+                "reference": "53c7977f701282005d0ef11e2e4c24239568000a",
                 "shasum": ""
             },
             "require": {
@@ -152,7 +152,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2019-03-27T14:14:07+00:00"
+            "time": "2019-04-26T07:51:59+00:00"
         },
         {
             "name": "bonnier/php-video-helper",
@@ -904,7 +904,9 @@
             "version": "5.7.2",
             "dist": {
                 "type": "zip",
-                "url": "https://www.advancedcustomfields.com"
+                "url": "https://www.advancedcustomfields.com",
+                "reference": null,
+                "shasum": null
             },
             "require": {
                 "junaidbhura/composer-wp-pro-plugins": "*"
@@ -956,7 +958,9 @@
             "version": "2.3.8",
             "dist": {
                 "type": "zip",
-                "url": "https://www.polylang.pro"
+                "url": "https://www.polylang.pro",
+                "reference": null,
+                "shasum": null
             },
             "require": {
                 "junaidbhura/composer-wp-pro-plugins": "*"
@@ -1550,7 +1554,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -1751,7 +1755,9 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/amazon-s3-and-cloudfront.1.4.3.zip"
+                "url": "https://downloads.wordpress.org/plugin/amazon-s3-and-cloudfront.1.4.3.zip",
+                "reference": null,
+                "shasum": null
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -1769,7 +1775,9 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/user-role-editor.4.50.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/user-role-editor.4.50.1.zip",
+                "reference": null,
+                "shasum": null
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -1787,7 +1795,9 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wp-rest-filter.1.4.3.zip"
+                "url": "https://downloads.wordpress.org/plugin/wp-rest-filter.1.4.3.zip",
+                "reference": null,
+                "shasum": null
             },
             "require": {
                 "composer/installers": "~1.0"

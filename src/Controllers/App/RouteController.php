@@ -68,7 +68,7 @@ class RouteController extends BaseController
             $composite = new Composite(new CompositeAdapter($content));
             $resource = new Item($composite, new CompositeTransformer());
             $resource->setMeta([
-                'type' => 'composite',
+                'type' => $composite->getKind(),
                 'status' => 200
             ]);
         } elseif ($content instanceof WP_Post && $content->post_type === 'page') {

@@ -25,6 +25,11 @@ class CommercialSpotAdapter extends AbstractContentAdapter implements Commercial
         return array_get($this->acfArray, 'description') ?: null;
     }
 
+    public function getDisplayFormat(): ?string
+    {
+        return array_get($this->acfArray, 'display_hint') ?: 'default';
+    }
+
     public function getImage(): ?ImageContract
     {
         if ($imageArray = array_get($this->acfArray, 'image')) {
