@@ -71,6 +71,7 @@ class CompositeTransformer extends TransformerAbstract
             'title'                     => $composite->getTitle(),
             'description'               => $composite->getDescription(),
             'status'                    => $composite->getStatus(),
+            'kind'                    => $composite->getKind(),
             'locale'                    => $composite->getLocale(),
             'commercial'                => $this->getCommercial($composite),
             'author'                    => $this->getAuthor($composite),
