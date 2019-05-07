@@ -44,7 +44,8 @@ class CxenseSearchRepository
                 $this->orgPrefix . '-pagetype' => [
                     'tag',
                     'category',
-                    'panel'
+                    'panel',
+                    'frontpage'
                 ],
             ],
             'facets' => $this->getSearchableTaxonomies(),
