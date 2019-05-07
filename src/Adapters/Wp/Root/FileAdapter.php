@@ -16,12 +16,14 @@ class FileAdapter implements FileContract
     protected $file;
     protected $postMeta;
     protected $attachmentMeta;
+    protected $acfData;
 
     public function __construct($file)
     {
         $this->file = $file;
         $this->postMeta = WpModelRepository::instance()->getPostMeta($file);
         $this->attachmentMeta = WpModelRepository::instance()->getAttachmentMeta($file);
+        $this->acfData = WpModelRepository::instance()->getAcfData($file);
     }
 
     public function getId(): ?int
@@ -52,7 +54,7 @@ class FileAdapter implements FileContract
 
     public function getCaption(): ?string
     {
-        return array_get($this->file, 'caption', data_get($this->file, 'post_excerpt')) ?: null;
+        return array_get($this->acfData, 'caption') ?: null;
     }
 
     public function getLanguage(): ?string

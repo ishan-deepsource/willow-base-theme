@@ -106,7 +106,7 @@ class CategoryAdapter implements CategoryContract
         return null;
     }
 
-    public function getContents(): ?Collection
+    public function getContents(int $page): ?Collection
     {
         return null;
     }

@@ -10,6 +10,7 @@ interface CommercialSpotContract extends ContentContract
 {
     public function getTitle(): ?string;
     public function getDescription(): ?string;
+    public function getDisplayFormat(): ?string;
     public function getImage(): ?ImageContract;
     public function getLink(): ?HyperlinkContract;
     public function getLabel(): ?string;

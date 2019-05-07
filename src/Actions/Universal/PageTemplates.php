@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Actions\Universal;
 
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
+use Bonnier\WP\SiteManager\Exceptions\SiteNotFoundException;
 use Bonnier\WP\SiteManager\WpSiteManager;
 
 /**
@@ -12,29 +13,21 @@ use Bonnier\WP\SiteManager\WpSiteManager;
  */
 class PageTemplates
 {
-    public $pageTemplates;
-    public $compositeTemplates;
-    //TODO: implement logic to handle sub-themes
-    private static $instance;
+    public $pageTemplates = [ // default
+        'frontpage' => 'Frontpage',
+        'cookiepolicy' => 'Cookie Politik',
+        '404-page' => '404 template',
+    ];
+    public $compositeTemplates = [];
 
-    private function __construct()
+    public function __construct()
     {
-        $this->pageTemplates = [
-            'frontpage' => 'Frontpage',
-            'cookiepolicy' => 'Cookie Politik',
-            '404-page' => '404 template',
-        ];
-        $this->compositeTemplates = [];
-        $brand = null;
-        if (($site = WpSiteManager::instance()->settings()->getSite())) {
-            $brand = data_get($site, 'brand.brand_code');
-        }
-        switch ($brand) {
+        switch ($this->getBrandCode()) {
             case 'BOB':
                 $this->pageTemplates = array_merge($this->pageTemplates, [
                     'authorlist' => 'Author List',
                     'architonic' => 'Architonic iFrame',
-                    ]);
+                ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'bodum-stempel' => 'Bodum Stempel',
                     'bodum-pour-over' => 'Bodum Pour over',
@@ -105,7 +98,7 @@ class PageTemplates
     public function registerProjectTemplates($atts)
     {
         // Create the key used for the themes cache
-        $cache_key = 'page_templates-' . md5(get_theme_root() . '/' . get_stylesheet());
+        $cacheKey = 'page_templates-' . md5(get_theme_root() . '/' . get_stylesheet());
 
         // Retrieve the cache list.
         // If it doesn't exist, or it's empty prepare an array
@@ -115,7 +108,7 @@ class PageTemplates
         }
 
         // New cache, therefore remove the old one
-        wp_cache_delete($cache_key, 'themes');
+        wp_cache_delete($cacheKey, 'themes');
 
         // Now add our template to the list of templates by merging our templates
         // with the existing templates array from the cache.
@@ -123,20 +116,20 @@ class PageTemplates
 
         // Add the modified cache to allow WordPress to pick it up for listing
         // available templates
-        wp_cache_add($cache_key, $templates, 'themes', 1800);
+        wp_cache_add($cacheKey, $templates, 'themes', 1800);
 
         return $atts;
     }
 
-    /**
-     * Returns an instance of this class.
-     */
-    public static function get_instance()
+    private function getBrandCode()
     {
-        if (null == self::$instance) {
-            self::$instance = new self();
+        try {
+            if ($site = WpSiteManager::instance()->settings()->getSite()) {
+                return data_get($site, 'brand.brand_code');
+            }
+        } catch (SiteNotFoundException $exception) {
+            return null;
         }
-
-        return self::$instance;
+        return null;
     }
 }

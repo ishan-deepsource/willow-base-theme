@@ -6,12 +6,10 @@ use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Repositories\WhiteAlbum\RedirectRepository;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
-use Bonnier\WP\Redirect\Http\BonnierRedirect;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\PageAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\CategoryAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagAdapter;
-use Bonnier\Willow\Base\Helpers\Cache;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Base\Pages\Page;
 use Bonnier\Willow\Base\Models\Base\Terms\Category;
@@ -21,6 +19,9 @@ use Bonnier\Willow\Base\Transformers\Api\Pages\PageTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Category\CategoryTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Tag\TagTransformer;
 use Bonnier\Willow\Base\Transformers\NullTransformer;
+use Bonnier\WP\Redirect\Helpers\LocaleHelper;
+use Bonnier\WP\Redirect\Models\Redirect;
+use Bonnier\WP\Redirect\WpBonnierRedirect;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
 use WP_Post;
@@ -54,13 +55,22 @@ class RouteController extends BaseController
         $locale = $request->get_param('lang');
         $path = $request->get_param('path');
         $content = $this->resolveContent($path, $locale);
+        if (is_null($content) && $redirect = $this->findRedirect($path)) {
+            $content = [
+                'type' => 'redirect',
+                'redirect' => $redirect
+            ];
+        }
 
         $resource = null;
 
         if ($content instanceof WP_Post && $content->post_type === 'contenthub_composite') {
             $composite = new Composite(new CompositeAdapter($content));
             $resource = new Item($composite, new CompositeTransformer());
-            $resource->setMeta(['type' => 'composite']);
+            $resource->setMeta([
+                'type' => $composite->getKind(),
+                'status' => 200
+            ]);
         } elseif ($content instanceof WP_Post && $content->post_type === 'page') {
             $page = new Page(new PageAdapter($content));
             $resource = new Item($page, new PageTransformer());
@@ -85,8 +95,8 @@ class RouteController extends BaseController
             $resource = new Item(null, new NullTransformer());
             $resource->setMeta([
                 'type' => 'redirect',
-                'location' => $content['redirect']->to,
-                'status' => $content['redirect']->code
+                'location' => $content['redirect']->getTo(),
+                'status' => $content['redirect']->getCode()
             ]);
         }
 
@@ -228,19 +238,7 @@ class RouteController extends BaseController
         }
 
         if (($composite = $this->findContenthubComposite($path, $status, $locale))) {
-            $excludePlatforms = data_get($composite, 'exclude_platforms');
-            if (collect($excludePlatforms)->contains('web')) {
-                return null;
-            }
-
-            return $composite;
-        }
-
-        if ($redirect = $this->findRedirect($path)) {
-            return [
-                'type' => 'redirect',
-                'redirect' => $redirect
-            ];
+            return collect(data_get($composite, 'exclude_platforms'))->contains('web') ? null : $composite;
         }
 
         return null;
@@ -277,89 +275,55 @@ class RouteController extends BaseController
         ?string $locale = null
     ): ?WP_Post {
         $parts = preg_split('#/#', $path, -1, PREG_SPLIT_NO_EMPTY);
+        $compositeSlug = end($parts); // Get the composite slug from the last part
+        array_pop($parts); // Remove composite slug
+        $categorySlug = implode('/', $parts); // Glue parts to form category slug
 
-        $content = null;
-
-        $lastPartIndex = count($parts) - 1;
-
-        foreach ($parts as $index => $part) {
-            // The last part of the path, should be the postname of the composite
-            // We need to skip checking if the last part is a category, in the case
-            // the category slug and the composite slug are the same. For instance
-            // https://willow-site.com/top-category/subject/subject
-            if ($index < $lastPartIndex && $category = get_category_by_slug($part)) {
-                if ($content && !$content instanceof WP_Term) {
-                    return null;
-                } elseif ($content && $category->parent !== $content->term_id) {
-                    return null;
-                } elseif (!$content && 0 !== $category->parent) {
-                    return null;
-                } else {
-                    $content = $category;
-                }
-            } elseif ($composite = $this->getComposite($part, $locale)) {
-                $cat = WpModelRepository::instance()->getAcfField($composite->ID, 'category');
-                if ($composite->post_status !== $status && $status !== 'all') {
-                    return null;
-                } elseif ($content && !$content instanceof WP_Term) {
-                    // The parent element of the slug is not a WP_Term
-                    // Composites should be attached to WP_Term (categories)
-                    return null;
-                } elseif ($content && $cat->term_id !== $content->term_id) {
-                    // The parent element of the slug is not the composites category
-                    return null;
-                } elseif (!$content && $cat) {
-                    // The composite is attached to a category, but is accessed directly
-                    return null;
-                } else {
+        if (($category = get_category_by_path($categorySlug)) && $category instanceof WP_Term) {
+            if (($composite = $this->getComposite($compositeSlug, $locale, $status)) && $composite instanceof WP_Post) {
+                if (in_array($category->term_id, $composite->post_category)) {
                     return $composite;
                 }
-            } else {
-                return null;
             }
         }
-
         return null;
     }
 
-    private function getComposite(string $slug, ?string $locale = null)
+    private function getComposite(string $slug, ?string $locale = null, $status = self::STATUS_PUBLISHED)
     {
-        $currentLang = $locale ?? LanguageProvider::getCurrentLanguage();
-        $posts = get_posts([
+        $query = new \WP_Query([
             'name' => $slug,
             'post_type' => WpComposite::POST_TYPE,
+            'post_status' => $status,
+            'lang' => $locale ?? LanguageProvider::getCurrentLanguage(),
         ]);
-        if (!empty($posts)) {
-            $post = collect($posts)->first(function (WP_Post $post) use ($currentLang) {
-                return $currentLang === LanguageProvider::getPostLanguage($post->ID);
-            });
-            return $post;
-        }
-
-        return null;
+        return $query->posts[0] ?? null;
     }
 
-    private function findRedirect($path)
+    private function findRedirect($path): ?Redirect
     {
-        if (!class_exists(BonnierRedirect::class)) {
+        if (!class_exists(WpBonnierRedirect::class)) {
             return null;
         }
         try {
-            if ($bonnierRedirect = BonnierRedirect::recursiveRedirectFinder($path)) {
+            if ($bonnierRedirect = WpBonnierRedirect::instance()->getRedirectRepository()->findRedirectByPath($path)) {
                 return $bonnierRedirect;
             }
         } catch (\Exception $exception) {
             // Empty because we just need to go to the next line.
         }
-        if (env('RESOLVE_WA_REDIRECTS') && env('WP_ENV') !== 'testing' && $redirect = $this->findWaRedirect($path)) {
-            BonnierRedirect::createRedirect(
-                $path,
-                $redirect->to,
-                LanguageProvider::getCurrentLanguage(),
-                'wa-route-resolve',
-                null
-            );
-            return $redirect;
+        if (env('RESOLVE_WA_REDIRECTS') && env('WP_ENV') !== 'testing' && $waRedirect = $this->findWaRedirect($path)) {
+            $redirect = new Redirect();
+            $redirect->setFrom($path)
+                ->setTo($waRedirect->to)
+                ->setLocale(LocaleHelper::getLanguage())
+                ->setType('wa-route-resolve')
+                ->setCode(301);
+            try {
+                return WpBonnierRedirect::instance()->getRedirectRepository()->save($redirect);
+            } catch (\Exception $exception) {
+                return null;
+            }
         }
 
         return null;

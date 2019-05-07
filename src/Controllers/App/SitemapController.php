@@ -38,7 +38,7 @@ class SitemapController extends WP_REST_Controller
         'category' => SitemapCategoryAdapter::class,
     ];
 
-    const PER_PAGE = 500;
+    const PER_PAGE = 100;
 
     public function register_routes()
     {
@@ -90,7 +90,10 @@ class SitemapController extends WP_REST_Controller
 
         $terms = collect(self::TAXONOMIES)->map(
             function (string $term) use ($posts, $perPage) {
-                $pages = ceil(intval(wp_count_terms($term)) / $perPage);
+                $termsCount = wp_count_terms($term, [
+                    'exclude' => $this->getExcludedPostTagsIds($term),
+                ]);
+                $pages = ceil(intval($termsCount) / $perPage);
                 $urls = [];
                 for ($i = 1; $i <= $pages; $i++) {
                     $urls[] = $term . '-' . $i;
@@ -126,7 +129,8 @@ class SitemapController extends WP_REST_Controller
                     'data' => [
                         'status' => 404
                     ]
-                ], 404
+                ],
+                404
             );
         }
         $data = Cache::remember(
@@ -141,6 +145,8 @@ class SitemapController extends WP_REST_Controller
                         'offset' => $offset,
                         'post_status' => 'publish',
                         'lang' => LanguageProvider::getCurrentLanguage(),
+                        'orderby' => ['post_modified' => 'DESC', 'ID' => 'DESC'],
+
                     ];
                     if ($type === 'page') {
                         $args['meta_query'] = [
@@ -171,16 +177,23 @@ class SitemapController extends WP_REST_Controller
                             ],
                         ];
                     }
+                    if ($type === WpComposite::POST_TYPE) {
+                        $args['meta_query'] = [
+                            [
+                                'key' => 'sitemap',
+                                'value' => '1',
+                                'compare' => '!=',
+                            ],
+                        ];
+                    }
                     $contents = get_posts($args);
                 } else {
-                    $contents = get_terms(
-                        [
-                            'taxonomy' => $type,
-                            'hide_empty' => false,
-                            'number' => $perPage,
-                            'offset' => $offset
-                        ]
-                    );
+                    $contents = get_terms([
+                        'taxonomy' => $type,
+                        'number' => $perPage,
+                        'offset' => $offset,
+                        'exclude' => $this->getExcludedPostTagsIds($type),
+                    ]);
                 }
                 $sitemapCollection = collect($contents)->map(
                     function ($content) use ($type) {
@@ -201,7 +214,26 @@ class SitemapController extends WP_REST_Controller
         return new WP_REST_Response($data);
     }
 
-    private function getTotalPostCount($postType) {
+    /**
+     * Get an array of post tags term ids,
+     * that have less than five posts attached to it.
+     *
+     * @param string $taxonomy
+     * @return array
+     */
+    private function getExcludedPostTagsIds(string $taxonomy)
+    {
+        if ($taxonomy === 'post_tag') {
+            return collect(get_terms($taxonomy))->reject(function (\WP_Term $tag) {
+                return $tag->count >= 5;
+            })->pluck('term_id')->toArray();
+        }
+
+        return [];
+    }
+
+    private function getTotalPostCount($postType)
+    {
         return with(new \WP_Query([
             'fields' => 'ids',
             'post_type' => $postType,

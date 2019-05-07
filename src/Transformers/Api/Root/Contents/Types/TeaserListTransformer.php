@@ -59,18 +59,8 @@ class TeaserListTransformer extends TransformerAbstract
         if (optional($teaserList->getTeasers())->isNotEmpty()) {
             $resource = $this->collection($teaserList->getTeasers(), new CompositeTeaserTransformer);
             if ($teaserList->canPaginate()) {
-                $paginator = new NumberedPagination(
-                    $teaserList->getPage(),
-                    $teaserList->getTeasersPerPage(),
-                    $teaserList->getTotalTeasers(),
-                    $teaserList->getTeasers()->count(),
-                    $teaserList->getTotalPages()
-                );
-                $cursor = new StringCursor();
-                $cursor->setCount($teaserList->getTeasers()->count());
-                $cursor->setNext($teaserList->getNextCursor());
-                $cursor->setPrev($teaserList->getPreviousCursor());
-                $cursor->setCurrent($teaserList->getCurrentCursor());
+                $paginator = NumberedPagination::createFromWidget($teaserList);
+                $cursor = StringCursor::createFromWidget($teaserList);
                 $resource->setMeta([
                     'pagination' => $paginator->toArray(),
                     'cursor' => $cursor->toArray(),

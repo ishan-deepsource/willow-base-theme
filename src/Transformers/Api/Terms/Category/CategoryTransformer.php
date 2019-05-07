@@ -8,7 +8,6 @@ use Bonnier\Willow\Base\Helpers\Cache;
 use Bonnier\Willow\Base\Models\Base\Terms\Category;
 use Bonnier\Willow\Base\Models\Contracts\Root\TranslationContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
-use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryTranslationContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\ContentTransformer;
@@ -161,9 +160,10 @@ class CategoryTransformer extends TransformerAbstract
         );
     }
 
-    public function includeContents(CategoryContract $page)
+    public function includeContents(CategoryContract $category, ParamBag $paramBag)
     {
-        return $this->collection($page->getContents(), new ContentTransformer());
+        $currentPage = intval($paramBag->get('page')[0]) ?: 1;
+        return $this->collection($category->getContents($currentPage), new ContentTransformer());
     }
 
     private function getTranslations(CategoryContract $category)

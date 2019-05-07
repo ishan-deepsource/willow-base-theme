@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Actions;
 
+use Bonnier\Willow\Base\Actions\Backend\Locale;
 use Bonnier\Willow\Base\Actions\Backend\PostSlugChange;
 use Bonnier\Willow\Base\Actions\Backend\PreviewUrl;
 use Bonnier\Willow\Base\Actions\Backend\EstimatedReadingTime;
@@ -27,7 +28,7 @@ class ActionsBootstrap
         new LocalizeApi();
         new Navigation();
         new PolylangTranslations();
-        PageTemplates::get_instance();
+        new PageTemplates();
         if (!is_admin()) {
             new ImgixSettings();
         }
@@ -36,10 +37,10 @@ class ActionsBootstrap
     private function loadBackendActions()
     {
         if (is_admin()) {
-            new PostSlugChange();
             new PreviewUrl();
             new EstimatedReadingTime();
             new AddMedia();
+            new Locale();
         }
     }
 }

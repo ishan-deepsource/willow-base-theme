@@ -205,12 +205,18 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
         return $this->getFullUrl(get_category_link($this->getId()));
     }
 
-    public function getContents(): ?Collection
+    public function getContents(int $page = 1): ?Collection
     {
         if (!$this->contents) {
-            $this->contents = collect($this->categoryContents)->map(function ($acfContentArray) {
+            $this->contents = collect($this->categoryContents)->map(function ($acfContentArray) use ($page) {
                 $class = collect($this->contentModelsMapping)->get(array_get($acfContentArray, 'acf_fc_layout'));
-                return $this->getContentFactory($class)->getModel($acfContentArray);
+                $model = $this->getContentFactory($class)->getModel($acfContentArray);
+                if ($model instanceof TeaserList) {
+                    $model->setParentId($this->getId());
+                    $model->setParentType('category');
+                    $model->setCurrentPage($page);
+                }
+                return $model;
             })->reject(function ($content) {
                 return is_null($content);
             });
