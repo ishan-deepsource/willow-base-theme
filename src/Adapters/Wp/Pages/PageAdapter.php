@@ -174,7 +174,8 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
             } else {
                 $page = WpModelRepository::instance()->getPost($pageId);
             }
-            if ($page instanceof WP_Post) {
+            $pageUrl = parse_url(get_permalink($page));
+            if ($page instanceof WP_Post && ($this->isFrontPage() || $pageUrl['path'] !== '/')) {
                 return [$locale => new Translation(new PageTranslationAdapter($page))];
             }
             return null;
@@ -187,14 +188,5 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
         }
 
         return null;
-    }
-
-    private function getContentFactory($class)
-    {
-        if ($this->contentFactory) {
-            return $this->contentFactory->setBaseClass($class);
-        }
-
-        return $this->contentFactory = new PageContentFactory($class);
     }
 }

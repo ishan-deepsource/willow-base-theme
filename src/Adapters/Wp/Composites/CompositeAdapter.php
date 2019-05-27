@@ -364,10 +364,11 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
             } else {
                 $composite = WpModelRepository::instance()->getPost($compositeId);
             }
-            if ($composite instanceof \WP_Post) {
+            $compositeUrl = parse_url(get_permalink($composite));
+            if ($composite instanceof \WP_Post && $compositeUrl['path'] !== '/') {
                 return [$locale => new Translation(new CompositeTranslationAdapter($composite))];
             }
-            return null;
+            return [];
         })->reject(function ($translation) {
             return is_null($translation);
         });
@@ -376,7 +377,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
             return $translations;
         }
 
-        return null;
+        return [];
     }
 
     public function getExcludePlatforms(): ?Collection
