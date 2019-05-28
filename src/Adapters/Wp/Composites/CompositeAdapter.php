@@ -367,7 +367,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
             if ($composite instanceof \WP_Post && $composite->post_status === 'publish') {
                 return [$locale => new Translation(new CompositeTranslationAdapter($composite))];
             }
-            return [];
+            return null;
         })->reject(function ($translation) {
             return is_null($translation);
         });
@@ -376,7 +376,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
             return $translations;
         }
 
-        return [];
+        return null;
     }
 
     public function getExcludePlatforms(): ?Collection
