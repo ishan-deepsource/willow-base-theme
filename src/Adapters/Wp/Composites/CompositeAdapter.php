@@ -365,7 +365,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
                 $composite = WpModelRepository::instance()->getPost($compositeId);
             }
             $compositeUrl = parse_url(get_permalink($composite));
-            if ($composite instanceof \WP_Post && $compositeUrl['path'] !== '/') {
+            if ($composite instanceof \WP_Post && $composite->post_status === 'publish') {
                 return [$locale => new Translation(new CompositeTranslationAdapter($composite))];
             }
             return [];
