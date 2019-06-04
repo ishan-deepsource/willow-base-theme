@@ -174,7 +174,7 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
             } else {
                 $page = WpModelRepository::instance()->getPost($pageId);
             }
-            if ($page instanceof WP_Post) {
+            if ($page instanceof WP_Post && $page->post_status === 'publish') {
                 return [$locale => new Translation(new PageTranslationAdapter($page))];
             }
             return null;
