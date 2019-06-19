@@ -22,6 +22,13 @@ class PageTemplates
 
     public function __construct()
     {
+        /**
+         * To add a new template, add it to the content type,
+         * i.e. pageTemplates or compositeTempaltes
+         * and also add it to the default case,
+         * since the brandcode is not available for some reason,
+         * when content is being saved.
+         */
         switch ($this->getBrandCode()) {
             case 'BOB':
                 $this->pageTemplates = array_merge($this->pageTemplates, [
@@ -40,6 +47,7 @@ class PageTemplates
                     'favourites' => 'Favourites Page',
                     'signup' => 'Signup Page',
                     'login' => 'Login Page',
+                    'piano-offer-page' => 'Piano Offer Page',
                 ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'gradient' => 'Gradient',
@@ -54,6 +62,7 @@ class PageTemplates
                     'favourites' => 'Favourites Page',
                     'signup' => 'Signup Page',
                     'login' => 'Login Page',
+                    'piano-offer-page' => 'Piano Offer Page',
                 ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'bodum-stempel' => 'Bodum Stempel',
