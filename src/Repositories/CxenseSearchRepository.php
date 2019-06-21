@@ -47,6 +47,9 @@ class CxenseSearchRepository
                     'panel',
                     'frontpage'
                 ],
+                'recs-recommendable' => [
+                    'false'
+                ],
             ],
             'facets' => $this->getSearchableTaxonomies(),
             'highlights' => [
