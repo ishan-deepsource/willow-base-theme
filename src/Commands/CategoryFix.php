@@ -16,7 +16,7 @@ class CategoryFix extends WP_CLI_Command
     }
 
     /**
-     * Sets all posts by default user to be by the user of your choice
+     * Deletes all duplicate categories per locale with no content and writes categories with content to csv for the editors to fix manually.
      *
      * ## OPTIONS
      * <locale>
