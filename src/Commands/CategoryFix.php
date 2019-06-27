@@ -16,13 +16,13 @@ class CategoryFix extends WP_CLI_Command
     }
 
     /**
-     * Deletes all duplicate categories per locale with no content and writes categories with content to csv for the editors to fix manually.
+     * Deletes all duplicate categories per locale with no contenthub ID and no content and writes categories with content to csv for the editors to fix manually.
      *
      * ## OPTIONS
      * <locale>
      * : The locale you want to use to find categories.
      * ## EXAMPLES
-     * wp contenteditor category fix da
+     * wp category fix da
      *
      */
     public function fix($args)
