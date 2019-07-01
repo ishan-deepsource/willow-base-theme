@@ -25,27 +25,11 @@
                     "junaidbhura/composer-wp-pro-plugins": "*"
                 }
             }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "junaidbhura/polylang-pro",
-                "version": "2.3.8",
-                "type": "wordpress-plugin",
-                "dist": {
-                    "type": "zip",
-                    "url": "https://www.polylang.pro"
-                },
-                "require": {
-                    "junaidbhura/composer-wp-pro-plugins": "*"
-                }
-            }
         }
     ],
     "require": {
         "php": ">=7.1",
         "junaidbhura/advanced-custom-fields-pro": "*",
-        "junaidbhura/polylang-pro": "*",
         "league/fractal": "^0.17.0",
         "wpackagist-plugin/amazon-s3-and-cloudfront": "^1.4",
         "wpackagist-plugin/user-role-editor": "^4.44",
