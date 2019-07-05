@@ -367,7 +367,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
             if ($composite instanceof \WP_Post && $composite->post_status === 'publish') {
                 return [$locale => new Translation(new CompositeTranslationAdapter($composite))];
             }
-            return null;
+            return [$locale => null];
         })->reject(function ($translation) {
             return is_null($translation);
         });

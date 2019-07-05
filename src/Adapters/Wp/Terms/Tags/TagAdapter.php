@@ -165,7 +165,7 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
             if ($term instanceof WP_Term) {
                 return [$locale => new Translation(new TagTranslationAdapter($term))];
             }
-            return null;
+            return [$locale => null];
         })->reject(function ($translation) {
             return is_null($translation);
         });

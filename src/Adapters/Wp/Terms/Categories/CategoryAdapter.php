@@ -237,7 +237,7 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
             if ($term instanceof \WP_Term) {
                 return [$locale => new Translation(new CategoryTranslationAdapter($term))];
             }
-            return null;
+            return [$locale => null];
         })->reject(function ($translation) {
             return is_null($translation);
         });
