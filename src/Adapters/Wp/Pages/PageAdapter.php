@@ -177,7 +177,7 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
             if ($page instanceof WP_Post && $page->post_status === 'publish') {
                 return [$locale => new Translation(new PageTranslationAdapter($page))];
             }
-            return null;
+            return [$locale => null];
         })->reject(function ($translation) {
             return is_null($translation);
         });
