@@ -130,12 +130,13 @@ class RedirectRepository
     {
         global $wpdb;
         $table = $wpdb->prefix . static::WA_ROUTE_RESOLVES_TABLE;
+        $fromUrl = parse_url($path, PHP_URL_PATH);
         try {
             return $wpdb->get_row(
                 $wpdb->prepare(
                     "SELECT * FROM `$table` WHERE `from_hash` = MD5(%s) AND `locale` = %s",
                     [
-                        $path,
+                        $fromUrl,
                         $this->locale
                     ]
                 )

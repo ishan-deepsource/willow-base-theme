@@ -100,16 +100,16 @@
         },
         {
             "name": "bonnier/contenthub-editor",
-            "version": "5.5.0",
+            "version": "5.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-contenthub-editor.git",
-                "reference": "753db6a6a40e6f8410ad883684aed45bf6ab0e84"
+                "reference": "f594c481c36cc26b34694d2090a922b9bcb2d57e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/753db6a6a40e6f8410ad883684aed45bf6ab0e84",
-                "reference": "753db6a6a40e6f8410ad883684aed45bf6ab0e84",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/f594c481c36cc26b34694d2090a922b9bcb2d57e",
+                "reference": "f594c481c36cc26b34694d2090a922b9bcb2d57e",
                 "shasum": ""
             },
             "require": {
@@ -152,7 +152,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2019-07-01T07:34:54+00:00"
+            "time": "2019-07-02T13:04:08+00:00"
         },
         {
             "name": "bonnier/php-video-helper",
@@ -284,16 +284,16 @@
         },
         {
             "name": "bonnier/wp-bonnier-redirect",
-            "version": "4.6.0",
+            "version": "4.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-bonnier-redirect.git",
-                "reference": "71f38c341b77c68ccfd0afdf41166c4d04691b25"
+                "reference": "77bbc440e2f813a994e3ca47d5450d951de840e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-redirect/zipball/71f38c341b77c68ccfd0afdf41166c4d04691b25",
-                "reference": "71f38c341b77c68ccfd0afdf41166c4d04691b25",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-redirect/zipball/77bbc440e2f813a994e3ca47d5450d951de840e9",
+                "reference": "77bbc440e2f813a994e3ca47d5450d951de840e9",
                 "shasum": ""
             },
             "require": {
@@ -321,7 +321,7 @@
                 }
             ],
             "description": "Redirect for Bonnier integration with Custom Permalink and Polylang",
-            "time": "2019-06-06T09:08:21+00:00"
+            "time": "2019-07-01T12:12:29+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-some",
@@ -734,16 +734,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.6.0",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "dc784032a3f6f4e7a4b882e272b771f6fe4c37cf"
+                "reference": "239400de7a173fe9901b9ac7c06497751f00727a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/dc784032a3f6f4e7a4b882e272b771f6fe4c37cf",
-                "reference": "dc784032a3f6f4e7a4b882e272b771f6fe4c37cf",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/239400de7a173fe9901b9ac7c06497751f00727a",
+                "reference": "239400de7a173fe9901b9ac7c06497751f00727a",
                 "shasum": ""
             },
             "require": {
@@ -801,7 +801,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2019-06-30T00:37:05+00:00"
+            "time": "2019-07-01T23:21:34+00:00"
         },
         {
             "name": "illuminate/contracts",
@@ -1653,7 +1653,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -4040,16 +4040,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "3.0.1",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "c99e3be9d3e85f60646f152f9002d46ed7770d18"
+                "reference": "c4a66b97f040e3e20b3aa2a243230a1c3a9f7c8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/c99e3be9d3e85f60646f152f9002d46ed7770d18",
-                "reference": "c99e3be9d3e85f60646f152f9002d46ed7770d18",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/c4a66b97f040e3e20b3aa2a243230a1c3a9f7c8c",
+                "reference": "c4a66b97f040e3e20b3aa2a243230a1c3a9f7c8c",
                 "shasum": ""
             },
             "require": {
@@ -4085,7 +4085,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2018-10-30T05:52:18+00:00"
+            "time": "2019-07-08T05:24:54+00:00"
         },
         {
             "name": "phpunit/phpunit",
