@@ -72,6 +72,13 @@ class SitemapController extends WP_REST_Controller
                         'order' => 'DESC',
                         'post_status' => 'publish',
                         'lang' => LanguageProvider::getCurrentLanguage(),
+                        'meta_query' => [
+                            [
+                                'key' => 'exclude_platforms',
+                                'value' => 'web',
+                                'compare' => 'NOT LIKE',
+                            ],
+                        ],
                     ]
                 );
                 $lastMod = (new DateTime($lastModPost[0]->post_modified_gmt))->format('c');
@@ -184,6 +191,11 @@ class SitemapController extends WP_REST_Controller
                                 'value' => '1',
                                 'compare' => '!=',
                             ],
+                            [
+                                'key' => 'exclude_platforms',
+                                'value' => 'web',
+                                'compare' => 'NOT LIKE',
+                            ],
                         ];
                     }
                     $contents = get_posts($args);
@@ -240,6 +252,13 @@ class SitemapController extends WP_REST_Controller
             'posts_per_page' => 1,
             'post_status' => 'publish',
             'lang' => LanguageProvider::getCurrentLanguage(),
+            'meta_query' => [
+                [
+                    'key' => 'exclude_platforms',
+                    'value' => 'web',
+                    'compare' => 'NOT LIKE',
+                ],
+            ],
         ]))->found_posts;
     }
 }
