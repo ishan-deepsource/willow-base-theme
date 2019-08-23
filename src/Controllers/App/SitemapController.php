@@ -73,10 +73,15 @@ class SitemapController extends WP_REST_Controller
                         'post_status' => 'publish',
                         'lang' => LanguageProvider::getCurrentLanguage(),
                         'meta_query' => [
+                            'relation' => 'OR',
                             [
                                 'key' => 'exclude_platforms',
                                 'value' => 'web',
                                 'compare' => 'NOT LIKE',
+                            ],
+                            [
+                                'key' => 'exclude_platforms',
+                                'compare' => 'NOT EXISTS',
                             ],
                         ],
                     ]
@@ -192,10 +197,17 @@ class SitemapController extends WP_REST_Controller
                                 'compare' => '!=',
                             ],
                             [
-                                'key' => 'exclude_platforms',
-                                'value' => 'web',
-                                'compare' => 'NOT LIKE',
-                            ],
+                                'relation' => 'OR',
+                                [
+                                    'key' => 'exclude_platforms',
+                                    'value' => 'web',
+                                    'compare' => 'NOT LIKE',
+                                ],
+                                [
+                                    'key' => 'exclude_platforms',
+                                    'compare' => 'NOT EXISTS',
+                                ],
+                            ]
                         ];
                     }
                     $contents = get_posts($args);
@@ -253,10 +265,15 @@ class SitemapController extends WP_REST_Controller
             'post_status' => 'publish',
             'lang' => LanguageProvider::getCurrentLanguage(),
             'meta_query' => [
+                'relation' => 'OR',
                 [
                     'key' => 'exclude_platforms',
                     'value' => 'web',
                     'compare' => 'NOT LIKE',
+                ],
+                [
+                    'key' => 'exclude_platforms',
+                    'compare' => 'NOT EXISTS',
                 ],
             ],
         ]))->found_posts;
