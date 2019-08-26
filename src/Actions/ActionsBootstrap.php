@@ -5,7 +5,6 @@ namespace Bonnier\Willow\Base\Actions;
 use Bonnier\Willow\Base\Actions\Backend\Locale;
 use Bonnier\Willow\Base\Actions\Backend\PostSlugChange;
 use Bonnier\Willow\Base\Actions\Backend\PreviewUrl;
-use Bonnier\Willow\Base\Actions\Backend\EstimatedReadingTime;
 use Bonnier\Willow\Base\Actions\Universal\ImgixSettings;
 use Bonnier\Willow\Base\Actions\Universal\LocalizeApi;
 use Bonnier\Willow\Base\Actions\Universal\PageTemplates;
@@ -38,7 +37,6 @@ class ActionsBootstrap
     {
         if (is_admin()) {
             new PreviewUrl();
-            new EstimatedReadingTime();
             new AddMedia();
             new Locale();
         }
