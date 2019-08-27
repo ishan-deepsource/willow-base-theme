@@ -30,16 +30,13 @@ class SitemapController extends WP_REST_Controller
         'post_tag',
         'category'
     ];
-
     const ADAPTER_MAPPING = [
         'page' => SitemapPostAdapter::class,
         WpComposite::POST_TYPE => SitemapPostAdapter::class,
         'post_tag' => SitemapTagAdapter::class,
         'category' => SitemapCategoryAdapter::class,
     ];
-
     const PER_PAGE = 100;
-
     public function register_routes()
     {
         register_rest_route(
@@ -55,7 +52,6 @@ class SitemapController extends WP_REST_Controller
             ]
         );
     }
-
     public function sitemaps(WP_REST_Request $request)
     {
         $perPage = self::PER_PAGE;
@@ -72,18 +68,6 @@ class SitemapController extends WP_REST_Controller
                         'order' => 'DESC',
                         'post_status' => 'publish',
                         'lang' => LanguageProvider::getCurrentLanguage(),
-                        'meta_query' => [
-                            'relation' => 'OR',
-                            [
-                                'key' => 'exclude_platforms',
-                                'value' => 'web',
-                                'compare' => 'NOT LIKE',
-                            ],
-                            [
-                                'key' => 'exclude_platforms',
-                                'compare' => 'NOT EXISTS',
-                            ],
-                        ],
                     ]
                 );
                 $lastMod = (new DateTime($lastModPost[0]->post_modified_gmt))->format('c');
@@ -100,7 +84,6 @@ class SitemapController extends WP_REST_Controller
                 ];
             }
         );
-
         $terms = collect(self::TAXONOMIES)->map(
             function (string $term) use ($posts, $perPage) {
                 $termsCount = wp_count_terms($term, [
@@ -123,10 +106,8 @@ class SitemapController extends WP_REST_Controller
                 ];
             }
         );
-
         return new WP_REST_Response(['data' => $posts->merge($terms)]);
     }
-
     public function content(WP_REST_Request $request)
     {
         $perPage = self::PER_PAGE;
@@ -160,7 +141,6 @@ class SitemapController extends WP_REST_Controller
                         'post_status' => 'publish',
                         'lang' => LanguageProvider::getCurrentLanguage(),
                         'orderby' => ['post_modified' => 'DESC', 'ID' => 'DESC'],
-
                     ];
                     if ($type === 'page') {
                         $args['meta_query'] = [
@@ -198,18 +178,6 @@ class SitemapController extends WP_REST_Controller
                                 'value' => '1',
                                 'compare' => '!=',
                             ],
-                            [
-                                'relation' => 'OR',
-                                [
-                                    'key' => 'exclude_platforms',
-                                    'value' => 'web',
-                                    'compare' => 'NOT LIKE',
-                                ],
-                                [
-                                    'key' => 'exclude_platforms',
-                                    'compare' => 'NOT EXISTS',
-                                ],
-                            ]
                         ];
                     }
                     $contents = get_posts($args);
@@ -227,19 +195,14 @@ class SitemapController extends WP_REST_Controller
                         return new SitemapItem(new $class($content));
                     }
                 );
-
                 $sitemap = new SitemapCollection(new SitemapCollectionAdapter($type, $sitemapCollection));
-
                 $manager = new Manager();
                 $resource = new Item($sitemap, new SitemapTransformer());
-
                 return $manager->createData($resource)->toArray();
             }
         );
-
         return new WP_REST_Response($data);
     }
-
     /**
      * Get an array of post tags term ids,
      * that have less than five posts attached to it.
@@ -254,10 +217,8 @@ class SitemapController extends WP_REST_Controller
                 return $tag->count >= 5;
             })->pluck('term_id')->toArray();
         }
-
         return [];
     }
-
     private function getTotalPostCount($postType)
     {
         return with(new \WP_Query([
@@ -266,18 +227,6 @@ class SitemapController extends WP_REST_Controller
             'posts_per_page' => 1,
             'post_status' => 'publish',
             'lang' => LanguageProvider::getCurrentLanguage(),
-            'meta_query' => [
-                'relation' => 'OR',
-                [
-                    'key' => 'exclude_platforms',
-                    'value' => 'web',
-                    'compare' => 'NOT LIKE',
-                ],
-                [
-                    'key' => 'exclude_platforms',
-                    'compare' => 'NOT EXISTS',
-                ],
-            ],
         ]))->found_posts;
     }
 }
