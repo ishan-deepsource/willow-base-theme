@@ -95,6 +95,7 @@ class SitemapController extends WP_REST_Controller
                 return [
                     'type' => $postType,
                     'lastmod' => $lastMod,
+                    'pages' => $pages,
                     'urls' => $urls
                 ];
             }
