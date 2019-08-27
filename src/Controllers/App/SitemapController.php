@@ -118,6 +118,7 @@ class SitemapController extends WP_REST_Controller
                             return $post['type'] === WpComposite::POST_TYPE;
                         }
                     )['lastmod'],
+                    'pages' => $pages,
                     'urls' => $urls
                 ];
             }
