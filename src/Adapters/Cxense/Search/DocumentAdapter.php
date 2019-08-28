@@ -219,4 +219,9 @@ class DocumentAdapter implements CompositeContract
     {
         return false;
     }
+
+    public function getShellLink(): ?string
+    {
+        return null;
+    }
 }

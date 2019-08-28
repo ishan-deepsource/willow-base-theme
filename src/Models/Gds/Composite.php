@@ -197,4 +197,9 @@ class Composite implements CompositeContract
     {
         return $this->baseComposite->getCtmDisabled();
     }
+
+    public function getShellLink(): ?string
+    {
+        return $this->getShellLink();
+    }
 }
