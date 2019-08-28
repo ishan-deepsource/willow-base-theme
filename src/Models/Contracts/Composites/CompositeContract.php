@@ -79,4 +79,6 @@ interface CompositeContract
     public function getExcludePlatforms(): ?Collection;
 
     public function getCtmDisabled(): bool;
+
+    public function getShellLink(): ?string;
 }

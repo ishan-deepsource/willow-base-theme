@@ -49,6 +49,7 @@ use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
 use Bonnier\Willow\Base\Traits\DateTimeZoneTrait;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
+use Bonnier\WP\ContentHub\Editor\Models\ACF\Composite\CompositeFieldGroup;
 use Bonnier\WP\ContentHub\Editor\Models\WpTaxonomy;
 use DateTime;
 use Illuminate\Support\Collection;
@@ -197,7 +198,11 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getLink(): ?string
     {
+
         if ($postId = $this->getId()) {
+            if ($this->getKind() === CompositeFieldGroup::KIND_TYPE_SHELL) {
+                return $this->getShellLink();
+            }
             return get_permalink($postId);
         }
 
@@ -390,5 +395,10 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     public function getCtmDisabled(): bool
     {
         return data_get($this->wpModel, 'disable_ctm', false);
+    }
+
+    public function getShellLink(): ?string
+    {
+        return data_get($this->wpModel, 'shell_link');
     }
 }
