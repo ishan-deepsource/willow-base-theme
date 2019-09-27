@@ -17,21 +17,17 @@ class ColorPaletteAdapter implements ColorPaletteContract
     {
         $meta = WpModelRepository::instance()->getPostMeta($attachmentId);
         $paletteString = array_get($meta, sprintf('%s.0', self::COLOR_PALETTE_META));
-        $unserialized = $paletteString;
-        $counter = 0;
-        while (is_serialized_string($unserialized)) {
-            $unserialized = unserialize($unserialized);
-            $this->colorPalette = $unserialized;
-            $counter++;
-            if ($counter > 0) {
-                $imageUrl = wp_get_attachment_url($attachmentId);
-                $this->colorPalette = ImgixHelper::getColorPalette($imageUrl);
-                update_post_meta($attachmentId, self::COLOR_PALETTE_META, $this->colorPalette);
-                break;
-            }
-        }
 
-        if (is_string($paletteString)) {
+        if (is_serialized_string($paletteString)) {
+            $counter = 0;
+            do {
+                $this->colorPalette = unserialize($paletteString);
+                $counter++;
+            } while (is_serialized_string($this->colorPalette));
+            if ($counter > 1) {
+                update_post_meta($attachmentId, self::COLOR_PALETTE_META, $this->colorPalette);
+            }
+        } elseif (is_string($paletteString)) {
             $palette = json_decode($paletteString);
             if (json_last_error() === JSON_ERROR_NONE) {
                 $this->colorPalette = $palette;
