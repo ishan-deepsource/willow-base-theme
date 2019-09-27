@@ -19,7 +19,14 @@ class ColorPaletteAdapter implements ColorPaletteContract
         $paletteString = array_get($meta, sprintf('%s.0', self::COLOR_PALETTE_META));
 
         if (is_serialized_string($paletteString)) {
-            $this->colorPalette = unserialize($paletteString);
+            $counter = 0;
+            do {
+                $this->colorPalette = unserialize($paletteString);
+                $counter++;
+            } while (is_serialized_string($this->colorPalette));
+            if ($counter > 1) {
+                update_post_meta($attachmentId, self::COLOR_PALETTE_META, $this->colorPalette);
+            }
         } elseif (is_string($paletteString)) {
             $palette = json_decode($paletteString);
             if (json_last_error() === JSON_ERROR_NONE) {
@@ -29,7 +36,7 @@ class ColorPaletteAdapter implements ColorPaletteContract
 
         if (!$this->colorPalette && $imageUrl = wp_get_attachment_url($attachmentId)) {
             $this->colorPalette = ImgixHelper::getColorPalette($imageUrl);
-            update_post_meta($attachmentId, self::COLOR_PALETTE_META, serialize($this->colorPalette));
+            update_post_meta($attachmentId, self::COLOR_PALETTE_META, $this->colorPalette);
         }
     }
 
