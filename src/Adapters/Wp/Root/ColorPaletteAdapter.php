@@ -17,13 +17,12 @@ class ColorPaletteAdapter implements ColorPaletteContract
     {
         $meta = WpModelRepository::instance()->getPostMeta($attachmentId);
         $paletteString = array_get($meta, sprintf('%s.0', self::COLOR_PALETTE_META));
-
-        if (is_serialized_string($paletteString)) {
+        if (is_serialized($paletteString)) {
             $counter = 0;
             do {
                 $this->colorPalette = unserialize($paletteString);
                 $counter++;
-            } while (is_serialized_string($this->colorPalette));
+            } while (is_serialized($this->colorPalette));
             if ($counter > 1) {
                 update_post_meta($attachmentId, self::COLOR_PALETTE_META, $this->colorPalette);
             }
