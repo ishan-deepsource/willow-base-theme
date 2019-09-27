@@ -17,10 +17,21 @@ class ColorPaletteAdapter implements ColorPaletteContract
     {
         $meta = WpModelRepository::instance()->getPostMeta($attachmentId);
         $paletteString = array_get($meta, sprintf('%s.0', self::COLOR_PALETTE_META));
+        $unserialized = $paletteString;
+        $counter = 0;
+        while (is_serialized_string($unserialized)) {
+            $unserialized = unserialize($unserialized);
+            $this->colorPalette = $unserialized;
+            $counter++;
+            if ($counter > 0) {
+                $imageUrl = wp_get_attachment_url($attachmentId);
+                $this->colorPalette = ImgixHelper::getColorPalette($imageUrl);
+                update_post_meta($attachmentId, self::COLOR_PALETTE_META, $this->colorPalette);
+                break;
+            }
+        }
 
-        if (is_serialized_string($paletteString)) {
-            $this->colorPalette = unserialize($paletteString);
-        } elseif (is_string($paletteString)) {
+        if (is_string($paletteString)) {
             $palette = json_decode($paletteString);
             if (json_last_error() === JSON_ERROR_NONE) {
                 $this->colorPalette = $palette;
@@ -29,7 +40,7 @@ class ColorPaletteAdapter implements ColorPaletteContract
 
         if (!$this->colorPalette && $imageUrl = wp_get_attachment_url($attachmentId)) {
             $this->colorPalette = ImgixHelper::getColorPalette($imageUrl);
-            update_post_meta($attachmentId, self::COLOR_PALETTE_META, serialize($this->colorPalette));
+            update_post_meta($attachmentId, self::COLOR_PALETTE_META, $this->colorPalette);
         }
     }
 
