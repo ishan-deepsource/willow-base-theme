@@ -6,35 +6,29 @@ use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Helpers\ImgixHelper;
 use Bonnier\Willow\Base\Models\Contracts\Root\ColorPaletteContract;
 use Illuminate\Support\Collection;
+use function WP_CLI\Utils\is_json;
 
 class ColorPaletteAdapter implements ColorPaletteContract
 {
     const COLOR_PALETTE_META = 'imgix_palette';
 
     private $colorPalette;
+    private $updatePostMeta = false;
 
     public function __construct($attachmentId)
     {
         $meta = WpModelRepository::instance()->getPostMeta($attachmentId);
-        $paletteString = array_get($meta, sprintf('%s.0', self::COLOR_PALETTE_META));
-        if (is_serialized($paletteString)) {
-            $counter = 0;
-            do {
-                $this->colorPalette = unserialize($paletteString);
-                $counter++;
-            } while (is_serialized($this->colorPalette));
-            if ($counter > 1) {
-                update_post_meta($attachmentId, self::COLOR_PALETTE_META, $this->colorPalette);
-            }
-        } elseif (is_string($paletteString)) {
-            $palette = json_decode($paletteString);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                $this->colorPalette = $palette;
-            }
+        $this->colorPalette = array_get($meta, sprintf('%s.0', self::COLOR_PALETTE_META));
+
+        $this->colorPalette = $this->unserializeRecursive($this->colorPalette);
+
+        if (!$this->getColors() && $imageUrl = wp_get_attachment_url($attachmentId)) {
+            $this->colorPalette = ImgixHelper::getColorPalette($imageUrl);
+            $this->updatePostMeta = true;
+
         }
 
-        if (!$this->colorPalette && $imageUrl = wp_get_attachment_url($attachmentId)) {
-            $this->colorPalette = ImgixHelper::getColorPalette($imageUrl);
+        if ($this->updatePostMeta) {
             update_post_meta($attachmentId, self::COLOR_PALETTE_META, $this->colorPalette);
         }
     }
@@ -68,5 +62,21 @@ class ColorPaletteAdapter implements ColorPaletteContract
         }
 
         return null;
+    }
+
+
+    private function unserializeRecursive($data, $counter = 0)
+    {
+        if (is_serialized($data)) {
+            // Suppress notice as false is returned in case of failure
+            $data = @unserialize($data);
+            $counter++;
+            return $this->unserializeRecursive($data, $counter);
+
+        }
+        if ($data && ($counter > 1)) {
+            $this->updatePostMeta = true;
+        }
+        return $data;
     }
 }
