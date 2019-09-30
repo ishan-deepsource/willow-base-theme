@@ -6,7 +6,6 @@ use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Helpers\ImgixHelper;
 use Bonnier\Willow\Base\Models\Contracts\Root\ColorPaletteContract;
 use Illuminate\Support\Collection;
-use function WP_CLI\Utils\is_json;
 
 class ColorPaletteAdapter implements ColorPaletteContract
 {
