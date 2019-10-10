@@ -149,7 +149,7 @@ class SitemapController extends WP_REST_Controller
                                 'relation' => 'OR',
                                 [
                                     'key' => 'sitemap',
-                                    'value' => '1',
+                                    'value' => '0',
                                     'compare' => '=',
                                 ],
                                 [
@@ -173,10 +173,15 @@ class SitemapController extends WP_REST_Controller
                     }
                     if ($type === WpComposite::POST_TYPE) {
                         $args['meta_query'] = [
+                            'relation' => 'OR',
                             [
                                 'key' => 'sitemap',
-                                'value' => '1',
-                                'compare' => '!=',
+                                'value' => '0',
+                                'compare' => '=',
+                            ],
+                            [
+                                'key' => 'sitemap',
+                                'compare' => 'NOT EXISTS',
                             ],
                         ];
                     }
