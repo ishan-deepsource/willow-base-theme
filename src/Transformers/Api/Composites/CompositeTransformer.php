@@ -119,10 +119,10 @@ class CompositeTransformer extends TransformerAbstract
     public function includeRelated(CompositeContract $composite, ParamBag $paramBag)
     {
         if (($tag = $paramBag->get('tag')) && !empty($tag)) {
-            return $this->relatedFromTags($tag[0]);
+            return $this->relatedByTags($tag[0]);
         }
 
-        return $this->relatedFromCxense($composite);
+        return $this->relatedByCategory($composite);
     }
 
     public function includeStory(CompositeContract $composite)
@@ -180,7 +180,7 @@ class CompositeTransformer extends TransformerAbstract
         return null;
     }
 
-    private function relatedFromTags(string $tag)
+    private function relatedByTags(string $tag)
     {
         $cacheKey = sprintf('related_composites_by_tag_%s', $tag);
         $expiresIn = 10 * HOUR_IN_SECONDS;
@@ -202,34 +202,9 @@ class CompositeTransformer extends TransformerAbstract
         return $this->collection($content, new CompositeTeaserTransformer());
     }
 
-    private function relatedFromCxense(CompositeContract $composite)
+    private function relatedByCategory(CompositeContract $composite)
     {
-        // Cache is handled inside cxense plugin
-        $result = WidgetDocumentQuery::make()
-            ->addContext('url', $this->getFullUrl($composite->getLink()))
-            ->byRelated()
-            ->addParameter('pageType', 'article gallery story')
-            ->setCategories()
-            ->get();
-        $content = collect($result['matches'])->map(
-            function (Document $cxArticle) use ($composite) {
-                $locale = WpCxense::instance()
-                        ->settings
-                        ->getOrganisationPrefix(LanguageProvider::getCurrentLanguage('locale')) ?? 'da';
-                if ($composite->getCommercial() && $cxArticle->{$locale. '-commercial-label'}) {
-                    return null;
-                }
-                $postId = intval($cxArticle->{'recs-articleid'});
-                $post = WpModelRepository::instance()->getPost($postId);
-                if ($post && $post->post_status === 'publish' && $post->ID === $postId) {
-                    return new Composite(new CompositeAdapter($post));
-                }
-                return null;
-            }
-        )->reject(function ($content) {
-            return is_null($content);
-        })->toArray();
 
-        return $this->collection($content, new CompositeTeaserTransformer());
+        return $this->collection($composite->getRelatedByCategory(), new CompositeTeaserTransformer());
     }
 }
