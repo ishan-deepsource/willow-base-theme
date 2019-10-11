@@ -13,6 +13,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Vocabulary\VocabularyAdapter;
 use Bonnier\Willow\Base\Factories\CompositeContentFactory;
 use Bonnier\Willow\Base\Factories\Contracts\ModelFactoryContract;
+use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Base\Root\Translation;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Story;
@@ -51,6 +52,9 @@ use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\ACF\Composite\CompositeFieldGroup;
 use Bonnier\WP\ContentHub\Editor\Models\WpTaxonomy;
+use Bonnier\WP\Cxense\Parsers\Document;
+use Bonnier\WP\Cxense\Services\WidgetDocumentQuery;
+use Bonnier\WP\Cxense\WpCxense;
 use DateTime;
 use Illuminate\Support\Collection;
 
@@ -400,5 +404,40 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     public function getShellLink(): ?string
     {
         return data_get($this->wpModel, 'shell_link');
+    }
+
+    public function getRelatedByCategoryQuery(): WidgetDocumentQuery
+    {
+        return WidgetDocumentQuery::make()
+            ->addContext('url', $this->getFullUrl($this->getLink()))
+            ->byRelated()
+            ->addParameter('pageType', 'article gallery story')
+            ->setCategories();
+    }
+
+    public function getRelatedByCategory(WidgetDocumentQuery $manualQuery = null): ?Collection
+    {
+        // Cache is handled inside cxense plugin
+        $query = $manualQuery ?: $this->getRelatedByCategoryQuery();
+
+
+        return collect($query->get()['matches'])->map(
+            function (Document $cxArticle) {
+                $locale = WpCxense::instance()
+                        ->settings
+                        ->getOrganisationPrefix(LanguageProvider::getCurrentLanguage('locale')) ?? 'da';
+                if ($this->getCommercial() && $cxArticle->{$locale. '-commercial-label'}) {
+                    return null;
+                }
+                $postId = intval($cxArticle->{'recs-articleid'});
+                $post = WpModelRepository::instance()->getPost($postId);
+                if ($post && $post->post_status === 'publish' && $post->ID === $postId) {
+                    return new Composite(new CompositeAdapter($post));
+                }
+                return null;
+            }
+        )->reject(function ($content) {
+            return is_null($content);
+        });
     }
 }

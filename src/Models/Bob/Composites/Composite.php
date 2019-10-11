@@ -1,6 +1,6 @@
 <?php
 
-namespace Bonnier\Willow\Base\Models\Base\Composites;
+namespace Bonnier\Willow\Base\Models\Bob\Composites;
 
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
@@ -18,7 +18,7 @@ use Illuminate\Support\Collection;
 /**
  * Class Composite
  *
- * @package \Bonnier\Willow\Base\Models
+ * @package \Bonnier\Willow\Bob\Models
  */
 class Composite implements CompositeContract
 {
@@ -207,11 +207,11 @@ class Composite implements CompositeContract
 
     public function getRelatedByCategoryQuery(): ?WidgetDocumentQuery
     {
-        return $this->composite->getRelatedByCategoryQuery();
+        return $this->composite->getRelatedByCategoryQuery()->setMatchingMode(WidgetDocumentQuery::RELATED_MAX_2_YEARS);
     }
 
     public function getRelatedByCategory(WidgetDocumentQuery $manualQuery = null): ?Collection
     {
-        return $this->composite->getRelatedByCategory($manualQuery);
+        return $this->composite->getRelatedByCategory($this->getRelatedByCategoryQuery());
     }
 }

@@ -15,6 +15,7 @@ use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
+use Bonnier\WP\Cxense\Services\WidgetDocumentQuery;
 use DateTime;
 use Illuminate\Support\Collection;
 
@@ -213,6 +214,16 @@ class InstagramCompositeAdapter implements CompositeContract
     }
 
     public function getShellLink(): ?string
+    {
+        return null;
+    }
+
+    public function getRelatedByCategory(WidgetDocumentQuery $manualQuery = null): ?Collection
+    {
+        return null;
+    }
+
+    public function getRelatedByCategoryQuery(): ?WidgetDocumentQuery
     {
         return null;
     }

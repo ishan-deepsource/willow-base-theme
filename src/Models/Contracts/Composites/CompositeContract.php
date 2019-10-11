@@ -9,6 +9,7 @@ use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
+use Bonnier\WP\Cxense\Services\WidgetDocumentQuery;
 use DateTime;
 use Illuminate\Support\Collection;
 
@@ -81,4 +82,8 @@ interface CompositeContract
     public function getCtmDisabled(): bool;
 
     public function getShellLink(): ?string;
+
+    public function getRelatedByCategory(WidgetDocumentQuery $manualQuery = null): ?Collection;
+
+    public function getRelatedByCategoryQuery(): ?WidgetDocumentQuery;
 }
