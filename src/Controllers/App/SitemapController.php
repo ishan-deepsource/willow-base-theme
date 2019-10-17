@@ -218,7 +218,7 @@ class SitemapController extends WP_REST_Controller
     private function getExcludedPostTagsIds(string $taxonomy)
     {
         if ($taxonomy === 'post_tag') {
-            return collect(get_terms($taxonomy))->reject(function (\WP_Term $tag) {
+            return collect(get_terms($taxonomy, ['hide_empty' => false]))->reject(function (\WP_Term $tag) {
                 return $tag->count >= 5;
             })->pluck('term_id')->toArray();
         }
