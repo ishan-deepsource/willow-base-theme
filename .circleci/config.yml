@@ -20,6 +20,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Update package repository
+          command: sudo apt-get update
+      - run:
          name: Install PHP libzip-dev
          command: sudo apt-get install -y libzip-dev libpng-dev
       - run:
