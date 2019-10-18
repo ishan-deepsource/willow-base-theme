@@ -37,7 +37,8 @@ class AuthorAdapter implements AuthorContract
 
     public function getName(): ?string
     {
-        return data_get($this->user, 'display_name') ?: null;
+        // Decode to ensure '&amp;' is converted to '&'
+        return htmlspecialchars_decode(data_get($this->user, 'display_name')) ?: null;
     }
 
     public function getBiography(): ?string
