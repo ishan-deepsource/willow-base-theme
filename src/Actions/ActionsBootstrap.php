@@ -13,6 +13,7 @@ use Bonnier\Willow\Base\Actions\Universal\PolylangSubdomain;
 use Bonnier\Willow\Base\Actions\Universal\PolylangTranslations;
 use Bonnier\Willow\Base\Actions\Universal\Navigation;
 use Bonnier\Willow\Base\Actions\Backend\AddMedia;
+use Bonnier\Willow\Base\Actions\Universal\SitemapFilters;
 
 class ActionsBootstrap
 {
@@ -25,6 +26,7 @@ class ActionsBootstrap
     public function loadFrontendActions()
     {
         // Universal
+        new SitemapFilters();
         new LocalizeApi();
         new Navigation();
         new PolylangTranslations();
