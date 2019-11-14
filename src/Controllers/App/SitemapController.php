@@ -10,6 +10,7 @@ use Bonnier\Willow\Base\Transformers\Api\Root\SitemapTransformer;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\Sitemap\WpBonnierSitemap;
 use DateTime;
+use Illuminate\Support\Collection;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
 use WP_REST_Controller;
@@ -62,7 +63,7 @@ class SitemapController extends WP_REST_Controller
                 'type' => $sitemapType['wp_type'],
                 'lastmod' => (new DateTime($sitemapType['modified_at']))->format('c'),
                 'pages' => $pages,
-                'urls' => collect(range(1, $pages))->map(function ($page) use ($sitemapType) {
+                'urls' => Collection::times($pages, function($page) use ($sitemapType) {
                     return sprintf('%s-%s', $sitemapType['wp_type'], $page);
                 })->toArray()
             ];
