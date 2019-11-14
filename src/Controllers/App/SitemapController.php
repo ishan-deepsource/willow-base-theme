@@ -21,6 +21,13 @@ class SitemapController extends WP_REST_Controller
 {
     const PER_PAGE = 1000;
 
+    private $sitemapRepository;
+
+    public function __construct()
+    {
+        $this->sitemapRepository = WpBonnierSitemap::instance()->getSitemapRepository();
+    }
+
     public function register_routes()
     {
         register_rest_route(
@@ -43,31 +50,29 @@ class SitemapController extends WP_REST_Controller
         if ($queryPerPage = $request->get_param('per_page')) {
             $perPage = intval($queryPerPage);
         }
-        $sitemapRepository = WpBonnierSitemap::instance()->getSitemapRepository();
-        $overview = $sitemapRepository->getOverview(LanguageProvider::getCurrentLanguage());
+        $overview = $this->sitemapRepository->getOverview(LanguageProvider::getCurrentLanguage());
 
-        $response = [];
-        foreach ($overview as $type) {
-            $pages = intval(ceil($type['amount'] / $perPage));
-            $urls = [];
-            for ($i = 1; $i <= $pages; $i++) {
-                $urls[] = $type['wp_type'] . '-' . $i;
-            }
-            $response[] = [
-                'type' => $type['wp_type'],
-                'lastmod' => (new DateTime($type['modified_at']))->format('c'),
-                'pages' => $pages,
-                'urls' => $urls
-            ];
+        if (empty($overview)) {
+            return $this->notFound();
         }
+
+        $response = collect($overview)->map(function ($sitemapType) use ($perPage) {
+            $pages = intval(ceil($sitemapType['amount'] / $perPage));
+            return [
+                'type' => $sitemapType['wp_type'],
+                'lastmod' => (new DateTime($sitemapType['modified_at']))->format('c'),
+                'pages' => $pages,
+                'urls' => collect(range(1, $pages))->map(function ($page) use ($sitemapType) {
+                    return sprintf('%s-%s', $sitemapType['wp_type'], $page);
+                })->toArray()
+            ];
+        })->toArray();
 
         return new WP_REST_Response(['data' => $response]);
     }
 
     public function content(WP_REST_Request $request)
     {
-        $start = microtime(true);
-
         $perPage = self::PER_PAGE;
         if ($queryPerPage = $request->get_param('per_page')) {
             $perPage = intval($queryPerPage);
@@ -75,32 +80,39 @@ class SitemapController extends WP_REST_Controller
         $type = $request->get_param('type');
         $page = $request->get_param('page') ?? 1;
 
-        $sitemapRepository = WpBonnierSitemap::instance()->getSitemapRepository();
-        $sitemaps = $sitemapRepository->getByType($type, $page, $perPage, LanguageProvider::getCurrentLanguage());
+        $sitemaps = $this->sitemapRepository->getByType($type, $page, $perPage, LanguageProvider::getCurrentLanguage());
 
         if (!$sitemaps || $sitemaps->isEmpty()) {
-            return new WP_REST_Response(
-                [
-                    'code' => 'no_sitemap_found',
-                    'message' => 'No sitemap was found for this type',
-                    'data' => [
-                        'status' => 404
-                    ]
-                ],
-                404
-            );
+            return $this->notFound();
         }
 
-        $sitemapCollection = collect($sitemaps)->map(
+        return $this->sitemapResponse(new SitemapCollection(new SitemapCollectionAdapter($type, $sitemaps->map(
             function ($content) {
                 return new SitemapItem(new SitemapAdapter($content));
             }
+        ))));
+    }
+
+    public function sitemapResponse(SitemapCollection $sitemapCollection)
+    {
+        return new WP_REST_Response(
+            (new Manager())
+                ->createData(new Item($sitemapCollection, new SitemapTransformer()))
+                ->toArray()
         );
+    }
 
-        $sitemap = new SitemapCollection(new SitemapCollectionAdapter($type, $sitemapCollection));
-        $manager = new Manager();
-        $resource = new Item($sitemap, new SitemapTransformer());
-
-        return new WP_REST_Response($manager->createData($resource)->toArray());
+    public function notFound()
+    {
+        return new WP_REST_Response(
+            [
+                'code' => 'no_sitemap_found',
+                'message' => 'No sitemap was found for this type',
+                'data' => [
+                    'status' => 404
+                ]
+            ],
+            404
+        );
     }
 }
