@@ -325,16 +325,16 @@
         },
         {
             "name": "bonnier/wp-bonnier-sitemap",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-bonnier-sitemap.git",
-                "reference": "1c1e49f03e4b951eb8c4e5c99d955e97132ce15e"
+                "reference": "942c6bf01a22a30a0cdb73b9b6bcbb24ed4b2a52"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-sitemap/zipball/1c1e49f03e4b951eb8c4e5c99d955e97132ce15e",
-                "reference": "1c1e49f03e4b951eb8c4e5c99d955e97132ce15e",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-sitemap/zipball/942c6bf01a22a30a0cdb73b9b6bcbb24ed4b2a52",
+                "reference": "942c6bf01a22a30a0cdb73b9b6bcbb24ed4b2a52",
                 "shasum": ""
             },
             "require": {
@@ -363,7 +363,7 @@
                 }
             ],
             "description": "A Sitemap plugin for the Willow platform",
-            "time": "2019-11-13T10:30:40+00:00"
+            "time": "2019-11-14T07:50:56+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-some",

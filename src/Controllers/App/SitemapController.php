@@ -48,7 +48,7 @@ class SitemapController extends WP_REST_Controller
 
         $response = [];
         foreach ($overview as $type) {
-            $pages = ceil($type['amount'] / $perPage);
+            $pages = intval(ceil($type['amount'] / $perPage));
             $urls = [];
             for ($i = 1; $i <= $pages; $i++) {
                 $urls[] = $type['wp_type'] . '-' . $i;
