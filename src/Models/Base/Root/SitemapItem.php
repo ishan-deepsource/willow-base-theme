@@ -24,7 +24,7 @@ class SitemapItem implements SitemapItemContract
         return $this->sitemapItem->getUrl();
     }
 
-    public function getLastModified(): DateTime
+    public function getLastModified(): ?DateTime
     {
         return $this->sitemapItem->getLastModified();
     }

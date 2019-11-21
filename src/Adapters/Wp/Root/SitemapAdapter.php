@@ -21,7 +21,7 @@ class SitemapAdapter implements SitemapItemContract
         return $this->sitemap->getUrl();
     }
 
-    public function getLastModified(): DateTime
+    public function getLastModified(): ?DateTime
     {
         return $this->sitemap->getModifiedAt();
     }
