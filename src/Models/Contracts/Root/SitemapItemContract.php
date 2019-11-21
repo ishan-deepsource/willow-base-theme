@@ -8,5 +8,5 @@ interface SitemapItemContract
 {
     public function getUrl(): ?string;
 
-    public function getLastModified(): DateTime;
+    public function getLastModified(): ?DateTime;
 }
