@@ -6,7 +6,7 @@ use DateTime;
 
 interface SitemapItemContract
 {
-    public function getUrl(): string;
+    public function getUrl(): ?string;
 
     public function getLastModified(): DateTime;
 }
