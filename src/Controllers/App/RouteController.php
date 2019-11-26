@@ -2,6 +2,8 @@
 
 namespace Bonnier\Willow\Base\Controllers\App;
 
+use Bonnier\Willow\Base\Models\Admin\NotFound;
+use Bonnier\Willow\Base\Repositories\NotFoundRepository;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Repositories\WhiteAlbum\RedirectRepository;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
@@ -112,16 +114,18 @@ class RouteController extends BaseController
             $manager = new Manager();
             $data = $manager->createData($resource)->toArray();
             if (array_get($data, 'data.template') === '404-page') {
-                return $this->return404Page($data);
+                return $this->return404Page($path, $locale, $data);
             }
             return new WP_REST_Response($data);
         } else {
-            return $this->return404Page();
+            return $this->return404Page($path, $locale);
         }
     }
 
-    private function return404Page(?array $data = [])
+    private function return404Page(string $path, string $locale, ?array $data = [])
     {
+        NotFoundRepository::instance()->register($path, $locale);
+
         if (empty($data)) {
             $post = collect(
                 get_posts([

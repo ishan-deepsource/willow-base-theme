@@ -5,6 +5,7 @@ use Bonnier\Willow\Base\Bootstrap;
 add_action('init', function () {
     new Bootstrap();
 });
+add_action('admin_menu', [Bootstrap::class, 'loadAdminMenu']);
 
 remove_action('template_redirect', 'redirect_canonical');
 
