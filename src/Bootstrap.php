@@ -19,6 +19,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Bootstrap
 {
+    /** @var NotFoundController */
+    private static $notFoundController;
+    
     /**
      * Boostrap constructor.
      */
@@ -34,19 +37,27 @@ class Bootstrap
 
     public static function loadAdminMenu()
     {
-        $database = new DB();
-        $notFoundRepository = new NotFoundRepository($database);
-        $request = Request::createFromGlobals();
-        $notFoundController = new NotFoundController($notFoundRepository, $request);
-
-        add_menu_page(
+        $pageHook = add_menu_page(
             'Not Found',
             'Not Found',
             'manage_categories', // Editor role
             'not-found',
-            [$notFoundController, 'displayNotFoundTable'],
+            [Bootstrap::class, 'loadNotFoundListTable'],
             'dashicons-editor-unlink'
         );
-        add_action('load-not-found', [$notFoundController, 'loadNotFoundTable']);
+        add_action('load-' . $pageHook, [Bootstrap::class, 'loadNotFoundListScreenOptions']);
+    }
+
+    public static function loadNotFoundListTable()
+    {
+        self::$notFoundController->displayNotFoundTable();
+    }
+
+    public static function loadNotFoundListScreenOptions()
+    {
+        $database = new DB();
+        $notFoundRepository = new NotFoundRepository($database);
+        $request = Request::createFromGlobals();
+        self::$notFoundController = new NotFoundController($notFoundRepository, $request);
     }
 }
