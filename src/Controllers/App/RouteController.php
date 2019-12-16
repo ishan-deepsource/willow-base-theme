@@ -178,6 +178,9 @@ class RouteController extends BaseController
 
     private function resolveContent($path, $locale)
     {
+        if (substr($path, 0, 2) === '//') {
+            return null;
+        }
         $query = parse_url(urldecode($path), PHP_URL_QUERY);
         parse_str($query, $queryParams);
         $path = parse_url(urldecode($path), PHP_URL_PATH);
