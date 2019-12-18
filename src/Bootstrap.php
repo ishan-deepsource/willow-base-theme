@@ -54,10 +54,10 @@ class Bootstrap
             'Settings',
             'manage_options',
             'not-found-settings',
-            [Bootstrap::class, 'loadNotFoundSettingsPage']
+            [Bootstrap::class, 'displayNotFoundSettingsPage']
         );
         add_action('load-' . $pageHook, [Bootstrap::class, 'loadNotFoundListScreenOptions']);
-        add_action('load-' . $settingsHook, [Bootstrap::class, 'loadNotFoundSettingsOptions']);
+        add_action('load-' . $settingsHook, [Bootstrap::class, 'loadNotFoundSettingsPage']);
     }
 
     public static function loadNotFoundListTable()
@@ -73,16 +73,15 @@ class Bootstrap
         self::$notFoundListController = new NotFoundListController($notFoundRepository, $request);
     }
 
-    public static function loadNotFoundSettingsPage()
+    public static function displayNotFoundSettingsPage()
     {
         self::$notFoundSettingsController->displaySettingsPage();
     }
 
-    public static function loadNotFoundSettingsOptions()
+    public static function loadNotFoundSettingsPage()
     {
         $request = Request::createFromGlobals();
         self::$notFoundSettingsController = new NotFoundSettingsController($request);
         self::$notFoundSettingsController->handlePost();
-        self::$notFoundSettingsController->registerScripts();
     }
 }

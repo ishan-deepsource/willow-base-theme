@@ -39,11 +39,6 @@ class NotFoundSettingsController
         }
     }
 
-    public function registerScripts()
-    {
-
-    }
-
     public function displaySettingsPage()
     {
         $view = sprintf('%s/Views/notFoundSettings.php', rtrim(dirname(dirname(__DIR__)), '/'));
