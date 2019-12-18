@@ -153,24 +153,24 @@ class DB
         $escaped = [];
 
         $i = 0;
-        foreach( $data as $column => $value ) {
+        foreach($data as $column => $value) {
             $format = is_int($value) ? '%d' : '%s';
-            $escaped[] = esc_sql( $column ) . " = " . $this->wpdb->prepare( $format, $value );
+            $escaped[] = esc_sql($column) . " = " . $this->wpdb->prepare($format, $value);
             $i++;
         }
 
         $query .= implode(', ', $escaped);
         $query .= ' WHERE id IN (';
 
-        $escaped = array();
+        $escaped = [];
 
         foreach ($rowIDs as $id) {
             $escaped[] = $this->wpdb->prepare('%d', $id);
         }
 
-        $query .= implode( $escaped, ', ' ) . ') LIMIT ' . count($rowIDs);
+        $query .= implode($escaped, ', ') . ') LIMIT ' . count($rowIDs);
 
-        return $this->wpdb->query( $query );
+        return $this->wpdb->query($query);
     }
 
     /**
