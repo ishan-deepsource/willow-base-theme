@@ -2,12 +2,14 @@
 
 namespace Bonnier\Willow\Base\Repositories;
 
+use Bonnier\Willow\Base\Controllers\Admin\NotFoundSettingsController;
 use Bonnier\Willow\Base\Database\DB;
 use Bonnier\Willow\Base\Database\Migrations\Migrate;
 use Bonnier\Willow\Base\Database\Query;
 use Bonnier\Willow\Base\Models\Admin\NotFound;
 use Bonnier\Willow\Base\Notifications\NotFoundRegistered;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class NotFoundRepository
 {
@@ -34,6 +36,15 @@ class NotFoundRepository
 
     public function register(string $path, string $locale)
     {
+        $ignoredExtensions = get_option(NotFoundSettingsController::IGNORED_EXTENSIONS_KEY, []);
+        if (!empty($ignoredExtensions)) {
+            $lowercasePath = mb_strtolower($path);
+            foreach ($ignoredExtensions as $extension) {
+                if (Str::endsWith($lowercasePath, '.' . $extension)) {
+                    return;
+                }
+            }
+        }
         $query = $this->query()
             ->select('*')
             ->where(['url_hash', hash('md5', $path)])
@@ -77,6 +88,17 @@ class NotFoundRepository
         if ($results = $this->results($query)) {
             return $this->mapNotFounds($results);
         }
+        return null;
+    }
+
+    public function getNotFoundById(int $id): ?NotFound
+    {
+        $query = $this->query()->select('*')
+            ->where(['id', $id], Query::FORMAT_INT);
+        if ($results = $this->results($query)) {
+            return $this->mapNotFounds($results)->first();
+        }
+
         return null;
     }
 
@@ -158,6 +180,31 @@ class NotFoundRepository
         }
 
         return $notFound;
+    }
+
+    public function ignoreMultipleByIDs(array $notFoundIDs)
+    {
+        return $this->database->updateMultipleByIDs($notFoundIDs, ['ignore_entry' => 1]);
+    }
+
+    /**
+     * @param NotFound $notFound
+     * @return bool
+     * @throws \Exception
+     */
+    public function delete(NotFound $notFound)
+    {
+        return $this->database->delete($notFound->getID()) !== false;
+    }
+
+    /**
+     * @param array $notFoundIDs
+     * @return bool
+     * @throws \Exception
+     */
+    public function deleteMultipleByIDs(array $notFoundIDs)
+    {
+        return $this->database->deleteMultiple($notFoundIDs);
     }
 
     /**

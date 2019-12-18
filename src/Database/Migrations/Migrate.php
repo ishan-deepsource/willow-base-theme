@@ -14,6 +14,7 @@ class Migrate
         $dbVersion = intval(get_option(self::OPTION) ?: 0);
         $migrations = collect([
             CreateNotFoundTable::class,
+            AlterNotFoundTableAddIgnoreEntry::class,
         ]);
 
         if ($dbVersion >= count($migrations)) {

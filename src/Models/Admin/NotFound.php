@@ -25,6 +25,9 @@ class NotFound
     /** @var \DateTime */
     private $updatedAt;
 
+    /** @var bool */
+    private $ignored;
+
     public function __construct()
     {
         $this->notFoundID = 0;
@@ -34,6 +37,7 @@ class NotFound
         $this->hits = 0;
         $this->notificationSent = false;
         $this->updatedAt = new \DateTime();
+        $this->ignored = false;
     }
 
     public static function createFromArray(array $data): NotFound
@@ -45,7 +49,8 @@ class NotFound
             ->setLocale(array_get($data, 'locale', null))
             ->setHits(intval(array_get($data, 'hits', 0)))
             ->setNotificationSent(boolval(array_get($data, 'notification_sent', false)))
-            ->setUpdatedAt(new \DateTime(array_get($data, 'updated_at', 'now')));
+            ->setUpdatedAt(new \DateTime(array_get($data, 'updated_at', 'now')))
+            ->setIgnored(boolval(array_get($data, 'ignore_entry', false)));
 
         return $notFound;
     }
@@ -174,6 +179,17 @@ class NotFound
         return $this;
     }
 
+    public function isIgnored(): bool
+    {
+        return $this->ignored;
+    }
+
+    public function setIgnored(bool $ignored): NotFound
+    {
+        $this->ignored = $ignored;
+        return $this;
+    }
+
     public function toArray()
     {
         return [
@@ -182,7 +198,8 @@ class NotFound
             'url_hash' => $this->urlHash,
             'locale' => $this->locale,
             'hits' => $this->hits,
-            'notification_sent' => $this->notificationSent ? 1 : 0
+            'notification_sent' => $this->notificationSent ? 1 : 0,
+            'ignore_entry' => $this->ignored ? 1 : 0,
         ];
     }
 }

@@ -4,12 +4,13 @@ namespace Bonnier\Willow\Base;
 
 use Bonnier\Willow\Base\Actions\ActionsBootstrap;
 use Bonnier\Willow\Base\Commands\CommandBootstrap;
+use Bonnier\Willow\Base\Controllers\Admin\NotFoundSettingsController;
 use Bonnier\Willow\Base\Controllers\App\AppControllerBootstrap;
 use Bonnier\Willow\Base\Controllers\Formatters\ControllerBootstrap;
 use Bonnier\Willow\Base\Database\DB;
 use Bonnier\Willow\Base\Database\Migrations\Migrate;
 use Bonnier\Willow\Base\Repositories\NotFoundRepository;
-use Bonnier\Willow\Base\Controllers\Admin\NotFoundController;
+use Bonnier\Willow\Base\Controllers\Admin\NotFoundListController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -19,9 +20,11 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Bootstrap
 {
-    /** @var NotFoundController */
-    private static $notFoundController;
-    
+    /** @var NotFoundListController */
+    private static $notFoundListController;
+    /** @var NotFoundSettingsController */
+    private static $notFoundSettingsController;
+
     /**
      * Boostrap constructor.
      */
@@ -45,12 +48,21 @@ class Bootstrap
             [Bootstrap::class, 'loadNotFoundListTable'],
             'dashicons-editor-unlink'
         );
+        $settingsHook = add_submenu_page(
+            'not-found',
+            'Settings',
+            'Settings',
+            'manage_options',
+            'not-found-settings',
+            [Bootstrap::class, 'loadNotFoundSettingsPage']
+        );
         add_action('load-' . $pageHook, [Bootstrap::class, 'loadNotFoundListScreenOptions']);
+        add_action('load-' . $settingsHook, [Bootstrap::class, 'loadNotFoundSettingsOptions']);
     }
 
     public static function loadNotFoundListTable()
     {
-        self::$notFoundController->displayNotFoundTable();
+        self::$notFoundListController->displayNotFoundTable();
     }
 
     public static function loadNotFoundListScreenOptions()
@@ -58,6 +70,19 @@ class Bootstrap
         $database = new DB();
         $notFoundRepository = new NotFoundRepository($database);
         $request = Request::createFromGlobals();
-        self::$notFoundController = new NotFoundController($notFoundRepository, $request);
+        self::$notFoundListController = new NotFoundListController($notFoundRepository, $request);
+    }
+
+    public static function loadNotFoundSettingsPage()
+    {
+        self::$notFoundSettingsController->displaySettingsPage();
+    }
+
+    public static function loadNotFoundSettingsOptions()
+    {
+        $request = Request::createFromGlobals();
+        self::$notFoundSettingsController = new NotFoundSettingsController($request);
+        self::$notFoundSettingsController->handlePost();
+        self::$notFoundSettingsController->registerScripts();
     }
 }
