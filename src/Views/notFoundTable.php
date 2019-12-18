@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \Bonnier\Willow\Base\Controllers\Admin\NotFoundController $this
+ * @var \Bonnier\Willow\Base\Controllers\Admin\NotFoundListController $this
  */
 ?>
 <div class="wrap">
@@ -27,23 +27,34 @@
             <div style="height: 50px;">
                 <h2 class="screen-reader-text">Filter Not Found list</h2>
                 <ul class="subsubsub">
-                    <li>
-                        <a class="<?php echo $this->request->get('notfound_locale') ? '' : 'current'; ?>"
-                           href="<?php echo esc_url(add_query_arg(['notfound_locale' => null])); ?>">All</a>
-                        |
-                    </li>
                     <?php
-                    foreach($this->locales as $notFoundLocale) {
-                        $locale = $notFoundLocale['locale'];
-                        $amount = $notFoundLocale['amount'];
-                        ?>
-                        <li>
-                            <a class="<?php echo $this->request->get('notfound_locale') === $locale ? 'current' : ''; ?>"
-                               href="<?php echo esc_url(add_query_arg(['notfound_locale' => $locale])); ?>"><?php echo strtoupper($locale) . ' (' . $amount . ')' ?></a>
-                            |
-                        </li>
-                        <?php
+                    $allActive = 'current';
+                    $allUrl = esc_url(add_query_arg(['notfound_locale' => null, 'notfound_ignored' => null]));
+                    if ($this->request->query->has('notfound_locale') || $this->request->query->has('notfound_ignored')) {
+                        $allActive = '';
                     }
+                    echo sprintf('<li><a class="%s" href="%s">All</a> |</li>', $allActive, $allUrl);
+
+                    foreach($this->locales as $notFoundLocale) {
+                        $title = sprintf(
+                                '%s (%s)',
+                                strtoupper($notFoundLocale['locale']),
+                                $notFoundLocale['amount']
+                        );
+                        $url = esc_url(add_query_arg(['notfound_locale' => $notFoundLocale['locale']]));
+                        $active = '';
+                        if ($this->request->get('notfound_locale') === $notFoundLocale['locale']) {
+                            $active = 'current';
+                        }
+                        echo sprintf('<li><a class="%s" href="%s">%s</a> |</li>', $active, $url, $title);
+                    }
+
+                    $ignoredActive = '';
+                    if ($this->request->get('notfound_ignored')) {
+                        $ignoredActive = 'current';
+                    }
+                    $ignoredUrl = esc_url(add_query_arg(['notfound_ignored' => 1]));
+                    echo sprintf('<li><a class="%s" href="%s">Ignored entriess</a></li>', $ignoredActive, $ignoredUrl);
                     ?>
                 </ul>
             </div>

@@ -146,6 +146,33 @@ class DB
         return true;
     }
 
+    public function updateMultipleByIDs(array $rowIDs, array $data)
+    {
+        $this->disableErrorOutput();
+        $query = sprintf("UPDATE %s SET ", $this->table);
+        $escaped = [];
+
+        $i = 0;
+        foreach($data as $column => $value) {
+            $format = is_int($value) ? '%d' : '%s';
+            $escaped[] = esc_sql($column) . " = " . $this->wpdb->prepare($format, $value);
+            $i++;
+        }
+
+        $query .= implode(', ', $escaped);
+        $query .= ' WHERE id IN (';
+
+        $escaped = [];
+
+        foreach ($rowIDs as $id) {
+            $escaped[] = $this->wpdb->prepare('%d', $id);
+        }
+
+        $query .= implode($escaped, ', ') . ') LIMIT ' . count($rowIDs);
+
+        return $this->wpdb->query($query);
+    }
+
     /**
      * @param int $rowID
      * @return bool
