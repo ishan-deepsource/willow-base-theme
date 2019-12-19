@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ceb74f44125962a62b0255317fd2af67",
+    "content-hash": "999669dcbd513fe98156ffacbd6b1351",
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
@@ -100,16 +100,16 @@
         },
         {
             "name": "bonnier/contenthub-editor",
-            "version": "5.10.4",
+            "version": "5.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-contenthub-editor.git",
-                "reference": "980d78313b0a36cfc6617065747e3b5696612cdd"
+                "reference": "eeef5cfe03faa06c2d887186809a04bac28c97eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/980d78313b0a36cfc6617065747e3b5696612cdd",
-                "reference": "980d78313b0a36cfc6617065747e3b5696612cdd",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-contenthub-editor/zipball/eeef5cfe03faa06c2d887186809a04bac28c97eb",
+                "reference": "eeef5cfe03faa06c2d887186809a04bac28c97eb",
                 "shasum": ""
             },
             "require": {
@@ -152,7 +152,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2019-12-03T11:05:49+00:00"
+            "time": "2019-12-19T13:47:51+00:00"
         },
         {
             "name": "bonnier/php-video-helper",
@@ -203,16 +203,16 @@
         },
         {
             "name": "bonnier/willow-mu-plugins",
-            "version": "1.4.1",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/willow-mu-plugins.git",
-                "reference": "b9d7e78f7b8874fdd6c807046880e4c865a58b9e"
+                "reference": "23d613b29b2483bcc22542a98261e2cf1e8170f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/b9d7e78f7b8874fdd6c807046880e4c865a58b9e",
-                "reference": "b9d7e78f7b8874fdd6c807046880e4c865a58b9e",
+                "url": "https://api.github.com/repos/BenjaminMedia/willow-mu-plugins/zipball/23d613b29b2483bcc22542a98261e2cf1e8170f8",
+                "reference": "23d613b29b2483bcc22542a98261e2cf1e8170f8",
                 "shasum": ""
             },
             "require": {
@@ -242,7 +242,7 @@
                 }
             ],
             "description": "A collection of Must Use WordPress Plugins for Willow",
-            "time": "2019-12-16T08:53:56+00:00"
+            "time": "2019-12-19T09:23:03+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-cache",
@@ -396,48 +396,6 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "Plugin for integrating social media into the application.",
             "time": "2019-08-27T10:13:22+00:00"
-        },
-        {
-            "name": "bonnier/wp-focal-point",
-            "version": "1.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/BenjaminMedia/wp-focal-point.git",
-                "reference": "ab4ce29d98d5611f29bf4b334a22f44e8a7b834a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-focal-point/zipball/ab4ce29d98d5611f29bf4b334a22f44e8a7b834a",
-                "reference": "ab4ce29d98d5611f29bf4b334a22f44e8a7b834a",
-                "shasum": ""
-            },
-            "require-dev": {
-                "johnpbloch/wordpress": "^4.9"
-            },
-            "type": "wordpress-plugin",
-            "autoload": {
-                "psr-4": {
-                    "Bonnier\\WP\\FocalPoint\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Bonnier Publications",
-                    "email": "interactive@bonnier.dk",
-                    "homepage": "http://bonnierpublications.com"
-                }
-            ],
-            "description": "This plugin allows setting a focal point on an image",
-            "homepage": "https://github.com/BenjaminMedia/wp-focal-point",
-            "keywords": [
-                "plugin",
-                "wordpress"
-            ],
-            "time": "2019-04-12T07:53:19+00:00"
         },
         {
             "name": "bonnier/wp-user-favourites",
@@ -1665,20 +1623,20 @@
         },
         {
             "name": "symfony/mime",
-            "version": "v4.4.1",
+            "version": "v5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mime.git",
-                "reference": "010cc488e56cafe5f7494dea70aea93100c234df"
+                "reference": "0e6a4ced216e49d457eddcefb61132173a876d79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mime/zipball/010cc488e56cafe5f7494dea70aea93100c234df",
-                "reference": "010cc488e56cafe5f7494dea70aea93100c234df",
+                "url": "https://api.github.com/repos/symfony/mime/zipball/0e6a4ced216e49d457eddcefb61132173a876d79",
+                "reference": "0e6a4ced216e49d457eddcefb61132173a876d79",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1.3",
+                "php": "^7.2.5",
                 "symfony/polyfill-intl-idn": "^1.10",
                 "symfony/polyfill-mbstring": "^1.0"
             },
@@ -1687,12 +1645,12 @@
             },
             "require-dev": {
                 "egulias/email-validator": "^2.1.10",
-                "symfony/dependency-injection": "^3.4|^4.1|^5.0"
+                "symfony/dependency-injection": "^4.4|^5.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.4-dev"
+                    "dev-master": "5.0-dev"
                 }
             },
             "autoload": {
@@ -1723,7 +1681,7 @@
                 "mime",
                 "mime-type"
             ],
-            "time": "2019-11-30T08:27:26+00:00"
+            "time": "2019-11-30T14:12:50+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
