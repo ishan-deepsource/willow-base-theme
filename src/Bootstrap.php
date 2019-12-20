@@ -11,6 +11,8 @@ use Bonnier\Willow\Base\Database\DB;
 use Bonnier\Willow\Base\Database\Migrations\Migrate;
 use Bonnier\Willow\Base\Repositories\NotFoundRepository;
 use Bonnier\Willow\Base\Controllers\Admin\NotFoundListController;
+use Bonnier\WP\Redirect\Models\Redirect;
+use Bonnier\WP\Redirect\WpBonnierRedirect;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -31,6 +33,7 @@ class Bootstrap
     public function __construct()
     {
         Migrate::run();
+        add_action(WpBonnierRedirect::ACTION_REDIRECT_SAVED, [Bootstrap::class, 'removeNotFoundRedirects']);
 
         new ControllerBootstrap();
         new CommandBootstrap();
@@ -67,8 +70,7 @@ class Bootstrap
 
     public static function loadNotFoundListScreenOptions()
     {
-        $database = new DB();
-        $notFoundRepository = new NotFoundRepository($database);
+        $notFoundRepository = new NotFoundRepository(new DB());
         $request = Request::createFromGlobals();
         self::$notFoundListController = new NotFoundListController($notFoundRepository, $request);
     }
@@ -83,5 +85,11 @@ class Bootstrap
         $request = Request::createFromGlobals();
         self::$notFoundSettingsController = new NotFoundSettingsController($request);
         self::$notFoundSettingsController->handlePost();
+    }
+
+    public static function removeNotFoundRedirects(Redirect $redirect)
+    {
+        $notFoundRepository = new NotFoundRepository(new DB());
+        $notFoundRepository->deleteByUrl($redirect->getFrom());
     }
 }
