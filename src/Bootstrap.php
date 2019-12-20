@@ -90,6 +90,6 @@ class Bootstrap
     public static function removeNotFoundRedirects(Redirect $redirect)
     {
         $notFoundRepository = new NotFoundRepository(new DB());
-        $notFoundRepository->deleteByUrl($redirect->getFrom());
+        $notFoundRepository->deleteByUrlAndLocale($redirect->getFrom(), $redirect->getLocale());
     }
 }
