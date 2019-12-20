@@ -207,6 +207,11 @@ class NotFoundRepository
         return $this->database->deleteMultiple($notFoundIDs);
     }
 
+    public function deleteByUrl(string $url)
+    {
+        return $this->database->deleteWhere(['url_hash' => hash('md5', $url)]);
+    }
+
     /**
      * @param array $notFounds
      * @return Collection

@@ -219,6 +219,12 @@ class DB
         return true;
     }
 
+    public function deleteWhere(array $data)
+    {
+        $this->disableErrorOutput();
+        return $this->wpdb->delete($this->table, $data);
+    }
+
     /**
      * @param array $data
      * @return array

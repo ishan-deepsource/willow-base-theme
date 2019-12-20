@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "999669dcbd513fe98156ffacbd6b1351",
+    "content-hash": "d72455e65639922cd443c298981fc81d",
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
@@ -284,16 +284,16 @@
         },
         {
             "name": "bonnier/wp-bonnier-redirect",
-            "version": "4.9.0",
+            "version": "4.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-bonnier-redirect.git",
-                "reference": "ec230d56ac93a6349a0e79f65f58d67e4e95aeca"
+                "reference": "9cf1d6b37d010001b3d597d2caa3adcc5b090d50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-redirect/zipball/ec230d56ac93a6349a0e79f65f58d67e4e95aeca",
-                "reference": "ec230d56ac93a6349a0e79f65f58d67e4e95aeca",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-redirect/zipball/9cf1d6b37d010001b3d597d2caa3adcc5b090d50",
+                "reference": "9cf1d6b37d010001b3d597d2caa3adcc5b090d50",
                 "shasum": ""
             },
             "require": {
@@ -321,7 +321,7 @@
                 }
             ],
             "description": "Redirect for Bonnier integration with Custom Permalink and Polylang",
-            "time": "2019-12-18T11:13:17+00:00"
+            "time": "2019-12-20T11:31:23+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-sitemap",
