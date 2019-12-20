@@ -207,9 +207,9 @@ class NotFoundRepository
         return $this->database->deleteMultiple($notFoundIDs);
     }
 
-    public function deleteByUrl(string $url)
+    public function deleteByUrlAndLocale(string $url, string $locale)
     {
-        return $this->database->deleteWhere(['url_hash' => hash('md5', $url)]);
+        return $this->database->deleteWhere(['url_hash' => hash('md5', $url), 'locale' => $locale]);
     }
 
     /**
