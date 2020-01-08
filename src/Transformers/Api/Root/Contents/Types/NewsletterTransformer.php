@@ -9,6 +9,9 @@ class NewsletterTransformer extends TransformerAbstract
 {
     public function transform(NewsletterContract $newsletter)
     {
-        return [];
+        return [
+            'source_code' => $newsletter->getSourceCode(),
+            'permission_text' => $newsletter->getPermissionText(),
+        ];
     }
 }
