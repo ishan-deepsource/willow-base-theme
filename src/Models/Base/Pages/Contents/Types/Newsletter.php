@@ -12,6 +12,11 @@ use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\Types\NewsletterContract
  */
 class Newsletter extends AbstractContent implements NewsletterContract
 {
+    public function getSourceCodeCheckbox(): ?bool
+    {
+        return $this->model->getSourceCodeCheckbox();
+    }
+
     public function getSourceCode(): ?int
     {
         return $this->model->getSourceCode();
