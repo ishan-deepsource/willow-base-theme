@@ -12,7 +12,7 @@ use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\Types\NewsletterContract
  */
 class Newsletter extends AbstractContent implements NewsletterContract
 {
-    public function getManualSourceCodeEnabled(): ?bool
+    public function getManualSourceCodeEnabled(): bool
     {
         return $this->model->getManualSourceCodeEnabled();
     }
