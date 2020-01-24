@@ -54,6 +54,20 @@ class PageTemplates
                     'colorblock' => 'Farveblok',
                 ]);
                 break;
+            case 'HIS':
+                $this->pageTemplates = array_merge($this->pageTemplates, [
+                    'profile' => 'Profile Page',
+                    'favourites' => 'Favourites Page',
+                    'signup' => 'Signup Page',
+                    'login' => 'Login Page',
+                    'piano-offer-page' => 'Piano Offer Page',
+                ]);
+                $this->compositeTemplates = array_merge($this->compositeTemplates, [
+                    'gradient' => 'Gradient',
+                    'colorblock' => 'Farveblok',
+                    'timeline' => 'Timeline',
+                ]);
+                break;
             default:
                 $this->pageTemplates = array_merge($this->pageTemplates, [
                     'authorlist' => 'Author List',
@@ -70,6 +84,7 @@ class PageTemplates
                     'bodum-vacuum' => 'Bodum Vacuum',
                     'gradient' => 'Gradient',
                     'colorblock' => 'Farveblok',
+                    'timeline' => 'Timeline',
                 ]);
                 break;
         }
