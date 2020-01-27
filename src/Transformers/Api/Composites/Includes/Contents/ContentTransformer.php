@@ -13,6 +13,7 @@ use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\Info
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\InsertedCodeTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\LeadParagraphTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\LinkTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\NewsletterTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ParagraphListTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\QuoteTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\TextItemTransformer;
@@ -38,8 +39,9 @@ class ContentTransformer extends TransformerAbstract
         'paragraph_list'        => ParagraphListTransformer::class,
         'hotspot_image'         => HotspotImageTransformer::class,
         'lead_paragraph'        => LeadParagraphTransformer::class,
+        'newsletter'            => NewsletterTransformer::class,
     ];
-    
+
     public function transform(ContentContract $content)
     {
         $transformerClass = collect($this->transformerMapping)->get($content->getType(), NullTransformer::class);

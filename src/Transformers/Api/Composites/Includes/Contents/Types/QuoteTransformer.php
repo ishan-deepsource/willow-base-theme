@@ -2,7 +2,6 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types;
 
-use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\InfoBoxContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\QuoteContract;
 use League\Fractal\TransformerAbstract;
 

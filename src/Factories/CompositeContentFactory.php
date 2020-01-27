@@ -35,6 +35,7 @@ class CompositeContentFactory extends AbstractModelFactory
         'paragraph_list'        => ParagraphListAdapter::class,
         'hotspot_image'         => HotspotImageAdapter::class,
         'lead_paragraph'        => LeadParagraphAdapter::class,
+        'newsletter'            => NewsletterAdapter::class,
     ];
 
     public function getAdapter($model)
