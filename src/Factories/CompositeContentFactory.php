@@ -12,6 +12,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\InfoBoxAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\InsertedCodeAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\LeadParagraphAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\LinkAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\NewsletterAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\NullContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ParagraphListAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\QuoteAdapter;
