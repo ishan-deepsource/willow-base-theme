@@ -223,7 +223,7 @@ class RouteController extends BaseController
         }
 
         // Route resolving for tag pages
-        if (preg_match('#/?tags/([^/]+)$#', $path, $match)) {
+        if (preg_match('#/?tags/([^/]+)/?$#', $path, $match)) {
             $slug = $match[1];
             if ($tag = get_term_by('slug', $slug, 'post_tag')) {
                 return $tag;
