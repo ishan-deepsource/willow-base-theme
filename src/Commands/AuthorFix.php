@@ -15,13 +15,34 @@ class AuthorFix extends WP_CLI_Command
         WP_CLI::add_command(CommandBootstrap::CORE_CMD_NAMESPACE  . ' ' . static::CMD_NAMESPACE, __CLASS__);
     }
 
+    private function fixLanguageAuthor($language, $authorId)
+    {
+        $posts = get_posts([
+            'lang' => $language,
+            'post_type' => WpComposite::POST_TYPE,
+            'numberposts' => -1,
+            'author' => 1,
+        ]);
+
+        $count = count($posts);
+        WP_CLI::line(sprintf('Found %s composites with language: %s', $count, $language));
+
+        foreach ($posts as $post) {
+            WP_CLI::line(sprintf('Updating post %s, set author_id %s', $post->ID, $authorId));
+            wp_update_post([
+                'ID' => $post->ID,
+                'post_author' => $authorId,
+            ]);
+        }
+    }
+
     /**
      * Sets all posts by default user to be by the user of your choice
      *
      * ## OPTIONS
      *
-     * <locale>
-     * : The locale you want to use to find composites.
+     * <language>
+     * : The language you want to use to find composites.
      * <author>
      * : The id of the user you want to set all composites to.
      * ---
@@ -34,30 +55,16 @@ class AuthorFix extends WP_CLI_Command
     public function fix($args)
     {
         if (count($args) < 2) {
-            WP_CLI::error('please provide both locale and author example:');
+            WP_CLI::error('Please provide both language and author example:');
             WP_CLI::error(sprintf('%s author fix da 3', CommandBootstrap::CORE_CMD_NAMESPACE));
         }
 
-        $locale = $args[0];
-        $author = $args[1];
+        $language = $args[0];
+        $authorId = $args[1];
 
-        $posts = get_posts([
-            'lang' => $locale,
-            'post_type' => WpComposite::POST_TYPE,
-            'numberposts' => -1,
-            'author' => 1,
-        ]);
-
-        $amountOfPosts = count($posts);
-
-        WP_CLI::line(sprintf('found %s composites with locale: %s', $amountOfPosts, $locale));
-
-        if ($amountOfPosts > 0) {
-            foreach ($posts as $post) {
-                WP_CLI::runcommand(sprintf('post update %d --post_author=%d', $post->ID, $author));
-            }
-        }
+        self::fixLanguageAuthor($language, $authorId);
     }
+
     /**
      * Sets all posts by default user to be by the editor user for each language
      * ---
@@ -67,29 +74,29 @@ class AuthorFix extends WP_CLI_Command
      *     wp contenteditor author fixAll
      *
      */
+
     public function fixAll()
     {
         $users = [
             'da' => 'Redaktionen',
-            'sv' => 'Redaktionen',
+            'sv' => 'Redaktionen SE',
             'nb' => 'Redaksjonen',
             'fi' => 'Toimitus',
-            'nl' => 'de redactie',
-
+            'nl' => 'Redactie',
         ];
-        foreach ($users as $lang => $username) {
+
+        foreach ($users as $language => $username) {
             $user = get_user_by('login', $username);
             if (empty($user)) {
+                WP_CLI::line('exit');
                 return;
             }
-            WP_CLI::line(sprintf('starting author fix for %s (%s)', $user->display_name, strtoupper($lang)));
-            WP_CLI::runcommand(sprintf(
-                '%s fix %s %d',
-                CommandBootstrap::CORE_CMD_NAMESPACE  . ' ' . static::CMD_NAMESPACE,
-                $lang,
-                $user->ID
-            ));
+            WP_CLI::line();
+            WP_CLI::line(sprintf('Language: %s', strtoupper($language)));
+            WP_CLI::line(sprintf('Author: %s', $user->display_name));
+            WP_CLI::line(sprintf('ID: %s', $user->id));
+
+            self::fixLanguageAuthor($language, $user->id);
         }
     }
-
 }
