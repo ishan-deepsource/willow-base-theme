@@ -236,7 +236,7 @@ class RouteController extends BaseController
 
     private function resolvePath($path, string $status = self::STATUS_PUBLISHED, ?string $locale = null)
     {
-        if ($page = $this->findPage($path, $status)) {
+        if ($page = $this->findPage($path, $locale, $status)) {
             return $page;
         }
 
@@ -251,9 +251,11 @@ class RouteController extends BaseController
         return null;
     }
 
-    private function findPage(string $path, string $status = self::STATUS_PUBLISHED): ?WP_Post
+    private function findPage(string $path, ?string $locale = null, string $status = self::STATUS_PUBLISHED): ?WP_Post
     {
-        $page = get_page_by_path($path);
+        $parts = preg_split('#/#', $path, -1, PREG_SPLIT_NO_EMPTY);
+        $pageSlug = end($parts); // Get the composite slug from the last part
+        $page = $this->getPost($pageSlug, 'page', $locale, $status);
         if (!$page || !$page instanceof WP_Post || $page->post_status !== $status) {
             return null;
         }
@@ -273,6 +275,12 @@ class RouteController extends BaseController
             }
         }
 
+        if (parse_url(get_permalink($page), PHP_URL_PATH) !== $path) {
+            // If the permalink path does not match the submitted path,
+            // we are returning a wrong page - maybe a top level page instead of a child page
+            return null;
+        }
+
         return $page;
     }
 
@@ -287,7 +295,7 @@ class RouteController extends BaseController
         $categorySlug = implode('/', $parts); // Glue parts to form category slug
 
         if (($category = get_category_by_path($categorySlug)) && $category instanceof WP_Term) {
-            if (($composite = $this->getComposite($compositeSlug, $locale, $status)) && $composite instanceof WP_Post) {
+            if (($composite = $this->getPost($compositeSlug, WpComposite::POST_TYPE, $locale, $status)) && $composite instanceof WP_Post) {
                 if (in_array($category->term_id, $composite->post_category)) {
                     return $composite;
                 }
@@ -296,11 +304,11 @@ class RouteController extends BaseController
         return null;
     }
 
-    private function getComposite(string $slug, ?string $locale = null, $status = self::STATUS_PUBLISHED)
+    private function getPost(string $slug, string $postType, ?string $locale = null, $status = self::STATUS_PUBLISHED): ?WP_Post
     {
         $query = new \WP_Query([
             'name' => $slug,
-            'post_type' => WpComposite::POST_TYPE,
+            'post_type' => $postType,
             'post_status' => $status,
             'lang' => $locale ?? LanguageProvider::getCurrentLanguage(),
         ]);
