@@ -39,6 +39,7 @@ class PageTemplates
                     'bodum-stempel' => 'Bodum Stempel',
                     'bodum-pour-over' => 'Bodum Pour over',
                     'bodum-vacuum' => 'Bodum Vacuum',
+                    'gradient' => 'Gradient',
                 ]);
                 break;
             case 'ILL':
