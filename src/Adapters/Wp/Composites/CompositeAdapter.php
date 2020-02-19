@@ -14,6 +14,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Terms\Vocabulary\VocabularyAdapter;
 use Bonnier\Willow\Base\Factories\CompositeContentFactory;
 use Bonnier\Willow\Base\Factories\Contracts\ModelFactoryContract;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
+use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ChaptersSummary;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Newsletter;
 use Bonnier\Willow\Base\Models\Base\Root\Translation;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
@@ -91,6 +92,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         'hotspot_image'         => HotspotImage::class,
         'lead_paragraph'        => LeadParagraph::class,
         'newsletter'            => Newsletter::class,
+        'chapters_summary'      => ChaptersSummary::class,
     ];
 
     protected $acfFields;
