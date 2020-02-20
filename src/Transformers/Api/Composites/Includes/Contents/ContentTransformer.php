@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents;
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\AssociatedCompositesTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ChaptersSummaryTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentAudioTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentFileTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\GalleryTransformer;
@@ -40,6 +41,7 @@ class ContentTransformer extends TransformerAbstract
         'hotspot_image'         => HotspotImageTransformer::class,
         'lead_paragraph'        => LeadParagraphTransformer::class,
         'newsletter'            => NewsletterTransformer::class,
+        'chapters_summary'      => ChaptersSummaryTransformer::class,
     ];
 
     public function transform(ContentContract $content)

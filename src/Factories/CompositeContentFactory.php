@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Factories;
 
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\AssociatedCompositesAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ChaptersSummaryAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentAudioAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentFileAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentImageAdapter;
@@ -37,6 +38,7 @@ class CompositeContentFactory extends AbstractModelFactory
         'hotspot_image'         => HotspotImageAdapter::class,
         'lead_paragraph'        => LeadParagraphAdapter::class,
         'newsletter'            => NewsletterAdapter::class,
+        'chapters_summary'      => ChaptersSummaryAdapter::class,
     ];
 
     public function getAdapter($model)
