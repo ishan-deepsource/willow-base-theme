@@ -51,7 +51,8 @@ class ContentTransformer extends TransformerAbstract
         return array_merge([
             'type'          => $content->getType(),
             'locked'        => $content->isLocked(),
-            'stick_to_next' => $content->getStickToNext()
+            'stick_to_next' => $content->getStickToNext(),
+            'uuid'          => wp_generate_uuid4()
         ], $transformedData);
     }
 }
