@@ -57,7 +57,7 @@ class WpModelRepository
     /**
      * @param int|array|\WP_Post $wpPost
      *
-     * @return array|\WP_Post|null
+     * @return \WP_Post|null
      */
     public function getPost($wpPost)
     {
@@ -66,9 +66,13 @@ class WpModelRepository
             return null;
         }
 
-        if ($wpPost instanceof \WP_Post || is_array($wpPost)) {
+        if ($wpPost instanceof \WP_Post) {
             $this->posts->put($postId, $wpPost);
             return $wpPost;
+        } elseif (is_array($wpPost) && array_key_exists('ID', $wpPost)) {
+            $post = new \WP_Post((object)$wpPost);
+            $this->posts->put($postId, $post);
+            return $post;
         }
 
         if (($post = $this->posts->get($postId, false)) && $post !== false) {
