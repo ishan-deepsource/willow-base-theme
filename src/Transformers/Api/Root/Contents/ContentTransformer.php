@@ -7,6 +7,7 @@ use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\BannerPlacementTran
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\CommercialSpotTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\FeaturedContentTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\NewsletterTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\QuoteTeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\SeoTextTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\TaxonomyListTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\TeaserListTransformer;
@@ -32,6 +33,7 @@ class ContentTransformer extends TransformerAbstract
         'banner_placement' => BannerPlacementTransformer::class,
         AcfName::WIDGET_TAXONOMY_TEASER_LIST => TaxonomyListTransformer::class,
         AcfName::WIDGET_COMMERCIAL_SPOT => CommercialSpotTransformer::class,
+        AcfName::WIDGET_QUOTE_TEASER => QuoteTeaserTransformer::class
     ];
 
     public function transform(ContentContract $content)

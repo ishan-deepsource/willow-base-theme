@@ -39,4 +39,14 @@ class CommercialAdapter implements CommercialContract
         }
         return null;
     }
+
+    public function getLinkLabel(): ?string
+    {
+        return array_get($this->acFields, 'commercial_label') ?: null;
+    }
+
+    public function getLink(): ?string
+    {
+        return array_get($this->acFields, 'commercial_link') ?: null;
+    }
 }

@@ -9,4 +9,8 @@ interface CommercialContract
     public function getLabel(): ?string;
 
     public function getLogo(): ?ImageContract;
+
+    public function getLinkLabel(): ?string;
+
+    public function getLink(): ?string;
 }

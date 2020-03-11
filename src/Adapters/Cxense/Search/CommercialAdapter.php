@@ -36,4 +36,14 @@ class CommercialAdapter implements CommercialContract
     {
         return null;
     }
+
+    public function getLinkLabel(): ?string
+    {
+        return null;
+    }
+
+    public function getLink(): ?string
+    {
+        return null;
+    }
 }

@@ -7,6 +7,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\CommercialSpotAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\FeaturedContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\NewsletterAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\NullContentAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\QuoteTeaserAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\SeoTextAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\TaxonomyListAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\TeaserListAdapter;
@@ -22,6 +23,7 @@ class PageContentFactory extends AbstractModelFactory
         AcfName::WIDGET_BANNER_PLACEMENT => BannerPlacementAdapter::class,
         AcfName::WIDGET_TAXONOMY_TEASER_LIST => TaxonomyListAdapter::class,
         AcfName::WIDGET_COMMERCIAL_SPOT => CommercialSpotAdapter::class,
+        AcfName::WIDGET_QUOTE_TEASER => QuoteTeaserAdapter::class,
     ];
 
     public function getAdapter($model)
