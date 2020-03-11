@@ -38,12 +38,19 @@ class FileAdapter implements FileContract
 
     public function getTitle(): ?string
     {
-        if (($title = array_get($this->file, 'title', data_get($this->file, 'post_title'))) &&
-            $title !== $this->getId()
-        ) {
-            return $title;
+        if (is_array($this->file)) {
+            if (($title = array_get($this->file, 'title', array_get($this->file, 'post_title'))) &&
+                $title !== $this->getId()
+            ) {
+                return $title;
+            }
+        } else {
+            if (($title = data_get($this->file, 'title', data_get($this->file, 'post_title'))) &&
+                $title !== $this->getId()
+            ) {
+                return $title;
+            }
         }
-
         return null;
     }
 

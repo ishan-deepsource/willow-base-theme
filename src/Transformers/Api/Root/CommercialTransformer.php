@@ -13,6 +13,8 @@ class CommercialTransformer extends TransformerAbstract
             'type' => $commercial->getType(),
             'label' => $commercial->getLabel(),
             'logo' => $this->getLogo($commercial),
+            'link_label' => $commercial->getLinkLabel(),
+            'link' => $commercial->getLink(),
         ];
     }
 

@@ -28,4 +28,14 @@ class Commercial implements CommercialContract
     {
         return $this->commercial->getLogo();
     }
+
+    public function getLinkLabel(): ?string
+    {
+        return $this->commercial->getLinkLabel();
+    }
+
+    public function getLink(): ?string
+    {
+        return $this->commercial->getLink();
+    }
 }
