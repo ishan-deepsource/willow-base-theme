@@ -51,6 +51,11 @@ class AuthorAdapter implements AuthorContract
         return null;
     }
 
+    public function getWebsite(): ?string
+    {
+        return null;
+    }
+
     public function getEmail(): ?string
     {
         return null;

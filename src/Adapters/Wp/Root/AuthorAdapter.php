@@ -70,6 +70,11 @@ class AuthorAdapter implements AuthorContract
         return $this->user->user_email ?: null;
     }
 
+    public function getWebsite(): ?string
+    {
+        return $this->user->user_url ?: null;
+    }
+
     public function getTitle(): ?string
     {
         return WpUserProfile::getTitle($this->getId()) ?: null;

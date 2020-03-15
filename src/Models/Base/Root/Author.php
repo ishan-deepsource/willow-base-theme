@@ -40,6 +40,11 @@ class Author implements AuthorContract
         return $this->author->getUrl();
     }
 
+    public function getWebsite(): ?string
+    {
+        return $this->author->getWebsite();
+    }
+
     public function getEmail(): ?string
     {
         return $this->author->getEmail();

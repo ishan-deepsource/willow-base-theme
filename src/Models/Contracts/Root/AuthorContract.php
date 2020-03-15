@@ -20,5 +20,7 @@ interface AuthorContract
 
     public function getUrl(): ?string;
 
+    public function getWebsite(): ?string;
+
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection;
 }
