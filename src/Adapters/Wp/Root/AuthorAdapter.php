@@ -10,6 +10,7 @@ use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\WP\ContentHub\Editor\Models\WpUserProfile;
+use DateTime;
 use Illuminate\Support\Collection;
 use WP_User;
 
@@ -62,7 +63,10 @@ class AuthorAdapter implements AuthorContract
 
     public function getUrl(): ?string
     {
-        return get_author_posts_url($this->getId()) ?: null;
+        if ($url = get_author_posts_url($this->getId())) {
+            return parse_url($url, PHP_URL_PATH);
+        }
+        return null;
     }
 
     public function getEmail(): ?string
@@ -95,5 +99,18 @@ class AuthorAdapter implements AuthorContract
             $composite = WpModelRepository::instance()->getPost($post);
             return new Composite(new CompositeAdapter($composite));
         });
+    }
+
+    public function getBirthday(): ?DateTime
+    {
+        if ($birthday = array_get($this->meta, 'birthday.0')) {
+            return new DateTime($birthday);
+        }
+        return null;
+    }
+
+    public function isPublic(): bool
+    {
+        return array_get($this->meta, 'public.0') === '1';
     }
 }

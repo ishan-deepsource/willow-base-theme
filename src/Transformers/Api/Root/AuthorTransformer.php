@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Transformers\Api\Root;
 
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Root\Partials\AuthorDetailsTransformer;
 use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 
@@ -15,6 +16,7 @@ use League\Fractal\TransformerAbstract;
 class AuthorTransformer extends TransformerAbstract
 {
     protected $availableIncludes = [
+        'details',
         'content-teasers'
     ];
 
@@ -27,9 +29,16 @@ class AuthorTransformer extends TransformerAbstract
             'biography' => $author->getBiography(),
             'avatar' => $this->getAvatar($author),
             'url' => $author->getUrl(),
-            'website' => $author->getWebsite(),
-            'email' => $author->getEmail(),
+            'public' => $author->isPublic()
         ];
+    }
+
+    public function includeDetails(AuthorContract $author)
+    {
+        if ($author->isPublic()) {
+            return $this->item($author, new AuthorDetailsTransformer());
+        }
+        return null;
     }
 
     public function includeContentTeasers(AuthorContract $author, ParamBag $paramBag)

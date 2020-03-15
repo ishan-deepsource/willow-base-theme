@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Models\Contracts\Root;
 
+use DateTime;
 use Illuminate\Support\Collection;
 
 interface AuthorContract
@@ -22,5 +23,9 @@ interface AuthorContract
 
     public function getWebsite(): ?string;
 
+    public function getBirthday(): ?DateTime;
+
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection;
+
+    public function isPublic(): bool;
 }

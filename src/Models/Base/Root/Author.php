@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Models\Base\Root;
 
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
+use DateTime;
 use Illuminate\Support\Collection;
 
 class Author implements AuthorContract
@@ -58,5 +59,15 @@ class Author implements AuthorContract
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection
     {
         return $this->author->getContentTeasers($page, $perPage, $orderBy, $order, $offset);
+    }
+
+    public function getBirthday(): ?DateTime
+    {
+        return $this->author->getBirthday();
+    }
+
+    public function isPublic(): bool
+    {
+        return $this->author->isPublic();
     }
 }
