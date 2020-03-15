@@ -28,4 +28,6 @@ interface AuthorContract
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection;
 
     public function isPublic(): bool;
+
+    public function getCount(): int;
 }

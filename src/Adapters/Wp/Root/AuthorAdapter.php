@@ -113,4 +113,9 @@ class AuthorAdapter implements AuthorContract
     {
         return array_get($this->meta, 'public.0') === '1';
     }
+
+    public function getCount(): int
+    {
+        return count_user_posts($this->getId(), WpComposite::POST_TYPE, true) ?: 0;
+    }
 }

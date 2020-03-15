@@ -29,7 +29,8 @@ class AuthorTransformer extends TransformerAbstract
             'biography' => $author->getBiography(),
             'avatar' => $this->getAvatar($author),
             'url' => $author->getUrl(),
-            'public' => $author->isPublic()
+            'public' => $author->isPublic(),
+            'count' => $author->getCount(),
         ];
     }
 

@@ -70,4 +70,9 @@ class Author implements AuthorContract
     {
         return $this->author->isPublic();
     }
+
+    public function getCount(): int
+    {
+        return $this->author->getCount();
+    }
 }

@@ -75,4 +75,9 @@ class AuthorAdapter implements AuthorContract
     {
         return false;
     }
+    
+    public function getCount(): int
+    {
+        return 0;
+    }
 }
