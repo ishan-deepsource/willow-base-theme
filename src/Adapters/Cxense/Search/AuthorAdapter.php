@@ -6,6 +6,7 @@ use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
+use Illuminate\Support\Collection;
 
 /**
  * Class DocumentAdapter
@@ -49,5 +50,10 @@ class AuthorAdapter implements AuthorContract
     public function getUrl(): ?string
     {
         return null;
+    }
+
+    public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection
+    {
+        return collect();
     }
 }
