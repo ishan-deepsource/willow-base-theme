@@ -2,11 +2,15 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
+use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
+use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
+use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\WP\ContentHub\Editor\Models\WpUserProfile;
+use Illuminate\Support\Collection;
 use WP_User;
 
 /**
@@ -48,9 +52,10 @@ class AuthorAdapter implements AuthorContract
 
     public function getAvatar(): ?ImageContract
     {
-        if ($imageId = array_get($this->meta, 'user_avatar.0')) {
-            $image = WpModelRepository::instance()->getPost($imageId);
-            return new Image(new ImageAdapter($image));
+        if ($imageId = intval(array_get($this->meta, 'user_avatar.0'))) {
+            if ($image = WpModelRepository::instance()->getPost($imageId)) {
+                return new Image(new ImageAdapter($image));
+            }
         }
         return null;
     }
@@ -63,5 +68,22 @@ class AuthorAdapter implements AuthorContract
     public function getTitle(): ?string
     {
         return WpUserProfile::getTitle($this->getId()) ?: null;
+    }
+
+    public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection
+    {
+        $offset = $offset ?: ($perPage * ($page - 1));
+        return collect(get_posts([
+            'post_type' => WpComposite::POST_TYPE,
+            'post_status' => 'publish',
+            'author' => $this->getId(),
+            'posts_per_page' => $perPage,
+            'offset' => $offset,
+            'orderby' => $orderBy,
+            'order'  => $order,
+        ]))->map(function (\WP_Post $post) {
+            $composite = WpModelRepository::instance()->getPost($post);
+            return new Composite(new CompositeAdapter($composite));
+        });
     }
 }

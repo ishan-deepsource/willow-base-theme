@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Models\Base\Root;
 
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
+use Illuminate\Support\Collection;
 
 class Author implements AuthorContract
 {
@@ -42,5 +43,10 @@ class Author implements AuthorContract
     public function getTitle(): ?string
     {
         return $this->author->getTitle();
+    }
+
+    public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection
+    {
+        return $this->author->getContentTeasers($page, $perPage, $orderBy, $order, $offset);
     }
 }

@@ -2,10 +2,12 @@
 
 namespace Bonnier\Willow\Base\Controllers\App;
 
-use Bonnier\Willow\Base\Models\Admin\NotFound;
+use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
+use Bonnier\Willow\Base\Models\Base\Root\Author;
 use Bonnier\Willow\Base\Repositories\NotFoundRepository;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Repositories\WhiteAlbum\RedirectRepository;
+use Bonnier\Willow\Base\Transformers\Api\Root\AuthorTransformer;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
@@ -24,20 +26,23 @@ use Bonnier\Willow\Base\Transformers\NullTransformer;
 use Bonnier\WP\Redirect\Helpers\LocaleHelper;
 use Bonnier\WP\Redirect\Models\Redirect;
 use Bonnier\WP\Redirect\WpBonnierRedirect;
+use Exception;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
 use WP_Post;
+use WP_Query;
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_REST_Server;
 use WP_Term;
 
 class RouteController extends BaseController
 {
-    const STATUS_PUBLISHED = 'publish';
-    const STATUS_SCHEDULED = 'future';
-    const STATUS_DRAFT = 'draft';
+    private const STATUS_PUBLISHED = 'publish';
+    private const STATUS_SCHEDULED = 'future';
+    private const STATUS_DRAFT = 'draft';
 
-    /* @var \Bonnier\Willow\Base\Repositories\WhiteAlbum\RedirectRepository */
+    /* @var RedirectRepository */
     protected $waRedirectRepository;
 
     public function register_routes()
@@ -47,7 +52,7 @@ class RouteController extends BaseController
             LanguageProvider::getCurrentLanguage()
         );
         register_rest_route('app', '/resolve', [
-            'methods' => \WP_REST_Server::READABLE,
+            'methods' => WP_REST_Server::READABLE,
             'callback' => [$this, 'resolve']
         ]);
     }
@@ -90,6 +95,10 @@ class RouteController extends BaseController
             $tag = new Tag(new TagAdapter($content));
             $resource = new Item($tag, new TagTransformer());
             $resource->setMeta(['type' => 'tag']);
+        } elseif ($content instanceof \WP_User) {
+            $author = new Author(new AuthorAdapter($content));
+            $resource = new Item($author, new AuthorTransformer());
+            $resource->setMeta(['type' => 'author']);
         } elseif ($content === 'search') {
             $resource = new Item(null, new NullTransformer());
             $resource->setMeta(['type' => 'search']);
@@ -138,9 +147,9 @@ class RouteController extends BaseController
             });
             if ($post instanceof WP_Post) {
                 $page = new Page(new PageAdapter($post));
-                $resource = new Item($page, new PageTransformer);
+                $resource = new Item($page, new PageTransformer());
             } else {
-                $resource = new Item(null, new NullTransformer);
+                $resource = new Item(null, new NullTransformer());
             }
             $resource->setMeta([
                 'type' => '404',
@@ -186,7 +195,8 @@ class RouteController extends BaseController
         $path = parse_url(urldecode($path), PHP_URL_PATH);
 
         // Route resolving for previewing article drafts
-        if (($queryParams['preview'] ?? false) &&
+        if (
+            ($queryParams['preview'] ?? false) &&
             ($queryParams['post_type'] ?? false) &&
             ($queryParams['p'] ?? false)
         ) {
@@ -227,6 +237,13 @@ class RouteController extends BaseController
             $slug = $match[1];
             if ($tag = get_term_by('slug', $slug, 'post_tag')) {
                 return $tag;
+            }
+        }
+
+        if (preg_match('#/?author/([^/]+)/?$#', $path, $match)) {
+            $slug = $match[1];
+            if ($author = get_user_by('slug', $slug)) {
+                return $author;
             }
         }
 
@@ -295,7 +312,10 @@ class RouteController extends BaseController
         $categorySlug = implode('/', $parts); // Glue parts to form category slug
 
         if (($category = get_category_by_path($categorySlug)) && $category instanceof WP_Term) {
-            if (($composite = $this->getPost($compositeSlug, WpComposite::POST_TYPE, $locale, $status)) && $composite instanceof WP_Post) {
+            if (
+                ($composite = $this->getPost($compositeSlug, WpComposite::POST_TYPE, $locale, $status)) &&
+                $composite instanceof WP_Post
+            ) {
                 if (in_array($category->term_id, $composite->post_category)) {
                     return $composite;
                 }
@@ -304,9 +324,13 @@ class RouteController extends BaseController
         return null;
     }
 
-    private function getPost(string $slug, string $postType, ?string $locale = null, $status = self::STATUS_PUBLISHED): ?WP_Post
-    {
-        $query = new \WP_Query([
+    private function getPost(
+        string $slug,
+        string $postType,
+        ?string $locale = null,
+        $status = self::STATUS_PUBLISHED
+    ): ?WP_Post {
+        $query = new WP_Query([
             'name' => $slug,
             'post_type' => $postType,
             'post_status' => $status,
@@ -324,7 +348,7 @@ class RouteController extends BaseController
             if ($bonnierRedirect = WpBonnierRedirect::instance()->getRedirectRepository()->findRedirectByPath($path)) {
                 return $bonnierRedirect;
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             // Empty because we just need to go to the next line.
         }
         if (env('RESOLVE_WA_REDIRECTS') && env('WP_ENV') !== 'testing' && $waRedirect = $this->findWaRedirect($path)) {
@@ -336,7 +360,7 @@ class RouteController extends BaseController
                 ->setCode(301);
             try {
                 return WpBonnierRedirect::instance()->getRedirectRepository()->save($redirect);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 return null;
             }
         }

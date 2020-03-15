@@ -270,13 +270,13 @@ class WpModelRepository
             return null;
         }
 
-        if (($userMeta = $this->attachmentMeta->get($wpUserId, false)) !== false) {
+        if (($userMeta = $this->userMeta->get($wpUserId, false)) !== false) {
             if (is_array($userMeta)) {
                 return $userMeta;
             }
             return null;
         }
-        $userMeta = wp_get_attachment_metadata($wpUserId);
+        $userMeta = get_user_meta($wpUserId);
         $this->userMeta->put($wpUserId, $userMeta);
 
         if (is_array($userMeta)) {
