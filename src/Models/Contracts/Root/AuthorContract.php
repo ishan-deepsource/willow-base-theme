@@ -16,6 +16,8 @@ interface AuthorContract
 
     public function getAvatar(): ?ImageContract;
 
+    public function getEmail(): ?string;
+
     public function getUrl(): ?string;
 
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection;

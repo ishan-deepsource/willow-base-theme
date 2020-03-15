@@ -9,9 +9,8 @@ use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Illuminate\Support\Collection;
 
 /**
- * Class DocumentAdapter
- *
- * @package \\${NAMESPACE}
+ * Class AuthorAdapter
+ * @package Bonnier\Willow\Base\Adapters\Cxense\Search
  */
 class AuthorAdapter implements AuthorContract
 {
@@ -48,6 +47,11 @@ class AuthorAdapter implements AuthorContract
     }
 
     public function getUrl(): ?string
+    {
+        return null;
+    }
+
+    public function getEmail(): ?string
     {
         return null;
     }
