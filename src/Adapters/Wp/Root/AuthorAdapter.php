@@ -8,6 +8,7 @@ use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\WP\ContentHub\Editor\Models\WpUserProfile;
 use DateTime;
@@ -64,7 +65,10 @@ class AuthorAdapter implements AuthorContract
     public function getUrl(): ?string
     {
         if ($url = get_author_posts_url($this->getId())) {
-            return parse_url($url, PHP_URL_PATH);
+            $path =  parse_url($url, PHP_URL_PATH);
+            if ($path) {
+                return LanguageProvider::getHomeUrl($path);
+            }
         }
         return null;
     }
