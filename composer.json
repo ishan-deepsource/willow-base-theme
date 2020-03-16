@@ -34,7 +34,7 @@
         "wpackagist-plugin/amazon-s3-and-cloudfront": "^1.4",
         "wpackagist-plugin/user-role-editor": "^4.44",
         "bonnier/willow-mu-plugins": "^1.4",
-        "bonnier/contenthub-editor": "^5.18",
+        "bonnier/contenthub-editor": "^5.19",
         "benjaminmedia/wp-cxense": "^2.1",
         "benjaminmedia/wp-site-manager": "^1.0",
         "bonnier/wp-bonnier-cache": "^4.1",

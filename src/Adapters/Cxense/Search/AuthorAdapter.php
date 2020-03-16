@@ -3,14 +3,14 @@
 namespace Bonnier\Willow\Base\Adapters\Cxense\Search;
 
 use Bonnier\WP\Cxense\Parsers\Document;
-use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
+use DateTime;
+use Illuminate\Support\Collection;
 
 /**
- * Class DocumentAdapter
- *
- * @package \\${NAMESPACE}
+ * Class AuthorAdapter
+ * @package Bonnier\Willow\Base\Adapters\Cxense\Search
  */
 class AuthorAdapter implements AuthorContract
 {
@@ -49,5 +49,35 @@ class AuthorAdapter implements AuthorContract
     public function getUrl(): ?string
     {
         return null;
+    }
+
+    public function getWebsite(): ?string
+    {
+        return null;
+    }
+
+    public function getEmail(): ?string
+    {
+        return null;
+    }
+
+    public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection
+    {
+        return collect();
+    }
+
+    public function getBirthday(): ?DateTime
+    {
+        return null;
+    }
+
+    public function isPublic(): bool
+    {
+        return false;
+    }
+    
+    public function getCount(): int
+    {
+        return 0;
     }
 }
