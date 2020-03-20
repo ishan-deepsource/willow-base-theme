@@ -97,7 +97,6 @@ class Bootstrap
 
     public static function allowUserInSitemap(bool $allowInSitemap, int $userID)
     {
-        $isPublic = get_user_meta($userID, 'public', true);
-        return boolval($isPublic);
+        return boolval(get_user_meta($userID, 'public', true));
     }
 }
