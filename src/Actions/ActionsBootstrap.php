@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Actions;
 
 use Bonnier\Willow\Base\Actions\Backend\Locale;
+use Bonnier\Willow\Base\Actions\Backend\MediaThumbs;
 use Bonnier\Willow\Base\Actions\Backend\PreviewUrl;
 use Bonnier\Willow\Base\Actions\Backend\RedirectHandler;
 use Bonnier\Willow\Base\Actions\Universal\ImgixSettings;
@@ -37,6 +38,7 @@ class ActionsBootstrap
     private function loadBackendActions()
     {
         if (is_admin()) {
+            new MediaThumbs();
             new PreviewUrl();
             new AddMedia();
             new Locale();
