@@ -40,6 +40,7 @@ class PageTemplates
                     'bodum-pour-over' => 'Bodum Pour over',
                     'bodum-vacuum' => 'Bodum Vacuum',
                     'gradient' => 'Gradient',
+                    'full-width' => 'Full Width'
                 ]);
                 break;
             case 'ILL':
@@ -86,6 +87,7 @@ class PageTemplates
                     'gradient' => 'Gradient',
                     'colorblock' => 'Farveblok',
                     'timeline' => 'Timeline',
+                    'full-width' => 'Full Width'
                 ]);
                 break;
         }
