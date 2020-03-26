@@ -40,7 +40,12 @@ class PageTemplates
                     'bodum-pour-over' => 'Bodum Pour over',
                     'bodum-vacuum' => 'Bodum Vacuum',
                     'gradient' => 'Gradient',
-                    'full-width' => 'Full Width'
+                ]);
+                break;
+            case 'COS':
+                $this->compositeTemplates = array_merge($this->compositeTemplates, [
+                    'gradient' => 'Gradient',
+                    'colorblock' => 'Farveblok',
                 ]);
                 break;
             case 'ILL':
@@ -87,7 +92,6 @@ class PageTemplates
                     'gradient' => 'Gradient',
                     'colorblock' => 'Farveblok',
                     'timeline' => 'Timeline',
-                    'full-width' => 'Full Width'
                 ]);
                 break;
         }
