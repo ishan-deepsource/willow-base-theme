@@ -11,8 +11,15 @@ class DateTimeTransformer extends TransformerAbstract
     {
         return [
             'date' => $publishedAt->format(DATE_ATOM),
-            'timezone_type' => 3,
+            'timezone_type' => $this->getTimezoneType($publishedAt),
             'timezone' => $publishedAt->getTimezone()->getName(),
         ];
+    }
+
+    protected function getTimezoneType(DateTime $date)
+    {
+        $json = json_encode($date);
+        $object = json_decode($json);
+        return $object->timezone_type;
     }
 }
