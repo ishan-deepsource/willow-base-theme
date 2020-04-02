@@ -2,10 +2,12 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Pages;
 
+use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Pages\PageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TranslationContract;
 use Bonnier\Willow\Base\Transformers\Api\Root\AuthorTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\ContentTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Root\DateTimeTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TranslationTransformer;
 use League\Fractal\ParamBag;
@@ -34,8 +36,8 @@ class PageTransformer extends TransformerAbstract
             'status'        => $page->getStatus(),
             'author'        => $this->getAuthor($page),
             'template'      => $page->getTemplate(),
-            'published_at'  => $page->getPublishedAt(),
-            'updated_at'    => $page->getUpdatedAt(),
+            'published_at'  => $this->getPublishedAt($page),
+            'updated_at'    => $this->getUpdatedAt($page),
             'is_front_page' => $page->isFrontPage(),
             'canonical_url' => $page->getCanonicalUrl(),
             'translations'  => $this->getTranslations($page),
@@ -70,6 +72,22 @@ class PageTransformer extends TransformerAbstract
             });
         }
 
+        return null;
+    }
+
+    private function getPublishedAt(PageContract $page)
+    {
+        if ($publishedAt = $page->getPublishedAt()) {
+            return with(new DateTimeTransformer())->transform($publishedAt);
+        }
+        return null;
+    }
+
+    private function getUpdatedAt(PageContract $page)
+    {
+        if ($publishedAt = $page->getPublishedAt()) {
+            return with(new DateTimeTransformer())->transform($publishedAt);
+        }
         return null;
     }
 }

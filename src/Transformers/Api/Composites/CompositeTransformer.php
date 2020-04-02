@@ -6,6 +6,7 @@ use Bonnier\Willow\Base\Models\Contracts\Root\TranslationContract;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\StoryTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentAudioTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Root\DateTimeTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TranslationTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
 use Bonnier\Willow\Base\Traits\UrlTrait;
@@ -77,8 +78,8 @@ class CompositeTransformer extends TransformerAbstract
             'author'                    => $this->getAuthor($composite),
             'author_description'        => $composite->getAuthorDescription() ?: null,
             'lead_image'                => $this->getLeadImage($composite),
-            'published_at'              => $composite->getPublishedAt(),
-            'updated_at'                => $composite->getUpdatedAt(),
+            'published_at'              => $this->getPublishedAt($composite),
+            'updated_at'                => $this->getUpdatedAt($composite),
             'canonical_url'             => $composite->getCanonicalUrl(),
             'template'                  => $composite->getTemplate(),
             'estimated_reading_time'    => $composite->getEstimatedReadingTime(),
@@ -138,6 +139,22 @@ class CompositeTransformer extends TransformerAbstract
     {
         if ($commercial = $composite->getCommercial()) {
             return with(new CommercialTransformer())->transform($commercial);
+        }
+        return null;
+    }
+
+    private function getPublishedAt(CompositeContract $composite)
+    {
+        if ($publishedAt = $composite->getPublishedAt()) {
+            return with(new DateTimeTransformer())->transform($publishedAt);
+        }
+        return null;
+    }
+
+    private function getUpdatedAt(CompositeContract $composite)
+    {
+        if ($publishedAt = $composite->getPublishedAt()) {
+            return with(new DateTimeTransformer())->transform($publishedAt);
         }
         return null;
     }
