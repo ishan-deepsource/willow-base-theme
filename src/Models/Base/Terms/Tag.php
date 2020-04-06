@@ -64,6 +64,11 @@ class Tag implements TagContract
     {
         return $this->tag->getTeasers();
     }
+    
+    public function getContents(int $page = 1): ?Collection
+    {
+        return $this->tag->getContents($page);
+    }
 
     public function getTranslations(): ?Collection
     {

@@ -37,7 +37,7 @@ class WidgetController extends \WP_REST_Controller
 
         $postId = $parentId;
 
-        if ($parentType === 'category') {
+        if ($parentType === 'category' || $parentType === 'post_tag') {
             $postId = sprintf('term_%s', $parentId);
         }
 

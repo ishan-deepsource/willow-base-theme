@@ -27,6 +27,8 @@ interface TagContract
 
     public function getTeasers(): ?Collection;
 
+    public function getContents(int $page): ?Collection;
+
     public function getTranslations(): ?Collection;
 
     public function getContenthubId(): ?string;
