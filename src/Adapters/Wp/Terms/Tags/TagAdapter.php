@@ -2,9 +2,18 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Tags;
 
+use Bonnier\Willow\Base\Factories\CategoryContentFactory;
+use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\BannerPlacement;
+use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\CommercialSpot;
+use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\FeaturedContent;
+use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\Newsletter;
+use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\SeoText;
+use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TaxonomyList;
+use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TeaserList;
 use Bonnier\Willow\Base\Models\Base\Root\Translation;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
+use Bonnier\WP\ContentHub\Editor\Helpers\AcfName;
 use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
@@ -23,11 +32,32 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
     use UrlTrait;
 
     protected $meta;
+    protected $acfFields;
+    protected $tagContents;
+    protected $contents;
+    /** @var CategoryContentFactory */
+    protected $contentFactory;
+
+    protected $contentModelsMapping = [
+        AcfName::WIDGET_TEASER_LIST => TeaserList::class,
+        AcfName::WIDGET_FEATURED_CONTENT => FeaturedContent::class,
+        AcfName::WIDGET_SEO_TEXT => SeoText::class,
+        AcfName::WIDGET_NEWSLETTER => Newsletter::class,
+        AcfName::WIDGET_BANNER_PLACEMENT => BannerPlacement::class,
+        AcfName::WIDGET_TAXONOMY_TEASER_LIST => TaxonomyList::class,
+        AcfName::WIDGET_COMMERCIAL_SPOT => CommercialSpot::class,
+    ];
 
     public function __construct(WP_Term $wpModel)
     {
         parent::__construct($wpModel);
         $this->meta = $this->getMeta();
+        $this->acfFields = WpModelRepository::instance()->getAcfData(sprintf(
+            '%s_%s',
+            $this->wpModel->taxonomy ?? null,
+            $this->wpModel->term_id ?? null
+        ));
+        $this->tagContents = array_get($this->acfFields, AcfName::GROUP_PAGE_WIDGETS) ?: null;
     }
 
     public function getId(): ?int
@@ -139,6 +169,26 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
         ]);
     }
 
+    public function getContents(int $page = 1): ?Collection
+    {
+        if (!$this->contents) {
+            $this->contents = collect($this->tagContents)->map(function ($acfContentArray) use ($page) {
+                $class = collect($this->contentModelsMapping)->get(array_get($acfContentArray, 'acf_fc_layout'));
+                $model = $this->getContentFactory($class)->getModel($acfContentArray);
+                if ($model instanceof TeaserList) {
+                    $model->setParentId($this->getId());
+                    $model->setParentType('post_tag');
+                    $model->setCurrentPage($page);
+                }
+                return $model;
+            })->reject(function ($content) {
+                return is_null($content);
+            });
+        }
+
+        return $this->contents;
+    }
+
     public function getContenthubId(): ?string
     {
         return array_get($this->wpMeta, 'content_hub_id.0') ?: null;
@@ -178,5 +228,14 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
         }
 
         return null;
+    }
+
+    private function getContentFactory($class)
+    {
+        if ($this->contentFactory) {
+            return $this->contentFactory->setBaseClass($class);
+        }
+
+        return $this->contentFactory = new CategoryContentFactory($class);
     }
 }

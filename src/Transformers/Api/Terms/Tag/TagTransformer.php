@@ -6,6 +6,7 @@ use Bonnier\Willow\Base\Models\Contracts\Root\TranslationContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\TagContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Root\Contents\ContentTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TranslationTransformer;
 use League\Fractal\ParamBag;
@@ -20,6 +21,7 @@ class TagTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'content-teasers',
         'teasers',
+        'contents',
     ];
 
     public function __construct(array $originalResponseData = [])
@@ -58,6 +60,12 @@ class TagTransformer extends TransformerAbstract
     public function includeTeasers(TagContract $tag)
     {
         return $this->collection($tag->getTeasers(), new TeaserTransformer());
+    }
+
+    public function includeContents(TagContract $tag, ParamBag $paramBag)
+    {
+        $currentPage = intval($paramBag->get('page')[0]) ?: 1;
+        return $this->collection($tag->getContents($currentPage), new ContentTransformer());
     }
 
     private function getTranslations(TagContract $tag)
