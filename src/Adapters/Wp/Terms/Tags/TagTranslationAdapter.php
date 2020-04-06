@@ -25,7 +25,10 @@ class TagTranslationAdapter implements TranslationContract
 
     public function getTitle(): ?string
     {
-        return data_get($this->tag, 'name') ?: null;
+        if ($title = data_get($this->tag, 'name')) {
+            return htmlspecialchars_decode($title);
+        }
+        return null;
     }
 
     public function getLink(): ?string

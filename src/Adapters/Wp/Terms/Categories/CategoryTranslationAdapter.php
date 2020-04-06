@@ -25,7 +25,11 @@ class CategoryTranslationAdapter implements TranslationContract
 
     public function getTitle(): ?string
     {
-        return data_get($this->category, 'name') ?: null;
+        if ($title = data_get($this->category, 'name')) {
+            return htmlspecialchars_decode($title);
+        }
+
+        return null;
     }
 
     public function getLink(): ?string

@@ -31,7 +31,10 @@ class VocabularyAdapter implements VocabularyContract
 
     public function getName(): ?string
     {
-        return data_get($this->vocabulary, 'name') ?: null;
+        if ($name = data_get($this->vocabulary, 'name')) {
+            return htmlspecialchars_decode($name);
+        }
+        return null;
     }
 
     public function getMachineName(): ?string

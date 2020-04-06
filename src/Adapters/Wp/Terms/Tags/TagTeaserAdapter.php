@@ -18,7 +18,10 @@ class TagTeaserAdapter extends AbstractTeaserAdapter
 
     public function getTitle(): ?string
     {
-        return data_get($this->meta, 'meta_title.' . LanguageProvider::getCurrentLanguage()) ?: null;
+        if ($title = data_get($this->meta, 'meta_title.' . LanguageProvider::getCurrentLanguage())) {
+            return htmlspecialchars_decode($title);
+        }
+        return null;
     }
 
     public function getImage(): ?ImageContract
