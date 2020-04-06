@@ -6,7 +6,6 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\Base\Transformers\Api\Root\CommercialTransformer;
-use Bonnier\Willow\Base\Transformers\Api\Root\DateTimeTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\ImageTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
 use League\Fractal\TransformerAbstract;
@@ -46,7 +45,7 @@ class CompositeTeaserTransformer extends TransformerAbstract
             'image'         => $this->getImage($composite),
             'description'   => $this->getDescription($composite),
             'link'          => $this->getPath($composite->getLink()),
-            'published_at'  => $this->getPublishedAt($composite),
+            'published_at'  => $composite->getPublishedAt(),
             'commercial'    => $this->getCommercial($composite),
             'label'         => [
                 'title' => $composite->getLabel(),
@@ -84,18 +83,5 @@ class CompositeTeaserTransformer extends TransformerAbstract
     {
         $commercial = $composite->getCommercial();
         return $commercial ? with(new CommercialTransformer())->transform($commercial) : null;
-    }
-
-    private function getPublishedAt(CompositeContract $composite)
-    {
-        if ($publishedAt = $composite->getPublishedAt()) {
-            return with(new DateTimeTransformer())->transform($publishedAt);
-        }
-        return null;
-    }
-
-    public function includeVocabularies(CompositeContract $composite)
-    {
-        return $this->collection($composite->getVocabularies(), new VocabularyTransformer());
     }
 }
