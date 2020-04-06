@@ -37,7 +37,10 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
 
     public function getName(): ?string
     {
-        return data_get($this->wpModel, 'name') ?: null;
+        if ($name = data_get($this->wpModel, 'name')) {
+            return htmlspecialchars_decode($name);
+        }
+        return null;
     }
 
     public function getTitle(): ?string
