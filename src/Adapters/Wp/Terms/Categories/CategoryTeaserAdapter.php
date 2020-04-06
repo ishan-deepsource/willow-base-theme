@@ -23,7 +23,6 @@ class CategoryTeaserAdapter extends AbstractTeaserAdapter
         if ($title = data_get($this->meta, 'meta_title.0')) {
             return htmlspecialchars_decode($title);
         }
-
         return null;
     }
 

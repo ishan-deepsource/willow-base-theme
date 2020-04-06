@@ -28,7 +28,6 @@ class CategoryTranslationAdapter implements TranslationContract
         if ($title = data_get($this->category, 'name')) {
             return htmlspecialchars_decode($title);
         }
-
         return null;
     }
 
