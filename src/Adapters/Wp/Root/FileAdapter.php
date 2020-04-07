@@ -56,7 +56,11 @@ class FileAdapter implements FileContract
 
     public function getDescription(): ?string
     {
-        return array_get($this->file, 'description', data_get($this->file, 'post_content')) ?: null;
+        if (is_array($this->file)) {
+            return array_get($this->file, 'description', array_get($this->file, 'post_content')) ?: null;
+        }
+
+        return data_get($this->file, 'description', data_get($this->file, 'post_content')) ?: null;
     }
 
     public function getCaption(): ?string
