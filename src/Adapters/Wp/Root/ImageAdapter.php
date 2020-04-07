@@ -33,7 +33,7 @@ class ImageAdapter extends FileAdapter implements ImageContract
 
     public function getAlt(): ?string
     {
-        return array_get($this->file, 'alt') ?: null;
+        return array_get($this->file, 'alt', data_get($this->file, 'alt')) ?: null;
     }
 
     public function getCopyright(): ?string
