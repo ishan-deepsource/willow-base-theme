@@ -196,15 +196,25 @@ class RouteController extends BaseController
 
         // Route resolving for previewing article drafts
         if (
-            ($queryParams['preview'] ?? false) &&
-            ($queryParams['post_type'] ?? false) &&
-            ($queryParams['p'] ?? false)
+            ($queryParams['preview'] ?? false)
         ) {
-            $posts =  get_posts([
-                'post_type' => $queryParams['post_type'],
-                'include' => $queryParams['p'], // Wordpress way of saying give me the content that match id
-                'post_status' => self::STATUS_DRAFT,
-            ]);
+            $posts = [];
+            if (
+                ($queryParams['post_type'] ?? false) &&
+                ($queryParams['p'] ?? false)
+            ) {
+                $posts = get_posts([
+                    'post_type' => $queryParams['post_type'],
+                    'include' => $queryParams['p'], // Wordpress way of saying give me the content that match id
+                    'post_status' => self::STATUS_DRAFT,
+                ]);
+            } else if ($queryParams['page_id'] ?? false) {
+                $posts = get_posts([
+                    'post_type' => 'page',
+                    'include' => $queryParams['page_id'],
+                    'post_status' => self::STATUS_DRAFT
+                ]);
+            }
             if (count($posts)) {
                 return $posts[0];
             }
