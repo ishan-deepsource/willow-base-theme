@@ -18,6 +18,7 @@ class RedirectRepository
     const WA_ROUTE_RESOLVES_TABLE_CREATED = 'whitealbum_route_resolves_created';
     const WA_ROUTE_RESOLVES_TABLE_VERSION = 1;
 
+    protected $domain;
     protected $client;
     protected $locale;
 
@@ -29,9 +30,10 @@ class RedirectRepository
      */
     public function __construct(string $domain, string $locale)
     {
+        $this->domain = $domain;
         $this->locale = $locale;
         $this->client = new Client([
-            'base_uri' => sprintf('http://old.%s', $domain),
+            'base_uri' => sprintf('http://old.%s', $this->domain),
         ]);
         $this->createRouteResolvesTable();
     }
@@ -82,9 +84,26 @@ class RedirectRepository
         } catch (RequestException $exception) {
             $response = $exception->getResponse();
         }
+        $to = optional($destination)->getPath() ?: '/';
+        if (
+            $destination &&
+            ($destination->getHost() !== $this->domain && $destination->getHost() !== sprintf('old.%s', $this->domain))
+        ) {
+            // Only keep destination host, if it differs from the current domain
+            // with and without the 'old.' prefix
+            $to = sprintf(
+                '%s://%s%s',
+                $destination->getScheme(),
+                $destination->getHost(),
+                $destination->getPath()
+            );
+            if ($destination->getQuery()) {
+                $to = sprintf('%s?%s', $to, $destination->getQuery());
+            }
+        }
         $this->storeResolvedRedirect(
             $url,
-            optional($destination)->getPath() ?: '/',
+            $to,
             optional($response)->getStatusCode() ?? 301
         );
         return $this->findRelsovedRedirectInDb($url);
