@@ -56,6 +56,11 @@ class CompositeTeaserTransformer extends TransformerAbstract
         ];
     }
 
+    public function includeVocabularies(CompositeContract $composite)
+    {
+        return $this->collection($composite->getVocabularies(), new VocabularyTransformer());
+    }
+
     private function getTitle(CompositeContract $composite)
     {
         return $composite->getTeaser('default')->getTitle();
