@@ -7,6 +7,7 @@ use Bonnier\Willow\Base\Commands\CommandBootstrap;
 use Bonnier\Willow\Base\Controllers\Admin\NotFoundSettingsController;
 use Bonnier\Willow\Base\Controllers\App\AppControllerBootstrap;
 use Bonnier\Willow\Base\Controllers\Formatters\ControllerBootstrap;
+use Bonnier\Willow\Base\Controllers\Root\PageController;
 use Bonnier\Willow\Base\Database\DB;
 use Bonnier\Willow\Base\Database\Migrations\Migrate;
 use Bonnier\Willow\Base\Repositories\NotFoundRepository;
@@ -87,6 +88,14 @@ class Bootstrap
         $request = Request::createFromGlobals();
         self::$notFoundSettingsController = new NotFoundSettingsController($request);
         self::$notFoundSettingsController->handlePost();
+    }
+
+    public static function registerPageRestController(array $args, string $postType)
+    {
+        if ($postType === 'page') {
+            $args['rest_controller_class'] = PageController::class;
+        }
+        return $args;
     }
 
     public static function removeNotFoundRedirects(Redirect $redirect)

@@ -7,6 +7,8 @@ add_action('init', function () {
 });
 add_action('admin_menu', [Bootstrap::class, 'loadAdminMenu']);
 
+add_filter('register_post_type_args', [Bootstrap::class, 'registerPageRestController'], 10, 2);
+
 remove_action('template_redirect', 'redirect_canonical');
 
 // Redirect all requests to index.php so the Vue app is loaded and 404s aren't thrown
