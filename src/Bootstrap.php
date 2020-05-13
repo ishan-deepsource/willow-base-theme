@@ -12,8 +12,10 @@ use Bonnier\Willow\Base\Database\DB;
 use Bonnier\Willow\Base\Database\Migrations\Migrate;
 use Bonnier\Willow\Base\Repositories\NotFoundRepository;
 use Bonnier\Willow\Base\Controllers\Admin\NotFoundListController;
+use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\WP\Redirect\Models\Redirect;
 use Bonnier\WP\Redirect\WpBonnierRedirect;
+use Bonnier\WP\SiteManager\WpSiteManager;
 use Bonnier\WP\Sitemap\WpBonnierSitemap;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -37,6 +39,7 @@ class Bootstrap
         Migrate::run();
         add_action(WpBonnierRedirect::ACTION_REDIRECT_SAVED, [Bootstrap::class, 'removeNotFoundRedirects']);
         add_filter(WpBonnierSitemap::FILTER_ALLOW_USER_IN_SITEMAP, [Bootstrap::class, 'allowUserInSitemap'], 10, 2);
+        add_filter(WpBonnierSitemap::FILTER_TAG_ALLOWED_IN_SITEMAP, [Bootstrap::class, 'allowTagInSitemap'], 10, 2);
 
         new ControllerBootstrap();
         new CommandBootstrap();
@@ -107,5 +110,13 @@ class Bootstrap
     public static function allowUserInSitemap(bool $allowInSitemap, int $userID)
     {
         return boolval(get_user_meta($userID, 'public', true));
+    }
+    
+    public static function allowTagInSitemap(bool $allowed, \WP_Term $tag)
+    {
+        if (get_term_meta($tag->term_id, 'internal', true)) {
+            return false;
+        }
+        return true;
     }
 }

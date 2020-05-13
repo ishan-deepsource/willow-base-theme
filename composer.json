@@ -39,7 +39,7 @@
         "benjaminmedia/wp-site-manager": "^1.0",
         "bonnier/wp-bonnier-cache": "^4.1",
         "bonnier/wp-bonnier-redirect": "^4.10",
-        "bonnier/wp-bonnier-sitemap": "^1.3.0",
+        "bonnier/wp-bonnier-sitemap": "^1.5",
         "bonnier/wp-bonnier-some": "^2.0",
         "league/csv": "^9.1",
         "wpackagist-plugin/wp-rest-filter": "^1.2",
