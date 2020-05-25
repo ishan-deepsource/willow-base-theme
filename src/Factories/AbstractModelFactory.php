@@ -55,8 +55,7 @@ abstract class AbstractModelFactory implements ModelFactoryContract
      */
     protected function getOverrideClass()
     {
-        $theme = getenv('APP_CHILD_THEME') ?? '';
-        $overrideClass = str_replace('Models\\Base', 'Models\\' . $theme, $this->baseClass);
+        $overrideClass = str_replace('Models\\Base', 'Models\\' . $this->getBrandTheme(), $this->baseClass);
         if ($this->validOverride($overrideClass)) {
             return $overrideClass;
         }
@@ -102,5 +101,13 @@ abstract class AbstractModelFactory implements ModelFactoryContract
             throw new MissingAdapterException(sprintf('The adapter class \'%s\' does not exist', $adapter));
         }
         return new $adapter($model);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getBrandTheme() {
+        $theme = getenv('APP_CHILD_THEME') ?? '';
+        return ucfirst(strtolower($theme));
     }
 }
