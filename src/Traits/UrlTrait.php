@@ -35,9 +35,9 @@ trait UrlTrait
     {
         $languages = LanguageProvider::getLanguageList();
         foreach ($languages as $language) {
-            $parsedUrl = parse_url($url);
-            $parsedHomeUrl = parse_url($language->home_url);
-            if(stristr($parsedUrl['host'], $parsedHomeUrl['host']) !== false) {
+            $parsedUrl = parse_url($url, PHP_URL_HOST);
+            $parsedHomeUrl = parse_url($language->home_url, PHP_URL_HOST);
+            if(stristr($parsedUrl, $parsedHomeUrl) !== false) {
                 return preg_replace('#://(api|native-api|admin)\.#', '://', $url);
             }
         }
