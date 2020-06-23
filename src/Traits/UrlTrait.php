@@ -33,6 +33,14 @@ trait UrlTrait
 
     protected function stripApi($url)
     {
-        return preg_replace('#://api\.#', '://', $url);
+        $languages = LanguageProvider::getLanguageList();
+        foreach ($languages as $language) {
+            $parsedUrl = parse_url($url);
+            $parsedHomeUrl = parse_url($language->home_url);
+            if(stristr($parsedUrl['host'], $parsedHomeUrl['host']) !== false) {
+                return preg_replace('#://(api|native-api|admin)\.#', '://', $url);
+            }
+        }
+        return $url;
     }
 }
