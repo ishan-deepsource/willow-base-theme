@@ -324,7 +324,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     public function getCanonicalUrl(): ?string
     {
         if (isset($this->acfFields['canonical_url']) && $url = $this->acfFields['canonical_url']) {
-            return $this->removeApiSubdomain($url);
+            return $this->stripApi($url);
         }
 
         return $this->getFullUrl(get_permalink($this->getId()));
@@ -444,17 +444,5 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         )->reject(function ($content) {
             return is_null($content);
         });
-    }
-
-    public static function removeApiSubdomain(string $permalink)
-    {
-        if (Str::contains($permalink, '://api.')) {
-            return preg_replace('#://api.#', '://', $permalink);
-        } else if (Str::contains($permalink, '://native-api.')) {
-            return preg_replace('#://native-api.#', '://', $permalink);
-        } else if (Str::contains($permalink, '://admin.')) {
-            return preg_replace('#://admin.#', '://', $permalink);
-        }
-        return $permalink;
     }
 }
