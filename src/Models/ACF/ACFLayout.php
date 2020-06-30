@@ -83,6 +83,12 @@ class ACFLayout implements Arrayable
         return $this;
     }
 
+    public function addSubFields(array $fields): ACFLayout
+    {
+        $this->subFields = array_merge($this->subFields, $fields);
+        return $this;
+    }
+
     /**
      * @return array
      */

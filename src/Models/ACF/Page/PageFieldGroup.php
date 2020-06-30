@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Models\ACF\Page;
 
+use Bonnier\Willow\Base\Helpers\AcfName;
 use Bonnier\Willow\Base\Models\ACF\ACFField;
 use Bonnier\Willow\Base\Models\ACF\ACFGroup;
 use Bonnier\Willow\Base\Models\ACF\ACFLayout;
@@ -105,7 +106,7 @@ class PageFieldGroup
     public static function getFeaturedContentLayout(): ACFLayout
     {
         $layout = new ACFLayout('5bbb23424c064');
-        $layout->setName('featured_content')
+        $layout->setName(AcfName::WIDGET_FEATURED_CONTENT)
             ->setLabel('Featured Content');
 
         $settings = new TabField('field_5bbb4363c6cc8');
@@ -148,13 +149,19 @@ class PageFieldGroup
 
         $layout->addSubField($label);
 
+        $layout->addSubFields(SortByFields::getFields(AcfName::WIDGET_FEATURED_CONTENT, [
+            'minTeasers' => 1,
+            'maxTeasers' => 1,
+            'teaserCountDefault' => 1
+        ]));
+
         return apply_filters(sprintf('willow/acf/layout=%s', $layout->getKey()), $layout);
     }
 
     public static function getTeaserListLayout(): ACFLayout
     {
         $layout = new ACFLayout('5bb3190811fdf');
-        $layout->setName('teaser_list')
+        $layout->setName(AcfName::WIDGET_TEASER_LIST)
             ->setLabel('Teaser List');
 
         $settings = new TabField('field_5bb31940ffcf0');
@@ -224,6 +231,7 @@ class PageFieldGroup
 
         $layout->addSubField($pagination);
 
+        $layout->addSubFields(SortByFields::getFields(AcfName::WIDGET_TEASER_LIST));
 
         return apply_filters(sprintf('willow/acf/layout=%s', $layout->getKey()), $layout);
     }
