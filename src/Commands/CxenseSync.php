@@ -2,8 +2,8 @@
 
 namespace Bonnier\Willow\Base\Commands;
 
+use Bonnier\Willow\Base\Models\WpComposite;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
-use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\Willow\Base\Repositories\CxenseSearchRepository;
 use Bonnier\WP\Cxense\Services\CxenseApi;
 use Bonnier\WP\Cxense\WpCxense;
@@ -12,8 +12,8 @@ use WP_CLI;
 
 class CxenseSync extends \WP_CLI_Command
 {
-    const CMD_NAMESPACE = 'cxense';
-    const ALLOWED_COMMANDS = ['cleanup', 'sync', 'info', 'wp-urls', 'cxense-urls', 'urls'];
+    private const CMD_NAMESPACE = 'cxense';
+    private const ALLOWED_COMMANDS = ['cleanup', 'sync', 'info', 'wp-urls', 'cxense-urls', 'urls'];
 
     protected $searchRepository;
 
@@ -289,7 +289,7 @@ class CxenseSync extends \WP_CLI_Command
     {
         $urls = collect();
 
-        WpComposite::map_all(function (\WP_Post $post) use (&$urls) {
+        WpComposite::mapAll(function (\WP_Post $post) use (&$urls) {
             $urls->push(get_permalink($post->ID));
         });
 
@@ -390,7 +390,7 @@ class CxenseSync extends \WP_CLI_Command
     private function syncCompositesIntoCxense()
     {
         // Iterate over composite urls and add those to cxense that are not already there
-        WpComposite::map_all(function (\WP_Post $post) {
+        WpComposite::mapAll(function (\WP_Post $post) {
             if (LanguageProvider::getPostLanguage($post->ID) !== LanguageProvider::getCurrentLanguage()) {
                 return;
             }

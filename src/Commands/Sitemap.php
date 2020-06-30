@@ -2,12 +2,12 @@
 
 namespace Bonnier\Willow\Base\Commands;
 
-use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
+use Bonnier\Willow\Base\Models\WpComposite;
 use WP_Post;
 
 class Sitemap extends \WP_CLI_Command
 {
-    const CMD_NAMESPACE = 'sitemap';
+    private const CMD_NAMESPACE = 'sitemap';
 
 
     public static function register()
@@ -32,7 +32,7 @@ class Sitemap extends \WP_CLI_Command
     public function migrate()
     {
         \WP_CLI::line('Migrating sitemap option on composites...');
-        WpComposite::map_all(function (WP_Post $composite) {
+        WpComposite::mapAll(function (WP_Post $composite) {
             update_field('sitemap', 0, $composite->ID);
             \WP_CLI::line(sprintf('Migrating sitemap option on composite: %s', $composite->ID));
         });

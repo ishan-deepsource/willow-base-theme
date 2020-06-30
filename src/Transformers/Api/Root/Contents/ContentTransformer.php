@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Root\Contents;
 
+use Bonnier\Willow\Base\Helpers\AcfName;
 use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\ContentContract;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\BannerPlacementTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\CommercialSpotTransformer;
@@ -12,7 +13,6 @@ use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\SeoTextTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\TaxonomyListTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\TeaserListTransformer;
 use Bonnier\Willow\Base\Transformers\NullTransformer;
-use Bonnier\WP\ContentHub\Editor\Helpers\AcfName;
 use League\Fractal\TransformerAbstract;
 
 class ContentTransformer extends TransformerAbstract

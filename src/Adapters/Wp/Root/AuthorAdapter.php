@@ -9,8 +9,6 @@ use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
-use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
-use Bonnier\WP\ContentHub\Editor\Models\WpUserProfile;
 use DateTime;
 use Illuminate\Support\Collection;
 use WP_User;

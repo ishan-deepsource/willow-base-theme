@@ -2,8 +2,8 @@
 
 namespace Bonnier\Willow\Base\Actions\Universal;
 
+use Bonnier\Willow\Base\Models\WpTaxonomy;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
-use Bonnier\WP\ContentHub\Editor\Models\WpTaxonomy;
 
 class PolylangTranslations
 {

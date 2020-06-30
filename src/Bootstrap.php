@@ -2,20 +2,37 @@
 
 namespace Bonnier\Willow\Base;
 
+use Bonnier\Willow\Base\ACF\Brands\BrandFactory;
+use Bonnier\Willow\Base\ACF\ImageHotSpotCoordinates;
+use Bonnier\Willow\Base\ACF\MarkdownEditor;
 use Bonnier\Willow\Base\Actions\ActionsBootstrap;
+use Bonnier\Willow\Base\Commands\CmdManager;
 use Bonnier\Willow\Base\Commands\CommandBootstrap;
 use Bonnier\Willow\Base\Controllers\Admin\NotFoundSettingsController;
+use Bonnier\Willow\Base\Controllers\Api\FocalpointEndpointController;
+use Bonnier\Willow\Base\Controllers\Api\UpdateEndpointController;
 use Bonnier\Willow\Base\Controllers\App\AppControllerBootstrap;
 use Bonnier\Willow\Base\Controllers\Formatters\ControllerBootstrap;
 use Bonnier\Willow\Base\Controllers\Root\PageController;
 use Bonnier\Willow\Base\Database\DB;
 use Bonnier\Willow\Base\Database\Migrations\Migrate;
+use Bonnier\Willow\Base\Helpers\CollectionHelper;
+use Bonnier\Willow\Base\Helpers\CompositeHelper;
+use Bonnier\Willow\Base\Helpers\FeatureTimeField;
+use Bonnier\Willow\Base\Helpers\FocalPoint;
+use Bonnier\Willow\Base\Helpers\PolylangConfig;
+use Bonnier\Willow\Base\Helpers\Utils;
+use Bonnier\Willow\Base\Models\WpAttachment;
+use Bonnier\Willow\Base\Models\WpComposite;
+use Bonnier\Willow\Base\Models\WpPage;
+use Bonnier\Willow\Base\Models\WpTaxonomy;
+use Bonnier\Willow\Base\Models\WpUserProfile;
 use Bonnier\Willow\Base\Repositories\NotFoundRepository;
 use Bonnier\Willow\Base\Controllers\Admin\NotFoundListController;
-use Bonnier\Willow\Base\Repositories\WpModelRepository;
+use Bonnier\Willow\Base\Repositories\SiteManager\SiteRepository;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\Redirect\Models\Redirect;
 use Bonnier\WP\Redirect\WpBonnierRedirect;
-use Bonnier\WP\SiteManager\WpSiteManager;
 use Bonnier\WP\Sitemap\WpBonnierSitemap;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -47,6 +64,36 @@ class Bootstrap
         new AppControllerBootstrap();
     }
 
+    public static function setup()
+    {
+        add_action('admin_enqueue_scripts', [__CLASS__, 'loadAdminScripts']);
+
+        CollectionHelper::register();
+
+        $domain = Utils::removeApiSubdomain(LanguageProvider::getHomeUrl());
+        $site = SiteRepository::find_by_domain(parse_url($domain, PHP_URL_HOST));
+        BrandFactory::register(data_get($site, 'brand.brand_code'));
+        new MarkdownEditor();
+        new ImageHotSpotCoordinates();
+        new CompositeHelper();
+        FeatureTimeField::register();
+
+        WpTaxonomy::register();
+        WpPage::register();
+        WpComposite::register();
+        WpAttachment::register();
+        WpUserProfile::register();
+        CmdManager::register();
+        PolylangConfig::register();
+
+        $updateEndpoint = new UpdateEndpointController();
+        $updateEndpoint->register_routes();
+
+        FocalPoint::instance();
+        $focalPointEndpoint = new FocalpointEndpointController();
+        $focalPointEndpoint->register_routes();
+    }
+
     public static function loadAdminMenu()
     {
         $pageHook = add_menu_page(
@@ -67,6 +114,18 @@ class Bootstrap
         );
         add_action('load-' . $pageHook, [Bootstrap::class, 'loadNotFoundListScreenOptions']);
         add_action('load-' . $settingsHook, [Bootstrap::class, 'loadNotFoundSettingsPage']);
+    }
+
+    public static function loadAdminScripts()
+    {
+        wp_register_style(
+            'contenthub_editor_stylesheet',
+            get_theme_file_uri('/assets/css/admin.css'),
+            false,
+            filemtime(get_theme_file_path('/assets/css/admin.css'))
+        );
+        wp_enqueue_style('contenthub_editor_stylesheet');
+        WpTaxonomy::admin_enqueue_scripts();
     }
 
     public static function loadNotFoundListTable()

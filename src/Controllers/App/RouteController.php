@@ -4,12 +4,12 @@ namespace Bonnier\Willow\Base\Controllers\App;
 
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
 use Bonnier\Willow\Base\Models\Base\Root\Author;
+use Bonnier\Willow\Base\Models\WpComposite;
 use Bonnier\Willow\Base\Repositories\NotFoundRepository;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Repositories\WhiteAlbum\RedirectRepository;
 use Bonnier\Willow\Base\Transformers\Api\Root\AuthorTransformer;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
-use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\PageAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\CategoryAdapter;

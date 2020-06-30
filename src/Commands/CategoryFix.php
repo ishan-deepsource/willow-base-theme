@@ -2,13 +2,12 @@
 
 namespace Bonnier\Willow\Base\Commands;
 
-use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use WP_CLI;
 use WP_CLI_Command;
 
 class CategoryFix extends WP_CLI_Command
 {
-    const CMD_NAMESPACE = 'category';
+    private const CMD_NAMESPACE = 'category';
 
     public static function register()
     {

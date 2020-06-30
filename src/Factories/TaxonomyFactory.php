@@ -5,8 +5,8 @@ namespace Bonnier\Willow\Base\Factories;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\CategoryAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\NullTaxonomyAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagAdapter;
-use Bonnier\WP\ContentHub\Editor\Helpers\AcfName;
-use Bonnier\WP\ContentHub\Editor\Models\WpTaxonomy;
+use Bonnier\Willow\Base\Helpers\AcfName;
+use Bonnier\Willow\Base\Models\WpTaxonomy;
 
 class TaxonomyFactory extends AbstractModelFactory
 {
