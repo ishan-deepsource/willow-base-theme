@@ -2,11 +2,9 @@
 
 namespace Bonnier\Willow\Base\Models\ACF\Page;
 
-use Bonnier\Willow\Base\ACF\CustomRelationship;
 use Bonnier\Willow\Base\Helpers\AcfName;
 use Bonnier\Willow\Base\Helpers\SortBy;
 use Bonnier\Willow\Base\Models\ACF\ACFField;
-use Bonnier\Willow\Base\Models\ACF\ACFLayout;
 use Bonnier\Willow\Base\Models\ACF\Fields\CustomRelationshipField;
 use Bonnier\Willow\Base\Models\ACF\Fields\NumberField;
 use Bonnier\Willow\Base\Models\ACF\Fields\RadioField;
@@ -87,7 +85,7 @@ class SortByFields
         return null;
     }
 
-    public static function getSkipTeasersAmountField(): ACFLayout
+    public static function getSkipTeasersAmountField(): ACFField
     {
         $field = new NumberField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_SKIP_TEASERS_AMOUNT)));
         $field->setLabel('Amount of Teasers skip')
@@ -100,7 +98,7 @@ class SortByFields
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
 
-    public static function getTeaserListField(): ACFLayout
+    public static function getTeaserListField(): ACFField
     {
         $field = new CustomRelationshipField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_TEASER_LIST)));
         $field->setLabel('Teasers')
