@@ -3,10 +3,12 @@
 namespace Bonnier\Willow\Base\Commands;
 
 use Bonnier\Willow\Base\Controllers\App\RouteController;
+use Bonnier\Willow\Base\Models\WpComposite;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\Cache\Models\Post;
-use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\WP\Cxense\Models\Post as CxensePost;
+use Bonnier\WP\Redirect\Models\Redirect;
+use Bonnier\WP\Redirect\WpBonnierRedirect;
 use Illuminate\Support\Collection;
 use League\Csv\Exception;
 use League\Csv\Reader;
@@ -213,7 +215,7 @@ class Cleanup extends \WP_CLI_Command
             return $page;
         }
 
-        if ($composite = with(new RouteController)->findContenthubComposite($url, 'all')) {
+        if ($composite = with(new RouteController())->findContenthubComposite($url, 'all')) {
             $this->resolveCache[$url] = $composite;
             return $composite;
         }
@@ -228,6 +230,9 @@ class Cleanup extends \WP_CLI_Command
      * @param \WP_Post|\WP_Term|null $fromContent
      * @param \WP_Post|\WP_Term|null $toContent
      * @param string $locale
+     * @param $daTo
+     * @throws \Bonnier\WP\Redirect\Database\Exceptions\DuplicateEntryException
+     * @throws \Bonnier\WP\Redirect\Exceptions\IdenticalFromToException
      */
     private function handleContent($fromContent, $toContent, $locale, $daTo)
     {
@@ -253,15 +258,14 @@ class Cleanup extends \WP_CLI_Command
 
         if ($createRedirect) {
             // Create a redirect through the BonnierRedirect plugin
-            BonnierRedirect::handleRedirect(
-                $fromUrl,
-                $toUrl,
-                $locale,
-                'cleanup-delete-script',
-                $fromContent->ID ?? $fromContent->term_id ?? 0,
-                301,
-                true
-            );
+            $redirect = new Redirect();
+            $redirect->setFrom($fromUrl)
+                ->setTo($toUrl)
+                ->setLocale($locale)
+                ->setType('cleanup-delete-script')
+                ->setWpID($fromContent->ID ?? $fromContent->term_id ?? 0)
+                ->setCode(301);
+            WpBonnierRedirect::instance()->getRedirectRepository()->save($redirect);
             if ($this->output) {
                 file_put_contents($this->doneFile, sprintf(
                     '"%s","%s","%s","%s","%s"%s',

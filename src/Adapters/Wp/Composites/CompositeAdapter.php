@@ -17,6 +17,7 @@ use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ChaptersSummary;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Newsletter;
 use Bonnier\Willow\Base\Models\Base\Root\Translation;
+use Bonnier\Willow\Base\Models\WpTaxonomy;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Story;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\AssociatedComposites;
@@ -52,8 +53,6 @@ use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
 use Bonnier\Willow\Base\Traits\DateTimeZoneTrait;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
-use Bonnier\WP\ContentHub\Editor\Models\ACF\Composite\CompositeFieldGroup;
-use Bonnier\WP\ContentHub\Editor\Models\WpTaxonomy;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\WP\Cxense\Services\WidgetDocumentQuery;
 use Bonnier\WP\Cxense\WpCxense;
@@ -208,7 +207,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     {
 
         if ($postId = $this->getId()) {
-            if ($this->getKind() === CompositeFieldGroup::KIND_TYPE_SHELL) {
+            if ($this->getKind() === 'Shell') {
                 return $this->getShellLink();
             }
             return get_permalink($postId);

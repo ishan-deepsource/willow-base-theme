@@ -3,16 +3,13 @@
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
 use Bonnier\Willow\Base\Models\Contracts\Root\TranslationContract;
+use Bonnier\Willow\Base\Models\WpComposite;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\StoryTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentAudioTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TranslationTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
 use Bonnier\Willow\Base\Traits\UrlTrait;
-use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
-use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
-use Bonnier\WP\Cxense\Parsers\Document;
-use Bonnier\WP\Cxense\Services\WidgetDocumentQuery;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 use Bonnier\Willow\Base\Helpers\Cache;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
@@ -24,7 +21,6 @@ use Bonnier\Willow\Base\Transformers\Api\Root\ImageTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Category\CategoryTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Tag\TagTransformer;
-use Bonnier\WP\Cxense\WpCxense;
 use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 use WP_Post;

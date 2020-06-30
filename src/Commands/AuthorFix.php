@@ -2,13 +2,15 @@
 
 namespace Bonnier\Willow\Base\Commands;
 
-use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
+use Bonnier\Willow\Base\Models\WpAuthor;
+use Bonnier\Willow\Base\Models\WpComposite;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use WP_CLI;
 use WP_CLI_Command;
 
 class AuthorFix extends WP_CLI_Command
 {
-    const CMD_NAMESPACE = 'author';
+    private const CMD_NAMESPACE = 'author';
 
     public static function register()
     {
@@ -77,26 +79,20 @@ class AuthorFix extends WP_CLI_Command
 
     public function fixAll()
     {
-        $users = [
-            'da' => 'Redaktionen',
-            'sv' => 'Redaktionen SE',
-            'nb' => 'Redaksjonen',
-            'fi' => 'Toimitus',
-            'nl' => 'Redactie',
-        ];
-
-        foreach ($users as $language => $username) {
-            $user = get_user_by('login', $username);
-            if (empty($user)) {
-                WP_CLI::line('exit');
+        collect(LanguageProvider::getLanguageList())->each(function ($language) {
+            $author = WpAuthor::getDefaultAuthor($language->slug);
+            if (empty($author)) {
+                WP_CLI::error('Could not get default user');
                 return;
             }
-            WP_CLI::line();
-            WP_CLI::line(sprintf('Language: %s', strtoupper($language)));
-            WP_CLI::line(sprintf('Author: %s', $user->display_name));
-            WP_CLI::line(sprintf('ID: %s', $user->id));
 
-            self::fixLanguageAuthor($language, $user->id);
-        }
+            WP_CLI::line();
+            WP_CLI::line(sprintf('Language:    %s', strtoupper($language->slug)));
+            WP_CLI::line(sprintf('Login:       %s', $author->user_login));
+            WP_CLI::line(sprintf('DisplayName: %s', $author->display_name));
+            WP_CLI::line(sprintf('ID:          %s', $author->id));
+
+            self::fixLanguageAuthor($language->slug, $author->id);
+        });
     }
 }

@@ -2,6 +2,8 @@
 
 use Bonnier\Willow\Base\Bootstrap;
 
+add_action('after_setup_theme', [Bootstrap::class, 'setup']);
+
 add_action('init', function () {
     new Bootstrap();
 });
@@ -12,11 +14,9 @@ add_filter('register_post_type_args', [Bootstrap::class, 'registerPageRestContro
 remove_action('template_redirect', 'redirect_canonical');
 
 // Redirect all requests to index.php so the Vue app is loaded and 404s aren't thrown
-function remove_redirects()
-{
+add_action('init', function () {
     add_rewrite_rule('^/(.+)/?', 'index.php', 'top');
-}
-add_action('init', 'remove_redirects');
+});
 
 function get_queried_object_json()
 {

@@ -13,6 +13,7 @@ class Migrate
     {
         $dbVersion = intval(get_option(self::OPTION) ?: 0);
         $migrations = collect([
+            CreateFeatureDatesTable::class,
             CreateNotFoundTable::class,
             AlterNotFoundTableAddIgnoreEntry::class,
         ]);

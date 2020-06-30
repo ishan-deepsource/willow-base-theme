@@ -6,6 +6,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\Partials\TeaserListHyperlink;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
+use Bonnier\Willow\Base\Helpers\SortBy;
 use Bonnier\Willow\Base\Models\Contracts\Utilities\WidgetPaginationContract;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
@@ -14,7 +15,6 @@ use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\Types\TeaserListContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\HyperlinkContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
-use Bonnier\WP\ContentHub\Editor\Helpers\SortBy;
 use Illuminate\Support\Collection;
 
 class TeaserListAdapter extends AbstractContentAdapter implements TeaserListContract

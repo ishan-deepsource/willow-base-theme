@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Tests\Unit\Actions\Universal;
 
 use Bonnier\Willow\Base\Actions\Universal\SitemapFilters;
+use Bonnier\Willow\Base\Helpers\Utils;
 use Bonnier\Willow\Base\Tests\Unit\ClassTestCase;
 
 class SitemapFiltersTest extends ClassTestCase
@@ -24,7 +25,7 @@ class SitemapFiltersTest extends ClassTestCase
 
         $this->assertEquals(
             'https://example.test/category/subcategory/article-title',
-            SitemapFilters::removeApiSubdomain($permalink)
+            Utils::removeApiSubdomain($permalink)
         );
     }
 
@@ -34,7 +35,7 @@ class SitemapFiltersTest extends ClassTestCase
 
         $this->assertEquals(
             'https://example.test/category/subcategory/article-title',
-            SitemapFilters::removeApiSubdomain($permalink)
+            Utils::removeApiSubdomain($permalink)
         );
     }
 
@@ -44,7 +45,7 @@ class SitemapFiltersTest extends ClassTestCase
 
         $this->assertEquals(
             'https://example.test/category/subcategory/article-title',
-            SitemapFilters::removeApiSubdomain($permalink)
+            Utils::removeApiSubdomain($permalink)
         );
     }
 
@@ -54,7 +55,7 @@ class SitemapFiltersTest extends ClassTestCase
 
         $this->assertEquals(
             'https://example.test/category/subcategory/api-article-title',
-            SitemapFilters::removeApiSubdomain($permalink)
+            Utils::removeApiSubdomain($permalink)
         );
     }
 }

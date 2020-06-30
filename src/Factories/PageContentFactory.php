@@ -11,7 +11,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\QuoteTeaserAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\SeoTextAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\TaxonomyListAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\TeaserListAdapter;
-use Bonnier\WP\ContentHub\Editor\Helpers\AcfName;
+use Bonnier\Willow\Base\Helpers\AcfName;
 
 class PageContentFactory extends AbstractModelFactory
 {

@@ -8,9 +8,9 @@ use GuzzleHttp\Psr7\Response;
 
 class TranslationManagerService
 {
-    const CACHE_GROUP = 'translation-manager';
-    const CACHE_KEY = 'translations';
-    const CACHE_EXPIRE = "3200";
+    private const CACHE_GROUP = 'translation-manager';
+    private const CACHE_KEY = 'translations';
+    private const CACHE_EXPIRE = '3200';
 
     private $client;
     private $serviceId;
@@ -40,7 +40,7 @@ class TranslationManagerService
                 ];
                 set_transient($cacheKey, $result);
             } catch (Exception $e) {
-                if(!empty($result['data'])) { // Avoid downtime if the cache is already populated
+                if (!empty($result['data'])) { // Avoid downtime if the cache is already populated
                     return $result['data'];
                 }
                 throw new Exception(

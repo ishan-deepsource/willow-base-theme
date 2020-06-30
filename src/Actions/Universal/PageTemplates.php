@@ -2,7 +2,7 @@
 
 namespace Bonnier\Willow\Base\Actions\Universal;
 
-use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
+use Bonnier\Willow\Base\Models\WpComposite;
 use Bonnier\WP\SiteManager\Exceptions\SiteNotFoundException;
 use Bonnier\WP\SiteManager\WpSiteManager;
 

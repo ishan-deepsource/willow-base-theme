@@ -3,10 +3,10 @@
 namespace Bonnier\Willow\Base\Controllers\App;
 
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
+use Bonnier\Willow\Base\Helpers\SortBy;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
-use Bonnier\WP\ContentHub\Editor\Helpers\SortBy;
 
 class ContentController extends BaseController
 {
