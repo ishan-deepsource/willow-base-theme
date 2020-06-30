@@ -58,6 +58,7 @@ use Bonnier\WP\Cxense\Services\WidgetDocumentQuery;
 use Bonnier\WP\Cxense\WpCxense;
 use DateTime;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 /**
  * Class CompositeAdapter
@@ -322,7 +323,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     public function getCanonicalUrl(): ?string
     {
         if (isset($this->acfFields['canonical_url']) && $url = $this->acfFields['canonical_url']) {
-            return $url;
+            return $this->stripApi($url);
         }
 
         return $this->getFullUrl(get_permalink($this->getId()));
