@@ -5,7 +5,6 @@ namespace Bonnier\Willow\Base\Models\ACF\Composite;
 use Bonnier\Willow\Base\Models\ACF\ACFField;
 use Bonnier\Willow\Base\Models\ACF\ACFGroup;
 use Bonnier\Willow\Base\Models\ACF\ACFLayout;
-use Bonnier\Willow\Base\Models\ACF\Fields\ColorPicker;
 use Bonnier\Willow\Base\Models\ACF\Fields\FileField;
 use Bonnier\Willow\Base\Models\ACF\Fields\FlexibleContentField;
 use Bonnier\Willow\Base\Models\ACF\Fields\ImageField;
@@ -224,7 +223,6 @@ class CompositeFieldGroup
         $content->addLayout(self::getQuoteWidget());
         $content->addLayout(self::getNewsletterWidget());
         $content->addLayout(self::getChaptersSummaryWidget());
-        $content->addLayout(self::getColorPicker());
 
         return apply_filters(sprintf('willow/acf/field=%s', $content->getKey()), $content);
     }
