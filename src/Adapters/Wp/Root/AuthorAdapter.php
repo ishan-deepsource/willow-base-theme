@@ -4,6 +4,8 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
+use Bonnier\Willow\Base\Models\WpComposite;
+use Bonnier\Willow\Base\Models\WpUserProfile;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;

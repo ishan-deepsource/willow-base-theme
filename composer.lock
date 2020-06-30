@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c9c0ca4ba88b6affd9bb1eeab0984c44",
+    "content-hash": "fc1fd0d45114dc8612bf11dd461a8dca",
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
@@ -97,6 +97,53 @@
                 "wordpress"
             ],
             "time": "2020-06-29T12:54:44+00:00"
+        },
+        {
+            "name": "bonnier/php-video-helper",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BenjaminMedia/video-helper.git",
+                "reference": "0ab5e775899d56ee9dc23314ca842c6275817487"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/BenjaminMedia/video-helper/zipball/0ab5e775899d56ee9dc23314ca842c6275817487",
+                "reference": "0ab5e775899d56ee9dc23314ca842c6275817487",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Bonnier\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bonnier Publications",
+                    "email": "interactive@bonnier.dk"
+                },
+                {
+                    "name": "Mohamed Salem Lamiri",
+                    "email": "mohamed.lamiri@bonnier.dk"
+                }
+            ],
+            "description": "Parses URLs from major cloud video providers (Youtube, Vimeo, 23Video). Capable of returning keys from various video embed and link urls to manipulate and access videos in various ways.",
+            "keywords": [
+                "23Video",
+                "bonnier",
+                "video helper",
+                "vimeo",
+                "youtube"
+            ],
+            "time": "2018-06-21T11:43:43+00:00"
         },
         {
             "name": "bonnier/willow-mu-plugins",
@@ -749,6 +796,51 @@
             "time": "2019-07-01T23:21:34+00:00"
         },
         {
+            "name": "illuminate/container",
+            "version": "v5.7.28",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/container.git",
+                "reference": "8c3a75e464d59509ae88db152cab61a3f115b9ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/container/zipball/8c3a75e464d59509ae88db152cab61a3f115b9ec",
+                "reference": "8c3a75e464d59509ae88db152cab61a3f115b9ec",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "5.7.*",
+                "illuminate/support": "5.7.*",
+                "php": "^7.1.3",
+                "psr/container": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Container\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "The Illuminate Container package.",
+            "homepage": "https://laravel.com",
+            "time": "2019-02-11T13:48:57+00:00"
+        },
+        {
             "name": "illuminate/contracts",
             "version": "v5.7.28",
             "source": {
@@ -791,6 +883,65 @@
             "description": "The Illuminate Contracts package.",
             "homepage": "https://laravel.com",
             "time": "2019-02-12T07:46:48+00:00"
+        },
+        {
+            "name": "illuminate/database",
+            "version": "v5.7.28",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/database.git",
+                "reference": "c0702cb8c665cab8d080a81de5a44ac672b26d62"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/database/zipball/c0702cb8c665cab8d080a81de5a44ac672b26d62",
+                "reference": "c0702cb8c665cab8d080a81de5a44ac672b26d62",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/container": "5.7.*",
+                "illuminate/contracts": "5.7.*",
+                "illuminate/support": "5.7.*",
+                "php": "^7.1.3"
+            },
+            "suggest": {
+                "doctrine/dbal": "Required to rename columns and drop SQLite columns (^2.6).",
+                "fzaninotto/faker": "Required to use the eloquent factory builder (^1.4).",
+                "illuminate/console": "Required to use the database commands (5.7.*).",
+                "illuminate/events": "Required to use the observers with Eloquent (5.7.*).",
+                "illuminate/filesystem": "Required to use the migrations (5.7.*).",
+                "illuminate/pagination": "Required to paginate the result set (5.7.*)."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Database\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "The Illuminate Database package.",
+            "homepage": "https://laravel.com",
+            "keywords": [
+                "database",
+                "laravel",
+                "orm",
+                "sql"
+            ],
+            "time": "2019-02-20T03:55:15+00:00"
         },
         {
             "name": "illuminate/support",
@@ -1102,6 +1253,70 @@
                 "rest"
             ],
             "time": "2017-06-12T11:04:56+00:00"
+        },
+        {
+            "name": "league/html-to-markdown",
+            "version": "4.9.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/html-to-markdown.git",
+                "reference": "1dcd0f85de786f46a7f224a27cc3d709ddd2a68c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/html-to-markdown/zipball/1dcd0f85de786f46a7f224a27cc3d709ddd2a68c",
+                "reference": "1dcd0f85de786f46a7f224a27cc3d709ddd2a68c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-xml": "*",
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "mikehaertl/php-shellcommand": "~1.1.0",
+                "phpunit/phpunit": "^4.8|^5.7",
+                "scrutinizer/ocular": "~1.1"
+            },
+            "bin": [
+                "bin/html-to-markdown"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.10-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\HTMLToMarkdown\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Colin O'Dell",
+                    "email": "colinodell@gmail.com",
+                    "homepage": "https://www.colinodell.com",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Nick Cernis",
+                    "email": "nick@cern.is",
+                    "homepage": "http://modernnerd.net",
+                    "role": "Original Author"
+                }
+            ],
+            "description": "An HTML-to-markdown conversion helper for PHP",
+            "homepage": "https://github.com/thephpleague/html-to-markdown",
+            "keywords": [
+                "html",
+                "markdown"
+            ],
+            "time": "2019-12-28T01:32:28+00:00"
         },
         {
             "name": "league/oauth2-client",
