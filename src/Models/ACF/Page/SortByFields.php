@@ -26,16 +26,20 @@ class SortByFields
         self::$widgetName = $widgetName;
         self::$config = $config;
         self::$sortByField = 'field_' . hash('md5', $widgetName . AcfName::FIELD_SORT_BY);
-        return collect([
+        $fields = [
             self::getTabField(),
             self::getOptionsField(),
-            self::getTeaserAmountField(),
+        ];
+        if ($teaserAmount = self::getTeaserAmountField()) {
+            array_push($fields, $teaserAmount);
+        }
+        return array_merge($fields, [
             self::getSkipTeasersAmountField(),
             self::getTeaserListField(),
             self::getCategoryField(),
             self::getTagField(),
-            self::getUserField(),
-        ])->rejectNullValues()->toArray();
+            self::getUserField()
+        ]);
     }
 
     public static function getTabField(): ACFField
@@ -70,12 +74,20 @@ class SortByFields
     public static function getTeaserAmountField(): ?ACFField
     {
         if (self::getMaxTeasers() > 1) {
-            $field = new NumberField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_TEASER_AMOUNT)));
+            $field = new NumberField(
+                sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_TEASER_AMOUNT))
+            );
             $field->setLabel('Amount of Teasers to display')
                 ->setName(AcfName::FIELD_TEASER_AMOUNT)
-                ->setInstructions('How many teasers should it contain?<br><b>Note:</b> Cxense max Teasers is configured to 10.')
+                ->setInstructions(
+                    'How many teasers should it contain?<br><b>Note:</b> Cxense max Teasers is configured to 10.'
+                )
                 ->setRequired(true)
-                ->setConditionalLogic(new ACFConditionalLogic(self::$sortByField, ACFConditionalLogic::OPERATOR_NOT_EQUALS, SortBy::MANUAL))
+                ->setConditionalLogic(new ACFConditionalLogic(
+                    self::$sortByField,
+                    ACFConditionalLogic::OPERATOR_NOT_EQUALS,
+                    SortBy::MANUAL
+                ))
                 ->setDefaultValue(self::getDefaultTeaserAmount())
                 ->setMin(self::getMinTeasers())
                 ->setMax(self::getMaxTeasers());
@@ -87,11 +99,17 @@ class SortByFields
 
     public static function getSkipTeasersAmountField(): ACFField
     {
-        $field = new NumberField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_SKIP_TEASERS_AMOUNT)));
+        $field = new NumberField(
+            sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_SKIP_TEASERS_AMOUNT))
+        );
         $field->setLabel('Amount of Teasers skip')
             ->setName(AcfName::FIELD_SKIP_TEASERS_AMOUNT)
             ->setInstructions('How many teasers should it skip?')
-            ->setConditionalLogic(new ACFConditionalLogic(self::$sortByField, ACFConditionalLogic::OPERATOR_EQUALS, SortBy::CUSTOM))
+            ->setConditionalLogic(new ACFConditionalLogic(
+                self::$sortByField,
+                ACFConditionalLogic::OPERATOR_EQUALS,
+                SortBy::CUSTOM
+            ))
             ->setMin(0)
             ->setMax(PHP_INT_MAX);
 
@@ -100,11 +118,17 @@ class SortByFields
 
     public static function getTeaserListField(): ACFField
     {
-        $field = new CustomRelationshipField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_TEASER_LIST)));
+        $field = new CustomRelationshipField(
+            sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_TEASER_LIST))
+        );
         $field->setLabel('Teasers')
             ->setName(AcfName::FIELD_TEASER_LIST)
             ->setRequired(true)
-            ->setConditionalLogic(new ACFConditionalLogic(self::$sortByField, ACFConditionalLogic::OPERATOR_EQUALS, SortBy::MANUAL))
+            ->setConditionalLogic(new ACFConditionalLogic(
+                self::$sortByField,
+                ACFConditionalLogic::OPERATOR_EQUALS,
+                SortBy::MANUAL
+            ))
             ->setPostTypes([
                 WpComposite::POST_TYPE
             ])
@@ -175,7 +199,11 @@ class SortByFields
         $field = new UserField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_USER)));
         $field->setLabel('Author')
             ->setName(AcfName::FIELD_USER)
-            ->setConditionalLogic(new ACFConditionalLogic(self::$sortByField, ACFConditionalLogic::OPERATOR_EQUALS, SortBy::AUTHOR))
+            ->setConditionalLogic(new ACFConditionalLogic(
+                self::$sortByField,
+                ACFConditionalLogic::OPERATOR_EQUALS,
+                SortBy::AUTHOR
+            ))
             ->setRole('editor')
             ->setAllowNull(true)
             ->setMultiple(false)
