@@ -263,7 +263,7 @@ class MetaFieldGroup
     private static function registerSitemapHooks()
     {
         add_filter('acf/update_value/key=' . static::SITEMAP_FIELD, function ($hideFromSiteMap, $postId) {
-            if ('Shell' === get_field(CompositeFieldGroup::KIND_FIELD, $postId)) {
+            if (CompositeFieldGroup::SHELL_VALUE === get_field(CompositeFieldGroup::KIND_FIELD, $postId)) {
                 // Force hide from sitemap allways
                 $hideFromSiteMap = 1;
             }

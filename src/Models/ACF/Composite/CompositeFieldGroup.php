@@ -32,6 +32,7 @@ class CompositeFieldGroup
     public const VIDEO_TEASER_IMAGE_FIELD = 'field_5a8d7ae021e44';
     public const SHELL_LINK_FIELD = 'field_5d66623efb36e';
     public const KIND_FIELD = 'field_58e388862daa8';
+    public const SHELL_VALUE = 'Shell';
 
     private const AUTHOR_FIELD = 'field_5af9888b4b7a1';
     private const LOCKED_CONTENT_FIELD = 'field_5921f0c676974';
@@ -83,7 +84,7 @@ class CompositeFieldGroup
             ->setRequired(true)
             ->setChoices([
                 'Article' => 'Article',
-                'Shell' => 'Shell',
+                self::SHELL_VALUE => self::SHELL_VALUE,
                 'Story' => 'Story',
             ])
             ->setDefaultValue('Article')
@@ -152,7 +153,7 @@ class CompositeFieldGroup
             ->setConditionalLogic(new ACFConditionalLogic(
                 self::KIND_FIELD,
                 ACFConditionalLogic::OPERATOR_NOT_EQUALS,
-                'Shell'
+                self::SHELL_VALUE
             ));
         return apply_filters(sprintf('willow/acf/field=%s', $articleContent->getKey()), $articleContent);
     }
@@ -170,7 +171,7 @@ class CompositeFieldGroup
             ->setConditionalLogic(new ACFConditionalLogic(
                 self::KIND_FIELD,
                 ACFConditionalLogic::OPERATOR_NOT_EQUALS,
-                'Shell'
+                self::SHELL_VALUE
             ));
 
         return apply_filters(sprintf('willow/acf/field=%s', $lockedContent->getKey()), $lockedContent);
@@ -180,7 +181,7 @@ class CompositeFieldGroup
     {
         $userRoleConditional = new ACFConditionalLogic();
         $userRoleConditional->add(self::LOCKED_CONTENT_FIELD, ACFConditionalLogic::OPERATOR_EQUALS, '1')
-            ->add(self::KIND_FIELD, ACFConditionalLogic::OPERATOR_NOT_EQUALS, 'Shell');
+            ->add(self::KIND_FIELD, ACFConditionalLogic::OPERATOR_NOT_EQUALS, self::SHELL_VALUE);
         $userRole = new SelectField('field_5921f0e576975');
         $userRole->setLabel('Required User Role')
             ->setName('required_user_role')
@@ -202,7 +203,7 @@ class CompositeFieldGroup
             ->setConditionalLogic(new ACFConditionalLogic(
                 self::KIND_FIELD,
                 ACFConditionalLogic::OPERATOR_NOT_EQUALS,
-                'Shell'
+                self::SHELL_VALUE
             ))
             ->setButtonLabel('Add Widget');
 
@@ -237,7 +238,7 @@ class CompositeFieldGroup
             ->setConditionalLogic(new ACFConditionalLogic(
                 self::KIND_FIELD,
                 ACFConditionalLogic::OPERATOR_EQUALS,
-                'Shell'
+                self::SHELL_VALUE
             ))
             ->setPlaceholder('Example of valid URL: https://google.com');
 

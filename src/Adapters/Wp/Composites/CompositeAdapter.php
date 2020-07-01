@@ -13,6 +13,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Vocabulary\VocabularyAdapter;
 use Bonnier\Willow\Base\Factories\CompositeContentFactory;
 use Bonnier\Willow\Base\Factories\Contracts\ModelFactoryContract;
+use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ChaptersSummary;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Newsletter;
@@ -208,7 +209,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     {
 
         if ($postId = $this->getId()) {
-            if ($this->getKind() === 'Shell') {
+            if ($this->getKind() === CompositeFieldGroup::SHELL_VALUE) {
                 return $this->getShellLink();
             }
             return get_permalink($postId);
