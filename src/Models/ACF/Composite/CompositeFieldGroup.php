@@ -31,8 +31,8 @@ class CompositeFieldGroup
     public const CONTENT_FIELD = 'field_58aae476809c6';
     public const VIDEO_TEASER_IMAGE_FIELD = 'field_5a8d7ae021e44';
     public const SHELL_LINK_FIELD = 'field_5d66623efb36e';
+    public const KIND_FIELD = 'field_58e388862daa8';
 
-    private const KIND_FIELD = 'field_58e388862daa8';
     private const AUTHOR_FIELD = 'field_5af9888b4b7a1';
     private const LOCKED_CONTENT_FIELD = 'field_5921f0c676974';
     private const IMAGE_LINK_FIELD = 'field_5ba0c550e9e5f';
