@@ -284,26 +284,60 @@ class PageFieldGroup
             ->setLabel('Taxonomy Teaser List');
 
         $title = new TextField('field_5bc0557ad2015');
+        $title->setLabel('Title')
+            ->setName(AcfName::FIELD_TITLE)
+            ->setRequired(true);
 
         $layout->addSubField($title);
 
         $description = new MarkdownField('field_5bc05582d2016');
+        $description->setLabel('Description')
+            ->setName(AcfName::FIELD_DESCRIPTION)
+            ->setMdeConfig(MarkdownField::CONFIG_SIMPLE);
 
         $layout->addSubField($description);
 
         $image = new ImageField('field_5bc05591d2017');
+        $image->setLabel('Image')
+            ->setName(AcfName::FIELD_IMAGE)
+            ->setReturnFormat(ACFField::RETURN_ARRAY)
+            ->setPreviewSize(ImageField::PREVIEW_THUMB);
 
         $layout->addSubField($image);
 
         $label = new TextField('field_5bc055a2d2018');
+        $label->setLabel('Label')
+            ->setName(AcfName::FIELD_LABEL);
 
         $layout->addSubField($label);
 
         $hint = new RadioField('field_5bc0566fff85d');
+        $hint->setLabel('Display Format')
+            ->setName(AcfName::FIELD_DISPLAY_HINT)
+            ->setChoice(AcfName::DISPLAY_HINT_DEFAULT, 'Default')
+            ->setChoice(AcfName::DISPLAY_HINT_PRESENTATION, 'Presentation')
+            ->setDefaultValue(AcfName::DISPLAY_HINT_DEFAULT)
+            ->setLayout('vertical')
+            ->setReturnFormat(ACFField::RETURN_VALUE);
 
         $layout->addSubField($hint);
 
         $taxonomy = new SelectField(self::TAXONOMY_FIELD);
+        $taxonomy->setLabel('Taxonomy')
+            ->setName(AcfName::FIELD_TAXONOMY)
+            ->addChoice(AcfName::FIELD_CATEGORY, 'Category')
+            ->addChoice(AcfName::FIELD_TAG, 'Tag')
+            ->setDefaultValue([
+                AcfName::FIELD_CATEGORY
+            ])
+            ->setAllowNull(false)
+            ->setMultiple(false)
+            ->setReturnFormat(ACFField::RETURN_VALUE)
+            ->setAjax(false);
+
+        WpTaxonomy::get_custom_taxonomies()->each(function ($customTaxonomy) use (&$taxonomy) {
+            $taxonomy->addChoice($customTaxonomy->machine_name, $customTaxonomy->name);
+        });
 
         $layout->addSubField($taxonomy);
 
@@ -508,7 +542,6 @@ class PageFieldGroup
             ->setReturnFormat(ACFField::RETURN_OBJECT);
 
         $layout->addSubField($composites);
-
 
         return apply_filters(sprintf('willow/acf/layout=%s', $layout->getKey()), $layout);
     }
