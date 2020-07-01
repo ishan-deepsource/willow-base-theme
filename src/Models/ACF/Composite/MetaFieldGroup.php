@@ -63,6 +63,7 @@ class MetaFieldGroup
         acf_add_local_field_group($filteredGroup->toArray());
 
         self::registerTranslations();
+        self::registerSitemapHooks();
     }
 
     public static function getCanonicalUrlField(): ACFField
@@ -257,5 +258,16 @@ class MetaFieldGroup
         collect(static::COMMERCIAL_TYPES)->each(function ($commercialType) {
             LanguageProvider::registerStringTranslation($commercialType, $commercialType, 'content-hub-editor');
         });
+    }
+
+    private static function registerSitemapHooks()
+    {
+        add_filter('acf/update_value/key=' . static::SITEMAP_FIELD, function ($hideFromSiteMap, $postId) {
+            if (CompositeFieldGroup::SHELL_VALUE === get_field(CompositeFieldGroup::KIND_FIELD, $postId)) {
+                // Force hide from sitemap allways
+                $hideFromSiteMap = 1;
+            }
+            return $hideFromSiteMap;
+        }, 10, 2);
     }
 }
