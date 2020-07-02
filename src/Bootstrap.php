@@ -43,6 +43,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Bootstrap
 {
+    private const FLUSH_REWRITE_RULES_FLAG = 'contenthub-editor-permalinks-rewrite-flush-rules-flag';
+
     /** @var NotFoundListController */
     private static $notFoundListController;
     /** @var NotFoundSettingsController */
@@ -66,6 +68,15 @@ class Bootstrap
 
     public static function setup()
     {
+        /** @var \WP_Rewrite $wp_rewrite */
+        global $wp_rewrite;
+        $wp_rewrite->set_permalink_structure('/%category%/%postname%/');
+        $wp_rewrite->add_permastruct('category', '/%category%');
+        $wp_rewrite->add_permastruct('post_tag', '/%post_tag%');
+        $wp_rewrite->use_trailing_slashes = false;
+        $wp_rewrite->flush_rules();
+
+        update_option(self::FLUSH_REWRITE_RULES_FLAG, true);
         add_action('admin_enqueue_scripts', [__CLASS__, 'loadAdminScripts']);
 
         CollectionHelper::register();
