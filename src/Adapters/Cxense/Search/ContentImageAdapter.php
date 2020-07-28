@@ -33,6 +33,11 @@ class ContentImageAdapter implements ContentImageContract
         return $this->url;
     }
 
+    public function getVideoUrl(): ?string
+    {
+        return null;
+    }
+
     public function getTitle(): ?string
     {
         return null;
