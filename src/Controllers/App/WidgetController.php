@@ -4,9 +4,9 @@ namespace Bonnier\Willow\Base\Controllers\App;
 
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\TeaserListAdapter;
 use Bonnier\Willow\Base\Controllers\Formatters\Api\AbstractApiController;
+use Bonnier\Willow\Base\Helpers\AcfName;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TeaserList;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\TeaserListTransformer;
-use Bonnier\WP\ContentHub\Editor\Helpers\AcfName;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
 

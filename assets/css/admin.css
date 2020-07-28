@@ -1,0 +1,68 @@
+label.setting[data-setting="caption"],
+.acf-media-modal.-edit .media-sidebar .attachment-details .setting[data-setting="caption"],
+.wp_attachment_details.edit-form-section label[for="attachment_caption"],
+textarea#attachment_caption {
+    display:none;
+}
+
+body.taxonomy-post_tag form[name=edittag] table.form-table:first-of-type tr#term-translations,
+body.taxonomy-category form[name=edittag] table.form-table:first-of-type tr#term-translations,
+body.taxonomy-post_tag form[name=edittag] #delete-link,
+body.taxonomy-category form[name=edittag] #delete-link,
+body.post-type-contenthub_composite div#col-left,
+body.post-type-post div#col-left
+{
+    display: none;
+}
+body.post-type-contenthub_composite div#col-right,
+body.post-type-post div#col-right
+{
+    width: 100%;
+}
+
+/* Hide "Add new tag" on post */
+div.acf-field-taxonomy[data-name="tags"] div.acf-actions.-hover {
+    display: none;
+}
+
+
+div.image-focalpoint-actions {
+  clear: both;
+  padding-top: 20px;
+}
+
+div.image-focalpoint-actions input {
+  width: 200px !important;
+}
+
+div.image-focalpoint-actions input,
+div.image-focalpoint-actions button,
+div.image-focalpoint-actions .dashicons {
+  margin-right: 10px !important;
+}
+
+div.image-focalpoint-actions .spinner {
+  float: none;
+  margin-top: -2px;
+}
+
+div.image-focalpoint-actions .dashicons {
+  margin-top: 4px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+div.image-focalpoint-actions .dashicons-yes {
+  background-color: #64b450;
+}
+
+div.image-focalpoint-actions .dashicons-no {
+  background-color: #a00;
+}
+
+#categorydiv.postbox,
+#tagsdiv-post_tag.postbox,
+#slugdiv.postbox,
+#authordiv.postbox {
+    display:none !important;
+}

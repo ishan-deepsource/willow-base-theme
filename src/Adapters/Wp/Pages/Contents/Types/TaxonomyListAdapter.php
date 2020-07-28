@@ -4,16 +4,15 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types;
 
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
+use Bonnier\Willow\Base\Helpers\AcfName;
+use Bonnier\Willow\Base\Models\WpTaxonomy;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Factories\TaxonomyFactory;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Base\Terms\Category;
 use Bonnier\Willow\Base\Models\Base\Terms\Tag;
-use Bonnier\Willow\Base\Models\Base\Terms\Vocabulary;
 use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\Types\TaxonomyListContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
-use Bonnier\WP\ContentHub\Editor\Helpers\AcfName;
-use Bonnier\WP\ContentHub\Editor\Models\WpTaxonomy;
 use Illuminate\Support\Collection;
 
 /**

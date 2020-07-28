@@ -5,6 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Pages;
 
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
+use Bonnier\Willow\Base\Helpers\AcfName;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\CommercialSpot;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\QuoteTeaser;
 use Bonnier\Willow\Base\Models\Base\Root\Translation;
@@ -24,7 +25,6 @@ use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Traits\DateTimeZoneTrait;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
-use Bonnier\WP\ContentHub\Editor\Helpers\AcfName;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\SeoText;
 use DateTime;
 use Illuminate\Support\Collection;
@@ -38,7 +38,8 @@ use WP_Post;
  */
 class PageAdapter extends AbstractWpAdapter implements PageContract
 {
-    use DateTimeZoneTrait, UrlTrait;
+    use DateTimeZoneTrait;
+    use UrlTrait;
 
     protected $acfFields;
     protected $pageContents;

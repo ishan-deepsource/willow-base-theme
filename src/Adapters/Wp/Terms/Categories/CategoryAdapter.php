@@ -3,8 +3,10 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Categories;
 
 use Bonnier\Willow\Base\Factories\CategoryContentFactory;
+use Bonnier\Willow\Base\Helpers\AcfName;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\CommercialSpot;
 use Bonnier\Willow\Base\Models\Base\Root\Translation;
+use Bonnier\Willow\Base\Models\WpComposite;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\BannerPlacement;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\FeaturedContent;
@@ -13,8 +15,6 @@ use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\SeoText;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TaxonomyList;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\TeaserList;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
-use Bonnier\WP\ContentHub\Editor\Helpers\AcfName;
-use Bonnier\WP\ContentHub\Editor\Models\WpComposite;
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\Partials\CategoryImageAdapter;
@@ -25,7 +25,6 @@ use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
-use Bonnier\WP\SiteManager\WpSiteManager;
 use Illuminate\Support\Collection;
 
 /**
