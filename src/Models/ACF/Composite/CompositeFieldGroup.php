@@ -37,6 +37,7 @@ class CompositeFieldGroup
     private const AUTHOR_FIELD = 'field_5af9888b4b7a1';
     private const LOCKED_CONTENT_FIELD = 'field_5921f0c676974';
     private const IMAGE_LINK_FIELD = 'field_5ba0c550e9e5f';
+    private const VIDEO_LINK_FIELD = 'field_5f1ece99714b3';
     private const SOURCE_CODE_FIELD = 'field_5e2ebd197a759';
 
     public static function register(): void
@@ -281,6 +282,13 @@ class CompositeFieldGroup
 
         $imageWidget->addSubField($file);
 
+        $videoUrl = new UrlField(self::VIDEO_LINK_FIELD);
+        $videoUrl->setLabel('Vimeo video url')
+            ->setName('vimeo_video_url')
+            ->setInstructions('The embed url for the Vimeo video.');
+
+        $imageWidget->addSubField($videoUrl);
+
         $lockedContent = new TrueFalseField('field_5922bd8e5cd9e');
         $lockedContent->setLabel('Locked Content')
             ->setName('locked_content')
@@ -481,7 +489,7 @@ class CompositeFieldGroup
         $urlWidget = new ACFLayout('590b1798c8768');
         $urlWidget->setName('link')
             ->setLabel('Link');
-        
+
         $url = new TextField('field_590b17c4c876a');
         $url->setLabel('URL')
             ->setName('url')
@@ -1015,7 +1023,6 @@ class CompositeFieldGroup
             }
             return null;
         }, 10, 1);
-        
         add_filter(sprintf('acf/validate_value/key=%s', self::SOURCE_CODE_FIELD), function ($valid, $value) {
             if ($valid && !empty($value) && strlen($value) !== 6) {
                 $valid = 'Please make sure your source code is in the right format';
@@ -1023,5 +1030,28 @@ class CompositeFieldGroup
 
             return $valid;
         }, 10, 4);
+        add_filter(sprintf('acf/validate_value/key=%s', self::VIDEO_LINK_FIELD), function ($valid, $value) {
+            if( $valid !== true ) {
+                return $valid;
+            }
+            if (strpos($value, 'vimeo') === false) {
+                $valid = 'Url must be a Vimeo url';
+                //$valid = false;
+            }
+            return $valid;
+        }, 10, 4);
     }
+
+    /*public static function validateVideoUrl($valid, $value, $field, $input_name) {
+
+        if( $valid !== true ) {
+            return $valid;
+        }
+
+        if (strpos($value, 'vimeo') === false) {
+            $valid = false;
+        }
+
+        return $valid;
+    }*/
 }

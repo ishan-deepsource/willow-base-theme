@@ -31,6 +31,11 @@ class ContentImage extends AbstractContent implements ContentImageContract
         return $this->model->getUrl();
     }
 
+    public function getVideoUrl() : ?string
+    {
+        return $this->model->getVideoUrl();
+    }
+
     public function getCaption() : ?string
     {
         return $this->model->getCaption();

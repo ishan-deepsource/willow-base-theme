@@ -14,6 +14,7 @@ class ContentImageTransformer extends TransformerAbstract
             'is_lead' => $image->isLead(),
             'file' => $image->isLocked() ? null : with(new ImageTransformer())->transform($image),
             'display_hint' => $image->getDisplayHint(),
+            'video_url' => $image->getVideoUrl(),
         ];
     }
 }
