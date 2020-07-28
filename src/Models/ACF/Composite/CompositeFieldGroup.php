@@ -1036,22 +1036,8 @@ class CompositeFieldGroup
             }
             if (strpos($value, 'vimeo') === false) {
                 $valid = 'Url must be a Vimeo url';
-                //$valid = false;
             }
             return $valid;
         }, 10, 4);
     }
-
-    /*public static function validateVideoUrl($valid, $value, $field, $input_name) {
-
-        if( $valid !== true ) {
-            return $valid;
-        }
-
-        if (strpos($value, 'vimeo') === false) {
-            $valid = false;
-        }
-
-        return $valid;
-    }*/
 }
