@@ -17,6 +17,7 @@ class ParagraphListTransformer extends TransformerAbstract
             'title' => $paragraphList->getTitle(),
             'description' => $paragraphList->getDescription(),
             'image' => $this->transformImage($paragraphList),
+            'video_url' => $paragraphList->getVideoUrl(),
             'collapsible' => $paragraphList->isCollapsible(),
             'display_hint' => $paragraphList->getDisplayHint(),
             'items' => $this->transformItems($paragraphList)

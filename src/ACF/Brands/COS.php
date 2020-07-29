@@ -7,6 +7,7 @@ class COS extends Brand
     public static function register(): void
     {
         self::removeVideoUrlFromImageWidget();
+        self::removeVideoUrlFromParagraphListWidget();
         self::removeInventoryWidget();
     }
 }
