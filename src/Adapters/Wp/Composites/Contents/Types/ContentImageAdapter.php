@@ -52,7 +52,7 @@ class ContentImageAdapter extends AbstractContentAdapter implements ContentImage
 
     public function getVideoUrl(): ?string
     {
-        return $this->acfArray['video_url'] ?? null;
+        return $this->acfArray['video_url'] ?: null;
     }
 
     public function getTitle(): ?string

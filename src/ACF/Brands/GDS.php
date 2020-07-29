@@ -14,9 +14,10 @@ class GDS implements BrandInterface
     {
         $galleryField = CompositeFieldGroup::getGalleryWidget();
         add_filter(sprintf('willow/acf/layout=%s', $galleryField->getKey()), [__CLASS__, 'setGalleryDisplayHints']);
-
         $contentField = CompositeFieldGroup::getContentField();
         add_filter(sprintf('willow/acf/field=%s', $contentField->getKey()), [__CLASS__, 'removeInventory']);
+        $imageWidget = CompositeFieldGroup::getImageWidget();
+        add_filter(sprintf('willow/acf/field=%s', $imageWidget->getKey()), [__CLASS__, 'removeVideUrlField']);
     }
 
     public static function setGalleryDisplayHints(ACFLayout $gallery): ACFLayout
@@ -33,5 +34,11 @@ class GDS implements BrandInterface
     {
         $inventoryField = CompositeFieldGroup::getInventoryWidget();
         return $contentField->removeLayout($inventoryField->getKey());
+    }
+
+    public static function removeVideoUrlField(ACFLayout $imageWidget)
+    {
+        $videoUrlField = CompositeFieldGroup::getVideoUrlField();
+        return $imageWidget->removeSubField($videoUrlField->getKey());
     }
 }
