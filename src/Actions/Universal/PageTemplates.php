@@ -59,6 +59,7 @@ class PageTemplates
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'gradient' => 'Gradient',
                     'colorblock' => 'Farveblok',
+                    'timeline' => 'Timeline',
                 ]);
                 break;
             case 'HIS':
