@@ -97,6 +97,13 @@ class ACFLayout implements Arrayable
         return $this->subFields;
     }
 
+    public function removeSubField(string $key)
+    {
+        $this->subFields = array_filter($this->subFields, function (ACFField $subField) use ($key) {
+            return $subField->getKey() !== $key;
+        });
+    }
+
     public function mapSubFields(callable $callback): ACFLayout
     {
         $this->subFields = array_map($callback, $this->subFields);

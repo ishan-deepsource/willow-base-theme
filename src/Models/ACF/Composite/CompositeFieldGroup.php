@@ -282,6 +282,8 @@ class CompositeFieldGroup
 
         $imageWidget->addSubField($file);
 
+        $imageWidget->addSubField(self::getVideoUrlField());
+
         $lockedContent = new TrueFalseField('field_5922bd8e5cd9e');
         $lockedContent->setLabel('Locked Content')
             ->setName('locked_content')
