@@ -55,4 +55,9 @@ class ParagraphListAdapter extends AbstractContentAdapter implements ParagraphLi
                 is_null($item->getTitle());
         });
     }
+
+	public function getVideoUrl(): ?string
+	{
+		return array_get($this->acfArray, 'video_url') ?: null;
+	}
 }

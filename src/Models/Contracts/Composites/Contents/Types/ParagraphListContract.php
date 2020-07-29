@@ -19,4 +19,6 @@ interface ParagraphListContract extends ContentContract
     public function getDisplayHint(): ?string;
 
     public function getItems(): Collection;
+
+    public function getVideoUrl(): ?string ;
 }

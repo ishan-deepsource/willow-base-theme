@@ -12,6 +12,7 @@ class GDS extends Brand
     public static function register(): void
     {
         self::removeVideoUrlFromImageWidget();
+        self::removeVideoUrlFromParagraphListWidget();
         self::removeInventoryWidget();
 
         $galleryField = CompositeFieldGroup::getGalleryWidget();

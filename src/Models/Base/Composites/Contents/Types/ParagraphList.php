@@ -53,4 +53,9 @@ class ParagraphList extends AbstractContent implements ParagraphListContract
     {
         return $this->model->getItems();
     }
+
+	public function getVideoUrl(): ?string
+	{
+		return $this->model->getVideoUrl();
+	}
 }

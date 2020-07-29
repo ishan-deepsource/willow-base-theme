@@ -722,6 +722,13 @@ class CompositeFieldGroup
 
         $paragraphListWidget->addSubField($image);
 
+	    $videoUrl = new UrlField('field_5f214904627a6');
+	    $videoUrl->setLabel('Video Url')
+	             ->setName('video_url')
+	             ->setInstructions('The embed url for the video.');
+
+	    $paragraphListWidget->addSubField($videoUrl);
+
         $collapsible = new TrueFalseField('field_5bd30f723cdcc');
         $collapsible->setLabel('Collapsible')
             ->setName('collapsible')
