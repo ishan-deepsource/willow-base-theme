@@ -33,11 +33,11 @@ class CompositeFieldGroup
     public const SHELL_LINK_FIELD = 'field_5d66623efb36e';
     public const KIND_FIELD = 'field_58e388862daa8';
     public const SHELL_VALUE = 'Shell';
+    public const VIDEO_URL_FIELD_NAME = 'video_url';
 
     private const AUTHOR_FIELD = 'field_5af9888b4b7a1';
     private const LOCKED_CONTENT_FIELD = 'field_5921f0c676974';
     private const IMAGE_LINK_FIELD = 'field_5ba0c550e9e5f';
-    private const VIDEO_LINK_FIELD = 'field_5f1ece99714b3';
     private const SOURCE_CODE_FIELD = 'field_5e2ebd197a759';
 
     public static function register(): void
@@ -282,7 +282,12 @@ class CompositeFieldGroup
 
         $imageWidget->addSubField($file);
 
-        $imageWidget->addSubField(self::getVideoUrlField());
+        $videoUrl = new UrlField('field_5f1ece99714b3');
+        $videoUrl->setLabel('Video url')
+            ->setName(self::VIDEO_URL_FIELD_NAME)
+            ->setInstructions('The embed url for the Vimeo video.');
+
+        $imageWidget->addSubField($videoUrl);
 
         $lockedContent = new TrueFalseField('field_5922bd8e5cd9e');
         $lockedContent->setLabel('Locked Content')
@@ -724,7 +729,7 @@ class CompositeFieldGroup
 
 	    $videoUrl = new UrlField('field_5f214904627a6');
 	    $videoUrl->setLabel('Video Url')
-	             ->setName('video_url')
+	             ->setName(self::VIDEO_URL_FIELD_NAME)
 	             ->setInstructions('The embed url for the video.');
 
 	    $paragraphListWidget->addSubField($videoUrl);
@@ -1011,16 +1016,6 @@ class CompositeFieldGroup
         return apply_filters(sprintf('willow/acf/layout=%s', $chaptersSummaryWidget->getKey()), $chaptersSummaryWidget);
     }
 
-    public static function getVideoUrlField()
-    {
-        $videoUrl = new UrlField(self::VIDEO_LINK_FIELD);
-        $videoUrl->setLabel('Video url')
-            ->setName('video_url')
-            ->setInstructions('The embed url for the Vimeo video.');
-
-        return $videoUrl;
-    }
-
     private static function registerHooks()
     {
         add_filter(sprintf('acf/load_value/key=%s', self::AUTHOR_FIELD), function ($value) {
@@ -1042,7 +1037,7 @@ class CompositeFieldGroup
 
             return $valid;
         }, 10, 4);
-        add_filter(sprintf('acf/validate_value/key=%s', self::VIDEO_LINK_FIELD), function ($valid, $value) {
+        add_filter(sprintf('acf/validate_value/name=%s', self::VIDEO_URL_FIELD_NAME), function ($valid, $value) {
             if( $valid !== true ) {
                 return $valid;
             }
