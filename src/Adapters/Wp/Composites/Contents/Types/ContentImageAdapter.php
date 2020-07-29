@@ -6,6 +6,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\Partials\ContentImageHyperlinkAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ColorPaletteAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
+use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Hyperlink;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
@@ -52,10 +53,7 @@ class ContentImageAdapter extends AbstractContentAdapter implements ContentImage
 
     public function getVideoUrl(): ?string
     {
-        if(isset($this->acfArray['video_url'])) {
-            return $this->acfArray['video_url'] ?: null;
-        }
-        return null;
+        return array_get($this->acfArray, CompositeFieldGroup::VIDEO_URL_FIELD_NAME) ?: null;
     }
 
     public function getTitle(): ?string

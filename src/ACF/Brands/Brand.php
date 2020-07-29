@@ -11,24 +11,24 @@ use Bonnier\Willow\Base\Models\ACF\Fields\FlexibleContentField;
 
 abstract class Brand implements BrandInterface
 {
+    public static function removeVideoUrlField(ACFLayout $layout)
+    {
+        $subFields = array_filter($layout->getSubFields(), function (ACFField $field) {
+            return $field->getName() !== CompositeFieldGroup::VIDEO_URL_FIELD_NAME;
+        });
+        return $layout->setSubFields($subFields);
+    }
+
     protected static function removeVideoUrlFromImageWidget()
     {
         $imageWidget = CompositeFieldGroup::getImageWidget();
-        add_filter(sprintf('willow/acf/layout=%s', $imageWidget->getKey()), function (ACFLayout $imageWidget) {
-            $videoUrlField = CompositeFieldGroup::getVideoUrlField();
-            return $imageWidget->removeSubField($videoUrlField->getKey());
-        });
+        add_filter(sprintf('willow/acf/layout=%s', $imageWidget->getKey()), [__CLASS__, 'removeVideoUrlField']);
     }
 
-    public static function removeVideoUrlFromParagraphListWidget(): void
+    protected static function removeVideoUrlFromParagraphListWidget(): void
     {
 	   $paragraphListWidget= CompositeFieldGroup::getParagraphListWidget();
-	    add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), function (ACFLayout $paragraphListWidget) {
-		    $subFields = array_filter($paragraphListWidget->getSubFields(), function (ACFField $field) {
-			    return $field->getName() !== 'video_url';
-		    });
-		  return $paragraphListWidget->setSubFields($subFields);
-	    });
+	    add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'removeVideoUrlField']);
     }
 
 	protected static function removeInventoryWidget()
