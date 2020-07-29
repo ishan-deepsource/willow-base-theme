@@ -1005,8 +1005,8 @@ class CompositeFieldGroup
     public static function getVideoUrlField()
     {
         $videoUrl = new UrlField(self::VIDEO_LINK_FIELD);
-        $videoUrl->setLabel('Vimeo video url')
-            ->setName('vimeo_video_url')
+        $videoUrl->setLabel('Video url')
+            ->setName('video_url')
             ->setInstructions('The embed url for the Vimeo video.');
 
         return $videoUrl;
