@@ -282,13 +282,6 @@ class CompositeFieldGroup
 
         $imageWidget->addSubField($file);
 
-        $videoUrl = new UrlField(self::VIDEO_LINK_FIELD);
-        $videoUrl->setLabel('Vimeo video url')
-            ->setName('vimeo_video_url')
-            ->setInstructions('The embed url for the Vimeo video.');
-
-        $imageWidget->addSubField($videoUrl);
-
         $lockedContent = new TrueFalseField('field_5922bd8e5cd9e');
         $lockedContent->setLabel('Locked Content')
             ->setName('locked_content')
@@ -1007,6 +1000,16 @@ class CompositeFieldGroup
             ->setLabel('Chapters summary');
 
         return apply_filters(sprintf('willow/acf/layout=%s', $chaptersSummaryWidget->getKey()), $chaptersSummaryWidget);
+    }
+
+    public static function getVideoUrlField()
+    {
+        $videoUrl = new UrlField(self::VIDEO_LINK_FIELD);
+        $videoUrl->setLabel('Vimeo video url')
+            ->setName('vimeo_video_url')
+            ->setInstructions('The embed url for the Vimeo video.');
+
+        return $videoUrl;
     }
 
     private static function registerHooks()
