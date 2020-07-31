@@ -1041,7 +1041,7 @@ class CompositeFieldGroup
             if( $valid !== true ) {
                 return $valid;
             }
-            if (strpos($value, 'vimeo') === false) {
+            if (isset($value) && !empty($value) && strpos($value, 'vimeo') === false) {
                 $valid = 'Url must be a Vimeo url';
             }
             return $valid;
