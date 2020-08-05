@@ -31,6 +31,11 @@ class CategoryTeaserAdapter extends AbstractTeaserAdapter
         return $this->category->getImage();
     }
 
+    public function getVideoUrl(): ?string
+    {
+        return null;
+    }
+
     public function getDescription(): string
     {
         return $this->category->getDescription() ?? '';

@@ -8,12 +8,14 @@ use Bonnier\Willow\Base\Models\ACF\Fields\ImageField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TabField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TextAreaField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TextField;
+use Bonnier\Willow\Base\Models\ACF\Fields\UrlField;
 use Bonnier\Willow\Base\Models\ACF\Properties\ACFLocation;
 use Bonnier\Willow\Base\Models\WpComposite;
 
 class TeaserFieldGroup
 {
     private const TEASER_IMAGE_FIELD = 'field_58e38da2194e3';
+    public const VIDEO_URL_FIELD_NAME = 'video_url';
 
     public static function register()
     {
@@ -36,6 +38,7 @@ class TeaserFieldGroup
         $group->addField(self::getSiteTeaserField());
         $group->addField(self::getTeaserTitleField());
         $group->addField(self::getTeaserImageField());
+        $group->addField(self::getTeaserVideoUrlField());
         $group->addField(self::getTeaserDescription());
         $group->addField(self::getSEOTeaser());
         $group->addField(self::getSEOTeaserTitle());
@@ -85,6 +88,16 @@ class TeaserFieldGroup
             ->setPreviewSize(ImageField::PREVIEW_MEDIUM);
 
         return apply_filters(sprintf('willow/acf/field=%s', $image->getKey()), $image);
+    }
+
+    public static function getTeaserVideoUrlField(): ACFField
+    {
+        $title = new UrlField('field_5f27cada40f60');
+        $title->setLabel('Video Url')
+            ->setName(self::VIDEO_URL_FIELD_NAME)
+            ->setInstructions('The embed url for the Vimeo video.');
+
+        return apply_filters(sprintf('willow/acf/field=%s', $title->getKey()), $title);
     }
 
     public static function getTeaserDescription(): ACFField
@@ -216,5 +229,14 @@ class TeaserFieldGroup
                 collect($_POST['acf'][CompositeFieldGroup::CONTENT_FIELD])
                     ->contains(CompositeFieldGroup::VIDEO_TEASER_IMAGE_FIELD, '1');
         });
+        add_filter(sprintf('acf/validate_value/name=%s', self::VIDEO_URL_FIELD_NAME), function ($valid, $value) {
+            if( $valid !== true ) {
+                return $valid;
+            }
+            if (isset($value) && !empty($value) && strpos($value, 'vimeo') === false) {
+                $valid = 'Url must be a Vimeo url';
+            }
+            return $valid;
+        }, 10, 4);
     }
 }

@@ -31,6 +31,12 @@ abstract class Brand implements BrandInterface
 	    add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'removeVideoUrlField']);
     }
 
+    protected static function removeVideoUrlFromTeaserImages()
+    {
+        $imageWidget = CompositeFieldGroup::getImageWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $imageWidget->getKey()), [__CLASS__, 'removeVideoUrlField']);
+    }
+
 	protected static function removeInventoryWidget()
     {
         $contentField = CompositeFieldGroup::getContentField();

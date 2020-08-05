@@ -24,6 +24,11 @@ class Teaser implements TeaserContract
         return $this->teaser->getImage();
     }
 
+    public function getVideoUrl() : ?string
+    {
+        return $this->teaser->getVideoUrl();
+    }
+
     public function getDescription(): ?string
     {
         return $this->teaser->getDescription();

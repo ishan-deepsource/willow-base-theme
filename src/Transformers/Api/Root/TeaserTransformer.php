@@ -12,6 +12,7 @@ class TeaserTransformer extends TransformerAbstract
         return [
             'title' => $teaser->getTitle(),
             'image' => $this->transformImage($teaser),
+            'video_url' => $teaser->getVideoUrl(),
             'description' => $teaser->getDescription(),
             'type' => $teaser->getType()
         ];

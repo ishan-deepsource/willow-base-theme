@@ -4,6 +4,8 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites;
 
 use Bonnier\Willow\Base\Adapters\Wp\Root\AbstractTeaserAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
+use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
+use Bonnier\Willow\Base\Models\ACF\Composite\TeaserFieldGroup;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
@@ -53,6 +55,19 @@ class CompositeTeaserAdapter extends AbstractTeaserAdapter
 
         if ($firstFileImage = $this->composite->getFirstFileImage()) {
             return $firstFileImage;
+        }
+
+        return null;
+    }
+
+    public function getVideoUrl(): ?string
+    {
+        if ($videoUrl = array_get($this->composite->getAcfFields(), $this->type . TeaserFieldGroup::VIDEO_URL_FIELD_NAME)) {
+            return $videoUrl;
+        }
+
+        if ($videoUrl = array_get($this->composite->getAcfFields(), TeaserFieldGroup::VIDEO_URL_FIELD_NAME)) {
+            return $videoUrl;
         }
 
         return null;

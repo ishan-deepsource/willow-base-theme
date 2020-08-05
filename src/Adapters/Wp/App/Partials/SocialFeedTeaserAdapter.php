@@ -27,6 +27,11 @@ class SocialFeedTeaserAdapter extends AbstractTeaserAdapter
         return $this->adapter->getLeadImage();
     }
 
+    public function getVideoUrl(): ?string
+    {
+        return null;
+    }
+
     public function getDescription(): ?string
     {
         return optional($this->adapter)->getDescription() ?: null;

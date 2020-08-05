@@ -8,6 +8,8 @@ interface TeaserContract
 
     public function getImage(): ?ImageContract;
 
+    public function getVideoUrl(): ?string;
+
     public function getDescription(): ?string;
 
     public function getType(): ?string;
