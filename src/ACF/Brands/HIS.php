@@ -9,6 +9,7 @@ class HIS extends Brand
     {
         self::removeVideoUrlFromImageWidget();
         self::removeVideoUrlFromParagraphListWidget();
+        self::removeVideoUrlFromTeaserImages();
         self::removeInventoryWidget();
     }
 }

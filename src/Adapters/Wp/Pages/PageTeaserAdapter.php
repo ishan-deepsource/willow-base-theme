@@ -46,6 +46,12 @@ class PageTeaserAdapter extends AbstractTeaserAdapter
         return null;
     }
 
+    public function getVideoUrl(): ?string
+    {
+        return $this->acfArray['video_url'] ?? null;
+    }
+
+
     public function getDescription(): ?string
     {
         if ($description = array_get($this->page->getAcfFields(), $this->type . 'teaser_description')) {

@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Categories;
 
 use Bonnier\Willow\Base\Adapters\Wp\Root\AbstractTeaserAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\Partials\CategoryImageAdapter;
+use Bonnier\Willow\Base\Models\ACF\Composite\TeaserFieldGroup;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
@@ -29,6 +30,11 @@ class CategoryTeaserAdapter extends AbstractTeaserAdapter
     public function getImage(): ?ImageContract
     {
         return new Image(new CategoryImageAdapter($this->meta));
+    }
+
+    public function getVideoUrl(): ?string
+    {
+        return array_get($this->acfArray, TeaserFieldGroup::VIDEO_URL_FIELD_NAME) ?: null;
     }
 
     public function getDescription(): ?string

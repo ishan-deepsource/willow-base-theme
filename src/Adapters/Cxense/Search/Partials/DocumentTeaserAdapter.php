@@ -32,6 +32,11 @@ class DocumentTeaserAdapter extends AbstractTeaserAdapter
         return $this->document->getLeadImage();
     }
 
+    public function getVideoUrl(): ?string
+    {
+        return null;
+    }
+
     public function getDescription(): string
     {
         return $this->document->getDescription() ?? '';

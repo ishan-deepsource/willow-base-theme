@@ -43,6 +43,7 @@ class CompositeTeaserTransformer extends TransformerAbstract
             'kind'          => $composite->getKind(),
             'status'        => $composite->getStatus(),
             'image'         => $this->getImage($composite),
+            'video_url'     => $this->getVideoUrl($composite),
             'description'   => $this->getDescription($composite),
             'link'          => $this->getPath($composite->getLink()),
             'published_at'  => $composite->getPublishedAt(),
@@ -69,6 +70,11 @@ class CompositeTeaserTransformer extends TransformerAbstract
     private function getImage(CompositeContract $composite)
     {
         return $this->transformTeaserImage($composite->getTeaser('default')->getImage());
+    }
+
+    private function getVideoUrl(CompositeContract $composite)
+    {
+        return $composite->getTeaser('default')->getVideoUrl();
     }
 
     private function getDescription(CompositeContract $composite)

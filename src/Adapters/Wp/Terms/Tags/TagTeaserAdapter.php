@@ -3,6 +3,8 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Tags;
 
 use Bonnier\Willow\Base\Adapters\Wp\Root\AbstractTeaserAdapter;
+use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
+use Bonnier\Willow\Base\Models\ACF\Composite\TeaserFieldGroup;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 
@@ -27,6 +29,11 @@ class TagTeaserAdapter extends AbstractTeaserAdapter
     public function getImage(): ?ImageContract
     {
         return null;
+    }
+
+    public function getVideoUrl(): ?string
+    {
+        return array_get($this->acfArray, TeaserFieldGroup::VIDEO_URL_FIELD_NAME) ?: null;
     }
 
     public function getDescription(): ?string
