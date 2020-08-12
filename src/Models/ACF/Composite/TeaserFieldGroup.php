@@ -15,7 +15,7 @@ use Bonnier\Willow\Base\Models\WpComposite;
 class TeaserFieldGroup
 {
     private const TEASER_IMAGE_FIELD = 'field_58e38da2194e3';
-    public const VIDEO_URL_FIELD_NAME = 'video_url';
+    public const VIDEO_URL_FIELD_NAME = 'teaser_video_url';
 
     public static function register()
     {
