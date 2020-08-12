@@ -25,6 +25,7 @@ class ImageTransformer extends TransformerAbstract
             'aspectratio'   => $image->getAspectRatio(),
             'link'          => $this->transformLink($image),
             'color_palette' => $this->transformColorPalette($image),
+            //'video_url'     => $image->getVideoUrl(),//$this->transformVideoUrl($image),
         ];
     }
 
@@ -39,6 +40,16 @@ class ImageTransformer extends TransformerAbstract
 
     private function transformColorPalette(ImageContract $image)
     {
+        if (($colorPalette = $image->getColorPalette()) && $colorPalette->getColors()) {
+            return with(new ColorPaletteTransformer())->transform($colorPalette);
+        }
+
+        return null;
+    }
+
+    private function transformVideoUrl(ImageContract $image)
+    {
+        //var_dump($image->getVideoUrl());exit;
         if (($colorPalette = $image->getColorPalette()) && $colorPalette->getColors()) {
             return with(new ColorPaletteTransformer())->transform($colorPalette);
         }

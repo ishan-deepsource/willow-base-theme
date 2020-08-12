@@ -2,6 +2,8 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
+use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
+use Bonnier\Willow\Base\Models\ACF\Composite\TeaserFieldGroup;
 use Bonnier\Willow\Base\Models\Base\Root\ColorPalette;
 use Bonnier\Willow\Base\Models\Base\Root\Hyperlink;
 use Bonnier\Willow\Base\Models\Contracts\Root\ColorPaletteContract;
@@ -81,5 +83,12 @@ class ImageAdapter extends FileAdapter implements ImageContract
     public function getColorPalette(): ?ColorPaletteContract
     {
         return new ColorPalette(new ColorPaletteAdapter($this->getId()));
+    }
+
+    public function getVideoUrl(): ?string
+    {
+        //var_dump($this->acfData);exit;
+        //var_dump(array_get($this->acfData, TeaserFieldGroup::VIDEO_URL_FIELD_NAME));exit;
+        return array_get($this->acfData, TeaserFieldGroup::VIDEO_URL_FIELD_NAME)?: null;
     }
 }

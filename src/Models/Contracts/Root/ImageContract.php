@@ -15,4 +15,6 @@ interface ImageContract extends FileContract
     public function getLink(): ?HyperlinkContract;
 
     public function getColorPalette(): ?ColorPaletteContract;
+
+    public function getVideoUrl(): ?string;
 }

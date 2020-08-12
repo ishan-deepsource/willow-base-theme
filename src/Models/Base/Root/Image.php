@@ -25,6 +25,11 @@ class Image implements ImageContract
         return $this->image->getUrl();
     }
 
+    public function getVideoUrl() : ?string
+    {
+        return $this->image->getVideoUrl();
+    }
+
     public function getTitle(): ?string
     {
         return $this->image->getTitle();
