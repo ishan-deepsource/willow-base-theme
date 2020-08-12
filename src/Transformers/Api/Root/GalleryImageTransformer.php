@@ -13,6 +13,7 @@ class GalleryImageTransformer extends TransformerAbstract
             'title' => $galleryImage->getTitle(),
             'description' => $galleryImage->getDescription(),
             'image' => with(new ImageTransformer)->transform($galleryImage->getImage()),
+            'video_url' => $galleryImage->getVideoUrl(),
         ];
     }
 }

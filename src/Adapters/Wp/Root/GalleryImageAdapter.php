@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Root;
 
 
+use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Root\GalleryImageContract;
@@ -41,5 +42,10 @@ class GalleryImageAdapter implements GalleryImageContract
         }
 
         return null;
+    }
+
+    public function getVideoUrl(): ?string
+    {
+        return array_get($this->galleryImage, CompositeFieldGroup::VIDEO_URL_FIELD_NAME) ?: null;
     }
 }

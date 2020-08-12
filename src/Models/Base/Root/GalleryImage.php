@@ -28,4 +28,9 @@ class GalleryImage implements GalleryImageContract
     {
         return $this->galleryImage->getImage();
     }
+
+    public function getVideoUrl(): ?string
+    {
+        return $this->galleryImage->getVideoUrl();
+    }
 }
