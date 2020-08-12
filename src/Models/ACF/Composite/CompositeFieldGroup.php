@@ -577,6 +577,13 @@ class CompositeFieldGroup
 
         $images->addSubField($imageDescription);
 
+        $imageVideoUrl = new UrlField('field_5f33c474363f4');
+        $imageVideoUrl->setLabel('Video url')
+            ->setName(self::VIDEO_URL_FIELD_NAME)
+            ->setInstructions('The embed url for the Vimeo video.');
+
+        $images->addSubField($imageVideoUrl);
+
         $galleryWidget->addSubField($images);
 
         $lockedContent = new TrueFalseField('field_5a4f4e5f17462');
