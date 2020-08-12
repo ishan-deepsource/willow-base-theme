@@ -18,7 +18,7 @@ class AttachmentFieldGroup
         }
         $group = new ACFGroup('group_5c51a64a46db2');
         $group->setTitle('Attachments')
-            ->setLocation(new ACFLocation('param', ACFLocation::OPERATOR_EQUALS, 'all'))
+            ->setLocation(new ACFLocation('attachment', ACFLocation::OPERATOR_EQUALS, 'all'))
             ->setMenuOrder(0)
             ->setPosition(ACFGroup::POSITION_NORMAL)
             ->setStyle(ACFGroup::STYLE_DEFAULT)

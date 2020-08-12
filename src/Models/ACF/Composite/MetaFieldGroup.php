@@ -161,7 +161,7 @@ class MetaFieldGroup
     public static function getMagazineYearField(): ACFField
     {
         $years = array_reverse(range(1980, date("Y") + 1));
-        $magazineYear = new SelectField('field_58fde876034e6');
+        $magazineYear = new SelectField('field_58f5febf3cb9c');
         $magazineYear->setLabel('Magazine Year')
             ->setName('magazine_year')
             ->setInstructions('The magazine year ie. 2017 if the article was published in 2017')
