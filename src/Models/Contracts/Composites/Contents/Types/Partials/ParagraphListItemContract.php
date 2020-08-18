@@ -11,4 +11,6 @@ interface ParagraphListItemContract
     public function getDescription(): ?string;
 
     public function getImage(): ?ImageContract;
+
+    public function getVideoUrl(): ?string;
 }

@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\Partials;
 
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
+use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\Partials\ParagraphListItemContract;
@@ -35,5 +36,10 @@ class ParagraphListItemAdapter implements ParagraphListItemContract
         }
 
         return null;
+    }
+
+    public function getVideoUrl(): ?string
+    {
+        return array_get($this->item, CompositeFieldGroup::VIDEO_URL_FIELD_NAME) ?: null;
     }
 }

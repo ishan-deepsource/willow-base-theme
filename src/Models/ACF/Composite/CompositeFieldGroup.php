@@ -790,6 +790,13 @@ class CompositeFieldGroup
 
         $items->addSubField($itemImage);
 
+        $itemVideoUrl = new UrlField('field_5f3ba1fad26a3');
+        $itemVideoUrl->setLabel('Video url')
+            ->setName(self::VIDEO_URL_FIELD_NAME)
+            ->setInstructions('The embed url for the Vimeo video.');
+
+        $items->addSubField($itemVideoUrl);
+
         $paragraphListWidget->addSubField($items);
 
         return apply_filters(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), $paragraphListWidget);
