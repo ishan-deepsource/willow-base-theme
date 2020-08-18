@@ -28,4 +28,9 @@ class ParagraphListItem implements ParagraphListItemContract
     {
         return $this->item->getImage();
     }
+
+    public function getVideoUrl(): ?string
+    {
+        return $this->item->getVideoUrl();
+    }
 }
