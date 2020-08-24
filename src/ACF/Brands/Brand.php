@@ -5,14 +5,25 @@ namespace Bonnier\Willow\Base\ACF\Brands;
 
 
 use Bonnier\Willow\Base\Models\ACF\ACFField;
+use Bonnier\Willow\Base\Models\ACF\ACFGroup;
 use Bonnier\Willow\Base\Models\ACF\ACFLayout;
 use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Composite\TeaserFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Fields\FlexibleContentField;
+use Bonnier\Willow\Base\Models\ACF\Fields\GroupField;
 use Bonnier\Willow\Base\Models\ACF\Fields\RepeaterField;
+use Bonnier\Willow\Base\Models\ACF\Fields\UrlField;
 
 abstract class Brand implements BrandInterface
 {
+    public static function removeTeaserVideoUrlField(ACFGroup $group)
+    {
+        $fields = array_filter($group->getFields(), function (ACFField $field) {
+            return $field->getName() !== TeaserFieldGroup::VIDEO_URL_FIELD_NAME;
+        });
+        return $group->setFields($fields);
+    }
+
     public static function removeVideoUrlField(ACFLayout $layout)
     {
         $subFields = array_filter($layout->getSubFields(), function (ACFField $field) {
@@ -50,8 +61,8 @@ abstract class Brand implements BrandInterface
 
     protected static function removeVideoUrlFromTeaserImages()
     {
-        $teaserFieldGroup = TeaserFieldGroup::getTeaserVideoUrlField();
-        add_filter(sprintf('willow/acf/layout=%s', $teaserFieldGroup->getKey()), [__CLASS__, 'removeVideoUrlField']);
+        $teaserFieldGroupId = TeaserFieldGroup::TEASER_FIELD_GROUP_ID;
+        add_filter(sprintf('willow/acf/group=%s', $teaserFieldGroupId), [__CLASS__, 'removeTeaserVideoUrlField']);
     }
 
 	protected static function removeInventoryWidget()

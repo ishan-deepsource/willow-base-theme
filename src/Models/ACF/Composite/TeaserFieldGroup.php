@@ -16,13 +16,14 @@ class TeaserFieldGroup
 {
     private const TEASER_IMAGE_FIELD = 'field_58e38da2194e3';
     public const VIDEO_URL_FIELD_NAME = 'teaser_video_url';
+    public const TEASER_FIELD_GROUP_ID = 'group_58e38d7eca92e';
 
     public static function register()
     {
         if (!function_exists('acf_add_local_field_group')) {
             return;
         }
-        $group = new ACFGroup('group_58e38d7eca92e');
+        $group = new ACFGroup(self::TEASER_FIELD_GROUP_ID);
         $location = new ACFLocation();
         $location->addLocation('post_type', ACFLocation::OPERATOR_EQUALS, WpComposite::POST_TYPE)
             ->addLocation('post_type', ACFLocation::OPERATOR_EQUALS, 'page');
