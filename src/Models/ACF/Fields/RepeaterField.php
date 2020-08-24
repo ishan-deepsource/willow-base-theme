@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Models\ACF\Fields;
 
 use Bonnier\Willow\Base\Models\ACF\ACFField;
+use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
 
 class RepeaterField extends ACFField
 {
@@ -79,6 +80,17 @@ class RepeaterField extends ACFField
     {
         array_push($this->subFields, $field);
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function removeVideoUrlFromSubFields(): array
+    {
+        $subFields = array_filter($this->subFields, function (ACFField $field) {
+            return $field->name !== CompositeFieldGroup::VIDEO_URL_FIELD_NAME;
+        });
+        return $subFields;
     }
 
     public function toArray(): array

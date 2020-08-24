@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Models\ACF;
 
+use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Properties\ACFLocation;
 use Illuminate\Contracts\Support\Arrayable;
 
@@ -78,12 +79,19 @@ class ACFGroup implements Arrayable
     }
 
     /**
+     * @return array
+     */
+    public function getFields(): array
+    {
+        return $this->fields;
+    }
+
+    /**
      * @param array|ACFField[] $fields
      * @return ACFGroup
      */
     public function setFields($fields)
     {
-        ddHtml($fields);
         $this->fields = $fields;
         return $this;
     }
