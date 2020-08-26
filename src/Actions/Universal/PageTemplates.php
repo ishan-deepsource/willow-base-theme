@@ -85,8 +85,6 @@ class PageTemplates
                     'piano-offer-page' => 'Piano Offer Page',
                 ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
-                    'gradient' => 'Gradient',
-                    'colorblock' => 'Farveblok',
                     'guide' => 'Guide',
                 ]);
                 break;
@@ -106,6 +104,7 @@ class PageTemplates
                     'bodum-vacuum' => 'Bodum Vacuum',
                     'gradient' => 'Gradient',
                     'colorblock' => 'Farveblok',
+                    'guide' => 'Guide',
                     'timeline' => 'Timeline',
                 ]);
                 break;
