@@ -85,7 +85,6 @@ class PageTemplates
                     'piano-offer-page' => 'Piano Offer Page',
                 ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
-                    'gradient' => 'Gradient',
                     'guide' => 'Guide',
                 ]);
                 break;
