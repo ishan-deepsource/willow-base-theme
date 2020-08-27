@@ -770,7 +770,7 @@ class CompositeFieldGroup
         $itemTitle = new TextField('field_5bb4be86fd04e');
         $itemTitle->setLabel('Title')
             ->setName('title')
-            ->setRequired(true);
+            ->setRequired(false);
 
         $items->addSubField($itemTitle);
 
