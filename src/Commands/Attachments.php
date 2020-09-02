@@ -31,12 +31,15 @@ class Attachments extends \WP_CLI_Command
         \WP_CLI::line('Fetching all attachments...');
         $attachments = collect(get_posts([
             'post_type' => 'attachment',
-            'posts_per_page' => -1
+            'posts_per_page' => -1,
+            'post_mime_type' => 'image/jpeg'
         ]));
         \WP_CLI::line(sprintf('Found %s attachments', number_format($attachments->count())));
         $bar = make_progress_bar('Copying attachment captions', $attachments->count());
         $attachments->each(function (\WP_Post $attachment) use (&$bar) {
-            update_field('caption', $attachment->post_excerpt, $attachment->ID);
+            if ( ! empty($attachment->post_excerpt)) {
+                update_field('caption', $attachment->post_excerpt, $attachment->ID);
+            }
             $bar->tick();
         });
         $bar->finish();
