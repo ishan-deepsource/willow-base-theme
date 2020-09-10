@@ -34,6 +34,7 @@ class CompositeFieldGroup
     public const KIND_FIELD = 'field_58e388862daa8';
     public const SHELL_VALUE = 'Shell';
     public const VIDEO_URL_FIELD_NAME = 'video_url';
+    public const COLLAPSIBLE_FIELD_NAME = 'collapsible';
 
     private const AUTHOR_FIELD = 'field_5af9888b4b7a1';
     private const LOCKED_CONTENT_FIELD = 'field_5921f0c676974';
@@ -743,7 +744,7 @@ class CompositeFieldGroup
 
         $collapsible = new TrueFalseField('field_5bd30f723cdcc');
         $collapsible->setLabel('Collapsible')
-            ->setName('collapsible')
+            ->setName(self::COLLAPSIBLE_FIELD_NAME)
             ->setInstructions('Should this paragraph list be collapsed in the view?');
 
         $paragraphListWidget->addSubField($collapsible);

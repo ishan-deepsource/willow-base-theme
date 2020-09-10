@@ -22,6 +22,12 @@ class GDS extends Brand
 
         $paragraphListWidget = CompositeFieldGroup::getParagraphListWidget();
         add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'setParagraphListDisplayHints']);
+
+        $paragraphListWidget = CompositeFieldGroup::getParagraphListWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'removeParagraphListCollapsible']);
+
+        $imageWidget = CompositeFieldGroup::getImageWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $imageWidget->getKey()), [__CLASS__, 'setImageDisplayHints']);
     }
 
     public static function setGalleryDisplayHints(ACFLayout $gallery): ACFLayout
@@ -48,6 +54,29 @@ class GDS extends Brand
                     'slider-cards' => 'Slider Cards',
                 ]);
                 $field->setDefaultValue('box');
+            }
+            return $field;
+        });
+    }
+
+
+    public static function removeParagraphListCollapsible(ACFLayout $layout)
+    {
+        $subFields = array_filter($layout->getSubFields(), function (ACFField $field) {
+            return $field->getName() !== CompositeFieldGroup::COLLAPSIBLE_FIELD_NAME;
+        });
+        return $layout->setSubFields($subFields);
+    }
+
+    public static function setImageDisplayHints(ACFLayout $paragraphList)
+    {
+        return $paragraphList->mapSubFields(function (ACFField $field) {
+            if ($field instanceof RadioField && $field->getName() === 'display_hint') {
+                $field->setChoices([
+                    'full-width' => 'Full Width',
+                    'half-width' => 'Half Width',
+                ]);
+                $field->setDefaultValue('full-width');
             }
             return $field;
         });
