@@ -2,6 +2,8 @@
 
 namespace Bonnier\Willow\Base\Commands;
 
+use Bonnier\Willow\Base\Commands\GDS\XmlImport;
+
 class CommandBootstrap
 {
     const CORE_CMD_NAMESPACE = 'willow';
@@ -17,6 +19,7 @@ class CommandBootstrap
             CxenseSync::register();
             Sitemap::register();
             CategoryFix::register();
+            XmlImport::register();
         }
     }
 }
