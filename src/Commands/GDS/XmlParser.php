@@ -525,6 +525,16 @@ class XmlParser
         return $this->postId;
     }
 
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function isGuide()
+    {
+        return $this->type === 'A';
+    }
+
     public function getBlocks()
     {
         return $this->blocks;

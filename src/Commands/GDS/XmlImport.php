@@ -119,19 +119,23 @@ class XmlImport extends WP_CLI_Command
                 // Check if import has already been done for this post
                 // Use "force" parameter to force reimport
                 if (get_field('xml_import', $postId) && !$this->force) {
-                    WP_CLI::error('This post has already been enriched with xml import.');
+                    WP_CLI::error('This post has already been enriched with xml import. You can run it again with the "force" parameter.');
                 }
 
                 // Log start
                 $this->log('Import - ' . $file . ' - start');
 
-                // Save meta time
-                //WP_CLI::line('Save meta time: ' . $time);
-                //update_field('field_5f560d8c95208', $time, $postId);  // TODO
+                if ($xmlParser->isGuide()) {
+                    update_field('_wp_page_template', 'guide', $postId);  // TODO
 
-                // Save meta price
-                //WP_CLI::line('Save meta price: ' . $price);
-                //update_field('field_5f560ec795209', $price, $postId);  // TODO
+                    // Save meta time
+                    //WP_CLI::line('Save meta time: ' . $time);
+                    update_field('field_5f560d8c95208', $time, $postId);
+
+                    // Save meta price
+                    //WP_CLI::line('Save meta price: ' . $price);
+                    update_field('field_5f560ec795209', $price, $postId);
+                }
 
                 // Set author to the default editor
                 self::setDefaultAuthor($xmlParser->getLanguage(), $postId);
@@ -278,7 +282,7 @@ class XmlImport extends WP_CLI_Command
             'image' => false,
             'video_url' => '',
             'collapsible' => false,
-            'display_hint' => 'ordered',    // TODO set to box when merging
+            'display_hint' => 'box',
             'items' => false,
         ];
     }
@@ -382,14 +386,11 @@ class XmlImport extends WP_CLI_Command
         }
         else if ($block['type'] === 'list') {
             WP_CLI::line('Widget: Text');
-            //var_dump($block);
-            //WP_CLI::line($block['content']);
             $content = '<ul>';
             foreach ($block['content'] as $ele) {
                 $content .= '<li>' . $ele . '<br>';
             }
             $content .= '</ul>';
-            //var_dump($content);exit;
 
             return [
                 'body'           => HtmlToMarkdown::parseHtml($content),
@@ -398,7 +399,7 @@ class XmlImport extends WP_CLI_Command
             ];
         }
         else if (!in_array($block['type'], ['metabox'])) {  // Allow metabox to be skipped, otherwise error
-            print "<h1>(buildWidget) ERROR, type not handled: " . $block['type'];
+            WP_CLI::error("<h1>(buildWidget) ERROR, type not handled: " . $block['type']);
             exit;
         }
         print "<br>\n";
@@ -511,7 +512,7 @@ class XmlImport extends WP_CLI_Command
                 $direction = $block['content'];
             }
             else {
-                print "<h1>ERROR, not matched</h1>";
+                WP_CLI::error("<h1>ERROR, not matched</h1>");
                 exit;
             }
         }
