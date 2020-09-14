@@ -14,6 +14,7 @@ use Bonnier\Willow\Base\Models\ACF\Composite\TranslationStateFieldGroup;
 use Bonnier\Willow\Base\Repositories\SiteManager\SiteRepository;
 use Bonnier\Willow\Base\Services\SiteManagerService;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
+use Bonnier\Willow\Base\Models\ACF\Composite\GuideMetaFieldGroup;
 
 class WpComposite
 {
@@ -144,6 +145,7 @@ class WpComposite
         TeaserFieldGroup::register();
         MetaFieldGroup::register();
         CompositeFieldGroup::register();
+        GuideMetaFieldGroup::register();
         TranslationStateFieldGroup::register();
         TaxonomyFieldGroup::register(WpTaxonomy::get_custom_taxonomies());
     }

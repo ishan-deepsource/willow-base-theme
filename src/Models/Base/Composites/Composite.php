@@ -9,6 +9,7 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentImageC
 use Bonnier\Willow\Base\Models\Contracts\Root\AudioContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\GuideMetaContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
 use Bonnier\WP\Cxense\Services\WidgetDocumentQuery;
@@ -213,5 +214,10 @@ class Composite implements CompositeContract
     public function getRelatedByCategory(WidgetDocumentQuery $manualQuery = null): ?Collection
     {
         return $this->composite->getRelatedByCategory($manualQuery);
+    }
+
+    public function getGuideMeta(): ?GuideMetaContract
+    {
+       return $this->composite->getGuideMeta();
     }
 }
