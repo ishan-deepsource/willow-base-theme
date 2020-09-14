@@ -7,6 +7,7 @@ use Bonnier\Willow\Base\Models\WpComposite;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\StoryTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentAudioTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Root\GuideMetaTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TranslationTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Terms\Vocabulary\VocabularyTransformer;
 use Bonnier\Willow\Base\Traits\UrlTrait;
@@ -77,6 +78,7 @@ class CompositeTransformer extends TransformerAbstract
             'updated_at'                => $composite->getUpdatedAt(),
             'canonical_url'             => $composite->getCanonicalUrl(),
             'template'                  => $composite->getTemplate(),
+            'guide_meta'                => $this->getGuideMeta($composite),
             'estimated_reading_time'    => $composite->getEstimatedReadingTime(),
             'audio'                     => $this->getAudio($composite),
             'word_count'                => $composite->getWordCount(),
@@ -134,6 +136,20 @@ class CompositeTransformer extends TransformerAbstract
     {
         if ($commercial = $composite->getCommercial()) {
             return with(new CommercialTransformer())->transform($commercial);
+        }
+        return null;
+    }
+
+    /**
+     * @param Composite $composite
+     *
+     * @return |null
+     */
+    private function getGuideMeta(CompositeContract $composite)
+    {
+        // guideMetaObj comes from compositeAdapter
+        if ($guideMetaObj = $composite->getGuideMeta()) {
+            return with(new GuideMetaTransformer())->transform($guideMetaObj);
         }
         return null;
     }
