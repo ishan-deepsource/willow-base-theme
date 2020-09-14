@@ -23,6 +23,7 @@ class XmlImport extends WP_CLI_Command
     private $outputNextId;
     private $outputParsedData;
     private $force;
+    private $encodeUtf8;
 
 
     public static function register()
@@ -48,6 +49,7 @@ class XmlImport extends WP_CLI_Command
         $this->outputNextId = false;
         $this->outputParsedData = false;
         $this->force = false;
+        $this->encodeUtf8 = false;
 
         $this->parseArguments($params);
 
@@ -94,7 +96,7 @@ class XmlImport extends WP_CLI_Command
         $files = array_diff($files, ['..', '.']);
         foreach ($files as $file) {
             if (is_dir($this->dir . '/' . $file)) {
-                $xmlParser = new XmlParser($this->dir, $file);
+                $xmlParser = new XmlParser($this->dir, $file, $this->encodeUtf8);
 
                 $blocks = $xmlParser->getBlocks();
                 $postId = $xmlParser->getPostId();
@@ -203,6 +205,10 @@ class XmlImport extends WP_CLI_Command
             }
             if ($param === 'force') {
                 $this->force = true;
+                continue;
+            }
+            if ($param === 'encode-utf8' || $param === 'encode-utf-8') {
+                $this->encodeUtf8 = true;
                 continue;
             }
             $returnParams[] = $param;
@@ -345,6 +351,15 @@ class XmlImport extends WP_CLI_Command
                 'acf_fc_layout'  => 'text_item'
             ];
         }
+        else if ($block['type'] === 'h3') {
+            WP_CLI::line('Widget: Text');
+            WP_CLI::line('<h3>' . $block['content'] . '</h3>');
+            return [
+                'body'           => HtmlToMarkdown::parseHtml('<h3>' . $block['content'] . '</h3>'),
+                'locked_content' => true,
+                'acf_fc_layout'  => 'text_item'
+            ];
+        }
         else if ($block['type'] === 'how-to') {
             WP_CLI::line('************************ how-to');
             return $this->buildBlocks($block['content'], $dir, $postId);
@@ -384,6 +399,15 @@ class XmlImport extends WP_CLI_Command
                 'acf_fc_layout'  => 'text_item'
             ];
         }
+        else if ($block['type'] === 'offer') {
+            WP_CLI::line('Widget: Text');
+            WP_CLI::line($block['content']);
+            return [
+                'body'           => HtmlToMarkdown::parseHtml($block['content']),
+                'locked_content' => true,
+                'acf_fc_layout'  => 'text_item'
+            ];
+        }
         else if ($block['type'] === 'list') {
             WP_CLI::line('Widget: Text');
             $content = '<ul>';
@@ -399,7 +423,7 @@ class XmlImport extends WP_CLI_Command
             ];
         }
         else if (!in_array($block['type'], ['metabox'])) {  // Allow metabox to be skipped, otherwise error
-            WP_CLI::error("<h1>(buildWidget) ERROR, type not handled: " . $block['type']);
+            WP_CLI::error("(buildWidget) ERROR, type not handled: " . $block['type']);
             exit;
         }
         print "<br>\n";
