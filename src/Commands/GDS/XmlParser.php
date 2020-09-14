@@ -9,7 +9,7 @@ class XmlParser
 {
     private static $countryLanguages = [
         'DK' => 'da',
-        'SV' => 'sv',
+        'SE' => 'sv',
         'NO' => 'nb',
         'FI' => 'fi',
         'NL' => 'nl',
@@ -32,7 +32,7 @@ class XmlParser
     //private $leadImageSet;
     private $success;
 
-    public function __construct($basedir, $dir)
+    public function __construct($basedir, $dir, $encodeUtf8)
     {
         $this->success = false;
 
