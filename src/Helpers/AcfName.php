@@ -44,6 +44,7 @@ class AcfName
     const WIDGET_BANNER_PLACEMENT = 'banner_placement';
     const WIDGET_FEATURED_CONTENT = 'featured_content';
     const WIDGET_NEWSLETTER = 'newsletter';
+    const WIDGET_GUIDE_META = 'guide_meta';
     const WIDGET_SEO_TEXT = 'seo_text';
     const WIDGET_TAXONOMY_TEASER_LIST = 'taxonomy_teaser_list';
     const WIDGET_TEASER_LIST = 'teaser_list';

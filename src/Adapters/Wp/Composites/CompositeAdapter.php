@@ -8,6 +8,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentAudioAdapte
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentImageAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\CommercialAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Root\GuideMetaAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Categories\CategoryAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\TagAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Vocabulary\VocabularyAdapter;
@@ -17,7 +18,9 @@ use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ChaptersSummary;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Newsletter;
+use Bonnier\Willow\Base\Models\Base\Root\GuideMeta;
 use Bonnier\Willow\Base\Models\Base\Root\Translation;
+use Bonnier\Willow\Base\Models\Contracts\Root\GuideMetaContract;
 use Bonnier\Willow\Base\Models\WpTaxonomy;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Story;
@@ -444,5 +447,10 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         )->reject(function ($content) {
             return is_null($content);
         });
+    }
+
+    public function getGuideMeta(): ?GuideMetaContract
+    {
+        return new GuideMeta(new GuideMetaAdapter($this->acfFields));
     }
 }
