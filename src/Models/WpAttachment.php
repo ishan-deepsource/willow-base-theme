@@ -190,6 +190,66 @@ class WpAttachment
         }, collect([]));
     }
 
+    /**
+     * Upload a local file with caption
+     *
+     * @param int $postId
+     * @param String $localeFile
+     * @param String $fileName
+     * @param String $caption
+     *
+     * @return null|int
+     */
+    public static function upload_file($postId, $localeFile, $fileName, $caption)
+    {
+        // Uploading file
+        $fileContent = file_get_contents($localeFile);
+        $uploadedFile = wp_upload_bits($fileName, null, $fileContent);
+        if ($uploadedFile['error']) {
+            //WP_CLI::error('');
+            var_dump($uploadedFile);
+            return null;
+        }
+
+        // Create attachment
+        $fileTitle = $fileName;
+        $attachment = [
+            'post_mime_type' => mime_content_type($uploadedFile['file']),
+            'post_parent' => $postId,
+            'post_title' => $fileTitle,
+            'post_content' => '',
+            'post_excerpt' => $caption,
+            'post_status' => 'inherit',
+            /*
+            'meta_input' => [
+                static::POST_META_CONTENTHUB_ID => $file->id,
+                static::POST_META_COPYRIGHT => $file->copyright ?? null,
+                static::POST_META_COPYRIGHT_URL => $file->copyright_url ?? null,
+                '_wp_attachment_image_alt' => static::getAlt($file),
+            ]
+            */  // TODO
+        ];
+        $attachmentId = wp_insert_attachment($attachment, $uploadedFile['file'], $postId);
+        update_field(AttachmentFieldGroup::CAPTION_FIELD_KEY, $caption, $attachmentId);
+        if (is_wp_error($attachmentId)) {
+            return null;
+        }
+
+        // Attachment meta data
+        require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+        $attachmentData = wp_generate_attachment_metadata($attachmentId, $uploadedFile['file']);
+        if (!wp_update_attachment_metadata($attachmentId, $attachmentData)) {
+            return null;
+        }
+
+        // Set language for the image so it will be visible in Media Library
+        if ($language = LanguageProvider::getPostLanguage($postId)) {
+            LanguageProvider::setPostLanguage($attachmentId, $language);
+        }
+
+        return $attachmentId;
+    }
+
     public static function upload_attachment($postId, $file)
     {
         if (is_null($file)) {
