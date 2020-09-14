@@ -148,7 +148,7 @@ class CompositeTransformer extends TransformerAbstract
     private function getGuideMeta(CompositeContract $composite)
     {
         // guideMetaObj comes from compositeAdapter
-        if ( $guideMetaObj = $composite->getGuideMeta()){
+        if ($guideMetaObj = $composite->getGuideMeta()) {
             return with(new GuideMetaTransformer())->transform($guideMetaObj);
         }
         return null;
