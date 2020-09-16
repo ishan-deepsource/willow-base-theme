@@ -21,4 +21,9 @@ class InfoBoxAdapter extends AbstractContentAdapter implements InfoBoxContract
     {
         return array_get($this->acfArray, 'body') ?: null;
     }
+
+    public function getDisplayHint(): string
+    {
+        return array_get($this->acfArray, 'display_hint') ?: 'yellow';
+    }
 }

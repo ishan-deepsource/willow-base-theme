@@ -9,4 +9,6 @@ interface InfoBoxContract extends ContentContract
     public function getTitle(): ?string;
 
     public function getBody(): ?string;
+
+    public function getDisplayHint(): string;
 }

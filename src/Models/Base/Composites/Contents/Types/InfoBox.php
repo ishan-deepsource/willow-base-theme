@@ -34,6 +34,11 @@ class InfoBox extends AbstractContent implements InfoBoxContract
         return $this->model->getTitle();
     }
 
+    public function getDisplayHint(): string
+    {
+        return $this->model->getDisplayHint();
+    }
+
     public function getStickToNext(): bool
     {
         return $this->model->getStickToNext();

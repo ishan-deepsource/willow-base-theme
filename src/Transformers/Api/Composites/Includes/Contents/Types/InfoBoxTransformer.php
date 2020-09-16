@@ -17,6 +17,7 @@ class InfoBoxTransformer extends TransformerAbstract
         return [
             'title' => $infoBox->isLocked() ? null : $infoBox->getTitle(),
             'body' => $infoBox->isLocked() ? null : $infoBox->getBody(),
+            'display_hint' => $infoBox->getDisplayHint(),
         ];
     }
 }
