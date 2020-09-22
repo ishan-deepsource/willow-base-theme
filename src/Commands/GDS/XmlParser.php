@@ -28,6 +28,7 @@ class XmlParser
     private $materials;
     //private $authors;
     private $firstAuthor;
+    private $difficultyText;
 
     //private $leadImageSet;
     private $success;
@@ -126,12 +127,13 @@ class XmlParser
     private function parseFile($filename)
     {
         $data = file_get_contents($filename);
-
-        //$data = utf8_encode($data);
-
         $data = $this->fixInvalidXml($data);
 
-        $xml = new SimpleXMLElement($data);
+        libxml_use_internal_errors(true);
+        $xml = simplexml_load_string($data);
+        self::checkXmlErrors();
+
+        //$xml = new SimpleXMLElement($data, null, false);
 
         $blocks = [];
 
@@ -157,6 +159,20 @@ class XmlParser
         $this->blocks = $blocks;
 
         $this->parseMeta($blocks);
+    }
+
+    private static function checkXmlErrors()
+    {
+        if (sizeof(libxml_get_errors()) > 0) {
+            WP_CLI::line('');
+            foreach (libxml_get_errors() as $error) {
+                WP_CLI::line('XML parse error: ' . $error->message);
+            }
+            WP_CLI::error('Error parsing XML.');
+        }
+        else {
+            WP_CLI::line('XML ok.');
+        }
     }
 
     private static function prepareBlocks($blocks)
@@ -307,11 +323,11 @@ class XmlParser
             }
             if (isset($data->img->attributes()->src)) {
                 $block['src'] = strval($data->img->attributes()->src);
-                // Use file that ends with a.jpg instead of b.jpg if possible
-                if (preg_match('/^(.+)b\.jpg$/', $block['src'], $res)) {
+                // Use file that ends with b.jpg instead of a.jpg if possible
+                if (preg_match('/^(.+)a\.jpg$/', $block['src'], $res)) {
                     $baseFileName = $res[1];
-                    if (file_exists($this->dir . "/" . $baseFileName . "a.jpg")) {
-                        $block['src'] = $baseFileName . "a.jpg";
+                    if (file_exists($this->dir . "/" . $baseFileName . "b.jpg")) {
+                        $block['src'] = $baseFileName . "b.jpg";
                     }
                 }
             }
@@ -342,11 +358,11 @@ class XmlParser
         }
         if (isset($data->attributes()->src)) {
             $block['src'] = strval($data->attributes()->src);
-            // Use file that ends with a.jpg instead of b.jpg if possible
-            if (preg_match('/^(.+)b\.jpg$/', $block['src'], $res)) {
+            // Use file that ends with b.jpg instead of a.jpg if possible
+            if (preg_match('/^(.+)a\.jpg$/', $block['src'], $res)) {
                 $baseFileName = $res[1];
-                if (file_exists($this->dir . "/" . $baseFileName . "a.jpg")) {
-                    $block['src'] = $baseFileName . "a.jpg";
+                if (file_exists($this->dir . "/" . $baseFileName . "b.jpg")) {
+                    $block['src'] = $baseFileName . "b.jpg";
                 }
             }
         }
@@ -365,7 +381,7 @@ class XmlParser
     {
         //WP_CLI::line("\n*** Process H2");
         //WP_CLI::line(ucfirst(self::toLower($data)));
-        return ['type' => 'h2', 'content' => ucfirst(self::toLower((strval($data))))];
+        return ['type' => 'h2', 'content' => self::ucFirst(strval($data))];
     }
 
     private function processH3($data)
@@ -373,12 +389,12 @@ class XmlParser
         if (in_array(strval($data), ['SVÆRHEDSGRAD', 'VAIKEUSASTE', 'VANSKELIGHETSGRAD', 'SVÅRIGHETSGRAD'])) {
             //WP_CLI::line("\n*** Process H3 - DIFFICULTY");
             //WP_CLI::line(ucfirst(self::toLower($data)));
-            return ['type' => 'difficulty', 'content' => ucfirst(self::toLower((strval($data))))];
+            return ['type' => 'difficulty', 'content' => self::ucFirst(strval($data))];
         }
 
         //WP_CLI::line("\n*** Process H3");
         //WP_CLI::line(ucfirst(self::toLower($data)));
-        return ['type' => 'h3', 'content' => ucfirst(self::toLower((strval($data))))];
+        return ['type' => 'h3', 'content' => self::ucFirst(strval($data))];
     }
 
     private function processHowTo($ele)
@@ -458,6 +474,11 @@ class XmlParser
             // Iterate metabox lines
             for ($i = 0; $i < sizeof($metaBox['content']) - 1; $i++) {
                 if (isset($metaBox['content'][$i]['content'])) {
+                    // Check for difficulty text
+                    if (in_array(self::toLower($metaBox['content'][$i]['content']), ['sværhedsgrad', 'vaikeusaste', 'vanskelighetsgrad', 'svårighetsgrad'])) {
+                        // The difficulty text is on the next line after Sværhedsgrad, so use: $i + 1
+                        $this->difficultyText = $metaBox['content'][$i + 1]['content'];
+                    }
 
                     // Check for time required
                     if (in_array($metaBox['content'][$i]['content'], ['Tidsforbrug', 'Vie aikaa', 'Tidsforbruk', 'Tidsförbrukning'])) {
@@ -478,7 +499,8 @@ class XmlParser
                         //WP_CLI::line('MATERIALER');
                         $materials = '';
                         // The materials are in the following elements
-                        for ($j = $i; $j < sizeof($metaBox['content']); $j++) {
+                        // Iterate from the next line ($i+1) to skip the h3 with "Materialer"
+                        for ($j = $i + 1; $j < sizeof($metaBox['content']); $j++) {
                             if (isset($metaBox['content'][$j]['content'])) {
                                 // If list then iterate the list items
                                 if ($metaBox['content'][$j]['type'] === 'list') {
@@ -515,8 +537,19 @@ class XmlParser
         return null;
     }
 
+    private static function ucFirst($data)
+    {
+        if (preg_match("/^(\d+\. )(\w)(.*)/", $data, $res)) {
+            return $res[1] . strtoupper($res[2]) . strtolower($res[3]);
+        }
+        return ucfirst(self::toLower((strval($data))));
+    }
+
     private static function toLower($txt)
     {
+        if (is_array($txt)) {
+            return $txt;
+        }
         return str_replace(['Æ', 'Ø', 'Å', 'Ä', 'Ö'], ['æ', 'ø', 'å', 'ä', 'ö'], strtolower($txt));
     }
 
@@ -563,6 +596,11 @@ class XmlParser
     public function getLanguage()
     {
         return self::$countryLanguages[strtoupper($this->country)];
+    }
+
+    public function getDifficultyText()
+    {
+        return $this->difficultyText;
     }
 
     public function success()

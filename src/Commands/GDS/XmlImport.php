@@ -16,15 +16,14 @@ class XmlImport extends WP_CLI_Command
     private $multiple;
     private $dir;
     private $log;
-    private $skipUpload;
+    private $skipImageUpload;
     private $exampleImageId;
     private $startContent;
-    private $exportOldContent;
     private $outputNextId;
     private $outputParsedData;
     private $force;
     private $encodeUtf8;
-
+    private $outputOverview;
 
     public static function register()
     {
@@ -43,15 +42,19 @@ class XmlImport extends WP_CLI_Command
     {
         $this->multiple = false;
         $this->log = false;
-        $this->skipUpload = false;
+        $this->skipImageUpload = false;
         $this->startContent = false;
-        $this->exportOldContent = false;
         $this->outputNextId = false;
         $this->outputParsedData = false;
         $this->force = false;
         $this->encodeUtf8 = false;
+        $this->outputOverview = false;
 
-        $this->parseArguments($params);
+        $remainingArguments = $this->parseArguments($params);
+        if (sizeof($remainingArguments) > 0) {
+            var_dump($remainingArguments);
+            WP_CLI::error('Arguments not parsed. Maybe you misspelled?');
+        }
 
         $this->log('Script start');
 
@@ -63,12 +66,10 @@ class XmlImport extends WP_CLI_Command
             WP_CLI::line('');
             WP_CLI::line('"log:/path/to/file" if you want to log start and end timestamps of the import.');
             WP_CLI::line('');
-            WP_CLI::line('"export-old-content:/path/to/file" save the current composite_content of the post to a file');
-            WP_CLI::line('');
             WP_CLI::line('"import-start-content/path/to/file" overwrite the current composite_content with the');
             WP_CLI::line('content of the file, before importing.');
             WP_CLI::line('');
-            WP_CLI::line('"skip-upload" do not upload images to Wordpress and S3. Use a default picture instead.');
+            WP_CLI::line('"skip-image-upload" do not upload images to Wordpress and S3. Use a default picture instead.');
             WP_CLI::line('');
             WP_CLI::line('"output-next-id" show the next post ID to be imported.');
             WP_CLI::line('');
@@ -81,7 +82,7 @@ class XmlImport extends WP_CLI_Command
             WP_CLI::line('wp gds xmlimport dir:../folder-with-folders/ log:/tmp/xmlimport');
             WP_CLI::line('wp gds xmlimport dir:../folder-with-folders/ log:/tmp/xmlimport multiple');
             WP_CLI::line('wp gds xmlimport dir:../folder-with-folders/ output-parsed-data');
-            WP_CLI::line('wp gds xmlimport dir:../folder-with-folders/ skip-upload');
+            WP_CLI::line('wp gds xmlimport dir:../folder-with-folders/ skip-image-upload');
             WP_CLI::line('wp gds xmlimport dir:../folder-with-folders/ output-next-id');
             WP_CLI::line('');
             WP_CLI::error('Dir Argument is missing');
@@ -103,6 +104,7 @@ class XmlImport extends WP_CLI_Command
                 $materials = $xmlParser->getMaterials();
                 $time = $xmlParser->getTime();
                 $price = $xmlParser->getPrice();
+                $difficulty = $xmlParser->getDifficultyText();
 
                 if ($this->outputParsedData) {
                     WP_CLI::line('Outputting parsed data:');
@@ -143,7 +145,7 @@ class XmlImport extends WP_CLI_Command
                 self::setDefaultAuthor($xmlParser->getLanguage(), $postId);
 
                 // Build composite content and save
-                $compositeContent = $this->build($postId, $blocks, $this->dir . '/' . $file, $materials);
+                $compositeContent = $this->build($postId, $blocks, $this->dir . '/' . $file, $materials, $time, $price, $difficulty, $xmlParser->getLanguage());
                 update_field('composite_content', $compositeContent, $postId);
 
                 // Save import timestamp in meta
@@ -182,17 +184,14 @@ class XmlImport extends WP_CLI_Command
                 $this->log = substr($param, 4, strlen($param) - 4);
                 continue;
             }
-            if (substr($param, 0, 19) === 'export-old-content:') {  // Export the post's CompositeContent to this file before importing
-                $this->exportOldContent = substr($param, 19, strlen($param) - 19);
-            }
             if (substr($param, 0, 21) === 'import-start-content:') {
                 $startContentFileName = substr($param, 21, strlen($param) - 21);
                 $this->importStartContent($startContentFileName);
                 $this->multiple = false;
                 continue;
             }
-            if ($param === 'skip-upload') { // Skip upload of images (great for testing / debugging)
-                $this->skipUpload = true;
+            if ($param === 'skip-image-upload') { // Skip upload of images (great for testing / debugging)
+                $this->skipImageUpload = true;
                 continue;
             }
             if ($param === 'output-next-id') {
@@ -209,6 +208,11 @@ class XmlImport extends WP_CLI_Command
             }
             if ($param === 'encode-utf8' || $param === 'encode-utf-8') {
                 $this->encodeUtf8 = true;
+                continue;
+            }
+            if ($param === 'output-overview') {
+                $this->outputOverview = true;
+                $this->skipImageUpload = true;
                 continue;
             }
             $returnParams[] = $param;
@@ -228,7 +232,48 @@ class XmlImport extends WP_CLI_Command
         }
     }
 
-    private function build($postId, $blocks, $dir, $materials)
+    // Export the post's CompositeContent to a file before importing
+    private static function exportOriginalContent($dir, $compositeContent, $postId)
+    {
+        // Export array
+        $file = $dir . '/original_content_' . $postId . '.txt';
+        if (!file_exists($file)) {
+            file_put_contents($file, var_export($compositeContent, true));
+            WP_CLI::line('Export of postId: ' . $postId);
+            WP_CLI::line('Exported to: ' . $file);
+            WP_CLI::line('Filesize: ' . filesize($file));
+        }
+
+        // Export json
+        $file = $dir . '/original_content_' . $postId . '.json';
+        if (!file_exists($file)) {
+            file_put_contents($file, json_encode($compositeContent));
+            WP_CLI::line('Exported to: ' . $file);
+            WP_CLI::line('Filesize: ' . filesize($file));
+        }
+    }
+
+    private static function showOverview($compositeContent)
+    {
+        foreach ($compositeContent as $ele) {
+            print $ele['acf_fc_layout'];
+            if (in_array($ele['acf_fc_layout'], ['lead_paragraph', 'paragraph_list'])) {
+                print '  -  ';
+                if ($ele['title']) {
+                    print $ele['title'];
+                }
+                else if (isset($ele['description'])) {
+                    print substr($ele['description'],0, 20) . '...';
+                }
+            }
+            if ($ele['acf_fc_layout'] == 'text_item') {
+                print '       -  ' . substr($ele['body'],0, 20) . '...';
+            }
+            print "\n";
+        }
+    }
+
+    private function build($postId, $blocks, $dir, $materials, $time, $price, $difficulty, $language)
     {
         WP_CLI::line('');
         WP_CLI::line('');
@@ -244,29 +289,33 @@ class XmlImport extends WP_CLI_Command
             WP_CLI::error('Article not found');
         }
 
+        // Get composite content
         $compositeContent = get_field('composite_content', $postId);
-        if ($this->exportOldContent) {
-            file_put_contents($this->exportOldContent, var_export($compositeContent, true));
-            if (!is_file($this->exportOldContent) || filesize($this->exportOldContent) === 0) {
-                WP_CLI::error('Error exporting ' . $this->exportOldContent);
-            }
-            WP_CLI::line('Export of postId: ' . $postId);
-            WP_CLI::line('Exported to: ' . $this->exportOldContent);
-            WP_CLI::line('Filesize: ' . filesize($this->exportOldContent));
-            WP_CLI::success('Export done.');
-            exit;
-        }
+
+        // Export composite content to a file
+        self::exportOriginalContent($dir, $compositeContent, $postId);
 
         // Use start content if provided (great for testing / debugging)
+        // This will overwrite the current compositeContent with the content in the import-file
         if ($this->startContent) {
             $compositeContent = $this->startContent;
+        }
+
+        // Output overview
+        if ($this->outputOverview) {
+            WP_CLI::line('Overview of ACF content already in WP');
+            self::showOverview($compositeContent);
         }
 
         // Used when skipping upload of images
         $this->setExampleImageId($compositeContent);
 
+        // Build the content
         $newContent = $this->buildBlocks($blocks, $dir, $postId);
-        $newContent[] = $this->buildMaterials($materials);
+
+        // Add materials
+        $newContent[] = $this->buildMaterials($materials, $language, $time, $price, $difficulty);
+
         WP_CLI::line('');
         WP_CLI::line('************************');
         WP_CLI::line('************************ var_export(newContent) - start');
@@ -276,15 +325,162 @@ class XmlImport extends WP_CLI_Command
         WP_CLI::line('************************ var_export(newContent) - slut');
         WP_CLI::line('');
 
-        return array_merge($compositeContent, $newContent);
+        // Output overview
+        if ($this->outputOverview) {
+            WP_CLI::line('Overview of new content');
+            self::showOverview($newContent);
+            WP_CLI::line('');
+        }
+
+        $finalContent = array_merge(
+            self::addTopChapters($language),
+            $compositeContent,
+            self::addMiddleChapters($language),
+            $newContent,
+            self::addBottomChapters($language)
+        );
+
+        // Move the pdf-file to the last block
+        $finalContent = self::movePdfFileToEnd($finalContent);
+
+        // Move materials to after Materials chapter
+        $finalContent = self::moveMaterials($finalContent);
+
+        // Output overview
+        if ($this->outputOverview) {
+            WP_CLI::line('Overview of old and new content');
+            self::showOverview($finalContent);
+            exit;
+        }
+
+        /*
+        var_dump($finalContent);
+        print "\nslutx1234\n";
+        exit;
+        */
+
+        return $finalContent;
     }
 
-    private function buildMaterials($materials)
+    private static function buildChapter($title)
     {
         return [
+            'acf_fc_layout' => 'lead_paragraph',
+            'title' => $title,
+            'description' => '',
+            'display_hint' => 'chapter',
+        ];
+    }
+
+    private static function buildChapters($translations, $language)
+    {
+        $chapters = [];
+        foreach ($translations[$language] as $title) {
+            $chapters[] = self::buildChapter($title);
+        }
+        return $chapters;
+    }
+
+    private static function addTopChapters($language)
+    {
+        $translations = [
+            'da' => ['Intro'],
+            'sv' => ['Intro'],
+            'no' => ['Intro'],
+            'fi' => ['Johdanto'],
+        ];
+        return self::buildChapters($translations, $language);
+    }
+
+    private static function addMiddleChapters($language)
+    {
+        $translations = [
+            'da' => ['Vejledning'],
+            'sv' => ['Instruktion'],
+            'no' => ['Veiledning'],
+            'fi' => ['Ohjeet'],
+        ];
+        return self::buildChapters($translations, $language);
+    }
+
+    private static function addBottomChapters($language)
+    {
+        $translations = [
+            'da' => ['Materialer', 'Tegning', 'Video', '3D-tegning', 'Tips & Tricks', 'Magasin-artikel'],
+            'sv' => ['Material','Ritning','Video','3D-ritning','Tips & Tricks','Tidningsartikel'],
+            'no' => ['Materialer','Tegning','Video','3D-tegning','Tips & Triks','Magasinartikkel'],
+            'fi' => ['Materiaalit','Piirustus','Video','3D-piirustus','Vinkit & niksit','Lehtiversio'],
+        ];
+        return self::buildChapters($translations, $language);
+    }
+
+    /*
+     * Find the file element and move it to the end
+     */
+    private static function movePdfFileToEnd($blocks)
+    {
+        $fileIndex = null;
+        for ($i = 0; $i < sizeof($blocks); $i++) {
+            if ($blocks[$i]['acf_fc_layout'] === 'file') {
+                $fileIndex = $i;
+                break;
+            }
+        }
+        if ($fileIndex) {
+            $fileElement = array_splice($blocks, $fileIndex, 1);
+            $blocks = array_merge($blocks, $fileElement);
+        }
+        return $blocks;
+    }
+
+    private static function moveMaterials($blocks)
+    {
+        $fileIndex = null;
+        for ($i = 0; $i < sizeof($blocks); $i++) {
+            if ($blocks[$i]['acf_fc_layout'] === 'lead_paragraph' &&
+                in_array($blocks[$i]['title'],['Materialer', 'Materiaalit', 'Materialer', 'Material'])) {
+                $tmp = $blocks[$i];
+                $blocks[$i] = $blocks[$i - 1];
+                $blocks[$i - 1] = $tmp;
+                return $blocks;
+            }
+        }
+
+        return $blocks;
+    }
+
+    private function buildMaterials($materials, $language, $time, $price, $difficulty)
+    {
+        $timeLabel = [
+            'da' => 'Tidsforbrug',
+            'fi' => 'Vie aikaa',
+            'nb' => 'Tidsforbruk',
+            'sv' => 'Tidsförbrukning'
+        ];
+
+        $priceLabel = [
+            'da' => 'Pris',
+            'fi' => 'Hinta',
+            'nb' => 'Pris',
+            'sv' => 'Pris'
+        ];
+
+        $difficultyLabel = [
+            'da' => 'Sværhedsgrad',
+            'fi' => 'Vaikeusaste',
+            'nb' => 'Vanskelighetsgrad',
+            'sv' => 'Svårighetsgrad'
+        ];
+
+        $description = $materials .
+            '<h3>' . $timeLabel[$language] . '</h3><p>' . $time . '</p>' .
+            '<h3>' . $priceLabel[$language] . '</h3><p>' . $price . '</p>' .
+            '<h3>' . $difficultyLabel[$language] . '</h3><p>' . $difficulty . '</p>';
+
+        return [
             'acf_fc_layout' => 'paragraph_list',
-            'title' => HtmlToMarkdown::parseHtml('Materialer'),
-            'description' => HtmlToMarkdown::parseHtml($materials),
+            'title' => '',
+            'description' => HtmlToMarkdown::parseHtml($description),
             'image' => false,
             'video_url' => '',
             'collapsible' => false,
@@ -312,9 +508,16 @@ class XmlImport extends WP_CLI_Command
         return $content;
     }
 
+    private static function logAuthors($postId, $authors)
+    {
+        file_put_contents('/tmp/authors.txt', $postId . ';' . $authors . PHP_EOL, FILE_APPEND);
+    }
+
     private function buildWidget($block, $dir, $postId)
     {
         if ($block['type'] === 'author') {
+            self::logAuthors($postId, $block['content']);
+            /*
             WP_CLI::line('Widget: Text');
             WP_CLI::line($block['content']);
             return [
@@ -322,6 +525,8 @@ class XmlImport extends WP_CLI_Command
                 'locked_content' => true,
                 'acf_fc_layout'  => 'text_item'
             ];
+            */
+            return null;
         }
         else if ($block['type'] === 'title') {
             /*
@@ -344,7 +549,18 @@ class XmlImport extends WP_CLI_Command
         }
         else if ($block['type'] === 'h2') {
             WP_CLI::line('Widget: Text');
-            WP_CLI::line('<h2>' . $block['content'] . '</h2>');
+            WP_CLI::line('<h2>' . $block['content'] . '</h2> x');
+
+            /*
+            if (preg_match("/riller/", $block['content'], $res)) {
+                print $block['content'] . " a ";
+                exit;
+            }
+            else {
+                print $block['content'] . " b ";
+            }
+            */
+
             return [
                 'body'           => HtmlToMarkdown::parseHtml('<h2>' . $block['content'] . '</h2>'),
                 'locked_content' => true,
@@ -394,7 +610,7 @@ class XmlImport extends WP_CLI_Command
             WP_CLI::line('Widget: Text');
             WP_CLI::line($block['content']);
             return [
-                'body'           => HtmlToMarkdown::parseHtml($block['content']),
+                'body'           => self::stripSlashes(HtmlToMarkdown::parseHtml($block['content'])),
                 'locked_content' => true,
                 'acf_fc_layout'  => 'text_item'
             ];
@@ -429,9 +645,14 @@ class XmlImport extends WP_CLI_Command
         print "<br>\n";
     }
 
+    private static function stripSlashes($data)
+    {
+        return preg_replace("/(\d+)\\\\+\./", "$1.", $data);
+    }
+
     private function uploadFile($postId, $dir, $src, $figcaption)
     {
-        if ($this->skipUpload) {
+        if ($this->skipImageUpload) {
             return $this->exampleImageId;
         }
 
@@ -506,7 +727,7 @@ class XmlImport extends WP_CLI_Command
 
         return [
             'acf_fc_layout' => 'paragraph_list',
-            'title' => HtmlToMarkdown::parseHtml($title),
+            'title' => self::stripSlashes(HtmlToMarkdown::parseHtml($title)),
             'description' => HtmlToMarkdown::parseHtml($description),
             'image' => $fileAttachmentId,
             'video_url' => '',
