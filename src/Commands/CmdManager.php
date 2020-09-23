@@ -37,6 +37,7 @@ class CmdManager
             WaRedirectResolver::register();
             AuthorFix::register();
             Attachments::register();
+            SeoMigration::register();
         }
     }
 }
