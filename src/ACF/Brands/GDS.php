@@ -22,12 +22,14 @@ class GDS extends Brand
 
         $paragraphListWidget = CompositeFieldGroup::getParagraphListWidget();
         add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'setParagraphListDisplayHints']);
-
-        $paragraphListWidget = CompositeFieldGroup::getParagraphListWidget();
         add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'removeParagraphListCollapsible']);
 
         $imageWidget = CompositeFieldGroup::getImageWidget();
         add_filter(sprintf('willow/acf/layout=%s', $imageWidget->getKey()), [__CLASS__, 'setImageDisplayHints']);
+
+        $infoBoxWidget = CompositeFieldGroup::getInfoboxWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $infoBoxWidget->getKey()), [__CLASS__, 'setInfoBoxDisplayHints']);
+        add_filter(sprintf('willow/acf/layout=%s', $infoBoxWidget->getKey()), [__CLASS__, 'setInfoBoxTitleNotRequired']);
     }
 
     public static function setGalleryDisplayHints(ACFLayout $gallery): ACFLayout
@@ -77,6 +79,32 @@ class GDS extends Brand
                     'half-width' => 'Half Width',
                 ]);
                 $field->setDefaultValue('full-width');
+            }
+            return $field;
+        });
+    }
+
+    public static function setInfoBoxDisplayHints(ACFLayout $infoBox)
+    {
+        $displayHint = new RadioField('field_5f60afb647c6e');
+        $displayHint->setLabel('Display Format')
+            ->setName('display_hint')
+            ->setChoice('yellow', 'Yellow')
+            ->setChoice('blue', 'Blue')
+            ->setChoice('green', 'Green')
+            ->setChoice('red', 'Red')
+            ->setDefaultValue('yellow')
+            ->setLayout('vertical')
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+
+        return $infoBox->addSubField($displayHint);
+    }
+
+    public static function setInfoBoxTitleNotRequired(ACFLayout $infoBox)
+    {
+        return $infoBox->mapSubFields(function (ACFField $field) {
+            if ($field->getName() === 'title') {
+                $field->setRequired(false);
             }
             return $field;
         });
