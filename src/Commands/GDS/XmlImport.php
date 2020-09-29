@@ -13,7 +13,7 @@ use WP_User;
 class XmlImport extends WP_CLI_Command
 {
     private const CMD_NAMESPACE = 'gds';
-    private $multiple;
+    private $bulk;
     private $dir;
     private $skipImageUpload;
     private $exampleImageId;
@@ -23,6 +23,7 @@ class XmlImport extends WP_CLI_Command
     private $force;
     private $encodeUtf8;
     private $outputOverview;
+    private $outputData;
 
     public static function register()
     {
@@ -39,7 +40,7 @@ class XmlImport extends WP_CLI_Command
      */
     public function xmlimport($params)
     {
-        $this->multiple = false;
+        $this->bulk = 0;
         $this->skipImageUpload = false;
         $this->startContent = false;
         $this->outputNextId = false;
@@ -47,6 +48,7 @@ class XmlImport extends WP_CLI_Command
         $this->force = false;
         $this->encodeUtf8 = false;
         $this->outputOverview = false;
+        $this->outputData = false;
 
         $remainingArguments = $this->parseArguments($params);
         if (sizeof($remainingArguments) > 0) {
@@ -62,23 +64,23 @@ class XmlImport extends WP_CLI_Command
             WP_CLI::line('dir:/path/ the directory to import from');
             WP_CLI::line('This dir should contain an import dir with directories that contain a html-file and jpg-files.');
             WP_CLI::line('');
-            WP_CLI::line('"import-start-content:/path/to/file" overwrite the current composite_content with the');
+            WP_CLI::line('"import-start-content:/path/to/file" overwrite the current composite-content with the');
             WP_CLI::line('content of the file, before importing.');
             WP_CLI::line('');
-            WP_CLI::line('"skip-image-upload" do not upload images to Wordpress and S3. Use a default picture instead.');
+            WP_CLI::line('"skip-image-upload" do not upload images to Wordpress and S3. Use a default image instead.');
             WP_CLI::line('');
             WP_CLI::line('"output-next-id" show the next post ID to be imported.');
             WP_CLI::line('');
+            WP_CLI::line('"output-data" show the current composite-content.');
+            WP_CLI::line('');
             WP_CLI::line('"output-parsed-data" show the data parsed in the xml file.');
             WP_CLI::line('');
-            WP_CLI::line('"multiple" do not stop after the first file is imported.');
-            WP_CLI::line('');
             WP_CLI::line('Examples:');
-            WP_CLI::line('wp gds xmlimport dir:../folder-with-folders/');
-            WP_CLI::line('wp gds xmlimport dir:../folder-with-folders/ output-next-id');
-            WP_CLI::line('wp gds xmlimport dir:../folder-with-folders/ output-parsed-data');
-            WP_CLI::line('wp gds xmlimport dir:../folder-with-folders/ skip-image-upload');
-            WP_CLI::line('wp gds xmlimport dir:../folder-with-folders/ multiple');
+            WP_CLI::line('wp gds xmlimport dir:../folder-with-import-folder/');
+            WP_CLI::line('wp gds xmlimport dir:../folder-with-import-folder/ output-next-id');
+            WP_CLI::line('wp gds xmlimport dir:../folder-with-import-folder/ output-data');
+            WP_CLI::line('wp gds xmlimport dir:../folder-with-import-folder/ output-parsed-data');
+            WP_CLI::line('wp gds xmlimport dir:../folder-with-import-folder/ skip-image-upload');
             WP_CLI::line('');
             self::error('Dir Argument is missing');
         }
@@ -125,6 +127,9 @@ class XmlImport extends WP_CLI_Command
                     self::error('This post has already been enriched with xml import. You can run it again with the "force" parameter.');
                 }
 
+                // Potential pause before importing article
+                $this->wait();
+
                 // Log start
                 self::log('Import - ' . $file . ' - start');
 
@@ -156,25 +161,51 @@ class XmlImport extends WP_CLI_Command
                 // Log end
                 self::log('Import - ' . $file . ' - end');
 
-                if (!$this->multiple) {
-                    WP_CLI::line('"multiple" argument not set, so stopping after one import.');
-                    WP_CLI::line('Post ID: ' . $postId);
-                    WP_CLI::success('Done.');
+                WP_CLI::line('Done with post ID: ' . $postId);
+
+                // Exit after import (do not import multiple) if start content has been used
+                if ($this->startContent) {
                     exit;
                 }
             }
         }
 
         self::log('Script end');
-        WP_CLI::success('Import done');
+        WP_CLI::success('No more to import. Import done.');
+    }
+
+    private function wait()
+    {
+        // if we are in the middle of a bulk import then keep importing
+        if ($this->bulk > 1) {
+            $this->bulk = $this->bulk - 1;
+            return;
+        }
+
+        WP_CLI::line('');
+        WP_CLI::line('How many articles would you like to bulk import? Enter a number. Press enter for a single article at a time.');
+
+        $handle = fopen("php://stdin", "r");
+        $line = rtrim(fgets($handle));
+        if (intval($line)) {
+            $this->bulk = intval($line);
+        }
     }
 
     private function moveFileToImported($file)
     {
+        // Create 'imported' folder if it doesn't exist
         if (!file_exists($this->dir . '/imported/')) {
             mkdir($this->dir . '/imported/');
         }
+
+        // Add .2 to folder destination if it already exists
         $moveTo = $this->dir . '/imported/' . $file;
+        while (file_exists($moveTo)) {
+            $moveTo = $moveTo . '.2';
+        }
+
+        // Move folder
         rename($this->dir . '/import/' . $file, $moveTo);
         if (!file_exists($moveTo)) {
             self::error('Error moving file to: ' . $moveTo);
@@ -185,10 +216,6 @@ class XmlImport extends WP_CLI_Command
     {
         $returnParams = [];
         foreach ($params as $param) {
-            if ($param === 'multiple') {
-                $this->multiple = true;
-                continue;
-            }
             if (substr($param, 0, 4) === 'dir:') {  // The basedir that includes the dirs to be imported
                 $this->dir = substr($param, 4, strlen($param) - 4);
                 continue;
@@ -196,7 +223,6 @@ class XmlImport extends WP_CLI_Command
             if (substr($param, 0, 21) === 'import-start-content:') {
                 $startContentFileName = substr($param, 21, strlen($param) - 21);
                 $this->importStartContent($startContentFileName);
-                $this->multiple = false;
                 continue;
             }
             if ($param === 'skip-image-upload') { // Skip upload of images (great for testing / debugging)
@@ -221,6 +247,11 @@ class XmlImport extends WP_CLI_Command
             }
             if ($param === 'output-overview') {
                 $this->outputOverview = true;
+                $this->skipImageUpload = true;
+                continue;
+            }
+            if ($param === 'output-data') {
+                $this->outputData = true;
                 $this->skipImageUpload = true;
                 continue;
             }
@@ -303,6 +334,14 @@ class XmlImport extends WP_CLI_Command
 
         // Export composite content to a file
         self::exportOriginalContent($dir, $compositeContent, $postId);
+
+        // Output compositeContent
+        if ($this->outputData) {
+            WP_CLI::line('Outputting compositeContent data:');
+            var_export($compositeContent);
+            WP_CLI::line('compositeContent data end. PostID: ' . $postId);
+            exit;
+        }
 
         // Use start content if provided (great for testing / debugging)
         // This will overwrite the current compositeContent with the content in the import-file
@@ -431,6 +470,7 @@ class XmlImport extends WP_CLI_Command
         }
         if ($fileIndex) {
             $fileElement = array_splice($blocks, $fileIndex, 1);
+            $fileElement[0]['locked_content'] = false;
             $blocks = array_merge($blocks, $fileElement);
         }
         return $blocks;
@@ -520,15 +560,6 @@ class XmlImport extends WP_CLI_Command
     {
         if ($block['type'] === 'author') {
             self::logAuthors($postId, $block['content']);
-            /*
-            WP_CLI::line('Widget: Text');
-            WP_CLI::line($block['content']);
-            return [
-                'body'           => HtmlToMarkdown::parseHtml($block['content']),
-                'locked_content' => true,
-                'acf_fc_layout'  => 'text_item'
-            ];
-            */
             return null;
         }
         else if ($block['type'] === 'title') {
@@ -555,7 +586,6 @@ class XmlImport extends WP_CLI_Command
 
             return [
                 'body'           => HtmlToMarkdown::parseHtml('<h2>' . $block['content'] . '</h2>'),
-                'locked_content' => true,
                 'acf_fc_layout'  => 'text_item'
             ];
         }
@@ -564,7 +594,6 @@ class XmlImport extends WP_CLI_Command
             WP_CLI::line('<h3>' . $block['content'] . '</h3>');
             return [
                 'body'           => HtmlToMarkdown::parseHtml('<h3>' . $block['content'] . '</h3>'),
-                'locked_content' => true,
                 'acf_fc_layout'  => 'text_item'
             ];
         }
@@ -591,8 +620,19 @@ class XmlImport extends WP_CLI_Command
             return [
                 'lead_image' => false,
                 'file' => $fileAttachmentId,
-                'locked_content' => true,
+                'locked_content' => false,
                 'acf_fc_layout' => 'image'
+            ];
+        }
+        else if ($block['type'] === 'lead') {
+            WP_CLI::line('Widget: Lead paragraph');
+            WP_CLI::line($block['content']);
+
+            return [
+                'acf_fc_layout' => 'lead_paragraph',
+                'title' => $block['content'],
+                'description' => '',
+                'display_hint' => 'default',
             ];
         }
         else if ($block['type'] === 'meta') {
@@ -603,7 +643,6 @@ class XmlImport extends WP_CLI_Command
             WP_CLI::line($block['content']);
             return [
                 'body'           => self::stripSlashes(HtmlToMarkdown::parseHtml($block['content'])),
-                'locked_content' => true,
                 'acf_fc_layout'  => 'text_item'
             ];
         }
@@ -612,7 +651,6 @@ class XmlImport extends WP_CLI_Command
             WP_CLI::line($block['content']);
             return [
                 'body'           => HtmlToMarkdown::parseHtml($block['content']),
-                'locked_content' => true,
                 'acf_fc_layout'  => 'text_item'
             ];
         }
@@ -626,7 +664,6 @@ class XmlImport extends WP_CLI_Command
 
             return [
                 'body'           => HtmlToMarkdown::parseHtml($content),
-                'locked_content' => true,
                 'acf_fc_layout'  => 'text_item'
             ];
         }
