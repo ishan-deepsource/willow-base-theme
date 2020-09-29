@@ -177,9 +177,53 @@ class XmlParser
 
     private static function prepareBlocks($blocks)
     {
+        $blocks = self::moveHowToLeads($blocks);
         $blocks = self::mergeText($blocks); // Merge h2 and text elements in the root
         $blocks = self::prepareSecondLevelText($blocks); // Merge h2 and text elements in the next level
         return $blocks;
+    }
+
+    /**
+     * For each how-to-section:
+     * Move the first h2 out before the how-to-section as a lead-paragraph
+     *
+     * @param $blocks
+     *
+     * @return array
+     */
+    private static function moveHowToLeads($blocks)
+    {
+        $newBlocks = [];
+        // Iterate blocks
+        for ($i=0; $i < sizeof($blocks); $i++) {
+            if ($blocks[$i]['type'] !== 'how-to') {
+                // Non how-to blocks are added directly
+                $newBlocks[] = $blocks[$i];
+                continue;
+            }
+
+            // Build how-to block with lead paragraph before how-to-section, and with h2 removed
+            $howToBlock = [];
+            // Iterate how-to
+            for ($j = 0; $j < sizeof($blocks[$i]['content']); $j++) {
+                // If how-to-section and first element is h2
+                if ($blocks[$i]['content'][$j]['type'] === 'how-to-section'
+                    && $blocks[$i]['content'][$j]['content'][0]['type'] === 'h2') {
+                    // Add lead paragraph before how-to-section
+                    $howToBlock[] = ['type' => 'lead', 'content' =>
+                        $blocks[$i]['content'][$j]['content'][0]['content']];
+                    // Remove h2
+                    unset($blocks[$i]['content'][$j]['content'][0]);
+                    // Add how-to-section
+                    $howToBlock[] = $blocks[$i]['content'][$j];
+                }
+                else {
+                    $howToBlock[] = $blocks[$i]['content'][$j];
+                }
+            }
+            $newBlocks[] = ['type' => 'how-to', 'content' => $howToBlock];
+        }
+        return $newBlocks;
     }
 
     private static function prepareSecondLevelText($blocks)

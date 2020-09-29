@@ -23,6 +23,7 @@ class XmlImport extends WP_CLI_Command
     private $force;
     private $encodeUtf8;
     private $outputOverview;
+    private $outputData;
 
     public static function register()
     {
@@ -47,6 +48,7 @@ class XmlImport extends WP_CLI_Command
         $this->force = false;
         $this->encodeUtf8 = false;
         $this->outputOverview = false;
+        $this->outputData = false;
 
         $remainingArguments = $this->parseArguments($params);
         if (sizeof($remainingArguments) > 0) {
@@ -62,23 +64,26 @@ class XmlImport extends WP_CLI_Command
             WP_CLI::line('dir:/path/ the directory to import from');
             WP_CLI::line('This dir should contain an import dir with directories that contain a html-file and jpg-files.');
             WP_CLI::line('');
-            WP_CLI::line('"import-start-content:/path/to/file" overwrite the current composite_content with the');
+            WP_CLI::line('"import-start-content:/path/to/file" overwrite the current composite-content with the');
             WP_CLI::line('content of the file, before importing.');
             WP_CLI::line('');
-            WP_CLI::line('"skip-image-upload" do not upload images to Wordpress and S3. Use a default picture instead.');
+            WP_CLI::line('"skip-image-upload" do not upload images to Wordpress and S3. Use a default image instead.');
             WP_CLI::line('');
             WP_CLI::line('"output-next-id" show the next post ID to be imported.');
+            WP_CLI::line('');
+            WP_CLI::line('"output-data" show the current composite-content.');
             WP_CLI::line('');
             WP_CLI::line('"output-parsed-data" show the data parsed in the xml file.');
             WP_CLI::line('');
             WP_CLI::line('"multiple" do not stop after the first file is imported.');
             WP_CLI::line('');
             WP_CLI::line('Examples:');
-            WP_CLI::line('wp gds xmlimport dir:../folder-with-folders/');
-            WP_CLI::line('wp gds xmlimport dir:../folder-with-folders/ output-next-id');
-            WP_CLI::line('wp gds xmlimport dir:../folder-with-folders/ output-parsed-data');
-            WP_CLI::line('wp gds xmlimport dir:../folder-with-folders/ skip-image-upload');
-            WP_CLI::line('wp gds xmlimport dir:../folder-with-folders/ multiple');
+            WP_CLI::line('wp gds xmlimport dir:../folder-with-import-folder/');
+            WP_CLI::line('wp gds xmlimport dir:../folder-with-import-folder/ output-next-id');
+            WP_CLI::line('wp gds xmlimport dir:../folder-with-import-folder/ output-data');
+            WP_CLI::line('wp gds xmlimport dir:../folder-with-import-folder/ output-parsed-data');
+            WP_CLI::line('wp gds xmlimport dir:../folder-with-import-folder/ skip-image-upload');
+            WP_CLI::line('wp gds xmlimport dir:../folder-with-import-folder/ multiple');
             WP_CLI::line('');
             self::error('Dir Argument is missing');
         }
@@ -224,6 +229,11 @@ class XmlImport extends WP_CLI_Command
                 $this->skipImageUpload = true;
                 continue;
             }
+            if ($param === 'output-data') {
+                $this->outputData = true;
+                $this->skipImageUpload = true;
+                continue;
+            }
             $returnParams[] = $param;
         }
         return $returnParams;
@@ -303,6 +313,14 @@ class XmlImport extends WP_CLI_Command
 
         // Export composite content to a file
         self::exportOriginalContent($dir, $compositeContent, $postId);
+
+        // Output compositeContent
+        if ($this->outputData) {
+            WP_CLI::line('Outputting compositeContent data:');
+            var_export($compositeContent);
+            WP_CLI::line('compositeContent data end. PostID: ' . $postId);
+            exit;
+        }
 
         // Use start content if provided (great for testing / debugging)
         // This will overwrite the current compositeContent with the content in the import-file
@@ -593,6 +611,17 @@ class XmlImport extends WP_CLI_Command
                 'file' => $fileAttachmentId,
                 'locked_content' => true,
                 'acf_fc_layout' => 'image'
+            ];
+        }
+        else if ($block['type'] === 'lead') {
+            WP_CLI::line('Widget: Lead paragraph');
+            WP_CLI::line($block['content']);
+
+            return [
+                'acf_fc_layout' => 'lead_paragraph',
+                'title' => $block['content'],
+                'description' => '',
+                'display_hint' => 'default',
             ];
         }
         else if ($block['type'] === 'meta') {
