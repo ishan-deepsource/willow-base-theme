@@ -324,14 +324,13 @@ class XmlParser
         else if ($type === 'meta') {
             return $this->processMeta($ele);
         }
-        else if ($type === 'p' && $ele->attributes()->itemprop == 'text') {
+        else if ($type === 'p') {
             return $this->processP($ele);
         }
-        else if ($type === 'p' && $ele->attributes()->itemprop == 'timeRequired') {
-            return $this->processP($ele);
-        } else if ($type === 'ul') {
+        else if ($type === 'ul') {
             return $this->processUl($ele);
-        } else {
+        }
+        else {
             WP_CLI::error('Type not handled processNode: ' . $type);
         }
     }

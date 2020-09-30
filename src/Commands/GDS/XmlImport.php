@@ -428,7 +428,7 @@ class XmlImport extends WP_CLI_Command
         $translations = [
             'da' => ['Intro'],
             'sv' => ['Intro'],
-            'no' => ['Intro'],
+            'nb' => ['Intro'],
             'fi' => ['Johdanto'],
         ];
         return self::buildChapters($translations, $language);
@@ -439,7 +439,7 @@ class XmlImport extends WP_CLI_Command
         $translations = [
             'da' => ['Vejledning'],
             'sv' => ['Instruktion'],
-            'no' => ['Veiledning'],
+            'nb' => ['Veiledning'],
             'fi' => ['Ohjeet'],
         ];
         return self::buildChapters($translations, $language);
@@ -450,7 +450,7 @@ class XmlImport extends WP_CLI_Command
         $translations = [
             'da' => ['Materialer', 'Tegning', 'Video', '3D-tegning', 'Tips & Tricks', 'Magasin-artikel'],
             'sv' => ['Material','Ritning','Video','3D-ritning','Tips & Tricks','Tidningsartikel'],
-            'no' => ['Materialer','Tegning','Video','3D-tegning','Tips & Triks','Magasinartikkel'],
+            'nb' => ['Materialer','Tegning','Video','3D-tegning','Tips & Triks','Magasinartikkel'],
             'fi' => ['Materiaalit','Piirustus','Video','3D-piirustus','Vinkit & niksit','Lehtiversio'],
         ];
         return self::buildChapters($translations, $language);
