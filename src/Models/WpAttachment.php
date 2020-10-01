@@ -8,6 +8,7 @@ use Bonnier\Willow\Base\Models\ACF\Attachment\AttachmentFieldGroup;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use GuzzleHttp\Client;
 use Illuminate\Support\Collection;
+use function DeliciousBrains\WP_Offload_S3\Aws3\GuzzleHttp\Psr7\parse_query;
 
 class WpAttachment
 {
