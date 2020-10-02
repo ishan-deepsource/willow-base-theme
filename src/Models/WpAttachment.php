@@ -316,6 +316,8 @@ class WpAttachment
                 array_pop($arr);
                 $post_title =  implode(' ', $arr);
             }
+        } else {
+            $post_title = '';
         }
         // Creating attachment
         $attachment = [
