@@ -312,7 +312,7 @@ class WpAttachment
             // file name example: narvafronten-nattstrid-andra-varldskriget-ostfronten-R-HbTkaiunaWgbbujINAOw.jpg
             $arr =explode('-',str_replace('_',' ',substr($fileName, 0, strrpos($fileName, "."))));
             if (!empty($arr)){
-                // remove last element
+                //Should remove last element file seed (f.x. HbTkaiunaWgbbujINAOw)
                 array_pop($arr);
                 $post_title =  implode(' ', $arr);
             }else {
