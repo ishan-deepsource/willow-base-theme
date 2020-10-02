@@ -315,9 +315,9 @@ class WpAttachment
                 // remove last element
                 array_pop($arr);
                 $post_title =  implode(' ', $arr);
+            }else {
+                $post_title = '';
             }
-        } else {
-            $post_title = '';
         }
         // Creating attachment
         $attachment = [
