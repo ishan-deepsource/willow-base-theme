@@ -308,14 +308,14 @@ class WpAttachment
             return null;
         }
         $post_title = $file->title;
-        if (empty($post_title)){
+        if (empty($post_title)) {
             // file name example: narvafronten-nattstrid-andra-varldskriget-ostfronten-R-HbTkaiunaWgbbujINAOw.jpg
-            $arr =explode('-',str_replace('_',' ',substr($fileName, 0, strrpos($fileName, "."))));
-            if (!empty($arr)){
+            $arr = explode('-', str_replace('_', ' ', substr($fileName, 0, strrpos($fileName, "."))));
+            if ( ! empty($arr)) {
                 //Should remove last element file seed (f.x. HbTkaiunaWgbbujINAOw)
                 array_pop($arr);
-                $post_title =  implode(' ', $arr);
-            }else {
+                $post_title = implode(' ', $arr);
+            } else {
                 $post_title = '';
             }
         }
