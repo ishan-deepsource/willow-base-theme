@@ -14,7 +14,6 @@ class GDS extends Brand
         self::removeVideoUrlFromImageWidget();
         self::removeVideoUrlFromGalleryItems();
         self::removeVideoUrlFromParagraphListWidget();
-        self::removeVideoUrlFromTeaserImages();
         self::removeInventoryWidget();
 
         $galleryField = CompositeFieldGroup::getGalleryWidget();
