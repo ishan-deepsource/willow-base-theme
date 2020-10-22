@@ -214,7 +214,7 @@ class CompositeFieldGroup
         $content->addLayout(self::getAudioWidget());
         $content->addLayout(self::getFileWidget());
         $content->addLayout(self::getVideoWidget());
-        $content->addLayout(self::getUrlWidget());
+        $content->addLayout(self::getLinkWidget());
         $content->addLayout(self::getGalleryWidget());
         $content->addLayout(self::getInsertedCodeWidget());
         $content->addLayout(self::getInfoboxWidget());
@@ -485,7 +485,7 @@ class CompositeFieldGroup
         return apply_filters(sprintf('willow/acf/layout=%s', $videoWidget->getKey()), $videoWidget);
     }
 
-    public static function getUrlWidget()
+    public static function getLinkWidget()
     {
         $urlWidget = new ACFLayout('590b1798c8768');
         $urlWidget->setName('link')
@@ -499,7 +499,7 @@ class CompositeFieldGroup
         $urlWidget->addSubField($url);
 
         $button = new TextField('field_590b179fc8769');
-        $button->setLabel('Button text')
+        $button->setLabel('Title text')
             ->setName('title');
 
         $urlWidget->addSubField($button);

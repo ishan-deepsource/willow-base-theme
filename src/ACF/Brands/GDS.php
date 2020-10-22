@@ -29,6 +29,9 @@ class GDS extends Brand
         $infoBoxWidget = CompositeFieldGroup::getInfoboxWidget();
         add_filter(sprintf('willow/acf/layout=%s', $infoBoxWidget->getKey()), [__CLASS__, 'setInfoBoxDisplayHints']);
         add_filter(sprintf('willow/acf/layout=%s', $infoBoxWidget->getKey()), [__CLASS__, 'setInfoBoxTitleNotRequired']);
+
+        $linkWidget = CompositeFieldGroup::getLinkWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $linkWidget->getKey()), [__CLASS__, 'addLinkWidgetDisplayHints']);
     }
 
     public static function setGalleryDisplayHints(ACFLayout $gallery): ACFLayout
@@ -107,5 +110,19 @@ class GDS extends Brand
             }
             return $field;
         });
+    }
+
+    public static function addLinkWidgetDisplayHints(ACFLayout $link)
+    {
+        $displayHint = new RadioField('field_5f916f115010d');
+        $displayHint->setLabel('Display Format')
+            ->setName('display_hint')
+            ->setChoice('default', 'Default')
+            ->setChoice('button', 'Button')
+            ->setDefaultValue('default')
+            ->setLayout('vertical')
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+
+        return $link->addSubField($displayHint);
     }
 }
