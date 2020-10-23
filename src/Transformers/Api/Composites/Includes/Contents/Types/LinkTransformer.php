@@ -20,7 +20,8 @@ class LinkTransformer extends TransformerAbstract
         return [
             'url'    => $link->isLocked() ? null : $this->getPath($link->getUrl()),
             'title'  => $link->isLocked() ? null : $link->getTitle(),
-            'target' => $link->isLocked() ? null : $link->getTarget()
+            'target' => $link->isLocked() ? null : $link->getTarget(),
+            'display_hint' => $link->isLocked() ? null : $link->getDisplayHint()
         ];
     }
 }
