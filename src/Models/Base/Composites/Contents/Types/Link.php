@@ -43,4 +43,9 @@ class Link extends AbstractContent implements LinkContract
     {
         return $this->model->getStickToNext();
     }
+
+    public function getDisplayHint(): ?string
+    {
+        return $this->model->getDisplayHint();
+    }
 }

@@ -26,4 +26,9 @@ class LinkAdapter extends AbstractContentAdapter implements LinkContract
     {
         return array_get($this->acfArray, 'target') ?: null;
     }
+
+    public function getDisplayHint(): ?string
+    {
+        return array_get($this->acfArray, 'display_hint') ?: null;
+    }
 }
