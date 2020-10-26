@@ -648,7 +648,7 @@ class CompositeFieldGroup
         $title = new TextField('field_58aae4b6809c7');
         $title->setLabel('Title')
             ->setName('title')
-            ->setRequired(true);
+            ->setRequired(false);
 
         $infobox->addSubField($title);
 
