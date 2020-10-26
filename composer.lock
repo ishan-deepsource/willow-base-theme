@@ -1019,7 +1019,7 @@
             "version": "1.0.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/junaidbhura/composer-wp-pro-plugins.git",
+                "url": "git@github.com:junaidbhura/composer-wp-pro-plugins.git",
                 "reference": "d6c2bd0fbe29a7f5767be6107e8f568228694753"
             },
             "dist": {
