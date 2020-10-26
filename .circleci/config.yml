@@ -32,6 +32,9 @@ jobs:
       # not working on composer 2.0
       # - run: sudo composer self-update
 
+      # use composer 1
+      - run composer self-update --1
+
       # Download and cache dependencies
       - restore_cache:
           keys:
