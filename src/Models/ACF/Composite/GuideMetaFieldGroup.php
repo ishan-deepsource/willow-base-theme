@@ -32,12 +32,12 @@ class GuideMetaFieldGroup {
         $timeText = new TextField('field_5f560d8c95208');
         $timeText->setName(self::TIME_REQUIRED_FIELD_NAME)
                  ->setLabel('Time required')
-                 ->setRequired(true);
+                 ->setRequired(false);
 
         $materialPriceText = new TextField('field_5f560ec795209');
         $materialPriceText->setName(self::PRICE_FIELD_NAME)
                           ->setLabel('Price')
-                          ->setRequired(true);
+                          ->setRequired(false);
 
         $group->addField($timeText);
         $group->addField($materialPriceText);
