@@ -28,7 +28,6 @@ class GDS extends Brand
 
         $infoBoxWidget = CompositeFieldGroup::getInfoboxWidget();
         add_filter(sprintf('willow/acf/layout=%s', $infoBoxWidget->getKey()), [__CLASS__, 'setInfoBoxDisplayHints']);
-        add_filter(sprintf('willow/acf/layout=%s', $infoBoxWidget->getKey()), [__CLASS__, 'setInfoBoxTitleNotRequired']);
 
         $linkWidget = CompositeFieldGroup::getLinkWidget();
         add_filter(sprintf('willow/acf/layout=%s', $linkWidget->getKey()), [__CLASS__, 'addLinkWidgetDisplayHints']);
@@ -100,16 +99,6 @@ class GDS extends Brand
             ->setReturnFormat(ACFField::RETURN_VALUE);
 
         return $infoBox->addSubField($displayHint);
-    }
-
-    public static function setInfoBoxTitleNotRequired(ACFLayout $infoBox)
-    {
-        return $infoBox->mapSubFields(function (ACFField $field) {
-            if ($field->getName() === 'title') {
-                $field->setRequired(false);
-            }
-            return $field;
-        });
     }
 
     public static function addLinkWidgetDisplayHints(ACFLayout $link)
