@@ -650,6 +650,7 @@ class CompositeFieldGroup
             ->setName('title')
             ->setRequired(false);
 
+        
         $infobox->addSubField($title);
 
         $body = new MarkdownField('field_58aae4d4809c8');
