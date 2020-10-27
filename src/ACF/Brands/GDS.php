@@ -6,6 +6,7 @@ use Bonnier\Willow\Base\Models\ACF\ACFField;
 use Bonnier\Willow\Base\Models\ACF\ACFLayout;
 use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Fields\RadioField;
+use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 
 class GDS extends Brand
 {
@@ -31,6 +32,9 @@ class GDS extends Brand
 
         $linkWidget = CompositeFieldGroup::getLinkWidget();
         add_filter(sprintf('willow/acf/layout=%s', $linkWidget->getKey()), [__CLASS__, 'addLinkWidgetDisplayHints']);
+
+        $teaserListWidget =  PageFieldGroup::getTeaserListLayout();
+        add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListDisplayHints']);
     }
 
     public static function setGalleryDisplayHints(ACFLayout $gallery): ACFLayout
@@ -113,5 +117,21 @@ class GDS extends Brand
             ->setReturnFormat(ACFField::RETURN_VALUE);
 
         return $link->addSubField($displayHint);
+    }
+
+    public static function setTeaserListDisplayHints(ACFLayout $teaserList)
+    {
+        $displayHint = new RadioField('field_5bb319a1ffcf1');
+        $displayHint->setLabel('Display Format')
+            ->setName('display_hint')
+            ->setChoice('1plus2plus4', '1 + 2 + 4')
+            ->setChoice('1col', '1 Col')
+            ->setChoice('4col', '4 Col')
+            ->setChoice('1plus5', '1 + 5')
+            ->setDefaultValue('default')
+            ->setLayout('vertical')
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+
+        return $teaserList->addSubField($displayHint);
     }
 }
