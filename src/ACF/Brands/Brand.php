@@ -13,6 +13,7 @@ use Bonnier\Willow\Base\Models\ACF\Fields\FlexibleContentField;
 use Bonnier\Willow\Base\Models\ACF\Fields\GroupField;
 use Bonnier\Willow\Base\Models\ACF\Fields\RepeaterField;
 use Bonnier\Willow\Base\Models\ACF\Fields\UrlField;
+use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 
 abstract class Brand implements BrandInterface
 {
@@ -71,6 +72,42 @@ abstract class Brand implements BrandInterface
         add_filter(sprintf('willow/acf/field=%s', $contentField->getKey()), function (FlexibleContentField $contentField) {
             $inventoryField = CompositeFieldGroup::getInventoryWidget();
             return $contentField->removeLayout($inventoryField->getKey());
+        });
+    }
+
+    protected static function removeAudioWidget()
+    {
+        $contentField = CompositeFieldGroup::getContentField();
+        add_filter(sprintf('willow/acf/field=%s', $contentField->getKey()), function (FlexibleContentField $contentField) {
+            $audioField = CompositeFieldGroup::getAudioWidget();
+            return $contentField->removeLayout($audioField->getKey());
+        });
+    }
+
+    protected static function removeChaptersSummaryWidget()
+    {
+        $contentField = CompositeFieldGroup::getContentField();
+        add_filter(sprintf('willow/acf/field=%s', $contentField->getKey()), function (FlexibleContentField $contentField) {
+            $chaptersSummaryField = CompositeFieldGroup::getChaptersSummaryWidget();
+            return $contentField->removeLayout($chaptersSummaryField->getKey());
+        });
+    }
+
+    protected static function removeQuotePageWidget()
+    {
+        $pageWidgetsField = PageFieldGroup::getPageWidgetsField();
+        add_filter(sprintf('willow/acf/field=%s', $pageWidgetsField->getKey()), function (FlexibleContentField $contentField) {
+            $quoteTeaserLayout = PageFieldGroup::getQuoteTeaserLayout();
+            return $contentField->removeLayout($quoteTeaserLayout->getKey());
+        });
+    }
+
+    protected static function removeFeaturedContentPageWidget()
+    {
+        $pageWidgetsField = PageFieldGroup::getPageWidgetsField();
+        add_filter(sprintf('willow/acf/field=%s', $pageWidgetsField->getKey()), function (FlexibleContentField $contentField) {
+            $chaptersSummaryField = PageFieldGroup::getFeaturedContentLayout();
+            return $contentField->removeLayout($chaptersSummaryField->getKey());
         });
     }
 }

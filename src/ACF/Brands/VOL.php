@@ -19,7 +19,13 @@ class VOL extends Brand
         self::removeVideoUrlFromGalleryItems();
         self::removeVideoUrlFromParagraphListWidget();
         self::removeVideoUrlFromTeaserImages();
+
         self::removeInventoryWidget();
+        self::removeAudioWidget();
+        self::removeChaptersSummaryWidget();
+
+        self::removeQuotePageWidget();
+        self::removeFeaturedContentPageWidget();
 
         $teaserListWidget =  PageFieldGroup::getTeaserListLayout();
         add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListDisplayHints']);
