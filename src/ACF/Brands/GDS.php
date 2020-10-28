@@ -128,7 +128,7 @@ class GDS extends Brand
             ->setChoice('1col', '1 Col')
             ->setChoice('4col', '4 Col')
             ->setChoice('1plus5', '1 + 5')
-            ->setDefaultValue('default')
+            ->setDefaultValue('1plus2plus4')
             ->setLayout('vertical')
             ->setReturnFormat(ACFField::RETURN_VALUE);
 
