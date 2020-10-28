@@ -12,6 +12,7 @@ class BrandFactory
         'gds' => GDS::class,
         'his' => HIS::class,
         'ill' => ILL::class,
+        'vol' => VOL::class,
     ];
 
     public static function register(?string $brandCode = null)
@@ -19,11 +20,16 @@ class BrandFactory
         if (is_null($brandCode)) {
             return;
         }
-        $formattedBrandCode = strtolower($brandCode);
+        $formattedBrandCode = self::isBrandVoldemort(strtolower($brandCode));
 
         /** @var BrandInterface | null $class */
         if ($class = Arr::get(self::$mapping, $formattedBrandCode)) {
             $class::register();
         }
+    }
+
+    public static function isBrandVoldemort($brandCode) {
+        $voldemortBrands = ['atr', 'bim', 'bol', 'dif', 'kom', 'liv', 'mhi', 'phi', 'shi', 'tar', 'wom'];
+        return in_array($brandCode, $voldemortBrands) ? 'vol' : $brandCode;
     }
 }
