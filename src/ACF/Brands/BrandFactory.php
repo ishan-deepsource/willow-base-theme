@@ -28,6 +28,8 @@ class BrandFactory
         }
     }
 
+    // This returns vol (voldemort) as a wrapping brand for all brandcodes contained.
+    // Ones a brand is removed from voldemort (Getting more love and custom design and feel), it should be removed from.
     public static function isBrandVoldemort($brandCode) {
         $voldemortBrands = ['atr', 'bim', 'bol', 'dif', 'kom', 'liv', 'mhi', 'phi', 'shi', 'tar', 'wom'];
         return in_array($brandCode, $voldemortBrands) ? 'vol' : $brandCode;
