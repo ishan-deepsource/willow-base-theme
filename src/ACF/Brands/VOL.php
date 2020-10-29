@@ -36,7 +36,7 @@ class VOL extends Brand
         $imageWidget = CompositeFieldGroup::getImageWidget();
         add_filter(sprintf('willow/acf/layout=%s', $imageWidget->getKey()), [__CLASS__, 'setImageDisplayHints']);
 
-        $paragraphListWidget = CompositeFieldGroup::getParagraphListWidget();
+        $paragraphListWidget = parent::$paragraphListWidget;
         add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'setParagraphListDisplayHints']);
         add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'removeParagraphListCollapsible']);
     }

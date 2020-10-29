@@ -17,7 +17,7 @@ class COS extends Brand
         self::removeVideoUrlFromTeaserImages();
         self::removeInventoryWidget();
 
-        $paragraphListWidget = CompositeFieldGroup::getParagraphListWidget();
+        $paragraphListWidget = parent::$paragraphListWidget;
         add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'removeParagraphListShowNumbers']);
     }
 

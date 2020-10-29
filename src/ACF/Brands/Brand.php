@@ -17,9 +17,9 @@ use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 
 abstract class Brand implements BrandInterface
 {
-    private static $pageWidgetsField;
-    private static $compositeContentsField;
-    private static $paragraphListWidget;
+    public static $pageWidgetsField;
+    public static $compositeContentsField;
+    public static $paragraphListWidget;
 
     public static function init() {
         self::$pageWidgetsField = PageFieldGroup::getPageWidgetsField();
