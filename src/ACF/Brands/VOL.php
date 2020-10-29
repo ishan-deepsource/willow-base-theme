@@ -15,6 +15,7 @@ class VOL extends Brand
 
     public static function register(): void
     {
+        self::init();
         self::removeVideoUrlFromImageWidget();
         self::removeVideoUrlFromGalleryItems();
         self::removeVideoUrlFromParagraphListWidget();
@@ -22,7 +23,6 @@ class VOL extends Brand
 
         self::removeInventoryWidget();
         self::removeAudioWidget();
-        self::removeChaptersSummaryWidget();
 
         self::removeQuotePageWidget();
         self::removeFeaturedContentPageWidget();
@@ -32,6 +32,13 @@ class VOL extends Brand
 
         $galleryField = CompositeFieldGroup::getGalleryWidget();
         add_filter(sprintf('willow/acf/layout=%s', $galleryField->getKey()), [__CLASS__, 'setGalleryDisplayHints']);
+
+        $imageWidget = CompositeFieldGroup::getImageWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $imageWidget->getKey()), [__CLASS__, 'setImageDisplayHints']);
+
+        $paragraphListWidget = CompositeFieldGroup::getParagraphListWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'setParagraphListDisplayHints']);
+        add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'removeParagraphListCollapsible']);
     }
 
     public static function setTeaserListDisplayHints(ACFLayout $teaserList)
@@ -67,5 +74,44 @@ class VOL extends Brand
             ->setReturnFormat(ACFField::RETURN_VALUE);
 
         return $gallery->addSubField($displayHint);
+    }
+
+    public static function setImageDisplayHints(ACFLayout $image)
+    {
+        return $image->mapSubFields(function (ACFField $field) {
+            if ($field instanceof RadioField && $field->getName() === 'display_hint') {
+                $field->setChoices([
+                    'default' => 'Default',
+                    'xl' => 'XL',
+                    'sm' => 'SM',
+                ]);
+                $field->setDefaultValue('default');
+            }
+            return $field;
+        });
+    }
+
+    public static function setParagraphListDisplayHints(ACFLayout $paragraphList)
+    {
+        return $paragraphList->mapSubFields(function (ACFField $field) {
+            if ($field instanceof RadioField && $field->getName() === 'display_hint') {
+                $field->setChoices([
+                    'box' => 'Box',
+                    'border' => 'Border',
+                    'clean' => 'Clean',
+                ]);
+                $field->setDefaultValue('box');
+            }
+            return $field;
+        });
+    }
+
+
+    public static function removeParagraphListCollapsible(ACFLayout $layout)
+    {
+        $subFields = array_filter($layout->getSubFields(), function (ACFField $field) {
+            return $field->getName() !== CompositeFieldGroup::COLLAPSIBLE_FIELD_NAME;
+        });
+        return $layout->setSubFields($subFields);
     }
 }

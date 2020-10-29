@@ -12,6 +12,7 @@ class GDS extends Brand
 {
     public static function register(): void
     {
+        self::init();
         self::removeVideoUrlFromImageWidget();
         self::removeVideoUrlFromGalleryItems();
         self::removeVideoUrlFromParagraphListWidget();
@@ -75,9 +76,9 @@ class GDS extends Brand
         return $layout->setSubFields($subFields);
     }
 
-    public static function setImageDisplayHints(ACFLayout $paragraphList)
+    public static function setImageDisplayHints(ACFLayout $image)
     {
-        return $paragraphList->mapSubFields(function (ACFField $field) {
+        return $image->mapSubFields(function (ACFField $field) {
             if ($field instanceof RadioField && $field->getName() === 'display_hint') {
                 $field->setChoices([
                     'full-width' => 'Full Width',

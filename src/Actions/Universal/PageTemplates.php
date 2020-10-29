@@ -88,6 +88,11 @@ class PageTemplates
                     'guide' => 'Guide',
                 ]);
                 break;
+            case 'VOL':
+                $this->compositeTemplates = array_merge($this->compositeTemplates, [
+                    'top-lg' => 'Top LG',
+                ]);
+                break;
             default:
                 $this->pageTemplates = array_merge($this->pageTemplates, [
                     'authorlist' => 'Author List',
@@ -106,6 +111,7 @@ class PageTemplates
                     'colorblock' => 'Farveblok',
                     'guide' => 'Guide',
                     'timeline' => 'Timeline',
+                    'top-lg' => 'Top LG',
                 ]);
                 break;
         }
@@ -170,6 +176,10 @@ class PageTemplates
     {
         try {
             if ($site = WpSiteManager::instance()->settings()->getSite()) {
+                $voldemortBrands = ['ATR', 'BIM', 'BOL', 'DIF', 'KOM', 'LIV', 'MHI', 'PHI', 'SHI', 'TAR', 'WOM'];
+                if (in_array(data_get($site, 'brand.brand_code'), $voldemortBrands)) {
+                    return 'VOL';
+                }
                 return data_get($site, 'brand.brand_code');
             }
         } catch (SiteNotFoundException $exception) {
