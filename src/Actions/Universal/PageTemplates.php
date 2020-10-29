@@ -177,7 +177,8 @@ class PageTemplates
         try {
             if ($site = WpSiteManager::instance()->settings()->getSite()) {
                 // This returns vol (voldemort) as a wrapping brand for all brandcodes contained.
-                // Ones a brand is removed from voldemort (Getting more love and custom design and feel), it should be removed from.
+                // Once a brand is removed from voldemort (Getting more love and custom design and feel), it should be removed from here.
+                // And from class BrandFactory.php as well!
                 $voldemortBrands = ['ATR', 'BIM', 'BOL', 'DIF', 'KOM', 'LIV', 'MHI', 'PHI', 'SHI', 'TAR', 'WOM'];
                 if (in_array(data_get($site, 'brand.brand_code'), $voldemortBrands)) {
                     return 'VOL';
