@@ -12,6 +12,7 @@ class GDS extends Brand
 {
     public static function register(): void
     {
+        self::init();
         self::removeVideoUrlFromImageWidget();
         self::removeVideoUrlFromGalleryItems();
         self::removeVideoUrlFromParagraphListWidget();
@@ -20,7 +21,7 @@ class GDS extends Brand
         $galleryField = CompositeFieldGroup::getGalleryWidget();
         add_filter(sprintf('willow/acf/layout=%s', $galleryField->getKey()), [__CLASS__, 'setGalleryDisplayHints']);
 
-        $paragraphListWidget = CompositeFieldGroup::getParagraphListWidget();
+        $paragraphListWidget = parent::$paragraphListWidget;
         add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'setParagraphListDisplayHints']);
         add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'removeParagraphListCollapsible']);
 
@@ -75,9 +76,9 @@ class GDS extends Brand
         return $layout->setSubFields($subFields);
     }
 
-    public static function setImageDisplayHints(ACFLayout $paragraphList)
+    public static function setImageDisplayHints(ACFLayout $image)
     {
-        return $paragraphList->mapSubFields(function (ACFField $field) {
+        return $image->mapSubFields(function (ACFField $field) {
             if ($field instanceof RadioField && $field->getName() === 'display_hint') {
                 $field->setChoices([
                     'full-width' => 'Full Width',

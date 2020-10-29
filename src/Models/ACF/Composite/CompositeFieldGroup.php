@@ -35,6 +35,7 @@ class CompositeFieldGroup
     public const SHELL_VALUE = 'Shell';
     public const VIDEO_URL_FIELD_NAME = 'video_url';
     public const COLLAPSIBLE_FIELD_NAME = 'collapsible';
+    public const SHOW_NUMBERS_FIELD_NAME = 'show_numbers';
 
     private const AUTHOR_FIELD = 'field_5af9888b4b7a1';
     private const LOCKED_CONTENT_FIELD = 'field_5921f0c676974';
@@ -748,6 +749,14 @@ class CompositeFieldGroup
             ->setInstructions('Should this paragraph list be collapsed in the view?');
 
         $paragraphListWidget->addSubField($collapsible);
+
+        $showNumbers = new TrueFalseField('field_5f9a7d5a67430');
+        $showNumbers->setLabel('Show numbers')
+            ->setName(self::SHOW_NUMBERS_FIELD_NAME)
+            ->setInstructions('Should this paragraph show numbers on the items?')
+            ->setDefaultValue(true);
+
+        $paragraphListWidget->addSubField($showNumbers);
 
         $displayHint = new RadioField('field_5bb4bd75fd04c');
         $displayHint->setLabel('Display Format')
