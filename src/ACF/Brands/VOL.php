@@ -49,7 +49,7 @@ class VOL extends Brand
             ->setChoice('1plus2', '1 + 2')
             ->setChoice('2plus1', '2 + 1')
             ->setChoice('featured', 'Featured')
-            ->setChoice('1col ', '1 Col')
+            ->setChoice('1col', '1 Col')
             ->setChoice('2col', '2 Col')
             ->setChoice('3col', '3 Col')
             ->setChoice('4col', '4 Col')
