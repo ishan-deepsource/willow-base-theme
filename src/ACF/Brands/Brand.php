@@ -94,6 +94,15 @@ abstract class Brand implements BrandInterface
         });
     }
 
+    protected static function removeMultimediaWidget()
+    {
+        $contentField = self::$compositeContentsField;
+        add_filter(sprintf('willow/acf/field=%s', $contentField->getKey()), function (FlexibleContentField $contentField) {
+            $multimediaField = CompositeFieldGroup::getAudioWidget();
+            return $contentField->removeLayout($multimediaField->getKey());
+        });
+    }
+
     protected static function removeChaptersSummaryWidget()
     {
         $contentField = self::$compositeContentsField;

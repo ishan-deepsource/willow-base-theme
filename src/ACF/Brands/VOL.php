@@ -23,6 +23,7 @@ class VOL extends Brand
 
         self::removeInventoryWidget();
         self::removeAudioWidget();
+        self::removeMultimediaWidget();
 
         self::removeQuotePageWidget();
         self::removeFeaturedContentPageWidget();

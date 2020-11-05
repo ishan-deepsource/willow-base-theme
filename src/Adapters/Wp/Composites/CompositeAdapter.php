@@ -17,6 +17,7 @@ use Bonnier\Willow\Base\Factories\Contracts\ModelFactoryContract;
 use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ChaptersSummary;
+use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Multimedia;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Newsletter;
 use Bonnier\Willow\Base\Models\Base\Root\GuideMeta;
 use Bonnier\Willow\Base\Models\Base\Root\Translation;
@@ -97,6 +98,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         'lead_paragraph'        => LeadParagraph::class,
         'newsletter'            => Newsletter::class,
         'chapters_summary'      => ChaptersSummary::class,
+        'multimedia'            => Multimedia::class,
     ];
 
     protected $acfFields;

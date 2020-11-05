@@ -13,6 +13,7 @@ class ILL extends Brand
     {
         self::init();
         self::removeInventoryWidget();
+        self::removeMultimediaWidget();
 
         $paragraphListWidget = parent::$paragraphListWidget;
         add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'removeParagraphListShowNumbers']);
