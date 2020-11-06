@@ -12,6 +12,8 @@ class ILL extends Brand
     public static function register(): void
     {
         self::init();
+        self::removeImageFromInfoboxWidget();
+
         self::removeInventoryWidget();
         self::removeMultimediaWidget();
 

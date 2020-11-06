@@ -36,6 +36,7 @@ class CompositeFieldGroup
     public const VIDEO_URL_FIELD_NAME = 'video_url';
     public const COLLAPSIBLE_FIELD_NAME = 'collapsible';
     public const SHOW_NUMBERS_FIELD_NAME = 'show_numbers';
+    public const IMAGE_FIELD = 'image';
 
     private const AUTHOR_FIELD = 'field_5af9888b4b7a1';
     private const LOCKED_CONTENT_FIELD = 'field_5921f0c676974';
@@ -663,6 +664,15 @@ class CompositeFieldGroup
             ->setMdeConfig(MarkdownField::CONFIG_SIMPLE);
 
         $infobox->addSubField($body);
+
+        $image = new ImageField('field_5fa3fdc25406d');
+        $image->setLabel('Image')
+            ->setName('image')
+            ->setRequired(false)
+            ->setReturnFormat(ACFField::RETURN_ARRAY)
+            ->setPreviewSize(ImageField::PREVIEW_MEDIUM);
+
+        $infobox->addSubField($image);
 
         $lockedContent = new TrueFalseField('field_5922bdd55cda2');
         $lockedContent->setLabel('Locked Content')

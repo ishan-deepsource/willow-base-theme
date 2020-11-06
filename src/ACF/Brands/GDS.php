@@ -5,6 +5,7 @@ namespace Bonnier\Willow\Base\ACF\Brands;
 use Bonnier\Willow\Base\Models\ACF\ACFField;
 use Bonnier\Willow\Base\Models\ACF\ACFLayout;
 use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
+use Bonnier\Willow\Base\Models\ACF\Fields\ImageField;
 use Bonnier\Willow\Base\Models\ACF\Fields\RadioField;
 use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 
@@ -28,7 +29,7 @@ class GDS extends Brand
         $imageWidget = CompositeFieldGroup::getImageWidget();
         add_filter(sprintf('willow/acf/layout=%s', $imageWidget->getKey()), [__CLASS__, 'setImageDisplayHints']);
 
-        $infoBoxWidget = CompositeFieldGroup::getInfoboxWidget();
+        $infoBoxWidget = parent::$infoboxWidget;
         add_filter(sprintf('willow/acf/layout=%s', $infoBoxWidget->getKey()), [__CLASS__, 'setInfoBoxDisplayHints']);
 
         $linkWidget = CompositeFieldGroup::getLinkWidget();
