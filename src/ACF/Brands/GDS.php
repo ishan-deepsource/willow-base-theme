@@ -24,7 +24,6 @@ class GDS extends Brand
 
         $paragraphListWidget = parent::$paragraphListWidget;
         add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'setParagraphListDisplayHints']);
-        add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'removeParagraphListCollapsible']);
 
         $imageWidget = CompositeFieldGroup::getImageWidget();
         add_filter(sprintf('willow/acf/layout=%s', $imageWidget->getKey()), [__CLASS__, 'setImageDisplayHints']);
@@ -66,15 +65,6 @@ class GDS extends Brand
             }
             return $field;
         });
-    }
-
-
-    public static function removeParagraphListCollapsible(ACFLayout $layout)
-    {
-        $subFields = array_filter($layout->getSubFields(), function (ACFField $field) {
-            return $field->getName() !== CompositeFieldGroup::COLLAPSIBLE_FIELD_NAME;
-        });
-        return $layout->setSubFields($subFields);
     }
 
     public static function setImageDisplayHints(ACFLayout $image)
