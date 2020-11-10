@@ -6,6 +6,7 @@ use Bonnier\Willow\Base\Helpers\HtmlToMarkdown;
 use Bonnier\Willow\Base\Models\ACF\Attachment\AttachmentFieldGroup;
 use Bonnier\Willow\Base\Models\WpAttachment;
 use Bonnier\Willow\Base\Models\WpAuthor;
+use Bonnier\Willow\Base\Models\WpComposite;
 use WP_CLI;
 use WP_CLI_Command;
 use WP_User;
@@ -35,7 +36,7 @@ class XmlImport extends WP_CLI_Command
      *
      * ## EXAMPLES
      *
-     * wp gds xmlimport ../xcago
+     * wp gds xmlimport dir:../xcago
      *
      */
     public function xmlimport($params)
@@ -107,6 +108,18 @@ class XmlImport extends WP_CLI_Command
                 $price = $xmlParser->getPrice();
                 $difficulty = $xmlParser->getDifficultyText();
 
+                // Validate post, post_type and language
+                $post = get_post($postId);
+                if (is_null($post)) {
+                    WP_CLI::error('Post not found: ' . $postId);
+                }
+                if ($post->post_type != 'contenthub_composite') {
+                    WP_CLI::error('post_type mismatch: contenthub_composite / ' . $post->post_type);
+                }
+                if (pll_get_post_language($post->ID) != $xmlParser->getLanguage()) {
+                    WP_CLI::error('Language mismatch: ' . pll_get_post_language($post->ID) . '/' . $xmlParser->getLanguage());
+                }
+
                 if ($this->outputParsedData) {
                     WP_CLI::line('Outputting parsed data:');
                     var_export($xmlParser->getBlocks());
@@ -148,6 +161,9 @@ class XmlImport extends WP_CLI_Command
                 // Set author to the default editor
                 self::setDefaultAuthor($xmlParser->getLanguage(), $postId);
 
+                // Set teaser image if not already set
+                $this->setTeaserImage($blocks, $postId, $this->dir . '/import/' . $file);
+
                 // Build composite content and save
                 $compositeContent = $this->build($postId, $blocks, $this->dir . '/import/' . $file, $materials, $time, $price, $difficulty, $xmlParser->getLanguage());
                 update_field('composite_content', $compositeContent, $postId);
@@ -172,6 +188,29 @@ class XmlImport extends WP_CLI_Command
 
         self::log('Script end');
         WP_CLI::success('No more to import. Import done.');
+    }
+
+    private function setTeaserImage($blocks, $postId, $dir)
+    {
+        // Return if teaser image is already set (do not overwrite)
+        if (get_field(WpComposite::POST_TEASER_IMAGE, $postId)) {
+            return;
+        }
+
+        // Find first image in import data
+        foreach ($blocks as $block) {
+            if ($block['type'] == 'image') {
+                WP_CLI::line('Set Teaser Image: ' . $block['src']);
+
+                $fileAttachmentId = $this->uploadFile($postId, $dir, $block['src'], '');
+                if (!$fileAttachmentId) {
+                    WP_CLI::error('Error uploading Teaser Image: ' . $block['src']);
+                }
+
+                update_field(WpComposite::POST_TEASER_IMAGE, $fileAttachmentId, $postId);
+                return;
+            }
+        }
     }
 
     private function wait()
@@ -291,6 +330,17 @@ class XmlImport extends WP_CLI_Command
             WP_CLI::line('Exported to: ' . $file);
             WP_CLI::line('Filesize: ' . filesize($file));
         }
+
+        // Export a backup to /tmp/
+        if (!file_exists('/tmp/original/')) {
+            mkdir('/tmp/original/');
+        }
+        $file = '/tmp/original/original_content_' . $postId . '.txt';
+        if (!file_exists($file)) {
+            file_put_contents($file, var_export($compositeContent, true));
+        }
+        $file = '/tmp/original/original_content_' . $postId . '.json';
+        file_put_contents($file, json_encode($compositeContent));
     }
 
     private static function showOverview($compositeContent)
@@ -428,7 +478,7 @@ class XmlImport extends WP_CLI_Command
         $translations = [
             'da' => ['Intro'],
             'sv' => ['Intro'],
-            'no' => ['Intro'],
+            'nb' => ['Intro'],
             'fi' => ['Johdanto'],
         ];
         return self::buildChapters($translations, $language);
@@ -439,7 +489,7 @@ class XmlImport extends WP_CLI_Command
         $translations = [
             'da' => ['Vejledning'],
             'sv' => ['Instruktion'],
-            'no' => ['Veiledning'],
+            'nb' => ['Veiledning'],
             'fi' => ['Ohjeet'],
         ];
         return self::buildChapters($translations, $language);
@@ -450,7 +500,7 @@ class XmlImport extends WP_CLI_Command
         $translations = [
             'da' => ['Materialer', 'Tegning', 'Video', '3D-tegning', 'Tips & Tricks', 'Magasin-artikel'],
             'sv' => ['Material','Ritning','Video','3D-ritning','Tips & Tricks','Tidningsartikel'],
-            'no' => ['Materialer','Tegning','Video','3D-tegning','Tips & Triks','Magasinartikkel'],
+            'nb' => ['Materialer','Tegning','Video','3D-tegning','Tips & Triks','Magasinartikkel'],
             'fi' => ['Materiaalit','Piirustus','Video','3D-piirustus','Vinkit & niksit','Lehtiversio'],
         ];
         return self::buildChapters($translations, $language);
@@ -527,7 +577,7 @@ class XmlImport extends WP_CLI_Command
             'image' => false,
             'video_url' => '',
             'collapsible' => false,
-            'display_hint' => 'box',
+            'display_hint' => 'material-list',
             'items' => false,
         ];
     }
@@ -570,10 +620,12 @@ class XmlImport extends WP_CLI_Command
             return null;
         }
         else if ($block['type'] === 'description') {
-            /*
-            print "<h1>(Set description)</h1>";
-            print "(" . $block['content'] . ")<br>\n";
-            */
+            $currentDescription = get_field('description', $postId);
+            if ($currentDescription == '' || is_null($currentDescription)) {
+                print "<h1>(Set description)</h1>";
+                print "(" . $block['content'] . ")<br>\n";
+                update_field('description', $block['content'], $postId);
+            }
             return null;
         }
         else if ($block['type'] === 'boxout') {
@@ -678,15 +730,33 @@ class XmlImport extends WP_CLI_Command
         return preg_replace("/(\d+)\\\\+\./", "$1.", $data);
     }
 
-    private function uploadFile($postId, $dir, $src, $figcaption)
+    private function uploadFile($postId, $dir, $fileName, $figcaption)
     {
         if ($this->skipImageUpload) {
             return $this->exampleImageId;
         }
 
         WP_CLI::line('*** UPLOAD IMAGE ***');
-        $file = $dir . '/' . $src;
-        $fileName = $src;
+        $file = $dir . '/' . $fileName;
+
+        if (preg_match('/^(.+)(a|b)\.jpg$/', $fileName, $res)) {
+            $baseFileName = $res[1];
+            $orgVersion = $res[2];
+            $oppositeVersion = $orgVersion == 'a' ? 'b' : 'a';
+            $oppositeFileName = $baseFileName . $oppositeVersion . ".jpg";
+            $oppositeFile = $dir . '/' . $oppositeFileName;
+
+            print "fileName: " . $fileName . "\n";
+            print "oppositeFileName: " . $oppositeFileName . "\n";
+            print "file: " . $file . "\n";
+            print "oppositeFile: " . $oppositeFile . "\n";
+
+            if (file_exists($oppositeFile)) {
+                WP_CLI::line('Uploading opposite file first: ' . $oppositeFileName);
+                WpAttachment::upload_file($postId, $oppositeFile, $oppositeFileName, $figcaption);
+            }
+        }
+
         return WpAttachment::upload_file($postId, $file, $fileName, $figcaption);
     }
 
@@ -884,5 +954,161 @@ class XmlImport extends WP_CLI_Command
     {
         self::log('Error: ' . $message);
         WP_CLI::error($message);
+    }
+
+    /**
+     * Show info about post
+     *
+     * ## EXAMPLES
+     *
+     * wp gds info 64300
+     *
+     */
+    public function info($params)
+    {
+        if (sizeof($params) != 1) {
+            WP_CLI::line('Show info about post');
+            WP_CLI::line('');
+            WP_CLI::line('Example:');
+            WP_CLI::line('');
+            WP_CLI::line('wp gds info 64300');
+            WP_CLI::error('Parameter missing.');
+        }
+
+        $post = get_post($params[0]);
+        if (!$post) {
+            WP_CLI::error('Post ID does not exist: ' . $params[0]);
+        }
+
+        $language = pll_get_post_language($post->ID);
+        WP_CLI::line('Title: ' . $post->post_title);
+        WP_CLI::line('Language: ' . $language);
+        WP_CLI::line('ID: ' . $post->ID);
+        WP_CLI::line('');
+
+        $translations = pll_get_post_translations($post->ID);
+        foreach ($translations as $translationLanguage => $translationId) {
+            WP_CLI::line($translationLanguage . ' ' . $translationId);
+        }
+    }
+
+    /**
+     * Show imported post ids
+     *
+     * ## EXAMPLES
+     *
+     * wp gds imported
+     *
+     */
+    public function imported($params)
+    {
+        // Get post ids of imported posts
+        $post_ids = [];
+        $titles = [];
+        $dates = [];
+        $query_args = array(
+            'post_type'  => 'contenthub_composite',
+            'posts_per_page' => '-1',
+            'meta_query' => array(
+                array(
+                    'key'   => 'xml_import',
+                ),
+            )
+        );
+        $query = new \WP_Query( $query_args );
+        if ( $query->posts ) {
+            foreach ( $query->posts as $key => $post ) {
+                $post_ids[] = $post->ID;
+                $titles[$post->ID] = $post->post_title;
+                $dates[$post->ID] = substr(get_field('xml_import', $post->ID), 0, 10);
+            }
+        }
+
+        // Build array with translation ids using the danish id as key
+        $data = [];
+        foreach ($post_ids as $post_id) {
+            $language = pll_get_post_language($post_id);
+            if (!in_array($language, ['da', 'fi', 'nb', 'sv'])) {
+                WP_CLI::error('Invalid language for post id: ' . $post_id);
+            }
+
+            $translations = pll_get_post_translations($post_id);
+
+            if (isset($translations['da'])) {
+                $daId = $translations['da'];
+                $data[$daId][$language] = $post_id;
+            }
+        }
+
+        // Output
+        ksort($data);
+        foreach ($data as $key => $val) {
+            $daTitle = '';
+            if (array_key_exists('da', $val)) {
+                $daTitle = $titles[$val['da']] ?? '';
+            }
+            // Only output danish title when the article exist in all 4 languages
+            if (sizeof($val) != 4) {
+                $daTitle = '';
+            }
+            WP_CLI::line(($val['da']??'') . ';' . ($val['fi']??'') . ';' . ($val['nb']??'') . ';' . ($val['sv']??'') . ';' . $daTitle);
+        }
+    }
+
+    public function validate($params)
+    {
+        if (sizeof($params) != 1) {
+            WP_CLI::line('Run with dir as parameter.');
+            exit;
+        }
+
+        $this->dir = $params[0];
+
+        // Get dirs and iterate them
+        $files = scandir($this->dir . '/import');
+        $files = array_diff($files, ['..', '.']);
+        foreach ($files as $file) {
+            if (is_dir($this->dir . '/import/' . $file)) {
+                WP_CLI::line('');
+                WP_CLI::line('Start validating: ' . $file);
+                $xmlParser = new XmlParser($this->dir . '/import/', $file, $this->encodeUtf8);
+
+                $post = get_post($xmlParser->getPostId());
+                if (is_null($post)) {
+                    WP_CLI::error('Post not found: ' . $xmlParser->getPostId());
+                }
+                if ($post->post_type != 'contenthub_composite') {
+                    WP_CLI::error('post_type mismatch: contenthub_composite / ' . $post->post_type);
+                }
+                if (pll_get_post_language($post->ID) != $xmlParser->getLanguage()) {
+                    WP_CLI::error('Language mismatch: ' . pll_get_post_language($post->ID) . '/' . $xmlParser->getLanguage());
+                }
+            }
+        }
+    }
+
+    public function content($params)
+    {
+        if (sizeof($params) != 1) {
+            WP_CLI::line('Run with dir as parameter.');
+            exit;
+        }
+
+        $postId = $params[0];
+
+        // Get dirs and iterate them
+        $post = get_post($postId);
+        if (is_null($post)) {
+            WP_CLI::error('Post not found: ' . $xmlParser->getPostId());
+        }
+        if ($post->post_type != 'contenthub_composite') {
+            WP_CLI::error('post_type mismatch: contenthub_composite / ' . $post->post_type);
+        }
+
+        // Get composite content
+        $compositeContent = get_field('composite_content', $postId);
+
+        //WP_CLI::line(json_encode($compositeContent));
+        WP_CLI::line(var_export($compositeContent));
     }
 }
