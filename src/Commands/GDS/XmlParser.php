@@ -86,6 +86,12 @@ class XmlParser
         // ->xpath does not work if <html> has xmlns set
         $xml = preg_replace("#<html xmlns=\"http://www.w3.org/1999/xhtml\">#", "<html>", $xml);
 
+        // Replace illegal 'group separator' character
+        $xml = str_replace(chr(29), '-', $xml);
+
+        // Replace illegal 'record separator' character
+        $xml = str_replace(chr(30), ' ', $xml);
+
         return $xml;
     }
 
@@ -153,7 +159,12 @@ class XmlParser
 
         $this->setFirstAuthor($xml);
 
-        $body = $xml->xpath("//div[@itemprop='articleBody']")[0];
+        $xpath = $xml->xpath("//div[@itemprop='articleBody']");
+        if (!isset($xpath[0])) {
+            WP_CLI::error('articleBody not found.');
+        }
+        $body = $xpath[0];
+
         $blocks = array_merge($blocks, $this->processNodes($body));
         $blocks = self::prepareBlocks($blocks);
         $this->blocks = $blocks;
@@ -179,7 +190,7 @@ class XmlParser
     {
         $blocks = self::moveHowToLeads($blocks);
         $blocks = self::mergeText($blocks); // Merge h2 and text elements in the root
-        $blocks = self::prepareSecondLevelText($blocks); // Merge h2 and text elements in the next level
+        $blocks = self::mergeTextRecursive($blocks); // Merge h2 and text elements in boxout and how-to elements in all levels below root
         return $blocks;
     }
 
@@ -226,12 +237,13 @@ class XmlParser
         return $newBlocks;
     }
 
-    private static function prepareSecondLevelText($blocks)
+    private static function mergeTextRecursive($blocks)
     {
         $i = 0;
         while ($i < sizeof($blocks)) {
             if (in_array($blocks[$i]['type'], ['how-to', 'boxout'])) {
                 $blocks[$i]['content'] = self::mergeText($blocks[$i]['content']);
+                $blocks[$i]['content'] = self::mergeTextRecursive($blocks[$i]['content']);
             }
             $i++;
         }
@@ -329,6 +341,9 @@ class XmlParser
         }
         else if ($type === 'ul') {
             return $this->processUl($ele);
+        }
+        else if ($type === 'li') {
+            return $this->processP($ele);   // Treat stray li as p
         }
         else {
             WP_CLI::error('Type not handled processNode: ' . $type);
@@ -519,8 +534,13 @@ class XmlParser
                 if (isset($metaBox['content'][$i]['content'])) {
                     // Check for difficulty text
                     if (in_array(self::toLower($metaBox['content'][$i]['content']), ['sværhedsgrad', 'vaikeusaste', 'vanskelighetsgrad', 'svårighetsgrad'])) {
-                        // The difficulty text is on the next line after Sværhedsgrad, so use: $i + 1
-                        $this->difficultyText = $metaBox['content'][$i + 1]['content'];
+                        // The difficulty text is on the next line after Sværhedsgrad or the following line, so use: $i + 1 or $i +2
+                        if ($metaBox['content'][$i + 1]['type'] == 'text' && array_key_exists('content', $metaBox['content'][$i + 1])) {
+                            $this->difficultyText = $metaBox['content'][$i + 1]['content'];
+                        }
+                        else if ($metaBox['content'][$i + 2]['type'] == 'text' && array_key_exists('content', $metaBox['content'][$i + 2])) {
+                            $this->difficultyText = $metaBox['content'][$i + 2]['content'];
+                        }
                     }
 
                     // Check for time required
