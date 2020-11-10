@@ -28,7 +28,13 @@ jobs:
       - run:
          name: Install PHP Modules
          command: sudo docker-php-ext-install zip gd
-      - run: sudo composer self-update
+
+      # not working on composer 2.0
+      # - run: sudo composer self-update
+
+      # use composer 1
+      - run: sudo composer self-update --1
+
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -36,7 +42,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: composer install -n --prefer-dist
+      - run: composer update -n --prefer-dist
 
       - save_cache:
           paths:

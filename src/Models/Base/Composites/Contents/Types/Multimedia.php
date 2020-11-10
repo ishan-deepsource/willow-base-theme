@@ -3,18 +3,17 @@
 namespace Bonnier\Willow\Base\Models\Base\Composites\Contents\Types;
 
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\AbstractContent;
-use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ParagraphListContract;
+use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\MultimediaContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
-use Illuminate\Support\Collection;
 
 /**
- * Class ParagraphList
+ * Class Multimedia
  * @package Bonnier\Willow\Base\Models\Base\Composites\Contents\Types
- * @property ParagraphListContract $model
+ * @property MultimediaContract $model
  */
-class ParagraphList extends AbstractContent implements ParagraphListContract
+class Multimedia extends AbstractContent implements MultimediaContract
 {
-    public function __construct(ParagraphListContract $content)
+    public function __construct(MultimediaContract $content)
     {
         parent::__construct($content);
     }
@@ -39,28 +38,18 @@ class ParagraphList extends AbstractContent implements ParagraphListContract
         return $this->model->getImage();
     }
 
-    public function isCollapsible(): bool
-    {
-        return $this->model->isCollapsible();
-    }
-
-    public function showNumbers(): bool
-    {
-        return $this->model->showNumbers();
-    }
-
     public function getDisplayHint(): ?string
     {
         return $this->model->getDisplayHint();
     }
 
-    public function getItems(): Collection
+    public function getVectaryId(): ?string
     {
-        return $this->model->getItems();
+        return $this->model->getVectaryId();
     }
 
-	public function getVideoUrl(): ?string
-	{
-		return $this->model->getVideoUrl();
-	}
+    public function getVectaryUrl(): ?string
+    {
+        return $this->model->getVectaryUrl();
+    }
 }

@@ -11,4 +11,6 @@ interface LinkContract extends ContentContract
     public function getUrl(): ?string;
 
     public function getTarget(): ?string;
+
+    public function getDisplayHint(): ?string;
 }

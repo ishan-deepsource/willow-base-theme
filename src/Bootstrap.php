@@ -84,25 +84,28 @@ class Bootstrap
         $domain = Utils::removeApiSubdomain(LanguageProvider::getHomeUrl());
         $site = SiteRepository::find_by_domain(parse_url($domain, PHP_URL_HOST));
         BrandFactory::register(data_get($site, 'brand.brand_code'));
-        new MarkdownEditor();
-        new ImageHotSpotCoordinates();
-        new CompositeHelper();
-        FeatureTimeField::register();
+        // acf_field class is not exist in very first time wp load
+        if (class_exists(\acf_field::class)) {
+            new MarkdownEditor();
+            new ImageHotSpotCoordinates();
+            new CompositeHelper();
+            FeatureTimeField::register();
 
-        WpTaxonomy::register();
-        WpPage::register();
-        WpComposite::register();
-        WpAttachment::register();
-        WpUserProfile::register();
-        CmdManager::register();
-        PolylangConfig::register();
+            WpTaxonomy::register();
+            WpPage::register();
+            WpComposite::register();
+            WpAttachment::register();
+            WpUserProfile::register();
+            CmdManager::register();
+            PolylangConfig::register();
 
-        $updateEndpoint = new UpdateEndpointController();
-        $updateEndpoint->register_routes();
+            $updateEndpoint = new UpdateEndpointController();
+            $updateEndpoint->register_routes();
 
-        FocalPoint::instance();
-        $focalPointEndpoint = new FocalpointEndpointController();
-        $focalPointEndpoint->register_routes();
+            FocalPoint::instance();
+            $focalPointEndpoint = new FocalpointEndpointController();
+            $focalPointEndpoint->register_routes();
+        }
     }
 
     public static function loadAdminMenu()
@@ -181,7 +184,7 @@ class Bootstrap
     {
         return boolval(get_user_meta($userID, 'public', true));
     }
-    
+
     public static function allowTagInSitemap(bool $allowed, \WP_Term $tag)
     {
         if (get_term_meta($tag->term_id, 'internal', true)) {

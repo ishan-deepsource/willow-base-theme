@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Models\Base\Composites\Contents\Types;
 
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\AbstractContent;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\InfoBoxContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 
 /**
  * Class Link
@@ -32,6 +33,11 @@ class InfoBox extends AbstractContent implements InfoBoxContract
     public function getTitle(): ?string
     {
         return $this->model->getTitle();
+    }
+
+    public function getImage(): ?ImageContract
+    {
+        return $this->model->getImage();
     }
 
     public function getDisplayHint(): string

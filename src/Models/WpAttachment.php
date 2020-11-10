@@ -8,6 +8,7 @@ use Bonnier\Willow\Base\Models\ACF\Attachment\AttachmentFieldGroup;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use GuzzleHttp\Client;
 use Illuminate\Support\Collection;
+use function DeliciousBrains\WP_Offload_S3\Aws3\GuzzleHttp\Psr7\parse_query;
 
 class WpAttachment
 {
@@ -306,12 +307,23 @@ class WpAttachment
             var_dump($uploadedFile);
             return null;
         }
-
+        $post_title = $file->title;
+        if (empty($post_title)) {
+            // file name example: narvafronten-nattstrid-andra-varldskriget-ostfronten-R-HbTkaiunaWgbbujINAOw.jpg
+            $arr = explode('-', str_replace('_', ' ', substr($fileName, 0, strrpos($fileName, "."))));
+            if ( ! empty($arr)) {
+                //Should remove last element file seed (f.x. HbTkaiunaWgbbujINAOw)
+                array_pop($arr);
+                $post_title = implode(' ', $arr);
+            } else {
+                $post_title = '';
+            }
+        }
         // Creating attachment
         $attachment = [
             'post_mime_type' => mime_content_type($uploadedFile['file']),
             'post_parent' => $postId,
-            'post_title' => $file->title ?? '',
+            'post_title' => $post_title,
             'post_content' => '',
             'post_excerpt' => static::getCaption($file),
             'post_status' => 'inherit',

@@ -41,6 +41,11 @@ class ParagraphListAdapter extends AbstractContentAdapter implements ParagraphLi
         return boolval(array_get($this->acfArray, 'collapsible', false));
     }
 
+    public function showNumbers(): bool
+    {
+        return boolval(array_get($this->acfArray, 'show_numbers', false));
+    }
+
     public function getDisplayHint(): ?string
     {
         return array_get($this->acfArray, 'display_hint') ?: null;

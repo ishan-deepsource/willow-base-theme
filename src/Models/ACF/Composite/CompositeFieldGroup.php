@@ -35,11 +35,15 @@ class CompositeFieldGroup
     public const SHELL_VALUE = 'Shell';
     public const VIDEO_URL_FIELD_NAME = 'video_url';
     public const COLLAPSIBLE_FIELD_NAME = 'collapsible';
+    public const SHOW_NUMBERS_FIELD_NAME = 'show_numbers';
+    public const IMAGE_FIELD = 'image';
 
     private const AUTHOR_FIELD = 'field_5af9888b4b7a1';
     private const LOCKED_CONTENT_FIELD = 'field_5921f0c676974';
     private const IMAGE_LINK_FIELD = 'field_5ba0c550e9e5f';
     private const SOURCE_CODE_FIELD = 'field_5e2ebd197a759';
+    private const MULTIMEDIA_DISPLAY_HINT = 'field_5fa10ca4c5576';
+    private const MULTIMEDIA_DISPLAY_HINT_3D = '3d';
 
     public static function register(): void
     {
@@ -214,7 +218,7 @@ class CompositeFieldGroup
         $content->addLayout(self::getAudioWidget());
         $content->addLayout(self::getFileWidget());
         $content->addLayout(self::getVideoWidget());
-        $content->addLayout(self::getUrlWidget());
+        $content->addLayout(self::getLinkWidget());
         $content->addLayout(self::getGalleryWidget());
         $content->addLayout(self::getInsertedCodeWidget());
         $content->addLayout(self::getInfoboxWidget());
@@ -226,6 +230,7 @@ class CompositeFieldGroup
         $content->addLayout(self::getQuoteWidget());
         $content->addLayout(self::getNewsletterWidget());
         $content->addLayout(self::getChaptersSummaryWidget());
+        $content->addLayout(self::getMultimediaWidget());
 
         return apply_filters(sprintf('willow/acf/field=%s', $content->getKey()), $content);
     }
@@ -485,7 +490,7 @@ class CompositeFieldGroup
         return apply_filters(sprintf('willow/acf/layout=%s', $videoWidget->getKey()), $videoWidget);
     }
 
-    public static function getUrlWidget()
+    public static function getLinkWidget()
     {
         $urlWidget = new ACFLayout('590b1798c8768');
         $urlWidget->setName('link')
@@ -499,7 +504,7 @@ class CompositeFieldGroup
         $urlWidget->addSubField($url);
 
         $button = new TextField('field_590b179fc8769');
-        $button->setLabel('Button text')
+        $button->setLabel('Title text')
             ->setName('title');
 
         $urlWidget->addSubField($button);
@@ -648,7 +653,7 @@ class CompositeFieldGroup
         $title = new TextField('field_58aae4b6809c7');
         $title->setLabel('Title')
             ->setName('title')
-            ->setRequired(true);
+            ->setRequired(false);
 
         $infobox->addSubField($title);
 
@@ -659,6 +664,15 @@ class CompositeFieldGroup
             ->setMdeConfig(MarkdownField::CONFIG_SIMPLE);
 
         $infobox->addSubField($body);
+
+        $image = new ImageField('field_5fa3fdc25406d');
+        $image->setLabel('Image')
+            ->setName('image')
+            ->setRequired(false)
+            ->setReturnFormat(ACFField::RETURN_ARRAY)
+            ->setPreviewSize(ImageField::PREVIEW_MEDIUM);
+
+        $infobox->addSubField($image);
 
         $lockedContent = new TrueFalseField('field_5922bdd55cda2');
         $lockedContent->setLabel('Locked Content')
@@ -748,6 +762,14 @@ class CompositeFieldGroup
             ->setInstructions('Should this paragraph list be collapsed in the view?');
 
         $paragraphListWidget->addSubField($collapsible);
+
+        $showNumbers = new TrueFalseField('field_5f9a7d5a67430');
+        $showNumbers->setLabel('Show numbers')
+            ->setName(self::SHOW_NUMBERS_FIELD_NAME)
+            ->setInstructions('Should this paragraph show numbers on the items?')
+            ->setDefaultValue(true);
+
+        $paragraphListWidget->addSubField($showNumbers);
 
         $displayHint = new RadioField('field_5bb4bd75fd04c');
         $displayHint->setLabel('Display Format')
@@ -1029,6 +1051,75 @@ class CompositeFieldGroup
             ->setLabel('Chapters summary');
 
         return apply_filters(sprintf('willow/acf/layout=%s', $chaptersSummaryWidget->getKey()), $chaptersSummaryWidget);
+    }
+
+    public static function getMultimediaWidget()
+    {
+        $multimediaWidget = new ACFLayout('5fa10a410e4db');
+        $multimediaWidget->setName('multimedia')
+            ->setLabel('Multimedia');
+
+        $title = new TextField('field_5fa10a570e4dc');
+        $title->setLabel('Title')
+            ->setName('title')
+            ->setPlaceholder('Title');
+
+        $multimediaWidget->addSubField($title);
+
+        $description = new TextField('field_5fa10a650e4dd');
+        $description->setLabel('Description')
+            ->setName('description')
+            ->setPlaceholder('Description');
+
+        $multimediaWidget->addSubField($description);
+
+        $image = new ImageField('field_5fa10adc0e4de');
+        $image->setLabel('Image')
+            ->setName('image')
+            ->setRequired(true)
+            ->setReturnFormat(ACFField::RETURN_ARRAY)
+            ->setPreviewSize(ImageField::PREVIEW_MEDIUM);
+
+        $multimediaWidget->addSubField($image);
+
+        $displayHint = new RadioField('field_5fa10ca4c5576');
+        $displayHint->setLabel('Display Format')
+            ->setName('display_hint')
+            ->setChoice('blueprint', 'Blueprint')
+            ->setChoice('3d', '3D')
+            ->setDefaultValue('blueprint')
+            ->setLayout('vertical')
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+
+        $multimediaWidget->addSubField($displayHint);
+
+        $id = new TextField('field_5fa10b770e4e0');
+        $id->setLabel('Vectary ID')
+            ->setName('vectary_id')
+            ->setInstructions('The ID to the 3D model in Vectary.')
+            ->setRequired(true)
+            ->setConditionalLogic(new ACFConditionalLogic(
+                self::MULTIMEDIA_DISPLAY_HINT,
+                ACFConditionalLogic::OPERATOR_EQUALS,
+                self::MULTIMEDIA_DISPLAY_HINT_3D
+            ));
+
+        $multimediaWidget->addSubField($id);
+
+        $url = new TextField('field_5fa10b230e4df');
+        $url->setLabel('URL')
+            ->setName('vectary_url')
+            ->setInstructions('The Vectary 3D model url.')
+            ->setRequired(true)
+            ->setConditionalLogic(new ACFConditionalLogic(
+                self::MULTIMEDIA_DISPLAY_HINT,
+                ACFConditionalLogic::OPERATOR_EQUALS,
+                self::MULTIMEDIA_DISPLAY_HINT_3D
+            ));
+
+        $multimediaWidget->addSubField($url);
+
+        return apply_filters(sprintf('willow/acf/layout=%s', $multimediaWidget->getKey()), $multimediaWidget);
     }
 
     private static function registerHooks()

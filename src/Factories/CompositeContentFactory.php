@@ -13,6 +13,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\InfoBoxAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\InsertedCodeAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\LeadParagraphAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\LinkAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\MultimediaAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\NewsletterAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\NullContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ParagraphListAdapter;
@@ -39,6 +40,7 @@ class CompositeContentFactory extends AbstractModelFactory
         'lead_paragraph'        => LeadParagraphAdapter::class,
         'newsletter'            => NewsletterAdapter::class,
         'chapters_summary'      => ChaptersSummaryAdapter::class,
+        'multimedia'            => MultimediaAdapter::class,
     ];
 
     public function getAdapter($model)
