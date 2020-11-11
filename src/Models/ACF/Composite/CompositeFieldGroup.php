@@ -1066,10 +1066,10 @@ class CompositeFieldGroup
 
         $multimediaWidget->addSubField($title);
 
-        $description = new TextField('field_5fa10a650e4dd');
+        $description = new MarkdownField('field_5fa10a650e4dd');
         $description->setLabel('Description')
             ->setName('description')
-            ->setPlaceholder('Description');
+            ->setMdeConfig(MarkdownField::CONFIG_SIMPLE);;
 
         $multimediaWidget->addSubField($description);
 
