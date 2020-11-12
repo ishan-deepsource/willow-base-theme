@@ -16,6 +16,7 @@ class WpTaxonomy
                     'label'             => $customTaxonomy->name,
                     'show_ui'           => false,
                     'show_admin_column' => false,
+                    'show_in_rest'      => true,
                 ]);
             });
         });
