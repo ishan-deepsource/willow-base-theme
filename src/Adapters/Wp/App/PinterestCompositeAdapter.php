@@ -228,4 +228,9 @@ class PinterestCompositeAdapter implements CompositeContract
     {
         return null;
     }
+
+    public function getContenthubId(): ?string
+    {
+        return null;
+    }
 }
