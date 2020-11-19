@@ -86,4 +86,6 @@ interface CompositeContract
     public function getRelatedByCategory(WidgetDocumentQuery $manualQuery = null): ?Collection;
 
     public function getRelatedByCategoryQuery(): ?WidgetDocumentQuery;
+
+    public function getContenthubId(): ?string;
 }

@@ -220,4 +220,9 @@ class Composite implements CompositeContract
     {
        return $this->composite->getGuideMeta();
     }
+
+    public function getContenthubId(): ?string
+    {
+        return $this->composite->getContenthubId();
+    }
 }

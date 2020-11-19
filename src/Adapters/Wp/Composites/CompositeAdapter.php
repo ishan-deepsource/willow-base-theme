@@ -455,4 +455,9 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     {
         return new GuideMeta(new GuideMetaAdapter($this->acfFields));
     }
+
+    public function getContenthubId(): ?string
+    {
+        return array_get($this->wpMeta, 'contenthub_id.0') ?: null;
+    }
 }

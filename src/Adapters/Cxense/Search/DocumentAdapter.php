@@ -235,4 +235,9 @@ class DocumentAdapter implements CompositeContract
     {
         return null;
     }
+
+    public function getContenthubId(): ?string
+    {
+        return null;
+    }
 }
