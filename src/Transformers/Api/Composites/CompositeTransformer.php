@@ -85,6 +85,7 @@ class CompositeTransformer extends TransformerAbstract
             'translations'              => $this->getTranslations($composite),
             'exclude_platforms'         => $composite->getExcludePlatforms(),
             'ctm_disabled'              => $composite->getCtmDisabled(),
+            'contenthub_id'             => $composite->getContenthubId(),
         ];
     }
 
@@ -216,7 +217,6 @@ class CompositeTransformer extends TransformerAbstract
 
     private function relatedByCategory(CompositeContract $composite)
     {
-
         return $this->collection($composite->getRelatedByCategory(), new CompositeTeaserTransformer());
     }
 }
