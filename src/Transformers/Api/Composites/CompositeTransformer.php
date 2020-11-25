@@ -86,6 +86,7 @@ class CompositeTransformer extends TransformerAbstract
             'exclude_platforms'         => $composite->getExcludePlatforms(),
             'ctm_disabled'              => $composite->getCtmDisabled(),
             'contenthub_id'             => $composite->getContenthubId(),
+            'editorial_type'            => $composite->getEditorialType(),
         ];
     }
 
