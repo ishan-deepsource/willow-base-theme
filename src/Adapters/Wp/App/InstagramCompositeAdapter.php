@@ -232,4 +232,9 @@ class InstagramCompositeAdapter implements CompositeContract
     {
         return null;
     }
+    
+    public function getEditorialType(): ?string
+    {
+        return null;
+    }
 }
