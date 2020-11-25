@@ -466,7 +466,10 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getEditorialType(): ?string
     {
-        $vocabulary = get_the_terms($this->getId(), 'editorial_type')[0]->name;
-        return $vocabulary ?? null;
+        $vocabularies = get_the_terms($this->getId(), 'editorial_type');
+        if ($vocabularies) {
+            return $vocabularies[0]->name;
+        }
+        return null;
     }
 }
