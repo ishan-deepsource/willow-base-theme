@@ -225,4 +225,9 @@ class Composite implements CompositeContract
     {
         return $this->composite->getContenthubId();
     }
+
+    public function getEditorialType(): ?string
+    {
+        return $this->composite->getEditorialType();
+    }
 }

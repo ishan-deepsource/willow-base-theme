@@ -55,12 +55,15 @@ use Bonnier\Willow\Base\Models\Contracts\Root\AuthorContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
+use Bonnier\Willow\Base\Services\SiteManagerService;
 use Bonnier\Willow\Base\Traits\DateTimeZoneTrait;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\WP\Cxense\Services\WidgetDocumentQuery;
 use Bonnier\WP\Cxense\WpCxense;
+use Bonnier\WP\SiteManager\Repositories\VocabularyRepository;
+use Bonnier\WP\SiteManager\Services\VocabularyService;
 use DateTime;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -459,5 +462,14 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     public function getContenthubId(): ?string
     {
         return array_get($this->wpMeta, 'contenthub_id.0') ?: null;
+    }
+
+    public function getEditorialType(): ?string
+    {
+        $vocabularies = get_the_terms($this->getId(), 'editorial_type');
+        if ($vocabularies) {
+            return $vocabularies[0]->name;
+        }
+        return null;
     }
 }

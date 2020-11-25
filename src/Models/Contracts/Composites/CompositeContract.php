@@ -88,4 +88,6 @@ interface CompositeContract
     public function getRelatedByCategoryQuery(): ?WidgetDocumentQuery;
 
     public function getContenthubId(): ?string;
+
+    public function getEditorialType(): ?string;
 }
