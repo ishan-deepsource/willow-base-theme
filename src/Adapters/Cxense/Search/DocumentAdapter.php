@@ -240,11 +240,4 @@ class DocumentAdapter implements CompositeContract
     {
         return null;
     }
-
-    public function getEditorialType(): ?string
-    {
-        return null;
-        //$vocabulary = get_the_terms($this->getId(), 'editorial_type')[0]->name;
-        //return $vocabulary ?? null;
-    }
 }
