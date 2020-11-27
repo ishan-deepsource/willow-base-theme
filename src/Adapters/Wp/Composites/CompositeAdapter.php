@@ -463,4 +463,17 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     {
         return array_get($this->wpMeta, 'contenthub_id.0') ?: null;
     }
+
+    public function getEditorialType(): ?string
+    {
+        if (!get_field('editorial_type')) {
+            return null;
+        }
+
+        $vocabularies = get_the_terms($this->getId(), 'editorial_type');
+        if ($vocabularies) {
+            return $vocabularies[0]->name;
+        }
+        return null;
+    }
 }
