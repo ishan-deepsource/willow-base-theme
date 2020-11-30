@@ -91,24 +91,21 @@ class SortBy
             ->toArray();
 
         $featuredPostIds =  array_keys($featuredPostIdTimestamps);
+
+        global $wpdb;
+        $excludedFromWebIds = $wpdb->get_col("SELECT post_id FROM wp_postmeta WHERE meta_key='exclude_platforms' and meta_value like '%web%'");
+
         $postsPerPage = Arr::get(self::$acfWidget, AcfName::FIELD_TEASER_AMOUNT) ?: 4;
         $offset = Arr::get(self::$acfWidget, AcfName::FIELD_SKIP_TEASERS_AMOUNT) ?: 0;
         // Calculate offset factoring in pagination;
         $paginatedOffset = $offset + ((self::$page -1) * $postsPerPage);
 
         $args = [
-            'meta_query' => array(
-                array(
-                    'key' => 'exclude_platforms',
-                    'value' => 'web',
-                    'compare' => 'NOT LIKE'
-                ),
-            ),
             'posts_per_page' => $postsPerPage,
             'offset' => $paginatedOffset,
             'order' => 'DESC',
             'orderby' => 'post_date',
-            'post__not_in' => $featuredPostIds,
+            'post__not_in' => array_merge($featuredPostIds, $excludedFromWebIds),
             'post_type' =>  WpComposite::POST_TYPE,
             'post_status' => 'publish',
             'suppress_filters' => true,
