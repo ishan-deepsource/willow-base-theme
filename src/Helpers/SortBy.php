@@ -91,7 +91,7 @@ class SortBy
             ->toArray();
 
         $featuredPostIds =  array_keys($featuredPostIdTimestamps);
-        
+
         global $wpdb;
         $excludedFromWebIds = $wpdb->get_col("SELECT post_id FROM wp_postmeta WHERE meta_key='exclude_platforms' and meta_value like '%web%'");
 
