@@ -97,6 +97,13 @@ class SortBy
         $paginatedOffset = $offset + ((self::$page -1) * $postsPerPage);
 
         $args = [
+            'meta_query' => array(
+                array(
+                    'key' => 'exclude_platforms',
+                    'value' => 'web',
+                    'compare' => 'NOT LIKE'
+                ),
+            ),
             'posts_per_page' => $postsPerPage,
             'offset' => $paginatedOffset,
             'order' => 'DESC',
