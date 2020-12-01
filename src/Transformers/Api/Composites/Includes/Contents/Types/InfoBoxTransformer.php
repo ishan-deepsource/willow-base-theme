@@ -16,7 +16,6 @@ class InfoBoxTransformer extends TransformerAbstract
 {
     public function transform(InfoBoxContract $infoBox)
     {
-        //var_dump($infoBox);exit;
         return [
             'title' => $infoBox->isLocked() ? null : $infoBox->getTitle(),
             'body' => $infoBox->isLocked() ? null : $infoBox->getBody(),
