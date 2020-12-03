@@ -221,4 +221,13 @@ class Composite implements CompositeContract
         // TODO: Implement getGuideMeta() method.
         return null;
     }
+    public function getContenthubId(): ?string
+    {
+        return null;
+    }
+
+    public function getEditorialType(): ?string
+    {
+        return null;
+    }
 }
