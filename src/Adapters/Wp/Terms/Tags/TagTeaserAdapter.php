@@ -33,6 +33,10 @@ class TagTeaserAdapter extends AbstractTeaserAdapter
 
     public function getVideoUrl(): ?string
     {
+        if (isset($this->acfArray)) {
+            return array_get($this->acfArray, TeaserFieldGroup::VIDEO_URL_FIELD_NAME) ?: null;
+        }
+
         return null;
     }
 

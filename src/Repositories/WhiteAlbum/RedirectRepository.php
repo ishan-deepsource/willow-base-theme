@@ -16,7 +16,7 @@ class RedirectRepository
 {
     const WA_ROUTE_RESOLVES_TABLE = 'whitealbum_route_resolves';
     const WA_ROUTE_RESOLVES_TABLE_CREATED = 'whitealbum_route_resolves_created';
-    const WA_ROUTE_RESOLVES_TABLE_VERSION = 1;
+    const WA_ROUTE_RESOLVES_TABLE_VERSION = '1';
 
     protected $domain;
     protected $client;
