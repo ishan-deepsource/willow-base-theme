@@ -68,6 +68,8 @@ class Bootstrap
 
     public static function setup()
     {
+        Sentry\init(['dsn' => 'https://b716ec360b4d4af7929f4c4d71117e82@o490129.ingest.sentry.io/5560599' ]);
+
         /** @var \WP_Rewrite $wp_rewrite */
         global $wp_rewrite;
         $wp_rewrite->set_permalink_structure('/%category%/%postname%/');
