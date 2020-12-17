@@ -50,7 +50,9 @@ class TranslationManagerService
                         $this->serviceId,
                         PHP_EOL,
                         $endpoint
-                    )
+                    ),
+                    0,
+                    $e
                 );
             }
         }
