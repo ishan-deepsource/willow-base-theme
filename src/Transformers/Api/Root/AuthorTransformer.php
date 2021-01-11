@@ -25,6 +25,7 @@ class AuthorTransformer extends TransformerAbstract
         return [
             'id' => $author->getId(),
             'name' => $author->getName(),
+            'email' => $author->getEmail(),
             'title' => $author->getTitle(),
             'biography' => $author->getBiography(),
             'avatar' => $this->getAvatar($author),
