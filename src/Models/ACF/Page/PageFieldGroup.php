@@ -268,7 +268,7 @@ class PageFieldGroup
             ->setRole('author')
             ->setRequired(true)
             ->setMultiple(true)
-            ->setInstructions('Author overview will only display public authors, even thou you can select non public ones.');
+            ->setInstructions('Author overview will only display public authors, even thou you can select non public ones. The order of the authors will determine the order on the overview page.');
 
         $layout->addSubField($userField);
 

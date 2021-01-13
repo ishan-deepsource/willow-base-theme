@@ -92,10 +92,14 @@ class PageTemplates
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'top-lg' => 'Top LG',
                 ]);
+
+                $this->pageTemplates = array_merge($this->pageTemplates, [
+                    'author-overview' => 'Author Overview',
+                ]);
                 break;
             default:
                 $this->pageTemplates = array_merge($this->pageTemplates, [
-                    'authorlist' => 'Author List',
+                    'author-overview' => 'author-overview',
                     'architonic' => 'Architonic iFrame',
                     'profile' => 'Profile Page',
                     'favourites' => 'Favourites Page',

@@ -12,6 +12,8 @@ use Bonnier\Willow\Base\Models\ACF\Properties\ACFLocation;
 
 class UserFieldGroup
 {
+    const PUBLIC_FIELD = 'public';
+
     public static function register(): void
     {
         if (!function_exists('acf_add_local_field_group')) {
@@ -72,7 +74,7 @@ class UserFieldGroup
     public static function getPublicField(): ACFField
     {
         $field = new TrueFalseField('field_5e6e0cdd219b5');
-        $field->setName('Public')
+        $field->setName('public')
             ->setLabel('public')
             ->setInstructions('Should this author have an author page and be on sitemaps in the frontend?');
 

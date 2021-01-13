@@ -38,7 +38,7 @@ class AuthorOverviewAdapter extends AbstractContentAdapter implements AuthorOver
          $args = [
              'meta_query' => [
                   [
-                      'key' => 'Public',
+                      'key' => 'public',
                       'value' => true,
                       'compare' => '=='
                   ]
@@ -46,6 +46,13 @@ class AuthorOverviewAdapter extends AbstractContentAdapter implements AuthorOver
              'include' => $authorIds,
          ];
 
-         return collect(get_users($args));
+        $users = collect(get_users($args));
+
+        // Sort the users so the order selected matters.
+        $sortedUsers = $users->sortBy(function (\WP_User $user) use ($authorIds) {
+            return array_search($user->ID, $authorIds);
+        })->all();
+
+         return collect($sortedUsers);
     }
 }
