@@ -41,6 +41,7 @@ class TagTransformer extends TransformerAbstract
             'canonical_url' => $tag->getCanonicalUrl(),
             'translations'  => $this->getTranslations($tag),
             'contenthub_id' => $tag->getContenthubId(),
+            'internal'      => $tag->getInternal(),
         ];
     }
 
