@@ -42,6 +42,7 @@ abstract class AbstractModelFactory implements ModelFactoryContract
     public function getModel($model)
     {
         $adapter = $this->getAdapter($model);
+
         $baseModel = new $this->baseClass($this->instantiateAdapter($adapter, $model));
         if ($overrideClass = $this->getOverrideClass()) {
             return new $overrideClass($baseModel);

@@ -20,6 +20,7 @@ use Bonnier\Willow\Base\Models\ACF\Fields\TextAreaField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TextField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TrueFalseField;
 use Bonnier\Willow\Base\Models\ACF\Fields\UrlField;
+use Bonnier\Willow\Base\Models\ACF\Fields\UserField;
 use Bonnier\Willow\Base\Models\ACF\Properties\ACFConditionalLogic;
 use Bonnier\Willow\Base\Models\ACF\Properties\ACFLocation;
 use Bonnier\Willow\Base\Models\WpComposite;
@@ -93,6 +94,7 @@ class PageFieldGroup
 
         $widgets->addLayout(self::getFeaturedContentLayout());
         $widgets->addLayout(self::getTeaserListLayout());
+        $widgets->addLayout(self::getAuthorOverviewLayout());
         $widgets->addLayout(self::getSeoTextLayout());
         $widgets->addLayout(self::getTaxonomyListLayout());
         $widgets->addLayout(self::getNewsletterLayout());
@@ -232,6 +234,43 @@ class PageFieldGroup
         $layout->addSubField($pagination);
 
         $layout->addSubFields(SortByFields::getFields(AcfName::WIDGET_TEASER_LIST));
+
+        return apply_filters(sprintf('willow/acf/layout=%s', $layout->getKey()), $layout);
+    }
+
+    public static function getAuthorOverviewLayout(): ACFLayout
+    {
+        $layout = new ACFLayout('layout_5ffd8e7e5dd86');
+        $layout->setName('author_overview')
+            ->setLabel('Author Overview');
+
+        $title = new TextField('field_5ffd8e8c5dd87');
+        $title->setLabel('Title')
+            ->setName('title');
+
+        $layout->addSubField($title);
+
+        $label = new TextField('field_5ffd93bf5dd88');
+        $label->setLabel('Label')
+            ->setName('label');
+
+        $layout->addSubField($label);
+
+        $description = new TextAreaField('field_5ffd93f95dd89');
+        $description->setLabel('Description')
+            ->setName('description');
+
+        $layout->addSubField($description);
+
+        $userField = (new UserField('field_5ffd94425dd8c'))
+            ->setLabel('Authors')
+            ->setName('authors')
+            ->setRole('author')
+            ->setRequired(true)
+            ->setMultiple(true)
+            ->setInstructions('Author overview will only display public authors, even thou you can select non public ones.');
+
+        $layout->addSubField($userField);
 
         return apply_filters(sprintf('willow/acf/layout=%s', $layout->getKey()), $layout);
     }

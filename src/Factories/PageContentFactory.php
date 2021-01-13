@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Factories;
 
+use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\AuthorOverviewAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\BannerPlacementAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\CommercialSpotAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\FeaturedContentAdapter;
@@ -17,6 +18,7 @@ class PageContentFactory extends AbstractModelFactory
 {
     protected $adapterMapping = [
         AcfName::WIDGET_TEASER_LIST => TeaserListAdapter::class,
+        AcfName::WIDGET_AUTHOR_OVERVIEW => AuthorOverviewAdapter::class,
         AcfName::WIDGET_FEATURED_CONTENT => FeaturedContentAdapter::class,
         AcfName::WIDGET_SEO_TEXT => SeoTextAdapter::class,
         AcfName::WIDGET_NEWSLETTER => NewsletterAdapter::class,
