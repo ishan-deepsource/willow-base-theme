@@ -32,7 +32,7 @@ class PageTemplates
         switch ($this->getBrandCode()) {
             case 'BOB':
                 $this->pageTemplates = array_merge($this->pageTemplates, [
-                    'authorlist' => 'Author List',
+                    'author-overview' => 'Author Overview',
                     'architonic' => 'Architonic iFrame',
                 ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
@@ -99,7 +99,7 @@ class PageTemplates
                 break;
             default:
                 $this->pageTemplates = array_merge($this->pageTemplates, [
-                    'author-overview' => 'author-overview',
+                    'author-overview' => 'Author Overview',
                     'architonic' => 'Architonic iFrame',
                     'profile' => 'Profile Page',
                     'favourites' => 'Favourites Page',

@@ -4,7 +4,7 @@ namespace Bonnier\Willow\Base\Transformers\Api\Root\Contents;
 
 use Bonnier\Willow\Base\Helpers\AcfName;
 use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\ContentContract;
-use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\AuthorListTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\AuthorOverviewTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\BannerPlacementTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\CommercialSpotTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types\FeaturedContentTransformer;
@@ -28,7 +28,7 @@ class ContentTransformer extends TransformerAbstract
 
     protected $transformerMapping = [
         'teaser_list' => TeaserListTransformer::class,
-        'author_overview' => AuthorListTransformer::class,
+        'author_overview' => AuthorOverviewTransformer::class,
         'featured_content' => FeaturedContentTransformer::class,
         'seo_text' => SeoTextTransformer::class,
         'newsletter' => NewsletterTransformer::class,

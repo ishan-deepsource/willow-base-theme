@@ -8,7 +8,7 @@ use Bonnier\Willow\Base\Transformers\Api\Root\AuthorTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\HyperlinkTransformer;
 use League\Fractal\TransformerAbstract;
 
-class AuthorListTransformer extends TransformerAbstract
+class AuthorOverviewTransformer extends TransformerAbstract
 {
     protected $defaultIncludes = [
         'authors',
