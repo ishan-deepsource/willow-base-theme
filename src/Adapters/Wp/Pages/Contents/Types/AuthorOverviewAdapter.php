@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types;
 
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\AbstractContentAdapter;
+use Bonnier\Willow\Base\Models\ACF\User\UserFieldGroup;
 use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\Types\AuthorOverviewContract;
 use Illuminate\Support\Collection;
 
@@ -11,7 +12,6 @@ class AuthorOverviewAdapter extends AbstractContentAdapter implements AuthorOver
     public function __construct(array $acfArray)
     {
         parent::__construct($acfArray);
-        $this->page = 1;
     }
 
     public function getTitle(): ?string
@@ -38,7 +38,7 @@ class AuthorOverviewAdapter extends AbstractContentAdapter implements AuthorOver
          $args = [
              'meta_query' => [
                   [
-                      'key' => 'public',
+                      'key' => UserFieldGroup::PUBLIC_FIELD,
                       'value' => true,
                       'compare' => '=='
                   ]

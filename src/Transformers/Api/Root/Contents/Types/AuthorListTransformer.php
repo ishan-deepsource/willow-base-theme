@@ -14,7 +14,6 @@ class AuthorListTransformer extends TransformerAbstract
         'authors',
     ];
 
-
     public function transform(AuthorOverviewContract $authorOverview)
     {
         return [
