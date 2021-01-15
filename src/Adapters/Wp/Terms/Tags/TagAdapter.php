@@ -238,4 +238,10 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
 
         return $this->contentFactory = new CategoryContentFactory($class);
     }
+
+    public function getInternal(): ?bool
+    {
+        $wpMeta = $this->getWpMeta();
+        return data_get($wpMeta, 'internal.0') ?: false;
+    }
 }

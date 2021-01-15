@@ -32,4 +32,6 @@ interface TagContract
     public function getTranslations(): ?Collection;
 
     public function getContenthubId(): ?string;
+
+    public function getInternal(): ?bool;
 }

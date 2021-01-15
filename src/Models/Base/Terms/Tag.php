@@ -64,7 +64,7 @@ class Tag implements TagContract
     {
         return $this->tag->getTeasers();
     }
-    
+
     public function getContents(int $page = 1): ?Collection
     {
         return $this->tag->getContents($page);
@@ -78,5 +78,10 @@ class Tag implements TagContract
     public function getContenthubId(): ?string
     {
         return $this->tag->getContenthubId();
+    }
+
+    public function getInternal(): ?bool
+    {
+        return $this->tag->getInternal();
     }
 }
