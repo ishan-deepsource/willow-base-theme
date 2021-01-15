@@ -6,6 +6,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Pages;
 use Bonnier\Willow\Base\Adapters\Wp\AbstractWpAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\AuthorAdapter;
 use Bonnier\Willow\Base\Helpers\AcfName;
+use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\AuthorOverview;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\CommercialSpot;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\QuoteTeaser;
 use Bonnier\Willow\Base\Models\Base\Root\Translation;
@@ -49,6 +50,7 @@ class PageAdapter extends AbstractWpAdapter implements PageContract
 
     protected $contentModelsMapping = [
         AcfName::WIDGET_TEASER_LIST => TeaserList::class,
+        AcfName::WIDGET_AUTHOR_OVERVIEW => AuthorOverview::class,
         AcfName::WIDGET_FEATURED_CONTENT => FeaturedContent::class,
         AcfName::WIDGET_SEO_TEXT => SeoText::class,
         AcfName::WIDGET_NEWSLETTER => Newsletter::class,
