@@ -21,6 +21,7 @@ use Bonnier\Willow\Base\Models\ACF\Fields\TextField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TrueFalseField;
 use Bonnier\Willow\Base\Models\ACF\Fields\UrlField;
 use Bonnier\Willow\Base\Models\ACF\Fields\UserField;
+use Bonnier\Willow\Base\Models\ACF\Fields\Wysiwyg;
 use Bonnier\Willow\Base\Models\ACF\Properties\ACFConditionalLogic;
 use Bonnier\Willow\Base\Models\ACF\Properties\ACFLocation;
 use Bonnier\Willow\Base\Models\WpComposite;
@@ -244,23 +245,20 @@ class PageFieldGroup
         $layout->setName('author_overview')
             ->setLabel('Author Overview');
 
-        $title = new TextField('field_5ffd8e8c5dd87');
-        $title->setLabel('Title')
-            ->setName('title');
+        $editorDescriptionTitle = new TextField('field_60100c8f854a5');
+        $editorDescriptionTitle->setLabel('Editors description title')
+            ->setName('editors_description_title');
 
-        $layout->addSubField($title);
+        $layout->addSubField($editorDescriptionTitle);
 
-        $label = new TextField('field_5ffd93bf5dd88');
-        $label->setLabel('Label')
-            ->setName('label');
+        $editorDescription = new Wysiwyg('field_6010095022dc9');
+        $editorDescription->setLabel('Editors description')
+            ->setName('editors_description')
+            ->setTabs(Wysiwyg::TABS_ALL)
+            ->setToolbar(Wysiwyg::TOOLBAR_FULL)
+            ->setMediaUpload(false);
 
-        $layout->addSubField($label);
-
-        $description = new TextAreaField('field_5ffd93f95dd89');
-        $description->setLabel('Description')
-            ->setName('description');
-
-        $layout->addSubField($description);
+        $layout->addSubField($editorDescription);
 
         $userField = (new UserField('field_5ffd94425dd8c'))
             ->setLabel('Authors')

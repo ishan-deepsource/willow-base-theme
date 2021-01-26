@@ -13,19 +13,14 @@ use Illuminate\Support\Collection;
  */
 class AuthorOverview extends AbstractContent implements AuthorOverviewContract
 {
-    public function getTitle(): ?string
+    public function getEditorsDescriptionTitle(): ?string
     {
-        return $this->model->getTitle();
+        return $this->model->getEditorsDescriptionTitle();
     }
 
-    public function getLabel(): ?string
+    public function getEditorsDescription(): ?string
     {
-        return $this->model->getLabel();
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->model->getDescription();
+        return $this->model->getEditorsDescription();
     }
 
     public function getAuthors(): Collection
