@@ -7,6 +7,7 @@ use Bonnier\Willow\Base\Models\ACF\ACFLayout;
 use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Fields\ImageField;
 use Bonnier\Willow\Base\Models\ACF\Fields\RadioField;
+use Bonnier\Willow\Base\Models\ACF\Fields\TextField;
 use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 
 class GDS extends Brand

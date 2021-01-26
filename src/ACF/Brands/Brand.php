@@ -12,6 +12,7 @@ use Bonnier\Willow\Base\Models\ACF\Composite\TeaserFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Fields\FlexibleContentField;
 use Bonnier\Willow\Base\Models\ACF\Fields\GroupField;
 use Bonnier\Willow\Base\Models\ACF\Fields\RepeaterField;
+use Bonnier\Willow\Base\Models\ACF\Fields\TextField;
 use Bonnier\Willow\Base\Models\ACF\Fields\UrlField;
 use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 
@@ -56,6 +57,14 @@ abstract class Brand implements BrandInterface
         return $layout->setSubFields($fields);
     }
 
+    public static function removeAssociatedCompositeWidgetTitle(ACFLayout $layout)
+    {
+        $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
+            return $field->getName() !== CompositeFieldGroup::TITLE_FIELD;
+        });
+        return $layout->setSubFields($fields);
+    }
+
     protected static function removeVideoUrlFromImageWidget()
     {
         $imageWidget = CompositeFieldGroup::getImageWidget();
@@ -90,6 +99,13 @@ abstract class Brand implements BrandInterface
     {
         $infoboxWidget = self::$infoboxWidget;
         add_filter(sprintf('willow/acf/layout=%s', $infoboxWidget->getKey()), [__CLASS__, 'removeImageField']);
+    }
+
+    protected static function removeTitleFromAssociatedCompositeWidget()
+    {
+
+        $associatedCompositeWidget = CompositeFieldGroup::getAssociatedCompositeWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $associatedCompositeWidget->getKey()), [__CLASS__, 'removeAssociatedCompositeWidgetTitle']);
     }
 
 	protected static function removeInventoryWidget()

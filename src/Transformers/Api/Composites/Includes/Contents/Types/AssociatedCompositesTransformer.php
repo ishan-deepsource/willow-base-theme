@@ -12,6 +12,7 @@ class AssociatedCompositesTransformer extends TransformerAbstract
     public function transform(AssociatedCompositesContract $associatedComposites)
     {
         return [
+            'title' => $associatedComposites->getTitle(),
             'composites' => $this->transformComposites($associatedComposites),
         ];
     }

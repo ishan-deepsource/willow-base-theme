@@ -19,6 +19,11 @@ class AssociatedComposites extends AbstractContent implements AssociatedComposit
         parent::__construct($associatedContent);
     }
 
+    public function getTitle(): ?string
+    {
+        return $this->model->getTitle();
+    }
+
     public function getComposites(): ?Collection
     {
         return $this->model->getComposites();

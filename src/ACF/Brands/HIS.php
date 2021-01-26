@@ -17,6 +17,7 @@ class HIS extends Brand
         self::removeVideoUrlFromParagraphListWidget();
         self::removeVideoUrlFromTeaserImages();
         self::removeImageFromInfoboxWidget();
+        self::removeTitleFromAssociatedCompositeWidget();
 
         self::removeInventoryWidget();
         self::removeMultimediaWidget();

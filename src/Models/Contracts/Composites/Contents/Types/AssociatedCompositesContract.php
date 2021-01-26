@@ -7,5 +7,7 @@ use Illuminate\Support\Collection;
 
 interface AssociatedCompositesContract extends ContentContract
 {
+    public function getTitle() : ?string;
+
     public function getComposites() : ?Collection;
 }

@@ -13,6 +13,7 @@ class ILL extends Brand
     {
         self::init();
         self::removeImageFromInfoboxWidget();
+        self::removeTitleFromAssociatedCompositeWidget();
 
         self::removeInventoryWidget();
         self::removeMultimediaWidget();
