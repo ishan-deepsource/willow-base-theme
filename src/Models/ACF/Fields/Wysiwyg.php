@@ -76,7 +76,7 @@ class Wysiwyg extends ACFField
     public function setToolbar(string $toolbar): Wysiwyg
     {
         if (! in_array($toolbar, [static::TOOLBAR_BASIC, static::TOOLBAR_FULL])) {
-            throw new \InvalidArgumentException(sprintf("%s is not a valid tabs option", $toolbar));
+            throw new \InvalidArgumentException(sprintf("%s is not a valid toolbar option", $toolbar));
         }
 
         $this->toolbar = $toolbar;
