@@ -6,11 +6,13 @@ use Bonnier\Willow\Base\Helpers\AcfName;
 use Bonnier\Willow\Base\Models\ACF\ACFField;
 use Bonnier\Willow\Base\Models\ACF\ACFGroup;
 use Bonnier\Willow\Base\Models\ACF\ACFLayout;
+use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Fields\CustomRelationshipField;
 use Bonnier\Willow\Base\Models\ACF\Fields\FileField;
 use Bonnier\Willow\Base\Models\ACF\Fields\FlexibleContentField;
 use Bonnier\Willow\Base\Models\ACF\Fields\ImageField;
 use Bonnier\Willow\Base\Models\ACF\Fields\MarkdownField;
+use Bonnier\Willow\Base\Models\ACF\Fields\MessageField;
 use Bonnier\Willow\Base\Models\ACF\Fields\NumberField;
 use Bonnier\Willow\Base\Models\ACF\Fields\RadioField;
 use Bonnier\Willow\Base\Models\ACF\Fields\SelectField;
@@ -251,12 +253,10 @@ class PageFieldGroup
 
         $layout->addSubField($editorDescriptionTitle);
 
-        $editorDescription = new Wysiwyg('field_6010095022dc9');
+        $editorDescription = new MarkdownField('field_6010095022dc9');
         $editorDescription->setLabel('Editors description')
             ->setName('editors_description')
-            ->setTabs(Wysiwyg::TABS_ALL)
-            ->setToolbar(Wysiwyg::TOOLBAR_FULL)
-            ->setMediaUpload(false);
+            ->setMdeConfig(MarkdownField::CONFIG_STANDARD);
 
         $layout->addSubField($editorDescription);
 

@@ -43,6 +43,9 @@ class PageTemplates
                 ]);
                 break;
             case 'COS':
+                $this->pageTemplates = array_merge($this->pageTemplates, [
+                    'author-overview' => 'Author Overview',
+                ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'gradient' => 'Gradient',
                     'colorblock' => 'Farveblok',
@@ -119,6 +122,7 @@ class PageTemplates
                 ]);
                 break;
         }
+        
         $postType = WpComposite::POST_TYPE;
         // Adds our template to the page dropdown for v4.7+
         add_filter('theme_page_templates', [$this, 'addTemplatesToMetaBox']);
@@ -187,6 +191,7 @@ class PageTemplates
                 if (in_array(data_get($site, 'brand.brand_code'), $voldemortBrands)) {
                     return 'VOL';
                 }
+
                 return data_get($site, 'brand.brand_code');
             }
         } catch (SiteNotFoundException $exception) {
