@@ -94,6 +94,7 @@ class Bootstrap
             WpTaxonomy::register();
             WpPage::register();
             WpComposite::register();
+            WpProduct::register();
             WpAttachment::register();
             WpUserProfile::register();
             CmdManager::register();
