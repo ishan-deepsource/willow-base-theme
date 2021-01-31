@@ -122,7 +122,7 @@ class PageTemplates
                 ]);
                 break;
         }
-        
+
         $postType = WpComposite::POST_TYPE;
         // Adds our template to the page dropdown for v4.7+
         add_filter('theme_page_templates', [$this, 'addTemplatesToMetaBox']);

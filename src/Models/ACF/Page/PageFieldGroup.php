@@ -247,12 +247,6 @@ class PageFieldGroup
         $layout->setName('author_overview')
             ->setLabel('Author Overview');
 
-        $editorDescriptionTitle = new TextField('field_60100c8f854a5');
-        $editorDescriptionTitle->setLabel('Editors description title')
-            ->setName('editors_description_title');
-
-        $layout->addSubField($editorDescriptionTitle);
-
         $editorDescription = new MarkdownField('field_6010095022dc9');
         $editorDescription->setLabel('Editors description')
             ->setName('editors_description')

@@ -14,11 +14,6 @@ class AuthorOverviewAdapter extends AbstractContentAdapter implements AuthorOver
         parent::__construct($acfArray);
     }
 
-    public function getEditorsDescriptionTitle(): ?string
-    {
-        return array_get($this->acfArray, 'editors_description_title') ?: null;
-    }
-
     public function getEditorsDescription(): ?string
     {
         return array_get($this->acfArray, 'editors_description') ?: null;
