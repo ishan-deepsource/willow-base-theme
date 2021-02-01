@@ -6,11 +6,13 @@ use Bonnier\Willow\Base\Helpers\AcfName;
 use Bonnier\Willow\Base\Models\ACF\ACFField;
 use Bonnier\Willow\Base\Models\ACF\ACFGroup;
 use Bonnier\Willow\Base\Models\ACF\ACFLayout;
+use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Fields\CustomRelationshipField;
 use Bonnier\Willow\Base\Models\ACF\Fields\FileField;
 use Bonnier\Willow\Base\Models\ACF\Fields\FlexibleContentField;
 use Bonnier\Willow\Base\Models\ACF\Fields\ImageField;
 use Bonnier\Willow\Base\Models\ACF\Fields\MarkdownField;
+use Bonnier\Willow\Base\Models\ACF\Fields\MessageField;
 use Bonnier\Willow\Base\Models\ACF\Fields\NumberField;
 use Bonnier\Willow\Base\Models\ACF\Fields\RadioField;
 use Bonnier\Willow\Base\Models\ACF\Fields\SelectField;
@@ -21,6 +23,7 @@ use Bonnier\Willow\Base\Models\ACF\Fields\TextField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TrueFalseField;
 use Bonnier\Willow\Base\Models\ACF\Fields\UrlField;
 use Bonnier\Willow\Base\Models\ACF\Fields\UserField;
+use Bonnier\Willow\Base\Models\ACF\Fields\Wysiwyg;
 use Bonnier\Willow\Base\Models\ACF\Properties\ACFConditionalLogic;
 use Bonnier\Willow\Base\Models\ACF\Properties\ACFLocation;
 use Bonnier\Willow\Base\Models\WpComposite;
@@ -244,23 +247,12 @@ class PageFieldGroup
         $layout->setName('author_overview')
             ->setLabel('Author Overview');
 
-        $title = new TextField('field_5ffd8e8c5dd87');
-        $title->setLabel('Title')
-            ->setName('title');
+        $editorDescription = new MarkdownField('field_6010095022dc9');
+        $editorDescription->setLabel('Editors description')
+            ->setName('editors_description')
+            ->setMdeConfig(MarkdownField::CONFIG_STANDARD);
 
-        $layout->addSubField($title);
-
-        $label = new TextField('field_5ffd93bf5dd88');
-        $label->setLabel('Label')
-            ->setName('label');
-
-        $layout->addSubField($label);
-
-        $description = new TextAreaField('field_5ffd93f95dd89');
-        $description->setLabel('Description')
-            ->setName('description');
-
-        $layout->addSubField($description);
+        $layout->addSubField($editorDescription);
 
         $userField = (new UserField('field_5ffd94425dd8c'))
             ->setLabel('Authors')

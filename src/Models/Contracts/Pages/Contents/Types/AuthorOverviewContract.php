@@ -10,8 +10,7 @@ use Illuminate\Support\Collection;
 
 interface AuthorOverviewContract extends ContentContract
 {
-    public function getTitle(): ?string;
-    public function getLabel(): ?string;
-    public function getDescription(): ?string;
+    public function getEditorsDescription(): ?string;
+
     public function getAuthors(): Collection;
 }
