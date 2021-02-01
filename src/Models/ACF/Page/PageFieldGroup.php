@@ -257,7 +257,6 @@ class PageFieldGroup
         $userField = (new UserField('field_5ffd94425dd8c'))
             ->setLabel('Authors')
             ->setName('authors')
-            ->setRole('author')
             ->setRequired(true)
             ->setMultiple(true)
             ->setInstructions('Author overview will only display public authors, even thou you can select non public ones. The order of the authors will determine the order on the overview page.');
