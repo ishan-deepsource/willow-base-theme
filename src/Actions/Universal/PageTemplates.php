@@ -89,6 +89,7 @@ class PageTemplates
                 ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'guide' => 'Guide',
+                    'test' => 'Test'
                 ]);
                 break;
             case 'VOL':
@@ -119,6 +120,7 @@ class PageTemplates
                     'guide' => 'Guide',
                     'timeline' => 'Timeline',
                     'top-lg' => 'Top LG',
+                    'test' => 'Test',
                 ]);
                 break;
         }
