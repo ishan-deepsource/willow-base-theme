@@ -17,9 +17,7 @@ class AuthorOverviewTransformer extends TransformerAbstract
     public function transform(AuthorOverviewContract $authorOverview)
     {
         return [
-            'title' => $authorOverview->getTitle(),
-            'label' => $authorOverview->getLabel(),
-            'description' => $authorOverview->getDescription(),
+            'editors_description' => $authorOverview->getEditorsDescription(),
         ];
     }
 
