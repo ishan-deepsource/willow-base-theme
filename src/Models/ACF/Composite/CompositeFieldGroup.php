@@ -871,11 +871,30 @@ class CompositeFieldGroup
 
         $inventoryWidget->addSubField($title);
 
+        $description = new MarkdownField('field_6017cd4793c46');
+        $description->setLabel('Description')
+            ->setName('description')
+            ->setMdeConfig(MarkdownField::CONFIG_STANDARD);
+
+        $inventoryWidget->addSubField($description);
+
         $items = new RepeaterField('field_58aeadcdcbe5d');
         $items->setLabel('Inventory Items')
             ->setName('inventory_items')
             ->setLayout('table')
             ->setButtonLabel('Add Row');
+
+        $displayHint = new RadioField('field_6017cd8b93c47');
+        $displayHint->setLabel('Display Format')
+            ->setName('display_hint')
+            ->setChoice('default', 'Default')
+            ->setChoice('heading', 'Heading')
+            ->setChoice('summary', 'Summary')
+            ->setDefaultValue('default')
+            ->setLayout('horizontal')
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+
+        $items->addSubField($displayHint);
 
         $name = new TextField('field_58aeae3fcbe61');
         $name->setLabel('Name')
@@ -887,7 +906,7 @@ class CompositeFieldGroup
         $value = new TextField('field_58aeae4ccbe62');
         $value->setLabel('Value')
             ->setName('value')
-            ->setRequired(true);
+            ->setRequired(false);
 
         $items->addSubField($value);
 
