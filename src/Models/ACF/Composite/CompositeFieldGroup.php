@@ -867,7 +867,7 @@ class CompositeFieldGroup
         $title = new TextField('field_58e3971e4d277');
         $title->setLabel('Title')
             ->setName('title')
-            ->setRequired(true);
+            ->setRequired(false);
 
         $inventoryWidget->addSubField($title);
 
@@ -882,6 +882,7 @@ class CompositeFieldGroup
         $items->setLabel('Inventory Items')
             ->setName('items')
             ->setLayout('table')
+            ->setRequired(true)
             ->setButtonLabel('Add Row');
 
         $displayHint = new RadioField('field_6017cd8b93c47');
