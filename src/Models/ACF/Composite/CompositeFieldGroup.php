@@ -867,7 +867,7 @@ class CompositeFieldGroup
         $title = new TextField('field_58e3971e4d277');
         $title->setLabel('Title')
             ->setName('title')
-            ->setRequired(true);
+            ->setRequired(false);
 
         $inventoryWidget->addSubField($title);
 
@@ -880,8 +880,9 @@ class CompositeFieldGroup
 
         $items = new RepeaterField('field_58aeadcdcbe5d');
         $items->setLabel('Inventory Items')
-            ->setName('inventory_items')
+            ->setName('items')
             ->setLayout('table')
+            ->setRequired(true)
             ->setButtonLabel('Add Row');
 
         $displayHint = new RadioField('field_6017cd8b93c47');
@@ -897,8 +898,8 @@ class CompositeFieldGroup
         $items->addSubField($displayHint);
 
         $name = new TextField('field_58aeae3fcbe61');
-        $name->setLabel('Name')
-            ->setName('name')
+        $name->setLabel('Key')
+            ->setName('key')
             ->setRequired(true);
 
         $items->addSubField($name);
