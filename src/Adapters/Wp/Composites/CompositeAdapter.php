@@ -20,6 +20,7 @@ use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ChaptersSummary;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Inventory;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Multimedia;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Newsletter;
+use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Product;
 use Bonnier\Willow\Base\Models\Base\Root\GuideMeta;
 use Bonnier\Willow\Base\Models\Base\Root\Translation;
 use Bonnier\Willow\Base\Models\Contracts\Root\GuideMetaContract;
@@ -104,6 +105,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         'chapters_summary'      => ChaptersSummary::class,
         'multimedia'            => Multimedia::class,
         'inventory'             => Inventory::class,
+        'product'               => Product::class,
     ];
 
     protected $acfFields;

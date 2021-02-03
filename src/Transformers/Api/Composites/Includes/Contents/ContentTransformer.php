@@ -18,6 +18,7 @@ use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\Link
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\MultimediaTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\NewsletterTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ParagraphListTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ProductTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\QuoteTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\TextItemTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\VideoTransformer;
@@ -46,6 +47,7 @@ class ContentTransformer extends TransformerAbstract
         'chapters_summary'      => ChaptersSummaryTransformer::class,
         'multimedia'            => MultimediaTransformer::class,
         'inventory'             => InventoryTransformer::class,
+        'product'               => ProductTransformer::class,
     ];
 
     public function transform(ContentContract $content)
