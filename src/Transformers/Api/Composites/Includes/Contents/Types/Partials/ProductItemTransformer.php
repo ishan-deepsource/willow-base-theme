@@ -10,8 +10,8 @@ class ProductItemTransformer extends TransformerAbstract
     public function transform(ProductItemContract $productItem)
     {
         return [
-            'key' => $productItem->getParameter(),
-            'value' => $productItem->getScore(),
+            'parameter' => $productItem->getParameter(),
+            'score' => $productItem->getScore(),
         ];
     }
 }
