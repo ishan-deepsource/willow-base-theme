@@ -231,6 +231,7 @@ class CompositeFieldGroup
         $content->addLayout(self::getNewsletterWidget());
         $content->addLayout(self::getChaptersSummaryWidget());
         $content->addLayout(self::getMultimediaWidget());
+        $content->addLayout(self::getProductWidget());
 
         return apply_filters(sprintf('willow/acf/field=%s', $content->getKey()), $content);
     }
@@ -925,6 +926,113 @@ class CompositeFieldGroup
         $inventoryWidget->addSubField($lockedContent);
 
         return apply_filters(sprintf('willow/acf/layout=%s', $inventoryWidget->getKey()), $inventoryWidget);
+    }
+
+    public static function getProductWidget(): ACFLayout
+    {
+        $productWidget = new ACFLayout('layout_601a57813410a');
+        $productWidget->setName('product')
+            ->setLabel('Product');
+
+        $title = new TextField('field_601a57813410b');
+        $title->setLabel('Title')
+            ->setName('title')
+            ->setRequired(true);
+
+        $productWidget->addSubField($title);
+
+        $description = new MarkdownField('field_601a57813410c');
+        $description->setLabel('Description')
+            ->setName('description')
+            ->setRequired(false)
+            ->setMdeConfig(MarkdownField::CONFIG_STANDARD);
+
+        $productWidget->addSubField($description);
+
+        $image = new ImageField('field_601a578d34112');
+        $image->setLabel('Image')
+            ->setName('image')
+            ->setRequired(true)
+            ->setReturnFormat(ACFField::RETURN_ARRAY)
+            ->setPreviewSize(ImageField::PREVIEW_MEDIUM);
+
+        $productWidget->addSubField($image);
+
+        $price = new TextField('field_601a57a534113');
+        $price->setLabel('Price')
+            ->setName('price')
+            ->setRequired(true);
+
+        $productWidget->addSubField($price);
+
+        $winner = new TrueFalseField('field_601a57d634114');
+        $winner->setLabel('Winner')
+            ->setName('winner')
+            ->setMessage('Mark the product as winner.');
+
+        $productWidget->addSubField($winner);
+
+        $bestBuy = new TrueFalseField('field_601a580934115');
+        $bestBuy->setLabel('Best buy')
+            ->setName('best_buy')
+            ->setMessage('Mark the product as best buy.');
+
+        $productWidget->addSubField($bestBuy);
+
+        $maxPoints = new SelectField('field_601a5910575dd');
+        $maxPoints->setLabel('Max points')
+            ->setName('max_points')
+            ->setInstructions('Max points. Default is 10.')
+            ->addChoice('1', '1')
+            ->addChoice('2', '2')
+            ->addChoice('3', '3')
+            ->addChoice('4', '4')
+            ->addChoice('5', '5')
+            ->addChoice('6', '6')
+            ->addChoice('7', '7')
+            ->addChoice('8', '8')
+            ->addChoice('9', '9')
+            ->addChoice('10', '10')
+            ->setDefaultValue(['10'])
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+
+        $productWidget->addSubField($maxPoints);
+
+        $items = new RepeaterField('field_601a57813410d');
+        $items->setLabel('Scores')
+            ->setName('items')
+            ->setLayout('table')
+            ->setRequired(true)
+            ->setButtonLabel('Add Row');
+
+        $parameter = new TextField('field_601a57813410f');
+        $parameter->setLabel('Parameter')
+            ->setName('parameter')
+            ->setRequired(true);
+
+        $items->addSubField($parameter);
+
+        $score = new TextField('field_601a578134110');
+        $score->setLabel('Score')
+            ->setName('score')
+            ->setRequired(true);
+
+        $items->addSubField($score);
+
+        $productWidget->addSubField($items);
+
+        $lockedContent = new TrueFalseField('field_601a578134111');
+        $lockedContent->setLabel('Locked Content')
+            ->setName('locked_content')
+            ->setConditionalLogic(new ACFConditionalLogic(
+                self::LOCKED_CONTENT_FIELD,
+                ACFConditionalLogic::OPERATOR_EQUALS,
+                '1'
+            ));
+
+        $productWidget->addSubField($lockedContent);
+
+        return apply_filters(sprintf('willow/acf/layout=%s', $productWidget->getKey()), $productWidget);
     }
 
     public static function getHotspotImageWidget(): ACFLayout
