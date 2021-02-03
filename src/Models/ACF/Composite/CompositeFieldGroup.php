@@ -861,7 +861,7 @@ class CompositeFieldGroup
 
     public static function getInventoryWidget(): ACFLayout
     {
-        $inventoryWidget = new ACFLayout('58aeadaacbe5c');
+        $inventoryWidget = new ACFLayout('layout_58aeadaacbe5c');
         $inventoryWidget->setName('inventory')
             ->setLabel('Inventory');
 
