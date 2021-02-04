@@ -1310,12 +1310,9 @@ class CompositeFieldGroup
             ->setPreviewSize('medium');
         $recipeWidget->addSubField($image);
 
-        $tags = new TaxonomyField('field_601beae919f6d');
+        $tags = new TextAreaField(('field_601beae919f6d');
         $tags->setLabel('Tags')
-            ->setName('tags')
-            ->setTaxonomy('post_tag')
-            ->setFieldType('multi_select')
-            ->setAddTerm(1);
+            ->setName('tags');
         $recipeWidget->addSubField($tags);
 
         $useAdArticleLeadImage = new TrueFalseField('field_601a977ef88d4');
