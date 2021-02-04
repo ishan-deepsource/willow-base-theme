@@ -1310,7 +1310,7 @@ class CompositeFieldGroup
             ->setPreviewSize('medium');
         $recipeWidget->addSubField($image);
 
-        $tags = new TextAreaField(('field_601beae919f6d');
+        $tags = new TextAreaField('field_601beae919f6d');
         $tags->setLabel('Tags')
             ->setName('tags');
         $recipeWidget->addSubField($tags);
