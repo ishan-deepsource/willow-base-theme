@@ -20,6 +20,7 @@ use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\News
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ParagraphListTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ProductTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\QuoteTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\RecipeTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\TextItemTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\VideoTransformer;
 use Bonnier\Willow\Base\Transformers\NullTransformer;
@@ -48,6 +49,7 @@ class ContentTransformer extends TransformerAbstract
         'multimedia'            => MultimediaTransformer::class,
         'inventory'             => InventoryTransformer::class,
         'product'               => ProductTransformer::class,
+        'recipe'                => RecipeTransformer::class,
     ];
 
     public function transform(ContentContract $content)
