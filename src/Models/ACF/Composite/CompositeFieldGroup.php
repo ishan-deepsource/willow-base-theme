@@ -1261,34 +1261,6 @@ class CompositeFieldGroup
             'd' => 'days',
         ];
 
-        $ingredientUnits = [
-            '-' => '-',
-            'gram' => 'gram',
-            'dl' => 'dl',
-            'teaspoon' => 'teaspoon',
-            'tablespoon' => 'tablespoon',
-            'ml' => 'ml',
-            'cl' => 'cl',
-            'liter' => 'liter',
-            'kg' => 'kg',
-            'piece' => 'piece',
-            'pinch' => 'pinch',
-            'nip' => 'nip',
-            'sprinkle' => 'sprinkle',
-            'bundle' => 'bundle',
-            'cloves' => 'cloves',
-            'slice' => 'slice',
-            'handful' => 'handful',
-            'can' => 'can',
-            'packet' => 'packet',
-        ];
-
-        $nutrientUnits = [
-            '-' => '-',
-            'kcal' => 'kcal',
-            'gram' => 'gram',
-        ];
-
         $recipeWidget = new ACFLayout('6017fc21f57e4');
         $recipeWidget->setName('recipe')
             ->setLabel('Recipe');
@@ -1403,14 +1375,6 @@ class CompositeFieldGroup
             ->setName('show_meta_info_in_header_and_teaser');
         $recipeWidget->addSubField($showMetaInfoInArticleHeaderAndTeaser);
 
-        /*
-        $useDataFromThisRecipeWidgetForTeaserHeaderAndMetaData = new TrueFalseField('field_601a97e2f88d6');
-        $useDataFromThisRecipeWidgetForTeaserHeaderAndMetaData
-            ->setLabel('Use data from this recipe widget for teaser, header and meta data')
-            ->setName('use_data_from_this_recipe_widget_for_teaser_header_and_meta_data');
-        $recipeWidget->addSubField($useDataFromThisRecipeWidgetForTeaserHeaderAndMetaData);
-        */
-
         //Ingredients
         $ingredientsGroup = new GroupField('field_60180088a3760');
         $ingredientsGroup->setLabel('Ingredients')
@@ -1430,44 +1394,14 @@ class CompositeFieldGroup
             ->setWrapper((new ACFWrapper())->setWidth('75'));
         $recipeWidget->addSubField($quantity);
 
-        $ingredientsListRepeater = new RepeaterField('field_601a92095acd4');
-        $ingredientsListRepeater->setLabel('Ingredients')
+        $ingredientBlockItems = new RepeaterField('field_601a92095acd4');
+        $ingredientBlockItems->setLabel('Ingredients')
             ->setName('ingredient_block_items')
             ->setLayout('block')
             ->setButtonLabel('Add Ingredient block');
-
-            $headLine = new TextField('field_601a92925acd5');
-            $headLine->setLabel('Headline')
-                ->setName('headline')
-                ->setPlaceholder('Headline text (leave empty for no headline)');
-            $ingredientsListRepeater->addSubField($headLine);
-
-            $ingredientsRepeater = new RepeaterField('field_601a92b65acd6');
-            $ingredientsRepeater->setLabel('')
-                ->setName('ingredient_items')
-                ->setLayout('table')
-                ->setButtonLabel('Add ingredient');
-
-                $amount = new TextField('field_601a92f25acd7');
-                $amount->setLabel('Amount')
-                    ->setName('amount');
-                $ingredientsRepeater->addSubField($amount);
-
-                $unit = new SelectField('field_601a930d5acd8');
-                $unit->setLabel('Unit')
-                    ->setName('unit')
-                    ->setChoices($ingredientUnits)
-                    ->setDefaultValue([]);
-                $ingredientsRepeater->addSubField($unit);
-
-                $ingredient = new TextField('field_601a93305acd9');
-                $ingredient->setLabel('Ingredient')
-                    ->setName('ingredient');
-                $ingredientsRepeater->addSubField($ingredient);
-
-            $ingredientsListRepeater->addSubField($ingredientsRepeater);
-
-        $recipeWidget->addSubField($ingredientsListRepeater);
+        // adds subfields to repeater here !!
+        self::setRecipeIngredientBlockItemsSubFields($ingredientBlockItems);
+        $recipeWidget->addSubField($ingredientBlockItems);
 
         //Instructions Group
         $instructionsGroup = new GroupField('field_601a93ef4bdd8');
@@ -1501,32 +1435,98 @@ class CompositeFieldGroup
             ->setName('nutrients_headline');
         $recipeWidget->addSubField($nutrientsHeadline);
 
-        $nutrientsRepeater = new RepeaterField('field_601a95a40796a');
-        $nutrientsRepeater->setLabel('Nutrients list')
+        $nutrientItems = new RepeaterField('field_601a95a40796a');
+        $nutrientItems->setLabel('Nutrients list')
             ->setName('nutrient_items')
             ->setLayout('table')
             ->setButtonLabel('Add Nutrient');
-
-            $nutrient = new TextField('field_601a95c40796b');
-            $nutrient->setLabel('Nutrient')
-                ->setName('nutrient');
-            $nutrientsRepeater->addSubField($nutrient);
-
-            $nutrientAmount = new TextField('field_601a95ed0796c');
-            $nutrientAmount->setLabel('Amount')
-                ->setName('amount');
-            $nutrientsRepeater->addSubField($nutrientAmount);
-
-            $nutrientAmountUnit = new SelectField('field_601a95f60796d');
-            $nutrientAmountUnit->setLabel('Unit')
-                ->setName('unit')
-                ->setChoices($nutrientUnits)
-                ->setDefaultValue([]);
-            $nutrientsRepeater->addSubField($nutrientAmountUnit);
-
-        $recipeWidget->addSubField($nutrientsRepeater);
+        // adds subfields to repeater here !!
+        self::setRecipeNutrientItemsSubFields($nutrientItems);
+        $recipeWidget->addSubField($nutrientItems);
 
         return apply_filters(sprintf('willow/acf/layout=%s', $recipeWidget->getKey()), $recipeWidget);
+    }
+
+    private static function setRecipeIngredientBlockItemsSubFields(&$ingredientBlockItems)
+    {
+        $headLine = new TextField('field_601a92925acd5');
+        $headLine->setLabel('Headline')
+            ->setName('headline')
+            ->setPlaceholder('Headline text (leave empty for no headline)');
+        $ingredientBlockItems->addSubField($headLine);
+
+        $ingredientItems = new RepeaterField('field_601a92b65acd6');
+        $ingredientItems->setLabel('')
+            ->setName('ingredient_items')
+            ->setLayout('table')
+            ->setButtonLabel('Add ingredient');
+        // adds subfields to repeater here !!
+        self::setRecipeIngredientItemsSubFields($ingredientItems);
+        $ingredientBlockItems->addSubField($ingredientItems);
+    }
+
+    private static function setRecipeIngredientItemsSubFields(&$ingredientItems)
+    {
+        $amount = new TextField('field_601a92f25acd7');
+        $amount->setLabel('Amount')
+            ->setName('amount');
+        $ingredientItems->addSubField($amount);
+
+        $unit = new SelectField('field_601a930d5acd8');
+        $unit->setLabel('Unit')
+            ->setName('unit')
+            ->setChoices([
+                '-' => '-',
+                'gram' => 'gram',
+                'dl' => 'dl',
+                'teaspoon' => 'teaspoon',
+                'tablespoon' => 'tablespoon',
+                'ml' => 'ml',
+                'cl' => 'cl',
+                'liter' => 'liter',
+                'kg' => 'kg',
+                'piece' => 'piece',
+                'pinch' => 'pinch',
+                'nip' => 'nip',
+                'sprinkle' => 'sprinkle',
+                'bundle' => 'bundle',
+                'cloves' => 'cloves',
+                'slice' => 'slice',
+                'handful' => 'handful',
+                'can' => 'can',
+                'packet' => 'packet',
+            ])
+            ->setDefaultValue([]);
+        $ingredientItems->addSubField($unit);
+
+        $ingredient = new TextField('field_601a93305acd9');
+        $ingredient->setLabel('Ingredient')
+            ->setName('ingredient');
+        $ingredientItems->addSubField($ingredient);
+    }
+
+    private static function setRecipeNutrientItemsSubFields(&$nutrientItems)
+    {
+        $nutrient = new TextField('field_601a95c40796b');
+        $nutrient->setLabel('Nutrient')
+            ->setName('nutrient');
+        $nutrientItems->addSubField($nutrient);
+
+        $nutrientAmount = new TextField('field_601a95ed0796c');
+        $nutrientAmount->setLabel('Amount')
+            ->setName('amount');
+        $nutrientItems->addSubField($nutrientAmount);
+
+        $nutrientAmountUnit = new SelectField('field_601a95f60796d');
+        $nutrientAmountUnit->setLabel('Unit')
+            ->setName('unit')
+            ->setChoices([
+                '-' => '-',
+                'kcal' => 'kcal',
+                'gram' => 'gram',
+            ])
+            ->setDefaultValue([]);
+        $nutrientItems->addSubField($nutrientAmountUnit);
     }
 
     private static function registerHooks()
