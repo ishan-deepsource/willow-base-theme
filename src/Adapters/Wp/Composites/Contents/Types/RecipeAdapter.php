@@ -41,14 +41,14 @@ class RecipeAdapter extends AbstractContentAdapter implements RecipeContract
         return array_get($this->acfArray, 'tags') ?: null;
     }
 
-    public function getUseAsArticleLeadImage(): bool
+    public function getUseAsArticleLeadImage(): ?bool
     {
-        return array_get($this->acfArray, 'use_as_article_lead_image') ?: false;
+        return boolval(array_get($this->acfArray, 'use_as_article_lead_image', false));
     }
 
-    public function getShowMetaInfoInHeaderAndTeaser(): bool
+    public function getShowMetaInfoInHeaderAndTeaser(): ?bool
     {
-        return array_get($this->acfArray, 'show_meta_info_in_header_and_teaser') ?: false;
+        return boolval(array_get($this->acfArray, 'show_meta_info_in_header_and_teaser', false));
     }
 
     public function getPreparationTime(): ?string

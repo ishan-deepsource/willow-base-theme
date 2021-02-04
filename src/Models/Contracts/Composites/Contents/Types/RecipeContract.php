@@ -16,9 +16,9 @@ interface RecipeContract extends ContentContract
 
     public function getTags(): ?string;
 
-    public function getUseAsArticleLeadImage(): bool;
+    public function getUseAsArticleLeadImage(): ?bool;
 
-    public function getShowMetaInfoInHeaderAndTeaser(): bool;
+    public function getShowMetaInfoInHeaderAndTeaser(): ?bool;
 
     public function getPreparationTime(): ?string;
 
