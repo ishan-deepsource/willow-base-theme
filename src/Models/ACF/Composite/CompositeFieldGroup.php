@@ -1306,7 +1306,7 @@ class CompositeFieldGroup
 
         $image = new ImageField('field_6017fcaef57e7');
         $image->setLabel('Image')
-            ->setName('name')
+            ->setName('image')
             ->setPreviewSize('medium');
         $recipeWidget->addSubField($image);
 
@@ -1400,14 +1400,16 @@ class CompositeFieldGroup
 
         $showMetaInfoInArticleHeaderAndTeaser = new TrueFalseField('field_601a97c1f88d5');
         $showMetaInfoInArticleHeaderAndTeaser->setLabel('Show meta info in article header and teaser')
-            ->setName('show_meta_info_in_article_header_and_teaser');
+            ->setName('show_meta_info_in_header_and_teaser');
         $recipeWidget->addSubField($showMetaInfoInArticleHeaderAndTeaser);
 
+        /*
         $useDataFromThisRecipeWidgetForTeaserHeaderAndMetaData = new TrueFalseField('field_601a97e2f88d6');
         $useDataFromThisRecipeWidgetForTeaserHeaderAndMetaData
             ->setLabel('Use data from this recipe widget for teaser, header and meta data')
-            ->setName('use_data_from_this_recipe_widget_for_teaser,_header_and_meta_data');
+            ->setName('use_data_from_this_recipe_widget_for_teaser_header_and_meta_data');
         $recipeWidget->addSubField($useDataFromThisRecipeWidgetForTeaserHeaderAndMetaData);
+        */
 
         //Ingredients
         $ingredientsGroup = new GroupField('field_60180088a3760');
@@ -1430,9 +1432,9 @@ class CompositeFieldGroup
 
         $ingredientsListRepeater = new RepeaterField('field_601a92095acd4');
         $ingredientsListRepeater->setLabel('Ingredients')
-            ->setName('ingredients_list')
+            ->setName('ingredient_block_items')
             ->setLayout('block')
-            ->setButtonLabel('Add Ingredient list');
+            ->setButtonLabel('Add Ingredient block');
 
             $headLine = new TextField('field_601a92925acd5');
             $headLine->setLabel('Headline')
@@ -1442,7 +1444,7 @@ class CompositeFieldGroup
 
             $ingredientsRepeater = new RepeaterField('field_601a92b65acd6');
             $ingredientsRepeater->setLabel('')
-                ->setName('ingredient')
+                ->setName('ingredient_items')
                 ->setLayout('table')
                 ->setButtonLabel('Add ingredient');
 
@@ -1501,7 +1503,7 @@ class CompositeFieldGroup
 
         $nutrientsRepeater = new RepeaterField('field_601a95a40796a');
         $nutrientsRepeater->setLabel('Nutrients list')
-            ->setName('nutrients_list')
+            ->setName('nutrient_items')
             ->setLayout('table')
             ->setButtonLabel('Add Nutrient');
 

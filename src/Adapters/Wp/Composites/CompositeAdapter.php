@@ -21,6 +21,7 @@ use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Inventory;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Multimedia;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Newsletter;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Product;
+use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Recipe;
 use Bonnier\Willow\Base\Models\Base\Root\GuideMeta;
 use Bonnier\Willow\Base\Models\Base\Root\Translation;
 use Bonnier\Willow\Base\Models\Contracts\Root\GuideMetaContract;
@@ -106,6 +107,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         'multimedia'            => Multimedia::class,
         'inventory'             => Inventory::class,
         'product'               => Product::class,
+        'recipe'                => Recipe::class,
     ];
 
     protected $acfFields;
