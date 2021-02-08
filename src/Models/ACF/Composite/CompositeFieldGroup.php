@@ -1284,7 +1284,7 @@ class CompositeFieldGroup
 
         $tags = new TextAreaField('field_601beae919f6d');
         $tags->setLabel('Tags')
-            ->setName('tags');
+            ->setName('recipe_tags');
         $recipeWidget->addSubField($tags);
 
         $useAdArticleLeadImage = new TrueFalseField('field_601a977ef88d4');
