@@ -23,8 +23,8 @@ class RecipeNutrientItemAdapter implements RecipeNutrientItemContract
         return array_get($this->item, 'amount') ?: null;
     }
 
-    public function getUnit(): ?string
+    public function getUnit(): string
     {
-        return array_get($this->item, 'unit') ?: null;
+        return array_get($this->item, 'unit') ?: '-';
     }
 }

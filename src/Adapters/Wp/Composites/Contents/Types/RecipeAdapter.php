@@ -38,7 +38,7 @@ class RecipeAdapter extends AbstractContentAdapter implements RecipeContract
 
     public function getTags(): ?string
     {
-        return array_get($this->acfArray, 'tags') ?: null;
+        return array_get($this->acfArray, 'recipe_tags') ?: null;
     }
 
     public function getUseAsArticleLeadImage(): ?bool
@@ -61,9 +61,9 @@ class RecipeAdapter extends AbstractContentAdapter implements RecipeContract
         return array_get($this->acfArray, 'preparation_time_min') ?: null;
     }
 
-    public function getPreparationTimeUnit(): ?string
+    public function getPreparationTimeUnit(): string
     {
-        return array_get($this->acfArray, 'preparation_time_units') ?: null;
+        return array_get($this->acfArray, 'preparation_time_unit') ?: 'm';
     }
 
     public function getCookingTime(): ?string
@@ -76,9 +76,9 @@ class RecipeAdapter extends AbstractContentAdapter implements RecipeContract
         return array_get($this->acfArray, 'cooking_time_min') ?: null;
     }
 
-    public function getCookingTimeUnit(): ?string
+    public function getCookingTimeUnit(): string
     {
-        return array_get($this->acfArray, 'cooking_time_units') ?: null;
+        return array_get($this->acfArray, 'cooking_time_unit') ?: 'm';
     }
 
     public function getTotalTime(): ?string
@@ -91,9 +91,9 @@ class RecipeAdapter extends AbstractContentAdapter implements RecipeContract
         return array_get($this->acfArray, 'total_time_min') ?: null;
     }
 
-    public function getTotalTimeUnit(): ?string
+    public function getTotalTimeUnit(): string
     {
-        return array_get($this->acfArray, 'cooking_time_units') ?: null;
+        return array_get($this->acfArray, 'total_time_unit') ?: 'm';
     }
 
     public function getTotalTimeExtraInfo(): ?string
@@ -149,7 +149,7 @@ class RecipeAdapter extends AbstractContentAdapter implements RecipeContract
             return new RecipeNutrientItem(new RecipeNutrientItemAdapter($item));
         })->reject(function (RecipeNutrientItem $item) {
             return is_null($item->getNutrient()) &&
-                is_null($item->getUnit()) &&
+                $item->getUnit() == '-' &&
                 is_null($item->getAmount());
         });
     }
