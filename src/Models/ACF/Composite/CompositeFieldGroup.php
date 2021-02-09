@@ -1256,7 +1256,7 @@ class CompositeFieldGroup
     public static function getRecipeWidget()
     {
         $timeUnits = [
-            'min' => 'minutes',
+            'm' => 'minutes',
             'h' => 'hours',
             'd' => 'days',
         ];
@@ -1312,13 +1312,15 @@ class CompositeFieldGroup
             ->setWrapper((new ACFWrapper())->setWidth('20'));
         $recipeWidget->addSubField($preparationTimeMin);
 
-        $preparationTimeMinUnits = new SelectField('field_6017fd79456b3');
-        $preparationTimeMinUnits->setLabel('Units')
-            ->setName('preparation_time_units')
+        $preparationTimeMinUnit = new SelectField('field_6017fd79456b3');
+        $preparationTimeMinUnit->setLabel('Units')
+            ->setName('preparation_time_unit')
             ->setWrapper((new ACFWrapper())->setWidth('20'))
             ->setChoices($timeUnits)
-            ->setDefaultValue(['min' => 'minutes']);
-        $recipeWidget->addSubField($preparationTimeMinUnits);
+            ->setMultiple(false)
+            ->setDefaultValue(['m'])
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+        $recipeWidget->addSubField($preparationTimeMinUnit);
 
         //Duration data - cooking time
         $cookingTime = new TextField('field_6017febc9b6cc');
@@ -1334,13 +1336,14 @@ class CompositeFieldGroup
             ->setWrapper((new ACFWrapper())->setWidth('20'));
         $recipeWidget->addSubField($cookingTimeMin);
 
-        $cookingTimeMinUnits = new SelectField('field_6017fee69b6cd');
-        $cookingTimeMinUnits->setLabel('Units')
-            ->setName('cooking_time_units')
+        $cookingTimeMinUnit = new SelectField('field_6017fee69b6cd');
+        $cookingTimeMinUnit->setLabel('Units')
+            ->setName('cooking_time_unit')
             ->setWrapper((new ACFWrapper())->setWidth('20'))
             ->setChoices($timeUnits)
-            ->setDefaultValue(['min' => 'minutes']);
-        $recipeWidget->addSubField($cookingTimeMinUnits);
+            ->setDefaultValue(['m'])
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+        $recipeWidget->addSubField($cookingTimeMinUnit);
 
         //Duration data - total time
         $totalTime = new TextField('field_601a902438441');
@@ -1356,13 +1359,14 @@ class CompositeFieldGroup
             ->setWrapper((new ACFWrapper())->setWidth('20'));
         $recipeWidget->addSubField($totalTimeMin);
 
-        $totalTimeMinUnits = new SelectField('field_601a902d38443');
-        $totalTimeMinUnits->setLabel('Units')
-            ->setName('total_time_units')
+        $totalTimeMinUnit = new SelectField('field_601a902d38443');
+        $totalTimeMinUnit->setLabel('Units')
+            ->setName('total_time_unit')
             ->setWrapper((new ACFWrapper())->setWidth('20'))
             ->setChoices($timeUnits)
-            ->setDefaultValue(['min' => 'minutes']);
-        $recipeWidget->addSubField($totalTimeMinUnits);
+            ->setDefaultValue(['m'])
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+        $recipeWidget->addSubField($totalTimeMinUnit);
 
         $totalTimeExtraInfo = new TextField('field_601a909c38444');
         $totalTimeExtraInfo->setLabel('Extra info')
@@ -1496,7 +1500,8 @@ class CompositeFieldGroup
                 'can' => 'can',
                 'packet' => 'packet',
             ])
-            ->setDefaultValue([]);
+            ->setDefaultValue(['-'])
+            ->setReturnFormat(ACFField::RETURN_VALUE);
         $ingredientItems->addSubField($unit);
 
         $ingredient = new TextField('field_601a93305acd9');
@@ -1525,7 +1530,8 @@ class CompositeFieldGroup
                 'kcal' => 'kcal',
                 'gram' => 'gram',
             ])
-            ->setDefaultValue([]);
+            ->setDefaultValue(['-'])
+            ->setReturnFormat(ACFField::RETURN_VALUE);
         $nutrientItems->addSubField($nutrientAmountUnit);
     }
 

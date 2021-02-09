@@ -18,9 +18,9 @@ class RecipeIngredientItemAdapter implements RecipeIngredientItemContract
         return array_get($this->item, 'amount') ?: null;
     }
 
-    public function getUnit(): ?string
+    public function getUnit(): string
     {
-        return array_get($this->item, 'unit') ?: null;
+        return array_get($this->item, 'unit') ?: '-';
     }
 
     public function getIngredient(): ?string
