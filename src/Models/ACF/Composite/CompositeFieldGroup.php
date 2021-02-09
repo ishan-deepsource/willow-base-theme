@@ -7,6 +7,7 @@ use Bonnier\Willow\Base\Models\ACF\ACFGroup;
 use Bonnier\Willow\Base\Models\ACF\ACFLayout;
 use Bonnier\Willow\Base\Models\ACF\Fields\FileField;
 use Bonnier\Willow\Base\Models\ACF\Fields\FlexibleContentField;
+use Bonnier\Willow\Base\Models\ACF\Fields\GroupField;
 use Bonnier\Willow\Base\Models\ACF\Fields\ImageField;
 use Bonnier\Willow\Base\Models\ACF\Fields\ImageHotspotCoordinatesField;
 use Bonnier\Willow\Base\Models\ACF\Fields\MarkdownField;
@@ -24,6 +25,7 @@ use Bonnier\Willow\Base\Models\ACF\Fields\UrlField;
 use Bonnier\Willow\Base\Models\ACF\Fields\UserField;
 use Bonnier\Willow\Base\Models\ACF\Properties\ACFConditionalLogic;
 use Bonnier\Willow\Base\Models\ACF\Properties\ACFLocation;
+use Bonnier\Willow\Base\Models\ACF\Properties\ACFWrapper;
 use Bonnier\Willow\Base\Models\WpComposite;
 
 class CompositeFieldGroup
@@ -231,6 +233,8 @@ class CompositeFieldGroup
         $content->addLayout(self::getNewsletterWidget());
         $content->addLayout(self::getChaptersSummaryWidget());
         $content->addLayout(self::getMultimediaWidget());
+        $content->addLayout(self::getProductWidget());
+        $content->addLayout(self::getRecipeWidget());
 
         return apply_filters(sprintf('willow/acf/field=%s', $content->getKey()), $content);
     }
@@ -860,26 +864,46 @@ class CompositeFieldGroup
 
     public static function getInventoryWidget(): ACFLayout
     {
-        $inventoryWidget = new ACFLayout('58aeadaacbe5c');
+        $inventoryWidget = new ACFLayout('layout_58aeadaacbe5c');
         $inventoryWidget->setName('inventory')
             ->setLabel('Inventory');
 
         $title = new TextField('field_58e3971e4d277');
         $title->setLabel('Title')
             ->setName('title')
-            ->setRequired(true);
+            ->setRequired(false);
 
         $inventoryWidget->addSubField($title);
 
+        $description = new MarkdownField('field_6017cd4793c46');
+        $description->setLabel('Description')
+            ->setName('description')
+            ->setMdeConfig(MarkdownField::CONFIG_STANDARD);
+
+        $inventoryWidget->addSubField($description);
+
         $items = new RepeaterField('field_58aeadcdcbe5d');
         $items->setLabel('Inventory Items')
-            ->setName('inventory_items')
+            ->setName('items')
             ->setLayout('table')
+            ->setRequired(true)
             ->setButtonLabel('Add Row');
 
+        $displayHint = new RadioField('field_6017cd8b93c47');
+        $displayHint->setLabel('Display Format')
+            ->setName('display_hint')
+            ->setChoice('default', 'Default')
+            ->setChoice('heading', 'Heading')
+            ->setChoice('summary', 'Summary')
+            ->setDefaultValue('default')
+            ->setLayout('horizontal')
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+
+        $items->addSubField($displayHint);
+
         $name = new TextField('field_58aeae3fcbe61');
-        $name->setLabel('Name')
-            ->setName('name')
+        $name->setLabel('Key')
+            ->setName('key')
             ->setRequired(true);
 
         $items->addSubField($name);
@@ -887,7 +911,7 @@ class CompositeFieldGroup
         $value = new TextField('field_58aeae4ccbe62');
         $value->setLabel('Value')
             ->setName('value')
-            ->setRequired(true);
+            ->setRequired(false);
 
         $items->addSubField($value);
 
@@ -905,6 +929,113 @@ class CompositeFieldGroup
         $inventoryWidget->addSubField($lockedContent);
 
         return apply_filters(sprintf('willow/acf/layout=%s', $inventoryWidget->getKey()), $inventoryWidget);
+    }
+
+    public static function getProductWidget(): ACFLayout
+    {
+        $productWidget = new ACFLayout('layout_601a57813410a');
+        $productWidget->setName('product')
+            ->setLabel('Product');
+
+        $title = new TextField('field_601a57813410b');
+        $title->setLabel('Title')
+            ->setName('title')
+            ->setRequired(true);
+
+        $productWidget->addSubField($title);
+
+        $description = new MarkdownField('field_601a57813410c');
+        $description->setLabel('Description')
+            ->setName('description')
+            ->setRequired(false)
+            ->setMdeConfig(MarkdownField::CONFIG_STANDARD);
+
+        $productWidget->addSubField($description);
+
+        $image = new ImageField('field_601a578d34112');
+        $image->setLabel('Image')
+            ->setName('image')
+            ->setRequired(true)
+            ->setReturnFormat(ACFField::RETURN_ARRAY)
+            ->setPreviewSize(ImageField::PREVIEW_MEDIUM);
+
+        $productWidget->addSubField($image);
+
+        $price = new TextField('field_601a57a534113');
+        $price->setLabel('Price')
+            ->setName('price')
+            ->setRequired(true);
+
+        $productWidget->addSubField($price);
+
+        $winner = new TrueFalseField('field_601a57d634114');
+        $winner->setLabel('Winner')
+            ->setName('winner')
+            ->setMessage('Mark the product as winner.');
+
+        $productWidget->addSubField($winner);
+
+        $bestBuy = new TrueFalseField('field_601a580934115');
+        $bestBuy->setLabel('Best buy')
+            ->setName('best_buy')
+            ->setMessage('Mark the product as best buy.');
+
+        $productWidget->addSubField($bestBuy);
+
+        $maxPoints = new SelectField('field_601a5910575dd');
+        $maxPoints->setLabel('Max points')
+            ->setName('max_points')
+            ->setInstructions('Max points. Default is 10.')
+            ->addChoice('1', '1')
+            ->addChoice('2', '2')
+            ->addChoice('3', '3')
+            ->addChoice('4', '4')
+            ->addChoice('5', '5')
+            ->addChoice('6', '6')
+            ->addChoice('7', '7')
+            ->addChoice('8', '8')
+            ->addChoice('9', '9')
+            ->addChoice('10', '10')
+            ->setDefaultValue(['10'])
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+
+        $productWidget->addSubField($maxPoints);
+
+        $items = new RepeaterField('field_601a57813410d');
+        $items->setLabel('Scores')
+            ->setName('items')
+            ->setLayout('table')
+            ->setRequired(true)
+            ->setButtonLabel('Add Row');
+
+        $parameter = new TextField('field_601a57813410f');
+        $parameter->setLabel('Parameter')
+            ->setName('parameter')
+            ->setRequired(true);
+
+        $items->addSubField($parameter);
+
+        $score = new TextField('field_601a578134110');
+        $score->setLabel('Score')
+            ->setName('score')
+            ->setRequired(true);
+
+        $items->addSubField($score);
+
+        $productWidget->addSubField($items);
+
+        $lockedContent = new TrueFalseField('field_601a578134111');
+        $lockedContent->setLabel('Locked Content')
+            ->setName('locked_content')
+            ->setConditionalLogic(new ACFConditionalLogic(
+                self::LOCKED_CONTENT_FIELD,
+                ACFConditionalLogic::OPERATOR_EQUALS,
+                '1'
+            ));
+
+        $productWidget->addSubField($lockedContent);
+
+        return apply_filters(sprintf('willow/acf/layout=%s', $productWidget->getKey()), $productWidget);
     }
 
     public static function getHotspotImageWidget(): ACFLayout
@@ -1120,6 +1251,282 @@ class CompositeFieldGroup
         $multimediaWidget->addSubField($url);
 
         return apply_filters(sprintf('willow/acf/layout=%s', $multimediaWidget->getKey()), $multimediaWidget);
+    }
+
+    public static function getRecipeWidget()
+    {
+        $timeUnits = [
+            'min' => 'minutes',
+            'h' => 'hours',
+            'd' => 'days',
+        ];
+
+        $recipeWidget = new ACFLayout('6017fc21f57e4');
+        $recipeWidget->setName('recipe')
+            ->setLabel('Recipe');
+
+        // General data
+        $title = new TextField('field_6017fc8af57e5');
+        $title->setLabel('Title')
+            ->setName('title');
+        $recipeWidget->addSubField($title);
+
+        $description = new MarkdownField('field_6017fc9cf57e6');
+        $description->setLabel('Description')
+            ->setName('description');
+        $recipeWidget->addSubField($description);
+
+        $image = new ImageField('field_6017fcaef57e7');
+        $image->setLabel('Image')
+            ->setName('image')
+            ->setPreviewSize('medium');
+        $recipeWidget->addSubField($image);
+
+        $tags = new TextAreaField('field_601beae919f6d');
+        $tags->setLabel('Tags')
+            ->setName('recipe_tags');
+        $recipeWidget->addSubField($tags);
+
+        $useAdArticleLeadImage = new TrueFalseField('field_601a977ef88d4');
+        $useAdArticleLeadImage->setLabel('Use as article lead-image')
+            ->setName('use_as_article_lead_image');
+        $recipeWidget->addSubField($useAdArticleLeadImage);
+
+        //Duration data
+        $durationGroup = new GroupField('field_6017fd2d456b0');
+        $durationGroup->setLabel('Duration')
+            ->setName('duration_group');
+        $recipeWidget->addSubField($durationGroup);
+
+        //Duration data - preparation time
+        $preparationTime = new TextField('field_6017fd4f456b1');
+        $preparationTime->setLabel('Preparation time')
+            ->setName('preparation_time')
+            ->setPlaceholder('preparation time')
+            ->setWrapper((new ACFWrapper())->setWidth('60'));
+        $recipeWidget->addSubField($preparationTime);
+
+        $preparationTimeMin = new TextField('field_6017fd6a456b2');
+        $preparationTimeMin->setLabel('Time')
+            ->setName('preparation_time_min')
+            ->setWrapper((new ACFWrapper())->setWidth('20'));
+        $recipeWidget->addSubField($preparationTimeMin);
+
+        $preparationTimeMinUnits = new SelectField('field_6017fd79456b3');
+        $preparationTimeMinUnits->setLabel('Units')
+            ->setName('preparation_time_units')
+            ->setWrapper((new ACFWrapper())->setWidth('20'))
+            ->setChoices($timeUnits)
+            ->setDefaultValue(['min' => 'minutes']);
+        $recipeWidget->addSubField($preparationTimeMinUnits);
+
+        //Duration data - cooking time
+        $cookingTime = new TextField('field_6017febc9b6cc');
+        $cookingTime->setLabel('Cooking time')
+            ->setName('cooking_time')
+            ->setPlaceholder('cooking time')
+            ->setWrapper((new ACFWrapper())->setWidth('60'));
+        $recipeWidget->addSubField($cookingTime);
+
+        $cookingTimeMin = new TextField('field_6017feaf9b6cb');
+        $cookingTimeMin->setLabel('Time')
+            ->setName('cooking_time_min')
+            ->setWrapper((new ACFWrapper())->setWidth('20'));
+        $recipeWidget->addSubField($cookingTimeMin);
+
+        $cookingTimeMinUnits = new SelectField('field_6017fee69b6cd');
+        $cookingTimeMinUnits->setLabel('Units')
+            ->setName('cooking_time_units')
+            ->setWrapper((new ACFWrapper())->setWidth('20'))
+            ->setChoices($timeUnits)
+            ->setDefaultValue(['min' => 'minutes']);
+        $recipeWidget->addSubField($cookingTimeMinUnits);
+
+        //Duration data - total time
+        $totalTime = new TextField('field_601a902438441');
+        $totalTime->setLabel('Total time')
+            ->setName('total_time')
+            ->setPlaceholder('total time')
+            ->setWrapper((new ACFWrapper())->setWidth('60'));
+        $recipeWidget->addSubField($totalTime);
+
+        $totalTimeMin = new TextField('field_601a902738442');
+        $totalTimeMin->setLabel('Time')
+            ->setName('total_time_min')
+            ->setWrapper((new ACFWrapper())->setWidth('20'));
+        $recipeWidget->addSubField($totalTimeMin);
+
+        $totalTimeMinUnits = new SelectField('field_601a902d38443');
+        $totalTimeMinUnits->setLabel('Units')
+            ->setName('total_time_units')
+            ->setWrapper((new ACFWrapper())->setWidth('20'))
+            ->setChoices($timeUnits)
+            ->setDefaultValue(['min' => 'minutes']);
+        $recipeWidget->addSubField($totalTimeMinUnits);
+
+        $totalTimeExtraInfo = new TextField('field_601a909c38444');
+        $totalTimeExtraInfo->setLabel('Extra info')
+            ->setName('total_time_extra_info')
+            ->setPlaceholder('total time (extra info)');
+        $recipeWidget->addSubField($totalTimeExtraInfo);
+
+        $showMetaInfoInArticleHeaderAndTeaser = new TrueFalseField('field_601a97c1f88d5');
+        $showMetaInfoInArticleHeaderAndTeaser->setLabel('Show meta info in article header and teaser')
+            ->setName('show_meta_info_in_header_and_teaser');
+        $recipeWidget->addSubField($showMetaInfoInArticleHeaderAndTeaser);
+
+        //Ingredients
+        $ingredientsGroup = new GroupField('field_60180088a3760');
+        $ingredientsGroup->setLabel('Ingredients')
+            ->setName('ingredients_group');
+        $recipeWidget->addSubField($ingredientsGroup);
+
+        $quantity = new TextField('field_601800c2a3761');
+        $quantity->setLabel('Quantity')
+            ->setName('quantity')
+            ->setWrapper((new ACFWrapper())->setWidth('25'));
+        $recipeWidget->addSubField($quantity);
+
+        $quantity = new TextField('field_601800f5a3762');
+        $quantity->setLabel('Quantity type')
+            ->setName('quantity_type')
+            ->setPlaceholder('eg. cookies')
+            ->setWrapper((new ACFWrapper())->setWidth('75'));
+        $recipeWidget->addSubField($quantity);
+
+        $ingredientBlockItems = new RepeaterField('field_601a92095acd4');
+        $ingredientBlockItems->setLabel('Ingredients')
+            ->setName('ingredient_block_items')
+            ->setLayout('block')
+            ->setButtonLabel('Add Ingredient block');
+        // adds subfields to repeater here !!
+        self::setRecipeIngredientBlockItemsSubFields($ingredientBlockItems);
+        $recipeWidget->addSubField($ingredientBlockItems);
+
+        //Instructions Group
+        $instructionsGroup = new GroupField('field_601a93ef4bdd8');
+        $instructionsGroup->setLabel('Instructions')
+            ->setName('instructions');
+        $recipeWidget->addSubField($instructionsGroup);
+
+        $instructionsHeadline = new TextField('field_601a940a4bdd9');
+        $instructionsHeadline->setLabel('Instructions headline')
+            ->setName('instructions_headline');
+        $recipeWidget->addSubField($instructionsHeadline);
+
+        $instructionsMarkdown = new MarkdownField('field_601a944c4bdda');
+        $instructionsMarkdown->setLabel('Instructions')
+            ->setName('instructions');
+        $recipeWidget->addSubField($instructionsMarkdown);
+
+        $instructionsTipMarkdown = new MarkdownField('field_601a96a123029');
+        $instructionsTipMarkdown->setLabel('Tip')
+            ->setName('instructions_tip');
+        $recipeWidget->addSubField($instructionsTipMarkdown);
+
+        //Nutrients Group
+        $nutrientsGroup = new GroupField('field_601a955e4bddb');
+        $nutrientsGroup->setLabel('Nutrients')
+            ->setName('nutrients_group');
+        $recipeWidget->addSubField($nutrientsGroup);
+
+        $nutrientsHeadline = new TextField('field_601a95744bddc');
+        $nutrientsHeadline->setLabel('Nutrients headline')
+            ->setName('nutrients_headline');
+        $recipeWidget->addSubField($nutrientsHeadline);
+
+        $nutrientItems = new RepeaterField('field_601a95a40796a');
+        $nutrientItems->setLabel('Nutrients list')
+            ->setName('nutrient_items')
+            ->setLayout('table')
+            ->setButtonLabel('Add Nutrient');
+        // adds subfields to repeater here !!
+        self::setRecipeNutrientItemsSubFields($nutrientItems);
+        $recipeWidget->addSubField($nutrientItems);
+
+        return apply_filters(sprintf('willow/acf/layout=%s', $recipeWidget->getKey()), $recipeWidget);
+    }
+
+    private static function setRecipeIngredientBlockItemsSubFields(&$ingredientBlockItems)
+    {
+        $headLine = new TextField('field_601a92925acd5');
+        $headLine->setLabel('Headline')
+            ->setName('headline')
+            ->setPlaceholder('Headline text (leave empty for no headline)');
+        $ingredientBlockItems->addSubField($headLine);
+
+        $ingredientItems = new RepeaterField('field_601a92b65acd6');
+        $ingredientItems->setLabel('')
+            ->setName('ingredient_items')
+            ->setLayout('table')
+            ->setButtonLabel('Add ingredient');
+        // adds subfields to repeater here !!
+        self::setRecipeIngredientItemsSubFields($ingredientItems);
+        $ingredientBlockItems->addSubField($ingredientItems);
+    }
+
+    private static function setRecipeIngredientItemsSubFields(&$ingredientItems)
+    {
+        $amount = new TextField('field_601a92f25acd7');
+        $amount->setLabel('Amount')
+            ->setName('amount');
+        $ingredientItems->addSubField($amount);
+
+        $unit = new SelectField('field_601a930d5acd8');
+        $unit->setLabel('Unit')
+            ->setName('unit')
+            ->setChoices([
+                '-' => '-',
+                'gram' => 'gram',
+                'dl' => 'dl',
+                'teaspoon' => 'teaspoon',
+                'tablespoon' => 'tablespoon',
+                'ml' => 'ml',
+                'cl' => 'cl',
+                'liter' => 'liter',
+                'kg' => 'kg',
+                'piece' => 'piece',
+                'pinch' => 'pinch',
+                'nip' => 'nip',
+                'sprinkle' => 'sprinkle',
+                'bundle' => 'bundle',
+                'cloves' => 'cloves',
+                'slice' => 'slice',
+                'handful' => 'handful',
+                'can' => 'can',
+                'packet' => 'packet',
+            ])
+            ->setDefaultValue([]);
+        $ingredientItems->addSubField($unit);
+
+        $ingredient = new TextField('field_601a93305acd9');
+        $ingredient->setLabel('Ingredient')
+            ->setName('ingredient');
+        $ingredientItems->addSubField($ingredient);
+    }
+
+    private static function setRecipeNutrientItemsSubFields(&$nutrientItems)
+    {
+        $nutrient = new TextField('field_601a95c40796b');
+        $nutrient->setLabel('Nutrient')
+            ->setName('nutrient');
+        $nutrientItems->addSubField($nutrient);
+
+        $nutrientAmount = new TextField('field_601a95ed0796c');
+        $nutrientAmount->setLabel('Amount')
+            ->setName('amount');
+        $nutrientItems->addSubField($nutrientAmount);
+
+        $nutrientAmountUnit = new SelectField('field_601a95f60796d');
+        $nutrientAmountUnit->setLabel('Unit')
+            ->setName('unit')
+            ->setChoices([
+                '-' => '-',
+                'kcal' => 'kcal',
+                'gram' => 'gram',
+            ])
+            ->setDefaultValue([]);
+        $nutrientItems->addSubField($nutrientAmountUnit);
     }
 
     private static function registerHooks()

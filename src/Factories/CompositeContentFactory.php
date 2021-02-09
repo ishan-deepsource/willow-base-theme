@@ -11,15 +11,19 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\GalleryAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\HotspotImageAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\InfoBoxAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\InsertedCodeAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\InventoryAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\LeadParagraphAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\LinkAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\MultimediaAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\NewsletterAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\NullContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ParagraphListAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ProductAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\QuoteAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\RecipeAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\TextItemAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\VideoAdapter;
+use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Product;
 
 class CompositeContentFactory extends AbstractModelFactory
 {
@@ -41,6 +45,9 @@ class CompositeContentFactory extends AbstractModelFactory
         'newsletter'            => NewsletterAdapter::class,
         'chapters_summary'      => ChaptersSummaryAdapter::class,
         'multimedia'            => MultimediaAdapter::class,
+        'inventory'             => InventoryAdapter::class,
+        'product'               => ProductAdapter::class,
+        'recipe'                => RecipeAdapter::class,
     ];
 
     public function getAdapter($model)

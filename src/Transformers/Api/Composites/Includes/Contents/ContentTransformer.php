@@ -12,12 +12,15 @@ use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\Cont
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\HotspotImageTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\InfoBoxTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\InsertedCodeTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\InventoryTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\LeadParagraphTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\LinkTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\MultimediaTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\NewsletterTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ParagraphListTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ProductTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\QuoteTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\RecipeTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\TextItemTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\VideoTransformer;
 use Bonnier\Willow\Base\Transformers\NullTransformer;
@@ -44,6 +47,9 @@ class ContentTransformer extends TransformerAbstract
         'newsletter'            => NewsletterTransformer::class,
         'chapters_summary'      => ChaptersSummaryTransformer::class,
         'multimedia'            => MultimediaTransformer::class,
+        'inventory'             => InventoryTransformer::class,
+        'product'               => ProductTransformer::class,
+        'recipe'                => RecipeTransformer::class,
     ];
 
     public function transform(ContentContract $content)
