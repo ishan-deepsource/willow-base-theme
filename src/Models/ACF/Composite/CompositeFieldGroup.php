@@ -898,12 +898,12 @@ class CompositeFieldGroup
 
         $items->addSubField($displayHint);
 
-        $name = new TextField('field_58aeae3fcbe61');
-        $name->setLabel('Key')
+        $key = new TextField('field_58aeae3fcbe61');
+        $key->setLabel('Key')
             ->setName('key')
             ->setRequired(true);
 
-        $items->addSubField($name);
+        $items->addSubField($key);
 
         $value = new TextField('field_58aeae4ccbe62');
         $value->setLabel('Value')
@@ -1020,6 +1020,49 @@ class CompositeFieldGroup
         $items->addSubField($score);
 
         $productWidget->addSubField($items);
+
+        $detailsDescription = new MarkdownField('field_6022832a2442e');
+        $detailsDescription->setLabel('Details Description')
+            ->setName('details_description')
+            ->setRequired(false)
+            ->setMdeConfig(MarkdownField::CONFIG_STANDARD);
+
+        $productWidget->addSubField($detailsDescription);
+
+        $detailsItems = new RepeaterField('field_6022837e2442f');
+        $detailsItems->setLabel('Details Items')
+            ->setName('details_items')
+            ->setLayout('table')
+            ->setRequired(false)
+            ->setButtonLabel('Add Row');
+
+        $detailsItemDisplayHint = new RadioField('field_6022839324430');
+        $detailsItemDisplayHint->setLabel('Display Format')
+            ->setName('display_hint')
+            ->setChoice('default', 'Default')
+            ->setChoice('heading', 'Heading')
+            ->setChoice('summary', 'Summary')
+            ->setDefaultValue('default')
+            ->setLayout('horizontal')
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+
+        $detailsItems->addSubField($detailsItemDisplayHint);
+
+        $detailsItemKey = new TextField('field_602283fc24431');
+        $detailsItemKey->setLabel('Key')
+            ->setName('key')
+            ->setRequired(true);
+
+        $detailsItems->addSubField($detailsItemKey);
+
+        $detailsItemValue = new TextField('field_6022844b24432');
+        $detailsItemValue->setLabel('Value')
+            ->setName('value')
+            ->setRequired(false);
+
+        $detailsItems->addSubField($detailsItemValue);
+
+        $productWidget->addSubField($detailsItems);
 
         $lockedContent = new TrueFalseField('field_601a578134111');
         $lockedContent->setLabel('Locked Content')

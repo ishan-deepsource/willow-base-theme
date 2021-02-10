@@ -23,4 +23,8 @@ interface ProductContract extends ContentContract
     public function getMaxPoints(): ?int;
 
     public function getItems(): Collection;
+
+    public function getDetailsDescription(): ?string;
+
+    public function getDetailsItems(): Collection;
 }
