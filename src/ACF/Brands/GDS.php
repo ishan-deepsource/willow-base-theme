@@ -19,6 +19,8 @@ class GDS extends Brand
         self::removeVideoUrlFromParagraphListWidget();
         self::removeRecipeWidget();
 
+        self::removeInventoryWidget();
+
         $galleryField = CompositeFieldGroup::getGalleryWidget();
         add_filter(sprintf('willow/acf/layout=%s', $galleryField->getKey()), [__CLASS__, 'setGalleryDisplayHints']);
 
