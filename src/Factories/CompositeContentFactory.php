@@ -20,6 +20,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\NullContentAdapter
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ParagraphListAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ProductAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\QuoteAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\RecipeAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\TextItemAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\VideoAdapter;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Product;
@@ -46,6 +47,7 @@ class CompositeContentFactory extends AbstractModelFactory
         'multimedia'            => MultimediaAdapter::class,
         'inventory'             => InventoryAdapter::class,
         'product'               => ProductAdapter::class,
+        'recipe'                => RecipeAdapter::class,
     ];
 
     public function getAdapter($model)
