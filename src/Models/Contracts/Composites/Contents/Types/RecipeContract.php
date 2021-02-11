@@ -14,8 +14,6 @@ interface RecipeContract extends ContentContract
 
     public function getImage(): ?ImageContract;
 
-    public function getTags(): ?string;
-
     public function getUseAsArticleLeadImage(): ?bool;
 
     public function getShowMetaInfoInHeaderAndTeaser(): ?bool;
@@ -55,4 +53,6 @@ interface RecipeContract extends ContentContract
     public function getNutrientsHeadline(): ?string;
 
     public function getNutrientItems(): Collection;
+
+    public function getTags(): ?string;
 }

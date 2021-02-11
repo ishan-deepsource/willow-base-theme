@@ -1332,11 +1332,6 @@ class CompositeFieldGroup
             ->setPreviewSize('medium');
         $recipeWidget->addSubField($image);
 
-        $tags = new TextAreaField('field_601beae919f6d');
-        $tags->setLabel('Tags')
-            ->setName('recipe_tags');
-        $recipeWidget->addSubField($tags);
-
         $useAdArticleLeadImage = new TrueFalseField('field_601a977ef88d4');
         $useAdArticleLeadImage->setLabel('Use as article lead-image')
             ->setName('use_as_article_lead_image');
@@ -1429,12 +1424,6 @@ class CompositeFieldGroup
             ->setName('show_meta_info_in_header_and_teaser');
         $recipeWidget->addSubField($showMetaInfoInArticleHeaderAndTeaser);
 
-        //Ingredients
-        $ingredientsGroup = new GroupField('field_60180088a3760');
-        $ingredientsGroup->setLabel('Ingredients')
-            ->setName('ingredients_group');
-        $recipeWidget->addSubField($ingredientsGroup);
-
         $quantity = new TextField('field_601800c2a3761');
         $quantity->setLabel('Quantity')
             ->setName('quantity')
@@ -1452,16 +1441,11 @@ class CompositeFieldGroup
         $ingredientBlockItems->setLabel('Ingredients')
             ->setName('ingredient_block_items')
             ->setLayout('block')
-            ->setButtonLabel('Add Ingredient block');
+            ->setButtonLabel('Add Ingredient block')
+            ->setMin(1);
         // adds subfields to repeater here !!
         self::setRecipeIngredientBlockItemsSubFields($ingredientBlockItems);
         $recipeWidget->addSubField($ingredientBlockItems);
-
-        //Instructions Group
-        $instructionsGroup = new GroupField('field_601a93ef4bdd8');
-        $instructionsGroup->setLabel('Instructions')
-            ->setName('instructions');
-        $recipeWidget->addSubField($instructionsGroup);
 
         $instructionsHeadline = new TextField('field_601a940a4bdd9');
         $instructionsHeadline->setLabel('Instructions headline')
@@ -1473,16 +1457,10 @@ class CompositeFieldGroup
             ->setName('instructions');
         $recipeWidget->addSubField($instructionsMarkdown);
 
-        $instructionsTipMarkdown = new MarkdownField('field_601a96a123029');
-        $instructionsTipMarkdown->setLabel('Tip')
+        $instructionsTipMarkdown = new TextField('field_601a96a123029');
+        $instructionsTipMarkdown->setLabel('Instructions tip')
             ->setName('instructions_tip');
         $recipeWidget->addSubField($instructionsTipMarkdown);
-
-        //Nutrients Group
-        $nutrientsGroup = new GroupField('field_601a955e4bddb');
-        $nutrientsGroup->setLabel('Nutrients')
-            ->setName('nutrients_group');
-        $recipeWidget->addSubField($nutrientsGroup);
 
         $nutrientsHeadline = new TextField('field_601a95744bddc');
         $nutrientsHeadline->setLabel('Nutrients headline')
@@ -1493,10 +1471,16 @@ class CompositeFieldGroup
         $nutrientItems->setLabel('Nutrients list')
             ->setName('nutrient_items')
             ->setLayout('table')
-            ->setButtonLabel('Add Nutrient');
+            ->setButtonLabel('Add Nutrient')
+            ->setMin(5);
         // adds subfields to repeater here !!
         self::setRecipeNutrientItemsSubFields($nutrientItems);
         $recipeWidget->addSubField($nutrientItems);
+
+        $tags = new TextField('field_601beae919f6d');
+        $tags->setLabel('Tags')
+            ->setName('recipe_tags');
+        $recipeWidget->addSubField($tags);
 
         return apply_filters(sprintf('willow/acf/layout=%s', $recipeWidget->getKey()), $recipeWidget);
     }
@@ -1513,7 +1497,8 @@ class CompositeFieldGroup
         $ingredientItems->setLabel('')
             ->setName('ingredient_items')
             ->setLayout('table')
-            ->setButtonLabel('Add ingredient');
+            ->setButtonLabel('Add ingredient')
+            ->setMin(5);
         // adds subfields to repeater here !!
         self::setRecipeIngredientItemsSubFields($ingredientItems);
         $ingredientBlockItems->addSubField($ingredientItems);
@@ -1562,9 +1547,18 @@ class CompositeFieldGroup
 
     private static function setRecipeNutrientItemsSubFields(&$nutrientItems)
     {
-        $nutrient = new TextField('field_601a95c40796b');
+        $nutrient = new SelectField('field_601a95c40796b');
         $nutrient->setLabel('Nutrient')
-            ->setName('nutrient');
+            ->setName('nutrient')
+            ->setChoices([
+                'Energy' => 'Energy',
+                'Protein' => 'Protein',
+                'Fat' => 'Fat',
+                'Carbohydrate' => 'Carbohydrate',
+                'Fiber' => 'Fiber',
+            ])
+            ->setDefaultValue(['Energy'])
+            ->setReturnFormat(ACFField::RETURN_VALUE);
         $nutrientItems->addSubField($nutrient);
 
         $nutrientAmount = new TextField('field_601a95ed0796c');
@@ -1580,7 +1574,7 @@ class CompositeFieldGroup
                 'kcal' => 'kcal',
                 'gram' => 'gram',
             ])
-            ->setDefaultValue(['-'])
+            ->setDefaultValue(['gram'])
             ->setReturnFormat(ACFField::RETURN_VALUE);
         $nutrientItems->addSubField($nutrientAmountUnit);
     }
