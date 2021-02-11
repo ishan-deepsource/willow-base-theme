@@ -3,7 +3,6 @@
 namespace Bonnier\Willow\Base\Models\Base\Composites\Contents\Types;
 
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\AbstractContent;
-use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\Partials\ProductDetailsContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ProductContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Illuminate\Support\Collection;
@@ -63,6 +62,11 @@ class Product extends AbstractContent implements ProductContract
     public function getItems(): Collection
     {
         return $this->model->getItems();
+    }
+
+    public function getDetailsTitle(): ?string
+    {
+        return $this->model->getDetailsTitle();
     }
 
     public function getDetailsDescription(): ?string

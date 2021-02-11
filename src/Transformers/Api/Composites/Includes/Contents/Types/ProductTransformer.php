@@ -23,6 +23,7 @@ class ProductTransformer extends TransformerAbstract
             'max_points' => $product->getMaxPoints(),
             'items' => $this->transformItems($product),
             'description' => $product->getDescription(),
+            'details_title' => $product->getDetailsTitle(),
             'details_description' => $product->getDetailsDescription(),
             'details_items' => $this->transformDetailsItems($product),
         ];

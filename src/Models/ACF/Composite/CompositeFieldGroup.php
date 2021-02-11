@@ -1024,6 +1024,13 @@ class CompositeFieldGroup
 
         $productWidget->addSubField($items);
 
+        $detailsTitle = new TextField('field_6025148bd81a0');
+        $detailsTitle->setLabel('Details Title')
+            ->setName('details_title')
+            ->setRequired(false);
+
+        $productWidget->addSubField($detailsTitle);
+
         $detailsDescription = new MarkdownField('field_6022832a2442e');
         $detailsDescription->setLabel('Details Description')
             ->setName('details_description')
