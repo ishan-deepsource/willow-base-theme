@@ -6,7 +6,7 @@ interface RecipeIngredientItemContract
 {
     public function getAmount(): ?string;
 
-    public function getUnit(): ?string;
+    public function getUnit(): string;
 
     public function getIngredient(): ?string;
 }
