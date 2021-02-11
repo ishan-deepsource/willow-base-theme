@@ -24,6 +24,8 @@ interface ProductContract extends ContentContract
 
     public function getItems(): Collection;
 
+    public function getDetailsTitle(): ?string;
+
     public function getDetailsDescription(): ?string;
 
     public function getDetailsItems(): Collection;
