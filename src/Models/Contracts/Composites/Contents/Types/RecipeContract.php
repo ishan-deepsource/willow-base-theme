@@ -22,19 +22,19 @@ interface RecipeContract extends ContentContract
 
     public function getPreparationTimeMin(): ?string;
 
-    public function getPreparationTimeUnit(): string;
+    public function getPreparationTimeUnit(): ?string;
 
     public function getCookingTime(): ?string;
 
     public function getCookingTimeMin(): ?string;
 
-    public function getCookingTimeUnit(): string;
+    public function getCookingTimeUnit(): ?string;
 
     public function getTotalTime(): ?string;
 
     public function getTotalTimeMin(): ?string;
 
-    public function getTotalTimeUnit(): string;
+    public function getTotalTimeUnit(): ?string;
 
     public function getTotalTimeExtraInfo(): ?string;
 
