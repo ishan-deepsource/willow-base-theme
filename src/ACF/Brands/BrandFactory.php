@@ -18,9 +18,6 @@ class BrandFactory
 
     public static function register(?string $brandCode = null)
     {
-        echo 'brandFactory->register ';
-        var_dump($brandCode);
-        //die();
         if (is_null($brandCode)) {
             return;
         }
