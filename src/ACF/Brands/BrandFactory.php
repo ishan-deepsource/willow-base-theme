@@ -11,12 +11,16 @@ class BrandFactory
         'cos' => COS::class,
         'gds' => GDS::class,
         'his' => HIS::class,
+        'ifo' => IFO::class,
         'ill' => ILL::class,
         'vol' => VOL::class,
     ];
 
     public static function register(?string $brandCode = null)
     {
+        echo 'brandFactory->register ';
+        var_dump($brandCode);
+        //die();
         if (is_null($brandCode)) {
             return;
         }

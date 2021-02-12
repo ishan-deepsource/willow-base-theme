@@ -92,6 +92,18 @@ class PageTemplates
                     'test' => 'Test'
                 ]);
                 break;
+            case 'IFO':
+                $this->compositeTemplates = array_merge($this->compositeTemplates, [
+                    'top-lg' => 'Top LG',
+                ]);
+
+                $this->pageTemplates = array_merge($this->pageTemplates, [
+                    'author-overview' => 'Author Overview',
+                    'recipe-overview' => 'Recipe Overview',
+                    'training-overview' => 'Training Overview',
+                    'food-plan-overview' => 'Food Plan Overview',
+                ]);
+                break;
             case 'VOL':
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'top-lg' => 'Top LG',
