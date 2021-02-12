@@ -516,8 +516,7 @@ class CompositeFieldGroup
             ->setName('seconds')
             ->setMin(0)
             ->setMax(7200)
-            ->setStep(1)
-            ->setDefaultValue(0);
+            ->setStep(1);
 
         $chapterItems->addSubField($chapterItemSeconds);
 

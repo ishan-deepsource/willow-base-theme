@@ -29,7 +29,7 @@ class VideoChapterItem implements VideoChapterItemContract
         return $this->item->getDescription();
     }
 
-    public function getSeconds(): int
+    public function getSeconds(): ?int
     {
         return $this->item->getSeconds();
     }
@@ -49,7 +49,7 @@ class VideoChapterItem implements VideoChapterItemContract
         return is_null($this->item->getThumbnail())
             && is_null($this->item->getTitle())
             && is_null($this->item->getDescription())
-            && $this->item->getSeconds() > 0
+            && is_null($this->item->getSeconds())
             && is_null($this->item->getUrl());
     }
 }
