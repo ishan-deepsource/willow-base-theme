@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Models\Base\Composites\Contents\Types;
 
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\AbstractContent;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\VideoContract;
+use Illuminate\Support\Collection;
 
 /**
  * Class Link
@@ -33,7 +34,12 @@ class Video extends AbstractContent implements VideoContract
     {
         return $this->model->getCaption();
     }
-    
+
+    public function getChapterItems(): Collection
+    {
+        return $this->model->getChapterItems();
+    }
+
     public function getStickToNext(): bool
     {
         return $this->model->getStickToNext();

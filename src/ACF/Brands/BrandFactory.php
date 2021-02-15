@@ -11,6 +11,7 @@ class BrandFactory
         'cos' => COS::class,
         'gds' => GDS::class,
         'his' => HIS::class,
+        'ifo' => IFO::class,
         'ill' => ILL::class,
         'vol' => VOL::class,
     ];

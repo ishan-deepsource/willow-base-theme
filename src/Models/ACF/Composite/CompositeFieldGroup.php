@@ -480,6 +480,54 @@ class CompositeFieldGroup
 
         $videoWidget->addSubField($caption);
 
+        $chapterItems = new RepeaterField('field_6026694040f43');
+        $chapterItems->setLabel('Chapters')
+            ->setName('chapter_items')
+            ->setLayout('row')
+            ->setButtonLabel('Add chapter');
+
+        $chapterItemImage = new ImageField('field_6026696e40f46');
+        $chapterItemImage->setLabel('Thumbnail')
+            ->setName('thumbnail')
+            ->setPreviewSize('thumbnail');
+
+        $chapterItems->addSubField($chapterItemImage);
+
+        $chapterItemUrl = new TextField('field_602669b940f48');
+        $chapterItemUrl->setLabel('Url')
+            ->setName('url');
+
+        $chapterItems->addSubField($chapterItemUrl);
+
+        $chapterItemTitle = new TextField('field_6026695840f44');
+        $chapterItemTitle->setLabel('Title')
+            ->setName('title');
+
+        $chapterItems->addSubField($chapterItemTitle);
+
+        $chapterItemDescription = new TextField('field_6026696440f45');
+        $chapterItemDescription->setLabel('Description')
+            ->setName('description');
+
+        $chapterItems->addSubField($chapterItemDescription);
+
+        $chapterItemSeconds = new NumberField('field_602669a740f47');
+        $chapterItemSeconds->setLabel('Seconds')
+            ->setName('seconds')
+            ->setMin(0)
+            ->setMax(7200)
+            ->setStep(1);
+
+        $chapterItems->addSubField($chapterItemSeconds);
+
+        $chapterItemTitle = new TrueFalseField('field_602669c340f49');
+        $chapterItemTitle->setLabel('Show in list overview')
+            ->setName('show_in_list_overview');
+
+        $chapterItems->addSubField($chapterItemTitle);
+
+        $videoWidget->addSubField($chapterItems);
+
         $lockedContent = new TrueFalseField('field_5922be0e5cda4');
         $lockedContent->setLabel('Locked Content')
             ->setName('locked_content')
@@ -1457,7 +1505,7 @@ class CompositeFieldGroup
             ->setName('instructions');
         $recipeWidget->addSubField($instructionsMarkdown);
 
-        $instructionsTipMarkdown = new TextField('field_601a96a123029');
+        $instructionsTipMarkdown = new MarkdownField('field_601a96a123029');
         $instructionsTipMarkdown->setLabel('Instructions tip')
             ->setName('instructions_tip');
         $recipeWidget->addSubField($instructionsTipMarkdown);
