@@ -116,6 +116,9 @@ class PageTemplates
             default:
                 $this->pageTemplates = array_merge($this->pageTemplates, [
                     'author-overview' => 'Author Overview',
+                    'recipe-overview' => 'Recipe Overview',
+                    'training-overview' => 'Training Overview',
+                    'food-plan-overview' => 'Food Plan Overview',
                     'architonic' => 'Architonic iFrame',
                     'profile' => 'Profile Page',
                     'favourites' => 'Favourites Page',
