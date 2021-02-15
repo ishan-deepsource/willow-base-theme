@@ -56,10 +56,24 @@ abstract class Brand implements BrandInterface
         return $layout->setSubFields($fields);
     }
 
+    public static function removeChapterItemsField(ACFLayout $layout)
+    {
+        $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
+            return $field->getName() !== CompositeFieldGroup::VIDEO_CHAPTER_ITEMS_FIELD;
+        });
+        return $layout->setSubFields($fields);
+    }
+
     protected static function removeVideoUrlFromImageWidget()
     {
         $imageWidget = CompositeFieldGroup::getImageWidget();
         add_filter(sprintf('willow/acf/layout=%s', $imageWidget->getKey()), [__CLASS__, 'removeVideoUrlField']);
+    }
+
+    protected static function removeChapterItemsFromVideoWidget(): void
+    {
+        $videoWidget = CompositeFieldGroup::getVideoWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $videoWidget->getKey()), [__CLASS__, 'removeChapterItemsField']);
     }
 
     protected static function removeVideoUrlFromParagraphListWidget(): void
