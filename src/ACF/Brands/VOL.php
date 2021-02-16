@@ -21,6 +21,7 @@ class VOL extends Brand
         self::removeVideoUrlFromParagraphListWidget();
         self::removeVideoUrlFromTeaserImages();
         self::removeImageFromInfoboxWidget();
+        self::removeChapterItemsFromVideoWidget();
 
         self::removeInventoryWidget();
         self::removeAudioWidget();

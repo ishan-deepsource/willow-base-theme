@@ -36,6 +36,7 @@ class CompositeFieldGroup
     public const KIND_FIELD = 'field_58e388862daa8';
     public const SHELL_VALUE = 'Shell';
     public const VIDEO_URL_FIELD_NAME = 'video_url';
+    public const VIDEO_CHAPTER_ITEMS_FIELD = 'chapter_items';
     public const COLLAPSIBLE_FIELD_NAME = 'collapsible';
     public const SHOW_NUMBERS_FIELD_NAME = 'show_numbers';
     public const IMAGE_FIELD = 'image';
@@ -482,7 +483,7 @@ class CompositeFieldGroup
 
         $chapterItems = new RepeaterField('field_6026694040f43');
         $chapterItems->setLabel('Chapters')
-            ->setName('chapter_items')
+            ->setName(self::VIDEO_CHAPTER_ITEMS_FIELD)
             ->setLayout('row')
             ->setButtonLabel('Add chapter');
 
