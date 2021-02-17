@@ -70,6 +70,7 @@ class CompositeFieldGroup
         $group->addField(self::getDescriptionField());
         $group->addField(self::getAuthorField());
         $group->addField(self::getAuthorDescriptionField());
+        $group->addField(self::getOtherAuthorField());
         $group->addField(self::getCategoryField());
         $group->addField(self::getTagField());
         $group->addField(self::getArticleContentField());
@@ -127,6 +128,16 @@ class CompositeFieldGroup
             ->setName('author_description')
             ->setInstructions('Extra information about the authors ie. who took the photos or did the styling');
         return apply_filters(sprintf('willow/acf/field=%s', $authorDescription->getKey()), $authorDescription);
+    }
+
+    public static function getOtherAuthorField(): ACFField
+    {
+        $otherAuthors = new UserField('field_602cce2886a59');
+        $otherAuthors->setLabel('Other Authors')
+            ->setName('other_authors')
+            ->setMultiple(true)
+            ->setReturnFormat(ACFField::RETURN_ARRAY);
+        return apply_filters(sprintf('willow/acf/field=%s', $otherAuthors->getKey()), $otherAuthors);
     }
 
     public static function getCategoryField(): ACFField
