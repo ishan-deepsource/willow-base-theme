@@ -277,6 +277,22 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         return array_get($this->acfFields, 'author_description') ?: null;
     }
 
+    public function getOtherAuthors(): ?Collection
+    {
+        $authors = collect(array_get($this->acfFields, 'other_authors', []))->map(function ($author) {
+            $wpUser = get_user_by('id', $author['ID']);
+            return new Author(new AuthorAdapter($wpUser));
+        })->reject(function ($author) {
+            return is_null($author);
+        });
+
+        if ($authors->isNotEmpty()) {
+            return $authors;
+        }
+
+        return null;
+    }
+
     public function getCategory(): ?CategoryContract
     {
         if ($category = array_get($this->acfFields, 'category')) {

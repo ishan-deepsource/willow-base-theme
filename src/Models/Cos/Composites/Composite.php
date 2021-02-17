@@ -120,6 +120,11 @@ class Composite implements CompositeContract
         return $this->composite->getAuthorDescription();
     }
 
+    public function getOtherAuthors(): ?Collection
+    {
+        return $this->composite->getOtherAuthors();
+    }
+
     public function getCategory(): ?CategoryContract
     {
         return $this->composite->getCategory();

@@ -33,6 +33,8 @@ interface CompositeContract
 
     public function getAuthorDescription(): ?string;
 
+    public function getOtherAuthors(): ?Collection;
+
     public function getTeaser(string $type): ?TeaserContract;
 
     public function getTeasers(): ?Collection;
