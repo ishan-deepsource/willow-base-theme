@@ -34,6 +34,8 @@ class CompositeFieldGroup
     public const VIDEO_TEASER_IMAGE_FIELD = 'field_5a8d7ae021e44';
     public const SHELL_LINK_FIELD = 'field_5d66623efb36e';
     public const KIND_FIELD = 'field_58e388862daa8';
+    public const COMPOSITE_FIELD_GROUP = 'group_58abfd3931f2f';
+    public const OTHER_AUTHERS_FIELD_NAME = 'other_authors';
     public const SHELL_VALUE = 'Shell';
     public const VIDEO_URL_FIELD_NAME = 'video_url';
     public const VIDEO_CHAPTER_ITEMS_FIELD = 'chapter_items';
@@ -54,7 +56,7 @@ class CompositeFieldGroup
             return;
         }
 
-        $group = new ACFGroup('group_58abfd3931f2f');
+        $group = new ACFGroup(self::COMPOSITE_FIELD_GROUP);
         $group->setTitle('Composite Fields')
             ->setLocation(new ACFLocation('post_type', ACFLocation::OPERATOR_EQUALS, WpComposite::POST_TYPE))
             ->setMenuOrder(6)
@@ -134,7 +136,7 @@ class CompositeFieldGroup
     {
         $otherAuthors = new UserField('field_602cce2886a59');
         $otherAuthors->setLabel('Other Authors')
-            ->setName('other_authors')
+            ->setName(self::OTHER_AUTHERS_FIELD_NAME)
             ->setMultiple(true)
             ->setReturnFormat(ACFField::RETURN_ARRAY);
         return apply_filters(sprintf('willow/acf/field=%s', $otherAuthors->getKey()), $otherAuthors);

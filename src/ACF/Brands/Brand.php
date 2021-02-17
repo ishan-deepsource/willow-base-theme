@@ -37,6 +37,14 @@ abstract class Brand implements BrandInterface
         return $group->setFields($fields);
     }
 
+    public static function removeOtherAuthorsField(ACFGroup $group)
+    {
+        $fields = array_filter($group->getFields(), function (ACFField $field) {
+            return $field->getName() !== CompositeFieldGroup::OTHER_AUTHERS_FIELD_NAME;
+        });
+        return $group->setFields($fields);
+    }
+
     public static function removeVideoUrlField(ACFLayout $layout)
     {
         $subFields = array_filter($layout->getSubFields(), function (ACFField $field) {
@@ -100,6 +108,12 @@ abstract class Brand implements BrandInterface
         add_filter(sprintf('willow/acf/group=%s', $teaserFieldGroupId), [__CLASS__, 'removeTeaserVideoUrlField']);
     }
 
+    protected static function removeOtherAuthors()
+    {
+        $compositeFieldGroupId = CompositeFieldGroup::COMPOSITE_FIELD_GROUP;
+        add_filter(sprintf('willow/acf/group=%s', $compositeFieldGroupId), [__CLASS__, 'removeOtherAuthorsField']);
+    }
+
     protected static function removeImageFromInfoboxWidget()
     {
         $infoboxWidget = self::$infoboxWidget;
@@ -151,6 +165,15 @@ abstract class Brand implements BrandInterface
         });
     }
 
+    protected static function removeRecipeWidget()
+    {
+        $contentField = self::$compositeContentsField;
+        add_filter(sprintf('willow/acf/field=%s', $contentField->getKey()), function (FlexibleContentField $contentField) {
+            $recipeField = CompositeFieldGroup::getRecipeWidget();
+            return $contentField->removeLayout($recipeField->getKey());
+        });
+    }
+
     protected static function removeQuotePageWidget()
     {
         $pageWidgetsField = self::$pageWidgetsField;
@@ -166,15 +189,6 @@ abstract class Brand implements BrandInterface
         add_filter(sprintf('willow/acf/field=%s', $pageWidgetsField->getKey()), function (FlexibleContentField $contentField) {
             $chaptersSummaryField = PageFieldGroup::getFeaturedContentLayout();
             return $contentField->removeLayout($chaptersSummaryField->getKey());
-        });
-    }
-
-    protected static function removeRecipeWidget()
-    {
-        $contentField = self::$compositeContentsField;
-        add_filter(sprintf('willow/acf/field=%s', $contentField->getKey()), function (FlexibleContentField $contentField) {
-            $recipeField = CompositeFieldGroup::getRecipeWidget();
-            return $contentField->removeLayout($recipeField->getKey());
         });
     }
 }
