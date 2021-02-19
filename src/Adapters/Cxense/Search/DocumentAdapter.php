@@ -71,6 +71,11 @@ class DocumentAdapter implements CompositeContract
         return null;
     }
 
+    public function getOtherAuthors(): ?Collection
+    {
+        return null;
+    }
+
     public function getContents(): ?Collection
     {
         return null;

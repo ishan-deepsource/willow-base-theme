@@ -73,6 +73,7 @@ class CompositeTransformer extends TransformerAbstract
             'commercial'                => $this->getCommercial($composite),
             'author'                    => $this->getAuthor($composite),
             'author_description'        => $composite->getAuthorDescription() ?: null,
+            'other_authors'             => $this->getOtherAuthors($composite),
             'lead_image'                => $this->getLeadImage($composite),
             'published_at'              => $composite->getPublishedAt(),
             'updated_at'                => $composite->getUpdatedAt(),
@@ -163,6 +164,13 @@ class CompositeTransformer extends TransformerAbstract
         }
 
         return null;
+    }
+
+    private function getOtherAuthors(CompositeContract $composite)
+    {
+        return collect($composite->getOtherAuthors())->map(function ($author) {
+            return with(new AuthorTransformer())->transform($author);
+        })->toArray();
     }
 
     private function getAudio(CompositeContract $composite)

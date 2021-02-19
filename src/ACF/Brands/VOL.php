@@ -16,6 +16,7 @@ class VOL extends Brand
     public static function register(): void
     {
         self::init();
+        self::removeOtherAuthors();
         self::removeVideoUrlFromImageWidget();
         self::removeVideoUrlFromGalleryItems();
         self::removeVideoUrlFromParagraphListWidget();
