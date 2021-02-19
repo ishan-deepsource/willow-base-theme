@@ -96,6 +96,7 @@ class IFO extends Brand
         return $paragraphList->mapSubFields(function (ACFField $field) {
             if ($field instanceof RadioField && $field->getName() === 'display_hint') {
                 $field->setChoices([
+                    'accordion' => 'Accordion',
                     'box' => 'Box',
                     'border' => 'Border',
                     'clean' => 'Clean',
