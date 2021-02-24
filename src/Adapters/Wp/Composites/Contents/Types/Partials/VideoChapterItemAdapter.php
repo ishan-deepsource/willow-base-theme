@@ -37,9 +37,9 @@ class VideoChapterItemAdapter implements VideoChapterItemContract
         return array_get($this->item, 'description') ?: null;
     }
 
-    public function getSeconds(): ?int
+    public function getTime(): ?string
     {
-        return array_get($this->item, 'seconds') ?: null;
+        return array_get($this->item, 'time') ?: null;
     }
 
     public function getUrl(): ?string

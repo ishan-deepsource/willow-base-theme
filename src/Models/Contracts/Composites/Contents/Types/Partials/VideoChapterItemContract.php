@@ -12,7 +12,7 @@ interface VideoChapterItemContract
 
     public function getDescription(): ?string;
 
-    public function getSeconds(): ?int;
+    public function getTime(): ?string;
 
     public function getUrl(): ?string;
 

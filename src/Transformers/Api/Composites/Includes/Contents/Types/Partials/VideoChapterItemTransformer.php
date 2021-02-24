@@ -14,7 +14,7 @@ class VideoChapterItemTransformer extends TransformerAbstract
             'thumbnail' => $this->transformImage($videoChapterItem),
             'title' => $videoChapterItem->getTitle(),
             'description' => $videoChapterItem->getDescription(),
-            'seconds' => $videoChapterItem->getSeconds(),
+            'time' => $videoChapterItem->getTime(),
             'url' => $videoChapterItem->getUrl(),
             'show_in_list_overview' => $videoChapterItem->getShowInListOverview(),
         ];
