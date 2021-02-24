@@ -20,6 +20,7 @@ use Bonnier\Willow\Base\Models\ACF\Fields\SelectField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TaxonomyField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TextAreaField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TextField;
+use Bonnier\Willow\Base\Models\ACF\Fields\TimePickerField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TrueFalseField;
 use Bonnier\Willow\Base\Models\ACF\Fields\UrlField;
 use Bonnier\Willow\Base\Models\ACF\Fields\UserField;
@@ -525,12 +526,9 @@ class CompositeFieldGroup
 
         $chapterItems->addSubField($chapterItemDescription);
 
-        $chapterItemSeconds = new NumberField('field_602669a740f47');
-        $chapterItemSeconds->setLabel('Seconds')
-            ->setName('seconds')
-            ->setMin(0)
-            ->setMax(7200)
-            ->setStep(1);
+        $chapterItemSeconds = new TimePickerField('field_602669a740f47');
+        $chapterItemSeconds->setLabel('Time')
+            ->setName('time');
 
         $chapterItems->addSubField($chapterItemSeconds);
 
