@@ -108,6 +108,7 @@ class GDS extends Brand
             ->setName('display_hint')
             ->setChoice('default', 'Default')
             ->setChoice('button', 'Button')
+            ->setChoice('promo_sales_button', 'Promo sales button (for collections/packages)')
             ->setDefaultValue('default')
             ->setLayout('vertical')
             ->setReturnFormat(ACFField::RETURN_VALUE);
