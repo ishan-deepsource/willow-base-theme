@@ -15,9 +15,9 @@ class TimePickerField extends ACFField
     
     /**
      * @param string $displayFormat
-     * @return DatePickerField
+     * @return TimePickerField
      */
-    public function setDisplayFormat(string $displayFormat): DatePickerField
+    public function setDisplayFormat(string $displayFormat): TimePickerField
     {
         $this->displayFormat = $displayFormat;
         return $this;
@@ -25,9 +25,9 @@ class TimePickerField extends ACFField
 
     /**
      * @param string $returnFormat
-     * @return DatePickerField
+     * @return TimePickerField
      */
-    public function setReturnFormat(string $returnFormat): DatePickerField
+    public function setReturnFormat(string $returnFormat): TimePickerField
     {
         $this->returnFormat = $returnFormat;
         return $this;
