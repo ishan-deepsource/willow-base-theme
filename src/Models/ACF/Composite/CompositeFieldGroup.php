@@ -504,7 +504,8 @@ class CompositeFieldGroup
         $chapterItemImage = new ImageField('field_6026696e40f46');
         $chapterItemImage->setLabel('Thumbnail')
             ->setName('thumbnail')
-            ->setPreviewSize('thumbnail');
+            ->setReturnFormat(ACFField::RETURN_ARRAY)
+            ->setPreviewSize(ImageField::PREVIEW_MEDIUM);
 
         $chapterItems->addSubField($chapterItemImage);
 
@@ -1389,7 +1390,8 @@ class CompositeFieldGroup
         $image = new ImageField('field_6017fcaef57e7');
         $image->setLabel('Image')
             ->setName('image')
-            ->setPreviewSize('medium');
+            ->setReturnFormat(ACFField::RETURN_ARRAY)
+            ->setPreviewSize(ImageField::PREVIEW_MEDIUM);
         $recipeWidget->addSubField($image);
 
         $useAdArticleLeadImage = new TrueFalseField('field_601a977ef88d4');
