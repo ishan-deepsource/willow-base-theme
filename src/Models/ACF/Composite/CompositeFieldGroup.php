@@ -37,6 +37,8 @@ class CompositeFieldGroup
     public const KIND_FIELD = 'field_58e388862daa8';
     public const COMPOSITE_FIELD_GROUP = 'group_58abfd3931f2f';
     public const OTHER_AUTHERS_FIELD_NAME = 'other_authors';
+    public const TEXT_BLOCK_FIELD_NAME = 'text_block';
+    public const DISPLAY_HINT_FIELD_NAME = 'display_hint';
     public const SHELL_VALUE = 'Shell';
     public const VIDEO_URL_FIELD_NAME = 'video_url';
     public const VIDEO_CHAPTER_ITEMS_FIELD = 'chapter_items';
@@ -739,6 +741,18 @@ class CompositeFieldGroup
 
         $infobox->addSubField($image);
 
+        $displayFormat = new RadioField('field_6037991dd120c');
+        $displayFormat->setLabel('Display Format')
+            ->setName('display_hint')
+            ->setChoice('default', 'Default')
+            ->setChoice('border', 'Border')
+            ->setChoice('solid', 'Solid')
+            ->setDefaultValue('default')
+            ->setLayout('vertical')
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+
+        $infobox->addSubField($displayFormat);
+
         $lockedContent = new TrueFalseField('field_5922bdd55cda2');
         $lockedContent->setLabel('Locked Content')
             ->setName('locked_content')
@@ -772,6 +786,13 @@ class CompositeFieldGroup
             ->setMdeConfig(MarkdownField::CONFIG_SIMPLE);
 
         $leadParagraphWidget->addSubField($description);
+
+        $textBlock = new MarkdownField('field_603792d0ed39e');
+        $textBlock->setLabel('Text block')
+            ->setName('text_block')
+            ->setMdeConfig(MarkdownField::CONFIG_SIMPLE);
+
+        $leadParagraphWidget->addSubField($textBlock);
 
         $displayFormat = new RadioField('field_5bbb61464317d');
         $displayFormat->setLabel('Display Format')

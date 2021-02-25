@@ -19,12 +19,14 @@ abstract class Brand implements BrandInterface
 {
     public static $pageWidgetsField;
     public static $compositeContentsField;
+    public static $leadParagraphWidget;
     public static $paragraphListWidget;
     public static $infoboxWidget;
 
     public static function init() {
         self::$pageWidgetsField = PageFieldGroup::getPageWidgetsField();
         self::$compositeContentsField = CompositeFieldGroup::getContentField();
+        self::$leadParagraphWidget = CompositeFieldGroup::getLeadParagraphWidget();
         self::$paragraphListWidget = CompositeFieldGroup::getParagraphListWidget();
         self::$infoboxWidget = CompositeFieldGroup::getInfoboxWidget();
     }
@@ -72,6 +74,22 @@ abstract class Brand implements BrandInterface
         return $layout->setSubFields($fields);
     }
 
+    public static function removeTextBlockField(ACFLayout $layout)
+    {
+        $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
+            return $field->getName() !== CompositeFieldGroup::TEXT_BLOCK_FIELD_NAME;
+        });
+        return $layout->setSubFields($fields);
+    }
+
+    public static function removeDisplayHintField(ACFLayout $layout)
+    {
+        $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
+            return $field->getName() !== CompositeFieldGroup::DISPLAY_HINT_FIELD_NAME;
+        });
+        return $layout->setSubFields($fields);
+    }
+
     protected static function removeVideoUrlFromImageWidget()
     {
         $imageWidget = CompositeFieldGroup::getImageWidget();
@@ -82,6 +100,18 @@ abstract class Brand implements BrandInterface
     {
         $videoWidget = CompositeFieldGroup::getVideoWidget();
         add_filter(sprintf('willow/acf/layout=%s', $videoWidget->getKey()), [__CLASS__, 'removeChapterItemsField']);
+    }
+
+    protected static function removeTextBlockFromLeadParagraphWidget(): void
+    {
+        $leadParagraphWidget = self::$leadParagraphWidget;
+        add_filter(sprintf('willow/acf/layout=%s', $leadParagraphWidget->getKey()), [__CLASS__, 'removeTextBlockField']);
+    }
+
+    protected static function removeDisplayHintFromInfoBoxWidget(): void
+    {
+        $infoboxWidget = self::$infoboxWidget;
+        add_filter(sprintf('willow/acf/layout=%s', $infoboxWidget->getKey()), [__CLASS__, 'removeDisplayHintField']);
     }
 
     protected static function removeVideoUrlFromParagraphListWidget(): void
