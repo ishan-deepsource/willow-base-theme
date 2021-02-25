@@ -32,6 +32,11 @@ class LeadParagraph extends AbstractContent implements LeadParagraphContract
         return $this->model->getDescription();
     }
 
+    public function getTextBlock(): ?string
+    {
+        return $this->model->getTextBlock();
+    }
+
     public function getDisplayHint(): string
     {
         return $this->model->getDisplayHint();

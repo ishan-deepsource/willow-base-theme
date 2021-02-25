@@ -10,5 +10,7 @@ interface LeadParagraphContract extends ContentContract
 
     public function getDescription(): ?string;
 
+    public function getTextBlock(): ?string;
+
     public function getDisplayHint(): string;
 }

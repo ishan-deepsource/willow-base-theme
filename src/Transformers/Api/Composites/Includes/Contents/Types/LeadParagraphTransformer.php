@@ -13,6 +13,7 @@ class LeadParagraphTransformer extends TransformerAbstract
         return [
             'title' => $leadParagraph->getTitle(),
             'description' => $leadParagraph->getDescription(),
+            'text_block' => $leadParagraph->getTextBlock(),
             'display_hint' => $leadParagraph->getDisplayHint(),
         ];
     }
