@@ -775,13 +775,6 @@ class CompositeFieldGroup
 
         $leadParagraphWidget->addSubField($description);
 
-        $textBlock = new MarkdownField('field_603792d0ed39e');
-        $textBlock->setLabel('Text block')
-            ->setName('text_block')
-            ->setMdeConfig(MarkdownField::CONFIG_SIMPLE);
-
-        $leadParagraphWidget->addSubField($textBlock);
-
         $displayFormat = new RadioField('field_5bbb61464317d');
         $displayFormat->setLabel('Display Format')
             ->setName('display_hint')

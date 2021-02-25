@@ -19,7 +19,6 @@ class GDS extends Brand
         self::removeVideoUrlFromGalleryItems();
         self::removeVideoUrlFromParagraphListWidget();
         self::removeChapterItemsFromVideoWidget();
-        self::removeTextBlockFromLeadParagraphWidget();
 
         self::removeRecipeWidget();
         self::removeInventoryWidget();

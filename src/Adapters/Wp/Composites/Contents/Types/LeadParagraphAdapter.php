@@ -17,11 +17,6 @@ class LeadParagraphAdapter extends AbstractContentAdapter implements LeadParagra
         return array_get($this->acfArray, 'description') ?: null;
     }
 
-    public function getTextBlock(): ?string
-    {
-        return array_get($this->acfArray, 'text_block') ?: null;
-    }
-
     public function getDisplayHint(): string
     {
         return array_get($this->acfArray, 'display_hint') ?: 'default';
