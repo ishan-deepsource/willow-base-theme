@@ -19,14 +19,12 @@ abstract class Brand implements BrandInterface
 {
     public static $pageWidgetsField;
     public static $compositeContentsField;
-    public static $leadParagraphWidget;
     public static $paragraphListWidget;
     public static $infoboxWidget;
 
     public static function init() {
         self::$pageWidgetsField = PageFieldGroup::getPageWidgetsField();
         self::$compositeContentsField = CompositeFieldGroup::getContentField();
-        self::$leadParagraphWidget = CompositeFieldGroup::getLeadParagraphWidget();
         self::$paragraphListWidget = CompositeFieldGroup::getParagraphListWidget();
         self::$infoboxWidget = CompositeFieldGroup::getInfoboxWidget();
     }
