@@ -37,8 +37,6 @@ class CompositeFieldGroup
     public const KIND_FIELD = 'field_58e388862daa8';
     public const COMPOSITE_FIELD_GROUP = 'group_58abfd3931f2f';
     public const OTHER_AUTHERS_FIELD_NAME = 'other_authors';
-    public const TEXT_BLOCK_FIELD_NAME = 'text_block';
-    public const DISPLAY_HINT_FIELD_NAME = 'display_hint';
     public const SHELL_VALUE = 'Shell';
     public const VIDEO_URL_FIELD_NAME = 'video_url';
     public const VIDEO_CHAPTER_ITEMS_FIELD = 'chapter_items';
