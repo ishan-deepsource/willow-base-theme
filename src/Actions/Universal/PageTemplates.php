@@ -95,6 +95,10 @@ class PageTemplates
             case 'IFO':
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'top-lg' => 'Top LG',
+                    'food-plan' => 'Food plan',
+                    'workout-video' => 'Workout video',
+                    'exercise-video' => 'Exercise video',
+                    'recipes' => 'Recipes',
                 ]);
 
                 $this->pageTemplates = array_merge($this->pageTemplates, [
@@ -135,6 +139,10 @@ class PageTemplates
                     'guide' => 'Guide',
                     'timeline' => 'Timeline',
                     'top-lg' => 'Top LG',
+                    'food-plan' => 'Food plan',
+                    'workout-video' => 'Workout video',
+                    'exercise-video' => 'Exercise video',
+                    'recipes' => 'Recipes',
                     'test' => 'Test',
                 ]);
                 break;
