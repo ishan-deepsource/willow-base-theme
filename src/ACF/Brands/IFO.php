@@ -39,6 +39,9 @@ class IFO extends Brand
         $paragraphListWidget = parent::$paragraphListWidget;
         add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'setParagraphListDisplayHints']);
         add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'removeParagraphListCollapsible']);
+
+        $infoBoxWidget = parent::$infoboxWidget;
+        add_filter(sprintf('willow/acf/layout=%s', $infoBoxWidget->getKey()), [__CLASS__, 'setInfoBoxDisplayHints']);
     }
 
     public static function setTeaserListDisplayHints(ACFLayout $teaserList)
@@ -89,6 +92,21 @@ class IFO extends Brand
             }
             return $field;
         });
+    }
+
+    public static function setInfoBoxDisplayHints(ACFLayout $infoBox)
+    {
+        $displayHint = new RadioField('field_5f60afb647c6e');
+        $displayHint->setLabel('Display Format')
+            ->setName('display_hint')
+            ->setChoice('default', 'Default')
+            ->setChoice('border', 'Border')
+            ->setChoice('solid', 'Solid')
+            ->setDefaultValue('default')
+            ->setLayout('vertical')
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+
+        return $infoBox->addSubField($displayHint);
     }
 
     public static function setParagraphListDisplayHints(ACFLayout $paragraphList)

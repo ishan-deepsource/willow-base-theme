@@ -741,18 +741,6 @@ class CompositeFieldGroup
 
         $infobox->addSubField($image);
 
-        $displayFormat = new RadioField('field_6037991dd120c');
-        $displayFormat->setLabel('Display Format')
-            ->setName('display_hint')
-            ->setChoice('default', 'Default')
-            ->setChoice('border', 'Border')
-            ->setChoice('solid', 'Solid')
-            ->setDefaultValue('default')
-            ->setLayout('vertical')
-            ->setReturnFormat(ACFField::RETURN_VALUE);
-
-        $infobox->addSubField($displayFormat);
-
         $lockedContent = new TrueFalseField('field_5922bdd55cda2');
         $lockedContent->setLabel('Locked Content')
             ->setName('locked_content')

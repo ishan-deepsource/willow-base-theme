@@ -20,7 +20,6 @@ class HIS extends Brand
         self::removeImageFromInfoboxWidget();
         self::removeChapterItemsFromVideoWidget();
         self::removeTextBlockFromLeadParagraphWidget();
-        self::removeDisplayHintFromInfoBoxWidget();
 
         self::removeInventoryWidget();
         self::removeMultimediaWidget();
