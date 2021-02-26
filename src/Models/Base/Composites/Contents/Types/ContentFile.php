@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Models\Base\Composites\Contents\Types;
 
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\AbstractContent;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\ContentFileContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\FileContract;
 use Illuminate\Support\Collection;
 
 /**
@@ -16,26 +17,6 @@ use Illuminate\Support\Collection;
 class ContentFile extends AbstractContent implements ContentFileContract
 {
 
-    public function getId(): int
-    {
-        return $this->model->getId();
-    }
-
-    public function getImages(): Collection
-    {
-        return $this->model->getImages();
-    }
-
-    public function getCaption(): ?string
-    {
-        return $this->model->getCaption();
-    }
-
-    public function getUrl(): ?string
-    {
-        return $this->model->getUrl();
-    }
-
     public function getTitle(): ?string
     {
         return $this->model->getTitle();
@@ -46,9 +27,14 @@ class ContentFile extends AbstractContent implements ContentFileContract
         return $this->model->getDescription();
     }
 
-    public function getLanguage(): ?string
+    public function getFile(): ?FileContract
     {
-        return $this->model->getLanguage();
+        return $this->model->getFile();
+    }
+
+    public function getImages(): Collection
+    {
+        return $this->model->getImages();
     }
 
     public function getDownloadButtonText(): ?string

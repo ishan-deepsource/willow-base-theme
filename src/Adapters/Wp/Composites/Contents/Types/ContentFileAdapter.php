@@ -5,6 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\FileAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
+use Bonnier\Willow\Base\Models\Contracts\Root\FileContract;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\File;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
@@ -32,9 +33,19 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
         }
     }
 
-    public function getId(): ?int
+    public function getTitle(): ?string
     {
-        return optional($this->file)->getId() ?: null;
+        return array_get($this->acfArray, 'title') ?: null;
+    }
+
+    public function getDescription(): ?string
+    {
+        return array_get($this->acfArray, 'description') ?: null;
+    }
+
+    public function getFile(): ?FileContract
+    {
+        return $this->file;
     }
 
     public function getImages(): ?Collection
@@ -50,6 +61,12 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
         });
     }
 
+    public function getDownloadButtonText(): ?string
+    {
+        return array_get($this->acfArray, 'download_button_text') ?: null;
+    }
+
+    /*
     public function getCaption(): ?string
     {
         return optional($this->file)->getCaption() ?: null;
@@ -65,18 +82,9 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
         return optional($this->file)->getLanguage() ?: null;
     }
 
-    public function getTitle(): ?string
+    public function getId(): ?int
     {
-        return array_get($this->acfArray, 'title') ?: null;
+        return optional($this->file)->getId() ?: null;
     }
-
-    public function getDescription(): ?string
-    {
-        return array_get($this->acfArray, 'description') ?: null;
-    }
-
-    public function getDownloadButtonText(): ?string
-    {
-        return array_get($this->acfArray, 'download_button_text') ?: null;
-    }
+    */
 }
