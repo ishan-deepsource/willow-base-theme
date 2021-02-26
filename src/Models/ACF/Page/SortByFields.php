@@ -132,14 +132,9 @@ class SortByFields
             ->setPostTypes([
                 WpComposite::POST_TYPE
             ])
-            ->setTaxonomy([
-                'category',
-                'post_tag'
-            ])
             ->setFilters([
                 'search',
-                'taxonomy',
-                'post_tag'
+                'taxonomy'
             ])
             ->setMin(self::getMinTeasers())
             ->setMax(self::getMaxTeasers())
