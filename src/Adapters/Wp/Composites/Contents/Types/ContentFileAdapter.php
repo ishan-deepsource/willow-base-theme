@@ -60,18 +60,23 @@ class ContentFileAdapter extends AbstractContentAdapter implements ContentFileCo
         return optional($this->file)->getUrl() ?: null;
     }
 
+    public function getLanguage(): ?string
+    {
+        return optional($this->file)->getLanguage() ?: null;
+    }
+
     public function getTitle(): ?string
     {
-        return optional($this->file)->getTitle() ?: null;
+        return array_get($this->acfArray, 'title') ?: null;
     }
 
     public function getDescription(): ?string
     {
-        return optional($this->file)->getDescription() ?: null;
+        return array_get($this->acfArray, 'description') ?: null;
     }
 
-    public function getLanguage(): ?string
+    public function getDownloadButtonText(): ?string
     {
-        return optional($this->file)->getLanguage() ?: null;
+        return array_get($this->acfArray, 'download_button_text') ?: null;
     }
 }

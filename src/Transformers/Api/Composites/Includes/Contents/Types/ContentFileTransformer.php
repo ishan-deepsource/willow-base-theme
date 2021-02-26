@@ -19,7 +19,8 @@ class ContentFileTransformer extends TransformerAbstract
     {
         return [
             'file'  => $file->isLocked() ? null : (new FileTransformer())->transform($file),
-            'images' => $file->isLocked() ? [] : $this->getImages($file)
+            'images' => $file->isLocked() ? [] : $this->getImages($file),
+            'download_button_text' => $file->isLocked() ? null : $file->getDownloadButtonText(),
         ];
     }
 

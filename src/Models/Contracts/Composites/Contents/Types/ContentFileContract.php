@@ -9,4 +9,6 @@ use Illuminate\Support\Collection;
 interface ContentFileContract extends ContentContract, FileContract
 {
     public function getImages() : ?Collection;
+
+    public function getDownloadButtonText() : ?string;
 }

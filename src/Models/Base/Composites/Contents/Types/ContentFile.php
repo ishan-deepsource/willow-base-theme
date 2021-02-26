@@ -51,6 +51,11 @@ class ContentFile extends AbstractContent implements ContentFileContract
         return $this->model->getLanguage();
     }
 
+    public function getDownloadButtonText(): ?string
+    {
+        return $this->model->getDownloadButtonText();
+    }
+
     public function getStickToNext(): bool
     {
         return $this->model->getStickToNext();
