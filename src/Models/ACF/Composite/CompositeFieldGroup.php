@@ -413,11 +413,17 @@ class CompositeFieldGroup
         $fileWidget->setName('file')
             ->setLabel('File');
 
-        $caption = new TextAreaField('field_590aefe3e4a5f');
-        $caption->setLabel('Caption')
-            ->setName('caption');
+        $title = new TextField('field_6038e027bbf88');
+        $title->setLabel('Title')
+            ->setName('title');
 
-        $fileWidget->addSubField($caption);
+        $fileWidget->addSubField($title);
+
+        $description = new TextAreaField('field_590aefe3e4a5f');
+        $description->setLabel('Description')
+            ->setName('description');
+
+        $fileWidget->addSubField($description);
 
         $fileField = new FileField('field_590af026e4a61');
         $fileField->setLabel('File')
