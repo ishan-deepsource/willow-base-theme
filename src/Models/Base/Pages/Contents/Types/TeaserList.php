@@ -145,4 +145,9 @@ class TeaserList extends AbstractContent implements TeaserListContract
     {
         return $this->model->setParentType($type);
     }
+
+    public function getTheme(): ?string
+    {
+        return $this->model->getTheme();
+    }
 }

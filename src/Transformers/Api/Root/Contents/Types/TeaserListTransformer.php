@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Root\Contents\Types;
 
+use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\Types\TeaserListContract;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
@@ -32,6 +33,7 @@ class TeaserListTransformer extends TransformerAbstract
             'link' => $this->transformLink($teaserList),
             'link_label' => $teaserList->getLinkLabel(),
             'display_hint' => $teaserList->getDisplayHint(),
+            PageFieldGroup::THEME_FIELD_NAME => $teaserList->getTheme(),
             'can_paginate' => $teaserList->canPaginate(),
         ];
     }

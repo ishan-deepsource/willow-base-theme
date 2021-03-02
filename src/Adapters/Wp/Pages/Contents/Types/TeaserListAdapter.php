@@ -7,6 +7,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\AbstractContentAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types\Partials\TeaserListHyperlink;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
 use Bonnier\Willow\Base\Helpers\SortBy;
+use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 use Bonnier\Willow\Base\Models\Contracts\Utilities\WidgetPaginationContract;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
@@ -76,6 +77,11 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
     public function getDisplayHint(): ?string
     {
         return array_get($this->acfArray, 'display_hint') ?: null;
+    }
+
+    public function getTheme(): ?string
+    {
+        return array_get($this->acfArray, PageFieldGroup::THEME_FIELD_NAME) ?: null;
     }
 
     public function canPaginate(): bool
