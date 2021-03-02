@@ -44,6 +44,9 @@ class WaRedirectResolver extends BaseCmd
      * default: 1
      * ---
      *
+     * [--host=<host>]
+     * : Set host name for proper loading of envs
+     *
      * ## EXAMPLES
      * wp contenthub editor wa redirect resolve run
      *
@@ -51,6 +54,8 @@ class WaRedirectResolver extends BaseCmd
      */
     public function run($args, $assoc_args)
     {
+        $this->setHost($assoc_args);
+
         $this->delay = $assoc_args['delay'] ?? 1;
         try {
             $this->repository = new ContentRepository();

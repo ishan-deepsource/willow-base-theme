@@ -38,6 +38,11 @@ class WaContent extends BaseCmd
     /**
      * Prunes imported composites from WhiteAlbum by removing those that are deleted on WhiteAlbum
      *
+     * ## OPTIONS
+     *
+     * [--host=<host>]
+     * : Set host name for proper loading of envs
+     *
      * ## EXAMPLES
      * wp contenthub editor wa content prune
      *
@@ -68,6 +73,11 @@ class WaContent extends BaseCmd
     /**
      * Fixes wrongly imported headings that was imported as ordered list
      *
+     * ## OPTIONS
+     *
+     * [--host=<host>]
+     * : Set host name for proper loading of envs
+     *
      * ## EXAMPLES
      * wp contenthub editor wa content fixHeadings
      *
@@ -77,6 +87,8 @@ class WaContent extends BaseCmd
      */
     public function fixHeadings($args, $assocArgs)
     {
+        $this->setHost($assocArgs);
+
         WpComposite::mapAll(function (WP_Post $post) {
             // Get all widgets from composite
             $brokenHeadings = collect(get_field('composite_content', $post->ID))
@@ -121,6 +133,9 @@ class WaContent extends BaseCmd
      * [--page=<page>]
      * : The page to start importing from
      *
+     * [--host=<host>]
+     * : Set host name for proper loading of envs
+     *
      * [--skip-existing]
      * : wether to skip alredy imported articles
      *
@@ -142,6 +157,8 @@ class WaContent extends BaseCmd
 
         $this->disableHooks(); // Disable various hooks and filters during import
 
+        $this->setHost($assocArgs);
+
         $this->failedImportFile = $assocArgs['failed-import-file'] ?? null;
         $this->repository = new ContentRepository($assocArgs['locale'] ?? null, $this->failedImportFile);
         if ($contentId = $assocArgs['id'] ?? null) {
@@ -162,6 +179,11 @@ class WaContent extends BaseCmd
      *
      * ## OPTIONS
      *
+     * [--host=<host>]
+     * : Set host name for proper loading of envs
+     *
+     * ## OPTIONS
+     *
      * [--id=<id>]
      * : The id of a single composite to import.
      *
@@ -176,6 +198,8 @@ class WaContent extends BaseCmd
      */
     public function refresh($args, $assocArgs)
     {
+        $this->setHost($assocArgs);
+
         $this->isRefreshing = true;
         if ($contentId = $assocArgs['id'] ?? null) {
             if ($post = get_post(WpComposite::postIDFromWhiteAlbumID($contentId))) {
