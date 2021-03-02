@@ -118,6 +118,8 @@ class IFO extends Brand
                     'box' => 'Box',
                     'border' => 'Border',
                     'clean' => 'Clean',
+                    'fold-out-no-items' => 'Fold out - no items',
+                    'img-left-no-items' => 'Img left - no items',
                 ]);
                 $field->setDefaultValue('box');
             }
