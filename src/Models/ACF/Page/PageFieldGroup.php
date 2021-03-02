@@ -38,6 +38,8 @@ class PageFieldGroup
     private const COMMERCIAL_SPOT_URL_FIELD = 'field_5c0fa2fcea1a6';
     private const LINK_TYPE_FIELD = 'field_5e68a31bbe22d';
 
+    public const THEME_FIELD_NAME = 'theme';
+
     public static function register()
     {
         if (function_exists('acf_add_local_field_group')) {
@@ -215,6 +217,23 @@ class PageFieldGroup
             ));
 
         $layout->addSubField($linkLabel);
+
+        $theme = new SelectField('field_603e41125233a');
+        $theme->setLabel('Theme')
+            ->setName('theme')
+            ->setChoices([
+                'default' => 'Default',
+                'theme-0' => 'Gray',
+                'theme-1' => 'Orange',
+                'theme-2' => 'Green',
+                'theme-3' => 'Blue',
+                'theme-4' => 'Dark-gray',
+            ])
+            ->setMultiple(false)
+            ->setDefaultValue(['default'])
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+
+        $layout->addSubField($theme);
 
         $hint = new RadioField('field_5bb319a1ffcf1');
         $hint->setLabel('Display Format')
