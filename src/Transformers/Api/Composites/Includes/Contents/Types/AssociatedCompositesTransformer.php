@@ -13,6 +13,7 @@ class AssociatedCompositesTransformer extends TransformerAbstract
     {
         return [
             'composites' => $this->transformComposites($associatedComposites),
+            'display_hint' => $associatedComposites->getDisplayHint(),
         ];
     }
 

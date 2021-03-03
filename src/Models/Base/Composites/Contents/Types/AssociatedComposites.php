@@ -24,6 +24,11 @@ class AssociatedComposites extends AbstractContent implements AssociatedComposit
         return $this->model->getComposites();
     }
 
+    public function getDisplayHint(): ?string
+    {
+        return $this->model->getDisplayHint();
+    }
+
     public function getStickToNext(): bool
     {
         return $this->model->getStickToNext();

@@ -37,4 +37,9 @@ class AssociatedCompositesAdapter extends AbstractContentAdapter implements Asso
 
         return $composites->isNotEmpty() ? $composites : null;
     }
+
+    public function getDisplayHint(): ?string
+    {
+        return array_get($this->acfArray, 'display_hint') ?: null;
+    }
 }
