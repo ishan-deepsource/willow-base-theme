@@ -42,6 +42,9 @@ class IFO extends Brand
 
         $infoBoxWidget = parent::$infoboxWidget;
         add_filter(sprintf('willow/acf/layout=%s', $infoBoxWidget->getKey()), [__CLASS__, 'setInfoBoxDisplayHints']);
+
+        $associatedCompositeWidget = CompositeFieldGroup::getAssociatedCompositeWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $associatedCompositeWidget->getKey()), [__CLASS__, 'setAssociatedCompositeDisplayHints']);
     }
 
     public static function setTeaserListDisplayHints(ACFLayout $teaserList)
@@ -49,15 +52,17 @@ class IFO extends Brand
         $displayHint = new RadioField('field_5bb319a1ffcf1');
         $displayHint->setLabel('Display Format')
             ->setName('display_hint')
-            ->setChoice('1plus2', '1 + 2')
-            ->setChoice('2plus1', '2 + 1')
-            ->setChoice('featured', 'Featured')
             ->setChoice('1col', '1 Col')
             ->setChoice('2col', '2 Col')
             ->setChoice('3col', '3 Col')
             ->setChoice('4col', '4 Col')
+            ->setChoice('2plus1', '2 + 1')
+            ->setChoice('1plus2', '1 + 2')
+            ->setChoice('4plus1', '4 + 1')
+            ->setChoice('slider4col', 'Slider - 4 col')
+            ->setChoice('slider-netflix', 'Slider - netflix')
             ->setChoice('toplist', 'Top list')
-            ->setChoice('slider', 'Slider')
+            ->setChoice('featured', 'Featured')
             ->setDefaultValue('1plus2')
             ->setLayout('vertical')
             ->setReturnFormat(ACFField::RETURN_VALUE);
@@ -118,6 +123,8 @@ class IFO extends Brand
                     'box' => 'Box',
                     'border' => 'Border',
                     'clean' => 'Clean',
+                    'fold-out-no-items' => 'Fold out - no items',
+                    'img-left-no-items' => 'Img left - no items',
                 ]);
                 $field->setDefaultValue('box');
             }
@@ -125,6 +132,19 @@ class IFO extends Brand
         });
     }
 
+    public static function setAssociatedCompositeDisplayHints(ACFLayout $associatedComposite)
+    {
+        $displayHint = new RadioField('field_603f7f06ddaac');
+        $displayHint->setLabel('Display Format')
+            ->setName('display_hint')
+            ->setChoice('default', 'Default')
+            ->setChoice('food-plan', 'Food plan')
+            ->setDefaultValue('default')
+            ->setLayout('vertical')
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+
+        return $associatedComposite->addSubField($displayHint);
+    }
 
     public static function removeParagraphListCollapsible(ACFLayout $layout)
     {

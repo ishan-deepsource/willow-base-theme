@@ -33,6 +33,11 @@ class WaPanel extends BaseCmd
      *
      * ## OPTIONS
      *
+     * [--host=<host>]
+     * : Set host name for proper loading of envs
+     *
+     * ## OPTIONS
+     *
      * [--id=<id>]
      * : The id of a single panel to import.
      *
@@ -50,6 +55,8 @@ class WaPanel extends BaseCmd
      */
     public function import($args, $assocArgs)
     {
+        $this->setHost($assocArgs);
+
         error_reporting(E_ALL); // Enable all error reporting to make sure we catch potential issues
 
         $this->disableHooks(); // Disable various hooks and filters during import

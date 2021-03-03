@@ -35,4 +35,11 @@ class BaseCmd extends WP_CLI_Command
     {
         return $this->getSites()->first();
     }
+
+    protected function setHost(array $assocArgs)
+    {
+        if (isset($assocArgs['host'])) {
+            $_SERVER['HOST_NAME'] = $assocArgs['host'];
+        }
+    }
 }

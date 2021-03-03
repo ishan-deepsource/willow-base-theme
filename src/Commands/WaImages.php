@@ -26,6 +26,10 @@ class WaImages extends BaseCmd
     /**
      * Updates images from WhiteAlbum
      *
+     * ## OPTIONS
+     *
+     * [--host=<host>]
+     * : Set host name for proper loading of envs
      *
      * ## EXAMPLES
      * wp contenthub editor wa images import
@@ -37,6 +41,8 @@ class WaImages extends BaseCmd
      */
     public function update($args, $assocArgs)
     {
+        $this->setHost($assocArgs);
+
         $this->repository = new ImageRepository();
 
         WpAttachment::mapAll(function (Wp_Post $attachment) {
