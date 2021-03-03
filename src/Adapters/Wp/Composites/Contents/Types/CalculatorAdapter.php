@@ -7,8 +7,8 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\CalculatorCon
 
 class CalculatorAdapter extends AbstractContentAdapter implements CalculatorContract
 {
-    public function getCalculator(): ?string
+    public function getCalculator(): string
     {
-        return array_get($this->acfArray, 'calculator') ?: null;
+        return array_get($this->acfArray, 'calculator', '');
     }
 }

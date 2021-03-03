@@ -22,7 +22,7 @@ class Calculator extends AbstractContent implements CalculatorContract
         return $this->model->getStickToNext();
     }
 
-    public function getCalculator(): ?string
+    public function getCalculator(): string
     {
         return $this->model->getCalculator();
     }
