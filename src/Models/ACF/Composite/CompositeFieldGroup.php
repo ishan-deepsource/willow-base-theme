@@ -250,6 +250,7 @@ class CompositeFieldGroup
         $content->addLayout(self::getMultimediaWidget());
         $content->addLayout(self::getProductWidget());
         $content->addLayout(self::getRecipeWidget());
+        $content->addLayout(self::getCalculatorWidget());
 
         return apply_filters(sprintf('willow/acf/field=%s', $content->getKey()), $content);
     }
@@ -1645,6 +1646,50 @@ class CompositeFieldGroup
             ->setDefaultValue(['gram'])
             ->setReturnFormat(ACFField::RETURN_VALUE);
         $nutrientItems->addSubField($nutrientAmountUnit);
+    }
+
+    public static function getCalculatorWidget()
+    {
+        $calculatorWidget = new ACFLayout('layout_603fbef1f5e40');
+        $calculatorWidget->setLabel('Calculator')
+            ->setName('calculator');
+
+        $calculatorField = new SelectField('field_603fbefcf5e41');
+        $calculatorField->setName('calculator')
+            ->setChoices([
+                '' => 'Select a calculator...',
+                'bmi' => 'BMI calculator',
+                // 'reward' => 'Calculates how much you can reward yourself',
+                // 'calories_burn' => 'Calories burn time based on activity',
+                // 'christmas_sin_burner' => 'Calories burn time based on christmas intake and activity',
+                // 'sin_burn' => 'Calories burn time based on intake and activity',
+                // 'kcal_burn' => 'Calories burning based on activity',
+                'kcal_burn_v2' => 'Calories burning based on activity (new version)',
+                // 'christmas_kcal' => 'Calories burning based on christmas activity',
+                'cooper_test' => 'Cooper test',
+                // 'calories_needed' => 'Daily calories need',
+                'calories_needed_with_weight_loss' => 'Daily calories need with weight loss',
+                'protein' => 'Daily protein need',
+                // 'due_date' => 'Due date',
+                // 'due_date_reverse' => 'Due date (reverse)',
+                // 'fertility' => 'Fertility days',
+                // 'weight_gain' => 'Intake-based weight gain calculator',
+                'fitness_value' => 'Physical fitness value',
+                // 'end_time' => 'Predicts 10k and half marathon run times based on 5k run time',
+                // 'pulse_rate' => 'Recommended training pulse rate',
+                // 'calories_while_resting' => 'Resting metabolic rate',
+                // 'speed_with_different_weight' => 'Run time after weight gain or loss',
+                // 'speed_with_different_age' => 'Run time prediction when getting older',
+                // 'speed' => 'Suggests running paces based on 5k run time',
+                // 'mars_bar' => 'Time it will take to burn a Mars bar',
+                'fat_percentage' => 'Waist-to-hip ratio',
+            ])
+            ->setDefaultValue([''])
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+
+        $calculatorWidget->addSubField($calculatorField);
+
+        return apply_filters(sprintf('willow/acf/layout=%s', $calculatorWidget->getKey()), $calculatorWidget);
     }
 
     private static function registerHooks()

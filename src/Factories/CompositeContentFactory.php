@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Factories;
 
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\AssociatedCompositesAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\CalculatorAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ChaptersSummaryAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentAudioAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Composites\Contents\Types\ContentFileAdapter;
@@ -48,6 +49,7 @@ class CompositeContentFactory extends AbstractModelFactory
         'inventory'             => InventoryAdapter::class,
         'product'               => ProductAdapter::class,
         'recipe'                => RecipeAdapter::class,
+        'calculator'            => CalculatorAdapter::class,
     ];
 
     public function getAdapter($model)
