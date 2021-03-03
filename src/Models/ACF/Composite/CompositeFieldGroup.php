@@ -1658,6 +1658,7 @@ class CompositeFieldGroup
         $calculatorField = new SelectField('field_603fbefcf5e41');
         $calculatorField->setName('calculator')
             ->setChoices([
+                // TODO: Out comment elements exits in White Album and should be enabled later.
                 '' => 'Select a calculator...',
                 'bmi' => 'BMI calculator',
                 // 'reward' => 'Calculates how much you can reward yourself',
