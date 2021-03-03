@@ -42,6 +42,9 @@ class IFO extends Brand
 
         $infoBoxWidget = parent::$infoboxWidget;
         add_filter(sprintf('willow/acf/layout=%s', $infoBoxWidget->getKey()), [__CLASS__, 'setInfoBoxDisplayHints']);
+
+        $associatedCompositeWidget = CompositeFieldGroup::getAssociatedCompositeWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $associatedCompositeWidget->getKey()), [__CLASS__, 'setAssociatedCompositeDisplayHints']);
     }
 
     public static function setTeaserListDisplayHints(ACFLayout $teaserList)
@@ -129,6 +132,19 @@ class IFO extends Brand
         });
     }
 
+    public static function setAssociatedCompositeDisplayHints(ACFLayout $associatedComposite)
+    {
+        $displayHint = new RadioField('field_603f7f06ddaac');
+        $displayHint->setLabel('Display Format')
+            ->setName('display_hint')
+            ->setChoice('default', 'Default')
+            ->setChoice('food-plan', 'Food plan')
+            ->setDefaultValue('default')
+            ->setLayout('vertical')
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+
+        return $associatedComposite->addSubField($displayHint);
+    }
 
     public static function removeParagraphListCollapsible(ACFLayout $layout)
     {
