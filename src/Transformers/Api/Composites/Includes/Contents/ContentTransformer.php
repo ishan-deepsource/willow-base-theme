@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents;
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\AssociatedCompositesTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\CalculatorTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ChaptersSummaryTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentAudioTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Composites\Includes\Contents\Types\ContentFileTransformer;
@@ -50,6 +51,7 @@ class ContentTransformer extends TransformerAbstract
         'inventory'             => InventoryTransformer::class,
         'product'               => ProductTransformer::class,
         'recipe'                => RecipeTransformer::class,
+        'calculator'            => CalculatorTransformer::class,
     ];
 
     public function transform(ContentContract $content)

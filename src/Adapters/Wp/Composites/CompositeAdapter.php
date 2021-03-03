@@ -16,6 +16,7 @@ use Bonnier\Willow\Base\Factories\CompositeContentFactory;
 use Bonnier\Willow\Base\Factories\Contracts\ModelFactoryContract;
 use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
+use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Calculator;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\ChaptersSummary;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Inventory;
 use Bonnier\Willow\Base\Models\Base\Composites\Contents\Types\Multimedia;
@@ -108,6 +109,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         'inventory'             => Inventory::class,
         'product'               => Product::class,
         'recipe'                => Recipe::class,
+        'calculator'            => Calculator::class,
     ];
 
     protected $acfFields;
