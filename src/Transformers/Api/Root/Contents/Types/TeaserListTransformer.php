@@ -33,7 +33,7 @@ class TeaserListTransformer extends TransformerAbstract
             'link' => $this->transformLink($teaserList),
             'link_label' => $teaserList->getLinkLabel(),
             'display_hint' => $teaserList->getDisplayHint(),
-            PageFieldGroup::THEME_FIELD_NAME => $teaserList->getTheme(),
+            'theme' => $teaserList->getTheme(),
             'can_paginate' => $teaserList->canPaginate(),
         ];
     }
