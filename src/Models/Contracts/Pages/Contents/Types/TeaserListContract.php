@@ -17,6 +17,7 @@ interface TeaserListContract extends ContentContract, WidgetPaginationContract
     public function getLink(): ?HyperlinkContract;
     public function getLinkLabel(): ?string;
     public function getDisplayHint(): ?string;
+    public function getTheme(): ?string;
     public function canPaginate(): bool;
     public function getTeasers(): ?Collection;
 }
