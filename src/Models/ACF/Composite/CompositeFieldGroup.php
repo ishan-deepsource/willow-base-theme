@@ -1490,7 +1490,8 @@ class CompositeFieldGroup
 
         $showMetaInfoInArticleHeaderAndTeaser = new TrueFalseField('field_601a97c1f88d5');
         $showMetaInfoInArticleHeaderAndTeaser->setLabel('Show meta info in article header and teaser')
-            ->setName('show_meta_info_in_header_and_teaser');
+            ->setName('show_meta_info_in_header_and_teaser')
+            ->setDefaultValue(true);
         $recipeWidget->addSubField($showMetaInfoInArticleHeaderAndTeaser);
 
         $quantity = new TextField('field_601800c2a3761');
