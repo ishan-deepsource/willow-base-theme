@@ -24,6 +24,7 @@ class COS extends Brand
         self::removeMultimediaWidget();
         self::removeProductWidget();
         self::removeRecipeWidget();
+        self::removeCalculatorWidget();
 
         $paragraphListWidget = parent::$paragraphListWidget;
         add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'removeParagraphListShowNumbers']);

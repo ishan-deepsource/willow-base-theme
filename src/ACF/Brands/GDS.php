@@ -23,6 +23,7 @@ class GDS extends Brand
 
         self::removeRecipeWidget();
         self::removeInventoryWidget();
+        self::removeCalculatorWidget();
 
         $galleryField = CompositeFieldGroup::getGalleryWidget();
         add_filter(sprintf('willow/acf/layout=%s', $galleryField->getKey()), [__CLASS__, 'setGalleryDisplayHints']);
