@@ -20,8 +20,7 @@ class CreateFeatureDatesTable implements Migration
         $sql = "
         SET sql_notes = 1;
         CREATE TABLE `$table` (
-          `id` int(10) unsigned NOT NULL AUTOINCREMENT,
-          `post_id` int(10) unsigned NOT NULL,
+          `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
           `post_id` int(10) unsigned NOT NULL,
           `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
           UNIQUE KEY `feature_dates_post_id_unique` (`post_id`),
