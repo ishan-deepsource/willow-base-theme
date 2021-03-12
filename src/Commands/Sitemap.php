@@ -26,11 +26,20 @@ class Sitemap extends \WP_CLI_Command
     /**
      * Migrates sitemap setting on all composites
      *
+     * ## OPTIONS
+     *
+     * [--host=<host>]
+     * : Set host name for proper loading of envs
+     *
      * ## EXAMPLES
      *     wp willow sitemap migrate
      */
-    public function migrate()
+    public function migrate($args, $assocArgs)
     {
+        if (isset($assocArgs['host'])) {
+            $_SERVER['HOST_NAME'] = $assocArgs['host'];
+        }
+
         \WP_CLI::line('Migrating sitemap option on composites...');
         WpComposite::mapAll(function (WP_Post $composite) {
             update_field('sitemap', 0, $composite->ID);
