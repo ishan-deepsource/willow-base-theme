@@ -18,7 +18,6 @@ class RecipeTransformer extends TransformerAbstract
             'title' => $recipe->getTitle(),
             'description' => $recipe->getDescription(),
             'image' => $this->transformImage($recipe),
-            'recipe_tags' => $recipe->getTags(),
             'use_as_article_lead_image' => $recipe->getUseAsArticleLeadImage(),
             'show_meta_info_in_header_and_teaser' => $recipe->getShowMetaInfoInHeaderAndTeaser(),
             'preparation_time' => $recipe->getPreparationTime(),

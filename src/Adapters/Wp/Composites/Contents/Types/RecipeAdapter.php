@@ -36,11 +36,6 @@ class RecipeAdapter extends AbstractContentAdapter implements RecipeContract
         return null;
     }
 
-    public function getTags(): ?string
-    {
-        return array_get($this->acfArray, 'recipe_tags') ?: null;
-    }
-
     public function getUseAsArticleLeadImage(): ?bool
     {
         return boolval(array_get($this->acfArray, 'use_as_article_lead_image', false));

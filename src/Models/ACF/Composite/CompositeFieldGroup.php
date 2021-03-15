@@ -1547,11 +1547,6 @@ class CompositeFieldGroup
         self::setRecipeNutrientItemsSubFields($nutrientItems);
         $recipeWidget->addSubField($nutrientItems);
 
-        $tags = new TextField('field_601beae919f6d');
-        $tags->setLabel('Tags')
-            ->setName('recipe_tags');
-        $recipeWidget->addSubField($tags);
-
         return apply_filters(sprintf('willow/acf/layout=%s', $recipeWidget->getKey()), $recipeWidget);
     }
 
