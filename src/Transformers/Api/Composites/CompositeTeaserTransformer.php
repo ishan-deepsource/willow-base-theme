@@ -54,6 +54,7 @@ class CompositeTeaserTransformer extends TransformerAbstract
             ],
             'estimated_reading_time'  => $composite->getEstimatedReadingTime(),
             'word_count'              => $composite->getWordCount(),
+            'contenthub_id'           => $composite->getContenthubId(),
         ];
     }
 
