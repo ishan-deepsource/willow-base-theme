@@ -53,6 +53,4 @@ interface RecipeContract extends ContentContract
     public function getNutrientsHeadline(): ?string;
 
     public function getNutrientItems(): Collection;
-
-    public function getTags(): ?string;
 }
