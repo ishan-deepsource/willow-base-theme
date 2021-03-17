@@ -12,8 +12,6 @@ class IFO extends Brand
 {
     public static function register(): void
     {
-        echo 'testhansi?';
-        die();
         self::init();
         self::removeVideoUrlFromImageWidget();
         self::removeVideoUrlFromGalleryItems();
@@ -29,10 +27,8 @@ class IFO extends Brand
         self::removeQuotePageWidget();
         self::removeFeaturedContentPageWidget();
 
-        $mads =  PageFieldGroup::getTeaserListLayout();
-        echo $mads->getKey();
-        die();
-        add_filter(sprintf('willow/acf/layout=%s', $mads->getKey()), [__CLASS__, 'setTeaserListDisplayHints']);
+        $teaserListWidget =  PageFieldGroup::getTeaserListLayout();
+        add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListDisplayHints']);
 
         $galleryField = CompositeFieldGroup::getGalleryWidget();
         add_filter(sprintf('willow/acf/layout=%s', $galleryField->getKey()), [__CLASS__, 'setGalleryDisplayHints']);
