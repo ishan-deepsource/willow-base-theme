@@ -50,7 +50,7 @@ class IFO extends Brand
     public static function setTeaserListDisplayHints(ACFLayout $teaserList)
     {
         $displayHint = new RadioField('field_5bb319a1ffcf1');
-        $displayHint->setLabel('Display Format22222')
+        $displayHint->setLabel('Display Format')
             ->setName('display_hint')
             ->setChoice('1col', '1 Col')
             ->setChoice('2col', '2 Col')
