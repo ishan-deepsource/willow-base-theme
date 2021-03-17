@@ -12,6 +12,8 @@ class IFO extends Brand
 {
     public static function register(): void
     {
+        echo 'testhansi?';
+        die();
         self::init();
         self::removeVideoUrlFromImageWidget();
         self::removeVideoUrlFromGalleryItems();
@@ -27,8 +29,10 @@ class IFO extends Brand
         self::removeQuotePageWidget();
         self::removeFeaturedContentPageWidget();
 
-        $teaserListWidget =  PageFieldGroup::getTeaserListLayout();
-        add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListDisplayHints']);
+        $mads =  PageFieldGroup::getTeaserListLayout();
+        echo $mads->getKey();
+        die();
+        add_filter(sprintf('willow/acf/layout=%s', $mads->getKey()), [__CLASS__, 'setTeaserListDisplayHints']);
 
         $galleryField = CompositeFieldGroup::getGalleryWidget();
         add_filter(sprintf('willow/acf/layout=%s', $galleryField->getKey()), [__CLASS__, 'setGalleryDisplayHints']);
@@ -50,7 +54,7 @@ class IFO extends Brand
     public static function setTeaserListDisplayHints(ACFLayout $teaserList)
     {
         $displayHint = new RadioField('field_5bb319a1ffcf1');
-        $displayHint->setLabel('Display Format')
+        $displayHint->setLabel('Display Format22222')
             ->setName('display_hint')
             ->setChoice('1col', '1 Col')
             ->setChoice('2col', '2 Col')
@@ -58,9 +62,11 @@ class IFO extends Brand
             ->setChoice('4col', '4 Col')
             ->setChoice('2plus1', '2 + 1')
             ->setChoice('1plus2', '1 + 2')
+            ->setChoice('1plus4', '1 + 4')
             ->setChoice('4plus1', '4 + 1')
             ->setChoice('slider4col', 'Slider - 4 col')
             ->setChoice('slider-netflix', 'Slider - netflix')
+            ->setChoice('text+4', 'text + 4')
             ->setChoice('toplist', 'Top list')
             ->setChoice('featured', 'Featured')
             ->setDefaultValue('1plus2')
