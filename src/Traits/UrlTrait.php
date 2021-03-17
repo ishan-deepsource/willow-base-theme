@@ -38,7 +38,8 @@ trait UrlTrait
             $parsedUrl = parse_url($url, PHP_URL_HOST);
             $parsedHomeUrl = parse_url($language->home_url, PHP_URL_HOST);
             if(stristr($parsedUrl, $parsedHomeUrl) !== false) {
-                return preg_replace('#://(api|native-api|admin)\.#', '://', $url);
+                $replace = preg_replace('#://(admin-|api-|native-api-)#', '://', $url);
+                return preg_replace('#://(api|native-api|admin)\.#', '://', $replace);
             }
         }
         return $url;
