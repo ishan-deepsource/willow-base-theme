@@ -1569,6 +1569,34 @@ class CompositeFieldGroup
         $ingredientBlockItems->addSubField($ingredientItems);
     }
 
+    /**
+     * Recipe ingredient choices, please don't change items order, it used in migration script
+     * @return string[]
+     */
+    public static function getRecipeIngredientChoices(){
+       return [
+           '-' => '-',
+           'gram' => 'gram',
+           'dl' => 'dl',
+           'teaspoon' => 'teaspoon',
+           'tablespoon' => 'tablespoon',
+           'ml' => 'ml',
+           'cl' => 'cl',
+           'liter' => 'liter',
+           'kg' => 'kg',
+           'piece' => 'piece',
+           'pinch' => 'pinch',
+           'nip' => 'nip',
+           'sprinkle' => 'sprinkle',
+           'bundle' => 'bundle',
+           'cloves' => 'cloves',
+           'slice' => 'slice',
+           'handful' => 'handful',
+           'can' => 'can',
+           'packet' => 'packet',
+       ];
+    }
+
     private static function setRecipeIngredientItemsSubFields(&$ingredientItems)
     {
         $amount = new TextField('field_601a92f25acd7');
@@ -1579,27 +1607,7 @@ class CompositeFieldGroup
         $unit = new SelectField('field_601a930d5acd8');
         $unit->setLabel('Unit')
             ->setName('unit')
-            ->setChoices([
-                '-' => '-',
-                'gram' => 'gram',
-                'dl' => 'dl',
-                'teaspoon' => 'teaspoon',
-                'tablespoon' => 'tablespoon',
-                'ml' => 'ml',
-                'cl' => 'cl',
-                'liter' => 'liter',
-                'kg' => 'kg',
-                'piece' => 'piece',
-                'pinch' => 'pinch',
-                'nip' => 'nip',
-                'sprinkle' => 'sprinkle',
-                'bundle' => 'bundle',
-                'cloves' => 'cloves',
-                'slice' => 'slice',
-                'handful' => 'handful',
-                'can' => 'can',
-                'packet' => 'packet',
-            ])
+            ->setChoices(self::getRecipeIngredientChoices())
             ->setDefaultValue(['-'])
             ->setReturnFormat(ACFField::RETURN_VALUE);
         $ingredientItems->addSubField($unit);
@@ -1610,18 +1618,40 @@ class CompositeFieldGroup
         $ingredientItems->addSubField($ingredient);
     }
 
+    /**
+     * please don't change items order, it used in migration script
+     * @return string[]
+     */
+    public static function getRecipeNutrientItemsChoices()
+    {
+       return [
+           'Energy' => 'Energy',
+           'Protein' => 'Protein',
+           'Fat' => 'Fat',
+           'Carbohydrate' => 'Carbohydrate',
+           'Fiber' => 'Fiber',
+       ];
+    }
+
+    /**
+     * please don't change items order, it used in migration script
+     * @return string[]
+     */
+    public static function getRecipeNutrientItemsUnitChoices()
+    {
+       return [
+           '-' => '-',
+           'kcal' => 'kcal',
+           'gram' => 'gram',
+       ];
+    }
+
     private static function setRecipeNutrientItemsSubFields(&$nutrientItems)
     {
         $nutrient = new SelectField('field_601a95c40796b');
         $nutrient->setLabel('Nutrient')
             ->setName('nutrient')
-            ->setChoices([
-                'Energy' => 'Energy',
-                'Protein' => 'Protein',
-                'Fat' => 'Fat',
-                'Carbohydrate' => 'Carbohydrate',
-                'Fiber' => 'Fiber',
-            ])
+            ->setChoices(self::getRecipeNutrientItemsChoices())
             ->setDefaultValue(['Energy'])
             ->setReturnFormat(ACFField::RETURN_VALUE);
         $nutrientItems->addSubField($nutrient);
@@ -1634,11 +1664,7 @@ class CompositeFieldGroup
         $nutrientAmountUnit = new SelectField('field_601a95f60796d');
         $nutrientAmountUnit->setLabel('Unit')
             ->setName('unit')
-            ->setChoices([
-                '-' => '-',
-                'kcal' => 'kcal',
-                'gram' => 'gram',
-            ])
+            ->setChoices(self::getRecipeNutrientItemsUnitChoices())
             ->setDefaultValue(['gram'])
             ->setReturnFormat(ACFField::RETURN_VALUE);
         $nutrientItems->addSubField($nutrientAmountUnit);
