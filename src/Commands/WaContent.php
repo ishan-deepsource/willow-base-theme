@@ -14,6 +14,7 @@ use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\Cache\Models\Post as BonnierCachePost;
 use Bonnier\WP\Cxense\Models\Post as CxensePost;
 use Illuminate\Support\Collection;
+
 // temperate solution for running command
 use Tests\CompositeContent\Partials\RecipeIngredientBlockItem;
 use Tests\CompositeContent\Partials\RecipeIngredientItem;
@@ -506,28 +507,28 @@ class WaContent extends BaseCmd
                     ];
                 }
                 if ($compositeContent->type === 'recipe') {
-                    if ($compositeContent->active !== "true") {
+                    if ( ! isset($compositeContent->active) || $compositeContent->active !== "true") {
                         return [];
                     }
 
                     $recipe = new Recipe();
-                    $recipe->setTitle($compositeContent->title)
+                    $recipe->setTitle($compositeContent->title ?? "")
                            ->setDescription('')
                            ->setImage(null)
                            ->setUseAsArticleLeadImage(false)
                            ->setShowMetaInfoInHeaderAndTeaser(true)
-                           ->setPreparationTime($compositeContent->prep_headline)
-                           ->setPreparationTimeMin($compositeContent->prep_time)
-                           ->setPreparationTimeUnit(strtolower($compositeContent->prep_unit))
-                           ->setCookingTime($compositeContent->cook_headline)
-                           ->setCookingTimeMin($compositeContent->cook_time)
-                           ->setCookingTimeUnit(strtolower($compositeContent->cook_unit))
-                           ->setTotalTime($compositeContent->total_headline)
-                           ->setTotalTimeMin($compositeContent->total_time)
-                           ->setTotalTimeUnit(strtolower($compositeContent->total_unit))
-                           ->setTotalTimeExtraInfo($compositeContent->total_time_extra)
-                           ->setQuantity($compositeContent->recipe_yield_value)
-                           ->setQuantityType($compositeContent->recipe_yield_text);
+                           ->setPreparationTime($compositeContent->prep_headline ?? "")
+                           ->setPreparationTimeMin($compositeContent->prep_time ?? "")
+                           ->setPreparationTimeUnit(strtolower($compositeContent->prep_unit ?? ""))
+                           ->setCookingTime($compositeContent->cook_headline ?? "")
+                           ->setCookingTimeMin($compositeContent->cook_time ?? "")
+                           ->setCookingTimeUnit(strtolower($compositeContent->cook_unit ?? ""))
+                           ->setTotalTime($compositeContent->total_headline ?? "")
+                           ->setTotalTimeMin($compositeContent->total_time ?? "")
+                           ->setTotalTimeUnit(strtolower($compositeContent->total_unit ?? ""))
+                           ->setTotalTimeExtraInfo($compositeContent->total_time_extra ?? "")
+                           ->setQuantity($compositeContent->recipe_yield_value ?? "")
+                           ->setQuantityType($compositeContent->recipe_yield_text ?? "");
 
                     //Convert WA ingredients content: "150]];[[1]];[[laks||;||200]];[[1]];[[fuldkornspasta||;||200]];[[2]];[[grønne asparges||;||1]];[[16]];[[dildspidser||;||2 ]];[[3]];[[jomfruolivenolie||;||2]];[[4]];[[parmesan||;||]];[[]];[[havsalt||;||]];[[]];[[sort peber" to recipe block items
                     //Row separator is "||;||", item separator is "]];[["
@@ -569,9 +570,9 @@ class WaContent extends BaseCmd
                     }
 
                     $recipe->setInstructionsHeadline($compositeContent->instructions_headline)
-                           ->setInstructions($compositeContent->instructions)
+                           ->setInstructions(HtmlToMarkdown::parseHtml($compositeContent->instructions ?? ""))
                            ->setInstructionsTip('')
-                           ->setNutrientsHeadline($compositeContent->nutrients_headline);
+                           ->setNutrientsHeadline($compositeContent->nutrients_headline ?? "");
 
                     //Convert WA nutrients content: 0]];[[589]];[[1||;||1]];[[36,3]];[[2||;||2]];[[17,2]];[[2||;||3]];[[78,1]];[[2||;||4]];[[11,5]];[[2
                     $waIngredientsRows = $compositeContent->nutrients;
