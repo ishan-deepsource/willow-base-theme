@@ -569,9 +569,25 @@ class WaContent extends BaseCmd
                         }
                     }
 
-                    $recipe->setInstructionsHeadline($compositeContent->instructions_headline)
-                           ->setInstructions(HtmlToMarkdown::parseHtml($compositeContent->instructions ?? ""))
-                           ->setInstructionsTip('')
+                    //separate instruction and instruction tip
+                    $delimiters         = ['tips', 'tip', 'vinkki'];
+                    $instructionTextRaw = HtmlToMarkdown::parseHtml($compositeContent->instructions ?? "");
+                    $instructionText    = $instructionTextRaw;
+                    $instructionTip     = '';
+                    if ( ! empty($instructionTextRaw)) {
+                        foreach ($delimiters as $delimiter) {
+                            $instructionArr = preg_split("/\*\*".$delimiter."/i", $instructionTextRaw, 2);
+                            if (count($instructionArr) == 2) {
+                                $instructionText = $instructionArr[0];
+                                $instructionTip  = "**".strtoupper($delimiter).$instructionArr[1];
+                                break;
+                            }
+                        }
+                    }
+
+                    $recipe->setInstructionsHeadline($compositeContent->instructions_headline ?? "")
+                           ->setInstructions($instructionText)
+                           ->setInstructionsTip($instructionTip)
                            ->setNutrientsHeadline($compositeContent->nutrients_headline ?? "");
 
                     //Convert WA nutrients content: 0]];[[589]];[[1||;||1]];[[36,3]];[[2||;||2]];[[17,2]];[[2||;||3]];[[78,1]];[[2||;||4]];[[11,5]];[[2
@@ -592,7 +608,8 @@ class WaContent extends BaseCmd
                     $data                   = $recipe->toArray();
                     $data['acf_fc_layout']  = $compositeContent->type;
                     $data['locked_content'] = false;
-
+                    // if the article contains recipe widget, so it is a recipe template
+                    update_post_meta($postId, '_wp_page_template', 'recipe');
                     return $data;
                 }
 
