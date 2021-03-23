@@ -7,6 +7,7 @@ use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\Redirect\Models\Redirect;
 use Bonnier\WP\Redirect\WpBonnierRedirect;
 use cli\progress\Bar;
+use function WP_CLI\Utils\make_progress_bar;
 
 class WaRedirectResolver extends BaseCmd
 {
@@ -67,7 +68,7 @@ class WaRedirectResolver extends BaseCmd
         $compositeIds = $this->getCompositeIds();
 
         /** @var Bar $progress */
-        $progress = WP_CLI\Utils\make_progress_bar('Resolving redirects...', $compositeIds->count());
+        $progress = make_progress_bar('Resolving redirects...', $compositeIds->count());
         $compositeIds->each(function (int $whiteAlbumID, int $compositeID) use (&$progress) {
             if (get_post_status($compositeID) === 'publish') {
                 $this->resolveRedirect($whiteAlbumID, $compositeID);
