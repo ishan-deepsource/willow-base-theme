@@ -98,7 +98,7 @@ class PageTemplates
                     'food-plan' => 'Food plan',
                     'workout-video' => 'Workout video',
                     'exercise-video' => 'Exercise video',
-                    'recipes' => 'Recipes',
+                    'recipe' => 'Recipe',
                 ]);
 
                 $this->pageTemplates = array_merge($this->pageTemplates, [
@@ -142,7 +142,7 @@ class PageTemplates
                     'food-plan' => 'Food plan',
                     'workout-video' => 'Workout video',
                     'exercise-video' => 'Exercise video',
-                    'recipes' => 'Recipes',
+                    'recipe' => 'Recipe',
                     'test' => 'Test',
                 ]);
                 break;
