@@ -57,6 +57,10 @@ class TranslationManagerRepository implements TranslationRepositoryContract
         $translations = &$translations[$lang];
 
         foreach ($keys as $key) {
+            if (! isset($translations[$key])) {
+                return ;
+            }
+
             $translations = &$translations[$key];
         }
 
