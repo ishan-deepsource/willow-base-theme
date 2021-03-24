@@ -39,6 +39,11 @@ class Recipe extends AbstractContent implements RecipeContract
         return $this->model->getImage();
     }
 
+    public function getTags(): ?string
+    {
+        return $this->model->getTags();
+    }
+
     public function getUseAsArticleLeadImage(): bool
     {
         return $this->model->getUseAsArticleLeadImage();
