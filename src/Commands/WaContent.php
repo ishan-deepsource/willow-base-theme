@@ -605,6 +605,8 @@ class WaContent extends BaseCmd
                         $recipe->setNutrientItems(new Collection($nutrientsCollection));
                     }
 
+                    $recipe->setTags($compositeContent->tags ?? "");
+
                     $data                   = $recipe->toArray();
                     $data['acf_fc_layout']  = $compositeContent->type;
                     $data['locked_content'] = false;
