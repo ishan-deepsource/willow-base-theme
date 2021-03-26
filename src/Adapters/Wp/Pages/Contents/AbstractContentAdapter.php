@@ -8,12 +8,12 @@ use Bonnier\Willow\Base\Models\Contracts\Pages\Contents\ContentContract;
 abstract class AbstractContentAdapter implements ContentContract
 {
     protected $acfArray;
-    protected $actOutput;
+    protected $acfOutput;
 
     public function __construct(array $acfArray)
     {
         $this->acfArray = $acfArray;
-        $this->actOutput = new AcfOutput($acfArray);
+        $this->acfOutput = new AcfOutput($acfArray);
     }
 
     public function getType() : ?string

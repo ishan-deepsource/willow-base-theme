@@ -11,9 +11,9 @@ class AcfOutput
     /**
      * constructor.
      *
-     * @param array    $acfArray
+     * @param mixed    $acfArray
      */
-    public function __construct(array $acfArray)
+    public function __construct($acfArray)
     {
         $this->acfArray = $acfArray;
     }
