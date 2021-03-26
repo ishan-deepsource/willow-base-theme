@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Composites\Contents;
 
+use Bonnier\Willow\Base\Helpers\AcfOutput;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
 
 /**
@@ -12,6 +13,7 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\ContentContract;
 abstract class AbstractContentAdapter implements ContentContract
 {
     protected $acfArray;
+    protected $acfOutput;
     protected $post;
 
     /**
@@ -23,6 +25,7 @@ abstract class AbstractContentAdapter implements ContentContract
     public function __construct(array $acfArray, \WP_Post $post = null)
     {
         $this->acfArray = $acfArray;
+        $this->acfOutput = new AcfOutput($acfArray);
         $this->post = $post;
         if (!$this->acfArray) {
             throw new \InvalidArgumentException('Missing ACF Array');
