@@ -164,6 +164,11 @@ class PinterestCompositeAdapter implements CompositeContract
         return null;
     }
 
+    public function getHideInSitemaps(): ?bool
+    {
+        return null;
+    }
+
     public function getTemplate(): ?string
     {
         return null;

@@ -88,6 +88,7 @@ class CompositeTransformer extends TransformerAbstract
             'ctm_disabled'              => $composite->getCtmDisabled(),
             'contenthub_id'             => $composite->getContenthubId(),
             'editorial_type'            => $composite->getEditorialType(),
+            'hide_in_sitemap'           => $composite->getHideInSitemaps(),
         ];
     }
 
