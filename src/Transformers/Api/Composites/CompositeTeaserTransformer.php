@@ -23,7 +23,7 @@ class CompositeTeaserTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'vocabularies',
+        'vocabularies'
     ];
 
     /**

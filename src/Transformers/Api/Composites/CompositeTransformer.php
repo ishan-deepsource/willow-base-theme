@@ -45,7 +45,7 @@ class CompositeTransformer extends TransformerAbstract
         'teasers',
         'tags',
         'vocabularies',
-        'story',
+        'story'
     ];
 
     protected $defaultIncludes = [
