@@ -487,6 +487,12 @@ class CompositeFieldGroup
 
         $videoWidget->addSubField($teaserImage);
 
+        $includeIntroVideo = new TrueFalseField('field_6061945f12bd9');
+        $includeIntroVideo->setLabel('Include intro video')
+            ->setName('include_intro_video');
+
+        $videoWidget->addSubField($includeIntroVideo);
+
         $url = new TextField('field_5938fe71ed0bb');
         $url->setLabel('Embed Url')
             ->setName('embed_url')
