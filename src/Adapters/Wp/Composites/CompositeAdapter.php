@@ -497,4 +497,13 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         }
         return null;
     }
+
+    public function getHideInSitemaps(): ?bool
+    {
+        $get = array_get($this->acfFields, 'sitemap', false);
+        if (!is_bool($get)) {
+            return false;
+        }
+        return $get;
+    }
 }

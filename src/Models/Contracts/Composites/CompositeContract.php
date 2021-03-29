@@ -92,4 +92,6 @@ interface CompositeContract
     public function getContenthubId(): ?string;
 
     public function getEditorialType(): ?string;
+
+    public function getHideInSitemaps(): ?bool;
 }
