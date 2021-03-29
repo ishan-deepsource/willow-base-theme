@@ -6,6 +6,7 @@ use Bonnier\Willow\Base\Models\ACF\ACFField;
 use Bonnier\Willow\Base\Models\ACF\ACFLayout;
 use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Fields\RadioField;
+use Bonnier\Willow\Base\Models\ACF\Fields\TrueFalseField;
 use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 
 class IFO extends Brand
@@ -45,6 +46,9 @@ class IFO extends Brand
 
         $associatedCompositeWidget = CompositeFieldGroup::getAssociatedCompositeWidget();
         add_filter(sprintf('willow/acf/layout=%s', $associatedCompositeWidget->getKey()), [__CLASS__, 'setAssociatedCompositeDisplayHints']);
+
+        $videoWidget = CompositeFieldGroup::getVideoWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $videoWidget->getKey()), [__CLASS__, 'setIncludeIntroVideoDefaultTrue']);
     }
 
     public static function setTeaserListDisplayHints(ACFLayout $teaserList)
@@ -154,5 +158,15 @@ class IFO extends Brand
             return $field->getName() !== CompositeFieldGroup::COLLAPSIBLE_FIELD_NAME;
         });
         return $layout->setSubFields($subFields);
+    }
+
+    public static function setIncludeIntroVideoDefaultTrue(ACFLayout $videoWidget)
+    {
+        $includeIntroVideo = new TrueFalseField('field_6061945f12bd9');
+        $includeIntroVideo->setLabel('Include intro video')
+            ->setName(CompositeFieldGroup::VIDEO_INCLUDE_INTRO_VIDEO_FIELD)
+            ->setDefaultValue(true);
+
+        return $videoWidget->addSubField($includeIntroVideo);
     }
 }

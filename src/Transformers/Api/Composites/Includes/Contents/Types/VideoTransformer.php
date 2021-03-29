@@ -18,7 +18,8 @@ class VideoTransformer extends TransformerAbstract
     {
         return [
             'embed_url' => $video->isLocked() ? null : $video->getEmbedUrl(),
-            'caption'   => $video->isLocked() ? null : $video->getCaption(),
+            'include_intro_video' => $video->isLocked() ? null : $video->getIncludeIntroVideo(),
+            'caption' => $video->isLocked() ? null : $video->getCaption(),
             'chapter_items' => $this->transformChapterItems($video),
         ];
     }

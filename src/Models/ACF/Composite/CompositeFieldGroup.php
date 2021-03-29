@@ -40,6 +40,7 @@ class CompositeFieldGroup
     public const SHELL_VALUE = 'Shell';
     public const VIDEO_URL_FIELD_NAME = 'video_url';
     public const VIDEO_CHAPTER_ITEMS_FIELD = 'chapter_items';
+    public const VIDEO_INCLUDE_INTRO_VIDEO_FIELD = 'include_intro_video';
     public const COLLAPSIBLE_FIELD_NAME = 'collapsible';
     public const SHOW_NUMBERS_FIELD_NAME = 'show_numbers';
     public const IMAGE_FIELD = 'image';
@@ -486,6 +487,12 @@ class CompositeFieldGroup
             );
 
         $videoWidget->addSubField($teaserImage);
+
+        $includeIntroVideo = new TrueFalseField('field_6061945f12bd9');
+        $includeIntroVideo->setLabel('Include intro video')
+            ->setName(self::VIDEO_INCLUDE_INTRO_VIDEO_FIELD);
+
+        $videoWidget->addSubField($includeIntroVideo);
 
         $url = new TextField('field_5938fe71ed0bb');
         $url->setLabel('Embed Url')
