@@ -51,6 +51,7 @@ class CompositeRecipeMetaTransformer extends TransformerAbstract
             if ($nutrient->getNutrient() == 'Energy') {
                 $recipeMeta['energy'] = $nutrient->getAmount();
                 $recipeMeta['energy_unit'] = $nutrient->getUnit();
+                return false;
             }
         });
     }
