@@ -64,6 +64,14 @@ abstract class Brand implements BrandInterface
         return $layout->setSubFields($fields);
     }
 
+    public static function removeIncludeIntroVideoField(ACFLayout $layout)
+    {
+        $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
+            return $field->getName() !== CompositeFieldGroup::VIDEO_INCLUDE_INTRO_VIDEO_FIELD;
+        });
+        return $layout->setSubFields($fields);
+    }
+
     public static function removeChapterItemsField(ACFLayout $layout)
     {
         $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
@@ -84,6 +92,12 @@ abstract class Brand implements BrandInterface
     {
         $imageWidget = CompositeFieldGroup::getImageWidget();
         add_filter(sprintf('willow/acf/layout=%s', $imageWidget->getKey()), [__CLASS__, 'removeVideoUrlField']);
+    }
+
+    protected static function removeIncludeIntroVideoFromVideoWidget(): void
+    {
+        $videoWidget = CompositeFieldGroup::getVideoWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $videoWidget->getKey()), [__CLASS__, 'removeIncludeIntroVideoField']);
     }
 
     protected static function removeChapterItemsFromVideoWidget(): void
