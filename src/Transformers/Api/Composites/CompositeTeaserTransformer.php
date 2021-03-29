@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
+use Bonnier\Willow\Base\Helpers\RecipeHelper;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
@@ -57,7 +58,7 @@ class CompositeTeaserTransformer extends TransformerAbstract
             'contenthub_id'           => $composite->getContenthubId(),
         ];
 
-        $this->addRecipe($composite, $out);
+        (new RecipeHelper())->addRecipeMetaToOutput($composite, $out);
 
         return $out;
     }
@@ -99,12 +100,5 @@ class CompositeTeaserTransformer extends TransformerAbstract
     {
         $commercial = $composite->getCommercial();
         return $commercial ? with(new CommercialTransformer())->transform($commercial) : null;
-    }
-
-    private function addRecipe(CompositeContract $composite, array &$out)
-    {
-        $recipe =  with(new CompositeRecipeTransformer)->transform($composite);
-        if (!empty($recipe))
-            $out['recipe'] = $recipe;
     }
 }
