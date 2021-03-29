@@ -17,6 +17,7 @@ class COS extends Brand
         self::removeVideoUrlFromParagraphListWidget();
         self::removeVideoUrlFromTeaserImages();
         self::removeImageFromInfoboxWidget();
+        self::removeIncludeIntroVideoFromVideoWidget();
         self::removeChapterItemsFromVideoWidget();
         self::removeThemeFromTeaserListPageWidget();
 
