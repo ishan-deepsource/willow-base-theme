@@ -44,7 +44,7 @@ class CompositeTransformer extends TransformerAbstract
         'teasers',
         'tags',
         'vocabularies',
-        'story'
+        'story',
     ];
 
     protected $defaultIncludes = [
@@ -63,7 +63,7 @@ class CompositeTransformer extends TransformerAbstract
 
     public function transform(CompositeContract $composite)
     {
-        return [
+        $out = [
             'id'                        => $composite->getId(),
             'title'                     => $composite->getTitle(),
             'description'               => $composite->getDescription(),
@@ -90,6 +90,10 @@ class CompositeTransformer extends TransformerAbstract
             'editorial_type'            => $composite->getEditorialType(),
             'hide_in_sitemap'           => $composite->getHideInSitemaps(),
         ];
+
+        $this->addRecipe($composite, $out);
+
+        return $out;
     }
 
     public function includeContents(CompositeContract $composite)
@@ -228,5 +232,12 @@ class CompositeTransformer extends TransformerAbstract
     private function relatedByCategory(CompositeContract $composite)
     {
         return $this->collection($composite->getRelatedByCategory(), new CompositeTeaserTransformer());
+    }
+
+    private function addRecipe(CompositeContract $composite, array &$out)
+    {
+        $recipe =  with(new CompositeRecipeTransformer)->transform($composite);
+        if (!empty($recipe))
+            $out['recipe'] = $recipe;
     }
 }

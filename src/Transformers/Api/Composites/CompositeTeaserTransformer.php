@@ -22,7 +22,7 @@ class CompositeTeaserTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'vocabularies'
+        'vocabularies',
     ];
 
     /**
@@ -37,7 +37,7 @@ class CompositeTeaserTransformer extends TransformerAbstract
 
     public function transform(CompositeContract $composite)
     {
-        return [
+        $out = [
             'id'            => $composite->getId(),
             'title'         => $this->getTitle($composite),
             'kind'          => $composite->getKind(),
@@ -56,6 +56,10 @@ class CompositeTeaserTransformer extends TransformerAbstract
             'word_count'              => $composite->getWordCount(),
             'contenthub_id'           => $composite->getContenthubId(),
         ];
+
+        $this->addRecipe($composite, $out);
+
+        return $out;
     }
 
     public function includeVocabularies(CompositeContract $composite)
@@ -95,5 +99,12 @@ class CompositeTeaserTransformer extends TransformerAbstract
     {
         $commercial = $composite->getCommercial();
         return $commercial ? with(new CommercialTransformer())->transform($commercial) : null;
+    }
+
+    private function addRecipe(CompositeContract $composite, array &$out)
+    {
+        $recipe =  with(new CompositeRecipeTransformer)->transform($composite);
+        if (!empty($recipe))
+            $out['recipe'] = $recipe;
     }
 }
