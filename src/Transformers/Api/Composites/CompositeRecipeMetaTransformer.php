@@ -45,7 +45,7 @@ class CompositeRecipeMetaTransformer extends TransformerAbstract
         return true;
     }
 
-    private function transformEnergyKcal(RecipeContract $content, array &$recipeMeta)
+    private function transformEnergyKcal(RecipeContract $content, array &$recipeMeta) : void
     {
         $content->getNutrientItems()->each(function($nutrient) use(&$recipeMeta) {
             if ($nutrient->getNutrient() == 'Energy') {

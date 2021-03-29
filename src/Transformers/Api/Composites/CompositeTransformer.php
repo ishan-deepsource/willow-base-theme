@@ -2,7 +2,7 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
-use Bonnier\Willow\Base\Helpers\RecipeHelper;
+use Bonnier\Willow\Base\Helpers\RecipeMetaHelper;
 use Bonnier\Willow\Base\Models\Contracts\Root\TranslationContract;
 use Bonnier\Willow\Base\Models\WpComposite;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
@@ -92,7 +92,7 @@ class CompositeTransformer extends TransformerAbstract
             'hide_in_sitemap'           => $composite->getHideInSitemaps(),
         ];
 
-        (new RecipeHelper())->addRecipeMetaToOutput($composite, $out);
+        (new RecipeMetaHelper())->addToOutput($composite, $out);
 
         return $out;
     }
