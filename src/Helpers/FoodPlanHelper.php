@@ -7,11 +7,19 @@ use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 /**
  * Class FoodPlanHelper
  * @package Bonnier\Willow\Base\Helpers
- * @desc adds week-number to output from permalink
- *  if page_template is 'food-plan'
  */
 class FoodPlanHelper
 {
+    /**
+     * @param CompositeContract $composite
+     * @param array $out
+     * @desc adds week-number to output from permalink
+     *  if page_template is 'food-plan'
+     *  extract week-number-year from permalink
+     * @example http://.../sunde-opskrifter/madplaner/madplan-uge-16-2021
+     *  appends to output
+     *  'week_number' => '16-2021'
+     */
     public function addToOutput(CompositeContract $composite, array &$out) : void
     {
         if ($composite->getTemplate() == 'food-plan') {
