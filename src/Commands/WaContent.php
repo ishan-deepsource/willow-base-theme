@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Commands;
 
+use Bonnier\Willow\Base\Commands\Helpers\ImportHelper;
 use Bonnier\Willow\Base\Commands\Taxonomy\Helpers\WpTerm;
 use Bonnier\Willow\Base\Helpers\EstimatedReadingTime;
 use Bonnier\Willow\Base\Helpers\HtmlToMarkdown;
@@ -470,8 +471,15 @@ class WaContent extends BaseCmd
                         ];*/
                 }
                 if ($compositeContent->type === 'inserted_code') {
+                    $insertCode = $compositeContent->code ?? "";
+                    if ( ! empty($insertCode) && $this->site->product_code === "IFO") {
+                        // only replace in iform
+                        $insertCode = ImportHelper::removeInsertCodeEmptyLines($insertCode);
+                        $insertCode = ImportHelper::insertCodeWrappingTableClass($insertCode);
+                    }
+
                     return [
-                        'code'           => $compositeContent->code,
+                        'code'           => $insertCode,
                         'locked_content' => false,
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
@@ -612,6 +620,7 @@ class WaContent extends BaseCmd
                     $data['locked_content'] = false;
                     // if the article contains recipe widget, so it is a recipe template
                     update_post_meta($postId, '_wp_page_template', 'recipe');
+
                     return $data;
                 }
 
