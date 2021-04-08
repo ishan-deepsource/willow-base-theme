@@ -19,7 +19,8 @@ class IFO extends Brand
         self::removeVideoUrlFromParagraphListWidget();
         self::removeVideoUrlFromTeaserImages();
         self::removeImageFromInfoboxWidget();
-        
+        self::removeSortByEditorialTypeFromTeaserListPageWidget();
+
         self::removeInventoryWidget();
         self::removeAudioWidget();
         self::removeMultimediaWidget();

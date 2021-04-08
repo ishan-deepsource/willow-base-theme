@@ -21,6 +21,8 @@ class SortByFields
     private static $config;
     private static $sortByField;
 
+    public const SORT_BY_EDITORIAL_TYPE = 'editorial_type';
+
     public static function getFields($widgetName, $config = [])
     {
         self::$widgetName = $widgetName;
