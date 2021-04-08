@@ -27,6 +27,7 @@ class AcfName
     const FIELD_LINK_LABEL = 'link_label';
     const FIELD_SORT_BY = 'sort_by';
     const FIELD_TAG = 'tag';
+    const FIELD_EDITORIAL_TYPE = 'editorial_type';
     const FIELD_TAXONOMY = 'taxonomy';
     const FIELD_TEASER_AMOUNT = 'teaser_amount';
     const FIELD_SKIP_TEASERS_AMOUNT = 'skip_teasers_amount';
