@@ -471,16 +471,11 @@ class WaContent extends BaseCmd
                         ];*/
                 }
                 if ($compositeContent->type === 'inserted_code') {
-                    $insertCode = "";
-                    $rawCode    = $compositeContent->code;
-                    if ( ! empty($rawCode)) {
+                    $insertCode = $compositeContent->code ?? "";
+                    if ( ! empty($insertCode) && $this->site->product_code === "IFO") {
                         // only replace in iform
-                        if ($this->site->product_code === "IFO") {
-                            $insertCode = ImportHelper::removeInsertCodeEmptyLines($rawCode);
-                            $insertCode = ImportHelper::insertCodeWrappingTableClass($insertCode);
-                        } else {
-                            $insertCode = $rawCode;
-                        }
+                        $insertCode = ImportHelper::removeInsertCodeEmptyLines($insertCode);
+                        $insertCode = ImportHelper::insertCodeWrappingTableClass($insertCode);
                     }
 
                     return [
