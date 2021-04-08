@@ -187,6 +187,9 @@ class SortBy
             $query->setTags([self::$acfWidget[AcfName::FIELD_TAG]]);
         }
 
+        if (self::isWpTerm(self::$acfWidget[AcfName::FIELD_EDITORIAL_TYPE] ?? null)) {
+            $query->setEditorialTypes([self::$acfWidget[AcfName::FIELD_EDITORIAL_TYPE]]);
+        }
         $result = $query->get();
 
         return self::convertCxenseResultToComposites($result, self::$acfWidget['teaser_amount']);

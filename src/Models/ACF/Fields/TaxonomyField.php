@@ -10,6 +10,7 @@ class TaxonomyField extends ACFField
 
     public const TAXONOMY_CATEGORY = 'category';
     public const TAXONOMY_TAG = 'post_tag';
+    public const TAXONOMY_EDITORIAL_TYPE = 'editorial_type';
 
     public const TYPE_SELECT = 'select';
     public const TYPE_MULTI = 'multi_select';
