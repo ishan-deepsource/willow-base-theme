@@ -21,6 +21,7 @@ use Tests\CompositeContent\Partials\RecipeIngredientBlockItem;
 use Tests\CompositeContent\Partials\RecipeIngredientItem;
 use Tests\CompositeContent\Partials\RecipeNutrientItem;
 use Tests\CompositeContent\Recipe;
+
 use WP_CLI;
 use WP_Post;
 use WP_User;
@@ -31,11 +32,11 @@ use WP_User;
 class WaContent extends BaseCmd
 {
     private const CMD_NAMESPACE = 'wa content';
-
     private $repository = null;
     private $failedImportFile = null;
     private $isRefreshing = false;
     private $site = null;
+    private $waFilesUrl = 'https://files.interactives.dk/';
 
     public static function register()
     {
@@ -393,10 +394,12 @@ class WaContent extends BaseCmd
                             'Widgets::Info'         => 'infobox',
                             'Widgets::Video'        => 'video',
                             'Widgets::Recipe'       => 'recipe',
+                            'Widgets::UploadedFile' => 'file',
                         ])
                             ->get($waWidget->type, null),
                     ])
                         ->merge($waWidget->properties)// merge properties
+                        ->merge($waWidget->uploaded_file ?? null)// merge uploaded file
                         ->merge($waWidget->image ?? null); // merge image
                 })
                 ->prepend(
@@ -457,19 +460,24 @@ class WaContent extends BaseCmd
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
+
                 if ($compositeContent->type === 'file') {
-                    // Todo implement file if necessary
-                    /*return [
-                        'file' => WpAttachment::upload_attachment($postId, $compositeContent->content),
-                        'images' => collect($compositeContent->content->images->edges)
-                            ->map(function ($image) use ($postId) {
-                                return [
-                                    'file' => WpAttachment::upload_attachment($postId, $image->node),
-                                ];
-                            }),
-                            'locked_content' => $compositeContent->locked,
-                            'acf_fc_layout' => $compositeContent->type
-                        ];*/
+                    $id                             = $compositeContent->uploaded_file_id ?? "";
+                    $fileUrl                        = (empty($compositeContent->path)) ? "" : $this->waFilesUrl.$compositeContent->path;
+                    $title                          = $compositeContent->title ?? "";
+                    $fileObj                        = new \stdClass();
+                    $fileObj->id                    = $id;
+                    $fileObj->url                   = $fileUrl;
+                    $fileObj->title                 = $title;
+                    $fileObj->not_generate_metadata = true;
+                    $fileId                         = WpAttachment::upload_attachment($postId, $fileObj);
+
+                    return [
+                        'title'          => $title,
+                        'file'           => $fileId,
+                        'locked_content' => false,
+                        'acf_fc_layout'  => $compositeContent->type,
+                    ];
                 }
                 if ($compositeContent->type === 'inserted_code') {
                     $insertCode = $compositeContent->code ?? "";
@@ -619,6 +627,7 @@ class WaContent extends BaseCmd
                     $data                   = $recipe->toArray();
                     $data['acf_fc_layout']  = $compositeContent->type;
                     $data['locked_content'] = false;
+
                     // if the article contains recipe widget, so it is a recipe template
                     update_post_meta($postId, '_wp_page_template', 'recipe');
 
