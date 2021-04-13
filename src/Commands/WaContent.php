@@ -257,6 +257,7 @@ class WaContent extends BaseCmd
         $this->saveTeasers($postId, $waContent);
         $this->saveCategories($postId, $waContent);
         $this->saveTags($postId, $waContent);
+        $this->saveOtherAuthors($postId, $waContent);
         $this->calculateReadingTime($postId);
 
         WP_CLI::success('imported: '.$waContent->widget_content->title.' id: '.$postId);
@@ -282,7 +283,7 @@ class WaContent extends BaseCmd
             'post_type'     => WpComposite::POST_TYPE,
             'post_date'     => $waContent->widget_content->publish_at,
             'post_modified' => $waContent->widget_content->publish_at,
-            'post_author'   => $this->getAuthor($waContent)->ID,
+            'post_author'   => $this->getFirstAuthor($waContent)->ID,
             'post_category' => [WpTerm::id_from_whitealbum_id($waContent->widget_content->category_id) ?? null],
             'meta_input'    => [
                 WpComposite::POST_META_WHITE_ALBUM_ID     => $waContent->widget_content->id,
@@ -669,6 +670,14 @@ class WaContent extends BaseCmd
         }
     }
 
+    private function saveOtherAuthors($postId, $waContent)
+    {
+        $otherAuthors = $this->getOtherAuthors($waContent);
+        if (!empty($otherAuthors)) {
+            update_post_meta($postId, 'other_authors', $otherAuthors);
+        }
+    }
+
     /**
      * @param                                $postId
      * @param  Collection  $compositeContents
@@ -739,16 +748,40 @@ class WaContent extends BaseCmd
         remove_action('transition_post_status', [CxensePost::class, 'post_status_changed'], 10);
     }
 
-    private function getAuthor($waContent): WP_User
+    private function getAuthor($waContent, $authorName): WP_User
     {
-        if ( ! empty($waContent->author)) {
-            $author = WpAuthor::findOrCreate($waContent->author);
+        if (!empty($authorName)) {
+            $author = WpAuthor::findOrCreate($authorName);
             if ($author instanceof WP_User) {
                 return $author;
             }
         }
 
         return WpAuthor::getDefaultAuthor($waContent->widget_content->site->locale);
+    }
+
+    private function getFirstAuthor($waContent)
+    {
+        $authors = $waContent->widget_content->authors;
+        if (!empty($authors)) {
+            return $this->getAuthor($waContent, $authors[0]->name);
+        }
+
+        return WpAuthor::getDefaultAuthor($waContent->widget_content->site->locale);
+    }
+
+    private function getOtherAuthors($waContent)
+    {
+        $output = [];
+        $authors = $waContent->widget_content->authors;
+        if (!empty($authors) && count($authors) > 1) {
+            array_shift($authors);
+            foreach ($authors as $authorKey => $authorValue) {
+                $output[] = $this->getAuthor($waContent, $authorValue->name)->ID;
+            }
+        }
+
+        return $output;
     }
 
     private function fixFaultyImageFormats($content)
