@@ -247,7 +247,7 @@ class MetaFieldGroup
         $sitemap = new TrueFalseField(self::SITEMAP_FIELD);
         $sitemap->setLabel('Hide from Sitemaps?')
             ->setName('sitemap')
-            ->setMessage('Should this page be hidden from sitemaps (no-follow)?')
+            ->setMessage('Should this page be hidden from sitemaps (no-index)?')
             ->setDefaultValue(0);
 
         return apply_filters(sprintf('willow/acf/field=%s', $sitemap->getKey()), $sitemap);
