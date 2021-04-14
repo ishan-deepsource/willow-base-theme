@@ -5,7 +5,9 @@ namespace Bonnier\Willow\Base\ACF\Brands;
 use Bonnier\Willow\Base\Models\ACF\ACFField;
 use Bonnier\Willow\Base\Models\ACF\ACFLayout;
 use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
+use Bonnier\Willow\Base\Models\ACF\Fields\ImageField;
 use Bonnier\Willow\Base\Models\ACF\Fields\RadioField;
+use Bonnier\Willow\Base\Models\ACF\Fields\RepeaterField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TrueFalseField;
 use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 
@@ -50,6 +52,9 @@ class IFO extends Brand
 
         $videoWidget = CompositeFieldGroup::getVideoWidget();
         add_filter(sprintf('willow/acf/layout=%s', $videoWidget->getKey()), [__CLASS__, 'setIncludeIntroVideoDefaultTrue']);
+
+        $fileWidget = CompositeFieldGroup::getFileWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $fileWidget->getKey()), [__CLASS__, 'removeRequiredFromFileWidgetImages']);
     }
 
     public static function setTeaserListDisplayHints(ACFLayout $teaserList)
@@ -151,6 +156,27 @@ class IFO extends Brand
             ->setReturnFormat(ACFField::RETURN_VALUE);
 
         return $associatedComposite->addSubField($displayHint);
+    }
+
+    public static function removeRequiredFromFileWidgetImages(ACFLayout $fileWidget)
+    {
+        $images = new RepeaterField('field_5921e5a83f4ea');
+        $images->setLabel('Images')
+            ->setName('images')
+            ->setRequired(false)
+            ->setLayout('table')
+            ->setButtonLabel('Add Image');
+
+        $image = new ImageField('field_5921e94c3f4eb');
+        $image->setLabel('File')
+            ->setName('file')
+            ->setRequired(false)
+            ->setReturnFormat(ACFField::RETURN_ARRAY)
+            ->setPreviewSize(ImageField::PREVIEW_MEDIUM);
+
+        $images->addSubField($image);
+
+        return $fileWidget->addSubField($images);
     }
 
     public static function removeParagraphListCollapsible(ACFLayout $layout)
