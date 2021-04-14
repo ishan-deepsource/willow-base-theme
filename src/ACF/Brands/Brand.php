@@ -97,14 +97,6 @@ abstract class Brand implements BrandInterface
         return $layout->setSubFields($fields);
     }
 
-    public static function removeImageRepeaterField(ACFLayout $layout)
-    {
-        $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
-            return $field->getName() !== 'images';
-        });
-        return $layout->setSubFields($fields);
-    }
-
     protected static function removeVideoUrlFromImageWidget()
     {
         $imageWidget = CompositeFieldGroup::getImageWidget();
@@ -139,12 +131,6 @@ abstract class Brand implements BrandInterface
     {
         $galleryWidget = CompositeFieldGroup::getGalleryWidget();
         add_filter(sprintf('willow/acf/layout=%s', $galleryWidget->getKey()), [__CLASS__, 'removeVideoUrlField']);
-    }
-
-    protected static function removeImageRepeaterFromFile(): void
-    {
-        $fileWidget = CompositeFieldGroup::getFileWidget();
-        add_filter(sprintf('willow/acf/layout=%s', $fileWidget->getKey()), [__CLASS__, 'removeImageRepeaterField']);
     }
 
     protected static function removeVideoUrlFromTeaserImages()
