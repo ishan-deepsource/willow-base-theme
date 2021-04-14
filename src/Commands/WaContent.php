@@ -469,7 +469,6 @@ class WaContent extends BaseCmd
                     $fileObj->id                    = $id;
                     $fileObj->url                   = $fileUrl;
                     $fileObj->title                 = $title;
-                    $fileObj->not_generate_metadata = true;
                     $fileId                         = WpAttachment::upload_attachment($postId, $fileObj);
 
                     return [
