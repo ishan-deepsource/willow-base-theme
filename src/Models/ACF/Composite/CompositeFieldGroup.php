@@ -910,6 +910,10 @@ class CompositeFieldGroup
         $associatedCompositeWidget->setName('associated_composites')
             ->setLabel('Associated Composites');
 
+        $title = new TextField('field_6078023029282');
+        $title->setLabel('Title')
+            ->setName('title');
+
         $content = new RelationshipField('field_58e393e0128b4');
         $content->setLabel('Content')
             ->setName('composites')
