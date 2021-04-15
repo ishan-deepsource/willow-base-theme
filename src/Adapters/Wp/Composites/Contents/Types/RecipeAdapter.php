@@ -36,6 +36,11 @@ class RecipeAdapter extends AbstractContentAdapter implements RecipeContract
         return null;
     }
 
+    public function getTags(): ?string
+    {
+        return array_get($this->acfArray, 'recipe_tags') ?: null;
+    }
+
     public function getUseAsArticleLeadImage(): ?bool
     {
         return boolval(array_get($this->acfArray, 'use_as_article_lead_image', false));
@@ -58,7 +63,7 @@ class RecipeAdapter extends AbstractContentAdapter implements RecipeContract
 
     public function getPreparationTimeUnit(): string
     {
-        return array_get($this->acfArray, 'preparation_time_unit') ?: 'm';
+        return $this->acfOutput->getString('preparation_time_unit', 'm');
     }
 
     public function getCookingTime(): ?string
@@ -73,7 +78,7 @@ class RecipeAdapter extends AbstractContentAdapter implements RecipeContract
 
     public function getCookingTimeUnit(): string
     {
-        return array_get($this->acfArray, 'cooking_time_unit') ?: 'm';
+        return $this->acfOutput->getString('cooking_time_unit', 'm');
     }
 
     public function getTotalTime(): ?string
@@ -88,7 +93,7 @@ class RecipeAdapter extends AbstractContentAdapter implements RecipeContract
 
     public function getTotalTimeUnit(): string
     {
-        return array_get($this->acfArray, 'total_time_unit') ?: 'm';
+        return $this->acfOutput->getString('total_time_unit', 'm');
     }
 
     public function getTotalTimeExtraInfo(): ?string

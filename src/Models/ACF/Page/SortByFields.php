@@ -21,6 +21,8 @@ class SortByFields
     private static $config;
     private static $sortByField;
 
+    public const SORT_BY_EDITORIAL_TYPE = 'editorial_type';
+
     public static function getFields($widgetName, $config = [])
     {
         self::$widgetName = $widgetName;
@@ -38,6 +40,7 @@ class SortByFields
             self::getTeaserListField(),
             self::getCategoryField(),
             self::getTagField(),
+            self::getEditorialTypeField(),
             self::getUserField()
         ]);
     }
@@ -188,6 +191,29 @@ class SortByFields
 
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
+
+    public static function getEditorialTypeField(): ACFField
+    {
+        $condition = new ACFConditionalLogic();
+        $condition->add(self::$sortByField, ACFConditionalLogic::OPERATOR_EQUALS, SortBy::CUSTOM)
+            ->add(self::$sortByField, ACFConditionalLogic::OPERATOR_EQUALS, SortBy::POPULAR);
+
+        $field = new TaxonomyField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_EDITORIAL_TYPE)));
+        $field->setLabel('Editorial Type')
+            ->setName(AcfName::FIELD_EDITORIAL_TYPE)
+            ->setConditionalLogic($condition)
+            ->setTaxonomy(TaxonomyField::TAXONOMY_EDITORIAL_TYPE)
+            ->setFieldType('select')
+            ->setAllowNull(true)
+            ->setAddTerm(false)
+            ->setSaveTerms(true)
+            ->setLoadTerms(false)
+            ->setReturnFormat(ACFField::RETURN_OBJECT)
+            ->setMultiple(false);
+        return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
+    }
+
+
 
     public static function getUserField(): ACFField
     {

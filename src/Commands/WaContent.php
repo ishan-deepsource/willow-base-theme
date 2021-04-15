@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Commands;
 
+use Bonnier\Willow\Base\Commands\Helpers\ImportHelper;
 use Bonnier\Willow\Base\Commands\Taxonomy\Helpers\WpTerm;
 use Bonnier\Willow\Base\Helpers\EstimatedReadingTime;
 use Bonnier\Willow\Base\Helpers\HtmlToMarkdown;
@@ -20,6 +21,7 @@ use Tests\CompositeContent\Partials\RecipeIngredientBlockItem;
 use Tests\CompositeContent\Partials\RecipeIngredientItem;
 use Tests\CompositeContent\Partials\RecipeNutrientItem;
 use Tests\CompositeContent\Recipe;
+
 use WP_CLI;
 use WP_Post;
 use WP_User;
@@ -30,11 +32,11 @@ use WP_User;
 class WaContent extends BaseCmd
 {
     private const CMD_NAMESPACE = 'wa content';
-
     private $repository = null;
     private $failedImportFile = null;
     private $isRefreshing = false;
     private $site = null;
+    private $waFilesUrl = 'https://files.interactives.dk/';
 
     public static function register()
     {
@@ -256,6 +258,7 @@ class WaContent extends BaseCmd
         $this->saveTeasers($postId, $waContent);
         $this->saveCategories($postId, $waContent);
         $this->saveTags($postId, $waContent);
+        $this->saveOtherAuthors($postId, $waContent);
         $this->calculateReadingTime($postId);
 
         WP_CLI::success('imported: '.$waContent->widget_content->title.' id: '.$postId);
@@ -281,7 +284,7 @@ class WaContent extends BaseCmd
             'post_type'     => WpComposite::POST_TYPE,
             'post_date'     => $waContent->widget_content->publish_at,
             'post_modified' => $waContent->widget_content->publish_at,
-            'post_author'   => $this->getAuthor($waContent)->ID,
+            'post_author'   => $this->getFirstAuthor($waContent)->ID,
             'post_category' => [WpTerm::id_from_whitealbum_id($waContent->widget_content->category_id) ?? null],
             'meta_input'    => [
                 WpComposite::POST_META_WHITE_ALBUM_ID     => $waContent->widget_content->id,
@@ -391,10 +394,12 @@ class WaContent extends BaseCmd
                             'Widgets::Info'         => 'infobox',
                             'Widgets::Video'        => 'video',
                             'Widgets::Recipe'       => 'recipe',
+                            'Widgets::UploadedFile' => 'file',
                         ])
                             ->get($waWidget->type, null),
                     ])
                         ->merge($waWidget->properties)// merge properties
+                        ->merge($waWidget->uploaded_file ?? null)// merge uploaded file
                         ->merge($waWidget->image ?? null); // merge image
                 })
                 ->prepend(
@@ -455,23 +460,34 @@ class WaContent extends BaseCmd
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
+
                 if ($compositeContent->type === 'file') {
-                    // Todo implement file if necessary
-                    /*return [
-                        'file' => WpAttachment::upload_attachment($postId, $compositeContent->content),
-                        'images' => collect($compositeContent->content->images->edges)
-                            ->map(function ($image) use ($postId) {
-                                return [
-                                    'file' => WpAttachment::upload_attachment($postId, $image->node),
-                                ];
-                            }),
-                            'locked_content' => $compositeContent->locked,
-                            'acf_fc_layout' => $compositeContent->type
-                        ];*/
+                    $id                             = $compositeContent->uploaded_file_id ?? "";
+                    $fileUrl                        = (empty($compositeContent->path)) ? "" : $this->waFilesUrl.$compositeContent->path;
+                    $title                          = $compositeContent->title ?? "";
+                    $fileObj                        = new \stdClass();
+                    $fileObj->id                    = $id;
+                    $fileObj->url                   = $fileUrl;
+                    $fileObj->title                 = $title;
+                    $fileId                         = WpAttachment::upload_attachment($postId, $fileObj);
+
+                    return [
+                        'title'          => $title,
+                        'file'           => $fileId,
+                        'locked_content' => false,
+                        'acf_fc_layout'  => $compositeContent->type,
+                    ];
                 }
                 if ($compositeContent->type === 'inserted_code') {
+                    $insertCode = $compositeContent->code ?? "";
+                    if ( ! empty($insertCode) && $this->site->product_code === "IFO") {
+                        // only replace in iform
+                        $insertCode = ImportHelper::removeInsertCodeEmptyLines($insertCode);
+                        $insertCode = ImportHelper::insertCodeWrappingTableClass($insertCode);
+                    }
+
                     return [
-                        'code'           => $compositeContent->code,
+                        'code'           => $insertCode,
                         'locked_content' => false,
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
@@ -605,11 +621,15 @@ class WaContent extends BaseCmd
                         $recipe->setNutrientItems(new Collection($nutrientsCollection));
                     }
 
+                    $recipe->setTags($compositeContent->tags ?? "");
+
                     $data                   = $recipe->toArray();
                     $data['acf_fc_layout']  = $compositeContent->type;
                     $data['locked_content'] = false;
+
                     // if the article contains recipe widget, so it is a recipe template
                     update_post_meta($postId, '_wp_page_template', 'recipe');
+
                     return $data;
                 }
 
@@ -655,6 +675,14 @@ class WaContent extends BaseCmd
     {
         if ($existingTermId = WpTerm::id_from_whitealbum_id($composite->widget_content->category_id)) {
             update_field('category', $existingTermId, $postId);
+        }
+    }
+
+    private function saveOtherAuthors($postId, $waContent)
+    {
+        $otherAuthors = $this->getOtherAuthors($waContent);
+        if (!empty($otherAuthors)) {
+            update_post_meta($postId, 'other_authors', $otherAuthors);
         }
     }
 
@@ -728,16 +756,40 @@ class WaContent extends BaseCmd
         remove_action('transition_post_status', [CxensePost::class, 'post_status_changed'], 10);
     }
 
-    private function getAuthor($waContent): WP_User
+    private function getAuthor($waContent, $authorName): WP_User
     {
-        if ( ! empty($waContent->author)) {
-            $author = WpAuthor::findOrCreate($waContent->author);
+        if (!empty($authorName)) {
+            $author = WpAuthor::findOrCreate($authorName);
             if ($author instanceof WP_User) {
                 return $author;
             }
         }
 
         return WpAuthor::getDefaultAuthor($waContent->widget_content->site->locale);
+    }
+
+    private function getFirstAuthor($waContent)
+    {
+        $authors = $waContent->widget_content->authors;
+        if (!empty($authors)) {
+            return $this->getAuthor($waContent, $authors[0]->name);
+        }
+
+        return WpAuthor::getDefaultAuthor($waContent->widget_content->site->locale);
+    }
+
+    private function getOtherAuthors($waContent)
+    {
+        $output = [];
+        $authors = $waContent->widget_content->authors;
+        if (!empty($authors) && count($authors) > 1) {
+            array_shift($authors);
+            foreach ($authors as $authorKey => $authorValue) {
+                $output[] = $this->getAuthor($waContent, $authorValue->name)->ID;
+            }
+        }
+
+        return $output;
     }
 
     private function fixFaultyImageFormats($content)

@@ -69,7 +69,7 @@ class HtmlToMarkdown
         preg_match_all('/<a[^>]*>(?:.|\n)*?<\/a>/i', $html, $matches);
 
         collect($matches)->flatten()->each(function ($anchorHtml) use (&$html) {
-            
+
             // convert encoding to special chars are read correctly
             $utfEncodedHtml = mb_convert_encoding($anchorHtml, 'HTML-ENTITIES', "UTF-8");
             // Parse the anchor so we may use objects to access the attributes
@@ -77,6 +77,7 @@ class HtmlToMarkdown
             $domDocument = new \DOMDocument();
             $domDocument->loadHTML($utfEncodedHtml);
             $anchors = $domDocument->getElementsByTagName('a');
+
             /* @var $anchor \DOMElement */
             if ($anchor = $anchors->item(0)) {
                 $attributes = collect($anchor->attributes)
@@ -86,10 +87,13 @@ class HtmlToMarkdown
                         return $attributes;
                     }, []);
 
+                $anchorText = $anchor->textContent;
+                // add space in markdown if anchor text have right space
+                $stringPatten = ($anchorText === rtrim($anchorText)) ? '[%s](%s%s)':'[%s ](%s%s)';
 
                 $markdown = sprintf(
-                    '[%s](%s%s)',
-                    static::parseHtml($anchor->textContent, false), // Fix any html that might be inside
+                    $stringPatten,
+                    static::parseHtml($anchorText, false), // Fix any html that might be inside
                     $anchor->getAttribute('href'),
                     empty($attributes) ? '' : sprintf(' %s', json_encode($attributes))
                 );

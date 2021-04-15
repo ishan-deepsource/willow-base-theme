@@ -170,6 +170,12 @@ class DocumentAdapter implements CompositeContract
         return null;
     }
 
+    public function getHideInSitemaps(): ?bool
+    {
+        // todo find the right field
+        return null;
+    }
+
     public function getTemplate(): ?string
     {
         return null;

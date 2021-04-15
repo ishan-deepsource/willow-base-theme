@@ -2,6 +2,8 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
+use Bonnier\Willow\Base\Helpers\FoodPlanHelper;
+use Bonnier\Willow\Base\Helpers\RecipeMetaHelper;
 use Bonnier\Willow\Base\Models\Contracts\Root\TranslationContract;
 use Bonnier\Willow\Base\Models\WpComposite;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
@@ -63,7 +65,7 @@ class CompositeTransformer extends TransformerAbstract
 
     public function transform(CompositeContract $composite)
     {
-        return [
+        $out = [
             'id'                        => $composite->getId(),
             'title'                     => $composite->getTitle(),
             'description'               => $composite->getDescription(),
@@ -88,7 +90,13 @@ class CompositeTransformer extends TransformerAbstract
             'ctm_disabled'              => $composite->getCtmDisabled(),
             'contenthub_id'             => $composite->getContenthubId(),
             'editorial_type'            => $composite->getEditorialType(),
+            'hide_in_sitemap'           => $composite->getHideInSitemaps(),
         ];
+
+        (new RecipeMetaHelper())->addToOutput($composite, $out);
+        (new FoodPlanHelper())->addToOutput($composite, $out);
+
+        return $out;
     }
 
     public function includeContents(CompositeContract $composite)

@@ -14,6 +14,7 @@ use Bonnier\Willow\Base\Models\ACF\Fields\GroupField;
 use Bonnier\Willow\Base\Models\ACF\Fields\RepeaterField;
 use Bonnier\Willow\Base\Models\ACF\Fields\UrlField;
 use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
+use Bonnier\Willow\Base\Models\ACF\Page\SortByFields;
 
 abstract class Brand implements BrandInterface
 {
@@ -64,6 +65,14 @@ abstract class Brand implements BrandInterface
         return $layout->setSubFields($fields);
     }
 
+    public static function removeIncludeIntroVideoField(ACFLayout $layout)
+    {
+        $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
+            return $field->getName() !== CompositeFieldGroup::VIDEO_INCLUDE_INTRO_VIDEO_FIELD;
+        });
+        return $layout->setSubFields($fields);
+    }
+
     public static function removeChapterItemsField(ACFLayout $layout)
     {
         $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
@@ -80,10 +89,24 @@ abstract class Brand implements BrandInterface
         return $layout->setSubFields($fields);
     }
 
+    public static function removeSortByEditorialTypeField(ACFLayout $layout)
+    {
+        $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
+            return $field->getName() !== SortByFields::SORT_BY_EDITORIAL_TYPE;
+        });
+        return $layout->setSubFields($fields);
+    }
+
     protected static function removeVideoUrlFromImageWidget()
     {
         $imageWidget = CompositeFieldGroup::getImageWidget();
         add_filter(sprintf('willow/acf/layout=%s', $imageWidget->getKey()), [__CLASS__, 'removeVideoUrlField']);
+    }
+
+    protected static function removeIncludeIntroVideoFromVideoWidget(): void
+    {
+        $videoWidget = CompositeFieldGroup::getVideoWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $videoWidget->getKey()), [__CLASS__, 'removeIncludeIntroVideoField']);
     }
 
     protected static function removeChapterItemsFromVideoWidget(): void
@@ -132,6 +155,12 @@ abstract class Brand implements BrandInterface
     {
         $teaserListLayout = PageFieldGroup::getTeaserListLayout();
         add_filter(sprintf('willow/acf/layout=%s', $teaserListLayout->getKey()), [__CLASS__, 'removeThemeField']);
+    }
+
+    protected static function removeSortByEditorialTypeFromTeaserListPageWidget()
+    {
+        $teaserListLayout = PageFieldGroup::getTeaserListLayout();
+        add_filter(sprintf('willow/acf/layout=%s', $teaserListLayout->getKey()), [__CLASS__, 'removeSortByEditorialTypeField']);
     }
 
 	protected static function removeInventoryWidget()

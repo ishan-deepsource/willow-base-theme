@@ -81,9 +81,7 @@ class TeaserListAdapter extends AbstractContentAdapter implements TeaserListCont
 
     public function getTheme(): string
     {
-        $get = array_get($this->acfArray, 'theme', 'default');
-        if (!is_string($get)) {return 'default';}
-        return $get;
+        return $this->acfOutput->getString('theme', 'default');
     }
 
     public function canPaginate(): bool

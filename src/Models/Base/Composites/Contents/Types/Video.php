@@ -30,6 +30,11 @@ class Video extends AbstractContent implements VideoContract
         return $this->model->getEmbedUrl();
     }
 
+    public function getIncludeIntroVideo(): bool
+    {
+        return $this->model->getIncludeIntroVideo();
+    }
+
     public function getCaption(): ?string
     {
         return $this->model->getCaption();

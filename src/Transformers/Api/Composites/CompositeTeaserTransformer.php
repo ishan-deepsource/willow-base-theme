@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
+use Bonnier\Willow\Base\Helpers\RecipeMetaHelper;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
@@ -37,7 +38,7 @@ class CompositeTeaserTransformer extends TransformerAbstract
 
     public function transform(CompositeContract $composite)
     {
-        return [
+        $out = [
             'id'            => $composite->getId(),
             'title'         => $this->getTitle($composite),
             'kind'          => $composite->getKind(),
@@ -56,6 +57,10 @@ class CompositeTeaserTransformer extends TransformerAbstract
             'word_count'              => $composite->getWordCount(),
             'contenthub_id'           => $composite->getContenthubId(),
         ];
+
+        (new RecipeMetaHelper())->addToOutput($composite, $out);
+
+        return $out;
     }
 
     public function includeVocabularies(CompositeContract $composite)

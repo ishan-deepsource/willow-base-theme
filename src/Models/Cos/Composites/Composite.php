@@ -160,6 +160,11 @@ class Composite implements CompositeContract
         return $this->composite->getCanonicalUrl();
     }
 
+    public function getHideInSitemaps(): ?bool
+    {
+        return $this->composite->getHideInSitemaps();
+    }
+
     public function getTemplate(): ?string
     {
         return $this->composite->getTemplate();

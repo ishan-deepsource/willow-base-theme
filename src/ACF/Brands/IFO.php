@@ -5,7 +5,10 @@ namespace Bonnier\Willow\Base\ACF\Brands;
 use Bonnier\Willow\Base\Models\ACF\ACFField;
 use Bonnier\Willow\Base\Models\ACF\ACFLayout;
 use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
+use Bonnier\Willow\Base\Models\ACF\Fields\ImageField;
 use Bonnier\Willow\Base\Models\ACF\Fields\RadioField;
+use Bonnier\Willow\Base\Models\ACF\Fields\RepeaterField;
+use Bonnier\Willow\Base\Models\ACF\Fields\TrueFalseField;
 use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 
 class IFO extends Brand
@@ -18,7 +21,8 @@ class IFO extends Brand
         self::removeVideoUrlFromParagraphListWidget();
         self::removeVideoUrlFromTeaserImages();
         self::removeImageFromInfoboxWidget();
-        
+        self::removeSortByEditorialTypeFromTeaserListPageWidget();
+
         self::removeInventoryWidget();
         self::removeAudioWidget();
         self::removeMultimediaWidget();
@@ -45,6 +49,12 @@ class IFO extends Brand
 
         $associatedCompositeWidget = CompositeFieldGroup::getAssociatedCompositeWidget();
         add_filter(sprintf('willow/acf/layout=%s', $associatedCompositeWidget->getKey()), [__CLASS__, 'setAssociatedCompositeDisplayHints']);
+
+        $videoWidget = CompositeFieldGroup::getVideoWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $videoWidget->getKey()), [__CLASS__, 'setIncludeIntroVideoDefaultTrue']);
+
+        $fileWidget = CompositeFieldGroup::getFileWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $fileWidget->getKey()), [__CLASS__, 'removeRequiredFromFileWidgetImages']);
     }
 
     public static function setTeaserListDisplayHints(ACFLayout $teaserList)
@@ -148,11 +158,42 @@ class IFO extends Brand
         return $associatedComposite->addSubField($displayHint);
     }
 
+    public static function removeRequiredFromFileWidgetImages(ACFLayout $fileWidget)
+    {
+        $images = new RepeaterField('field_5921e5a83f4ea');
+        $images->setLabel('Images')
+            ->setName('images')
+            ->setRequired(false)
+            ->setLayout('table')
+            ->setButtonLabel('Add Image');
+
+        $image = new ImageField('field_5921e94c3f4eb');
+        $image->setLabel('File')
+            ->setName('file')
+            ->setRequired(false)
+            ->setReturnFormat(ACFField::RETURN_ARRAY)
+            ->setPreviewSize(ImageField::PREVIEW_MEDIUM);
+
+        $images->addSubField($image);
+
+        return $fileWidget->addSubField($images);
+    }
+
     public static function removeParagraphListCollapsible(ACFLayout $layout)
     {
         $subFields = array_filter($layout->getSubFields(), function (ACFField $field) {
             return $field->getName() !== CompositeFieldGroup::COLLAPSIBLE_FIELD_NAME;
         });
         return $layout->setSubFields($subFields);
+    }
+
+    public static function setIncludeIntroVideoDefaultTrue(ACFLayout $videoWidget)
+    {
+        $includeIntroVideo = new TrueFalseField('field_6061945f12bd9');
+        $includeIntroVideo->setLabel('Include intro video')
+            ->setName(CompositeFieldGroup::VIDEO_INCLUDE_INTRO_VIDEO_FIELD)
+            ->setDefaultValue(true);
+
+        return $videoWidget->addSubField($includeIntroVideo);
     }
 }

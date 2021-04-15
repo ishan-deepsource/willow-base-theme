@@ -12,13 +12,68 @@ class WpTaxonomy
     {
         add_action('init', function () {
             static::get_custom_taxonomies()->each(function ($customTaxonomy) {
-                register_taxonomy($customTaxonomy->machine_name, WpComposite::POST_TYPE, [
-                    'label'             => $customTaxonomy->name,
-                    'show_ui'           => false,
-                    'show_admin_column' => false,
-                    'show_in_rest'      => true,
-                ]);
+                if ($customTaxonomy->machine_name === 'editorial_type') {
+                    register_taxonomy($customTaxonomy->machine_name, WpComposite::POST_TYPE, [
+                        'label'             => $customTaxonomy->name,
+                        'show_ui'           => false,
+                        'show_admin_column' => true,
+                        'show_in_rest'      => true,
+                    ]);
+                } else {
+                    register_taxonomy($customTaxonomy->machine_name, WpComposite::POST_TYPE, [
+                        'label'             => $customTaxonomy->name,
+                        'show_ui'           => false,
+                        'show_admin_column' => false,
+                        'show_in_rest'      => true,
+                    ]);
+                }
+
             });
+        });
+
+        add_action( 'restrict_manage_posts', function ($post_type) {
+            if ('contenthub_composite' !== $post_type) {
+                return;
+            }
+
+            $tag_terms = get_terms( array(
+                'taxonomy' => 'post_tag',
+                'hide_empty' => false,
+            ) );
+            echo "<select name='tag' id='tag' class='postform'>";
+            echo '<option value="">Show All Tags</option>';
+            foreach ( $tag_terms as $term ) {
+                printf(
+                    '<option value="%1$s" %2$s>%3$s (%4$s)</option>',
+                    $term->slug,
+                    ( ( isset( $_GET['tag'] ) && ( $_GET['tag'] == $term->slug ) ) ? ' selected="selected"' : '' ),
+                    $term->name,
+                    $term->count
+                );
+            }
+            echo '</select>';
+
+            $customTaxonomies = static::get_custom_taxonomies();
+            $editorialType = $customTaxonomies->firstWhere('machine_name', 'editorial_type');
+            if ($editorialType) {
+                $editorial_type_terms = get_terms(array(
+                    'taxonomy' => 'editorial_type',
+                    'hide_empty' => false,
+                ));
+
+                echo "<select name='editorial_type' id='editorial-type' class='postform'>";
+                echo '<option value="">Show All Editorial Types</option>';
+                foreach ($editorial_type_terms as $term) {
+                    printf(
+                        '<option value="%1$s" %2$s>%3$s (%4$s)</option>',
+                        $term->slug,
+                        ((isset($_GET['editorial_type']) && ($_GET['editorial_type'] == $term->slug)) ? ' selected="selected"' : ''),
+                        $term->name,
+                        $term->count
+                    );
+                }
+                echo '</select>';
+            }
         });
     }
 
