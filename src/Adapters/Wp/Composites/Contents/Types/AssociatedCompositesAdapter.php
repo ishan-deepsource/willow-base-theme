@@ -24,6 +24,11 @@ class AssociatedCompositesAdapter extends AbstractContentAdapter implements Asso
         parent::__construct($acfArray);
     }
 
+    public function getTitle(): ?string
+    {
+        return array_get($this->acfArray, 'title') ?: null;
+    }
+
     public function getComposites(): ?Collection
     {
         $composites = collect(array_get($this->acfArray, 'composites', []))
