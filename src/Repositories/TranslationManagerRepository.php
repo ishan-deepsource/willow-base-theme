@@ -30,7 +30,7 @@ class TranslationManagerRepository implements TranslationRepositoryContract
 
             foreach ($translationsResponse as $trans) {
                 foreach ($trans->value as $lang => $val) {
-                    $this->explodeNestedArray($translations, $trans->key, $val, $lang, '.');
+                    $this->explodeNestedArray($translations, $trans->key, $val, $lang);
                 }
             }
 
@@ -49,17 +49,9 @@ class TranslationManagerRepository implements TranslationRepositoryContract
      * @param $value
      * @param $lang
      * @param string $separator
-     * @return mixed
      */
-    public function explodeNestedArray(&$translations, $path, $value, $lang, $separator = '.')
+    public function explodeNestedArray(&$translations, $path, $value, $lang)
     {
-        $keys = explode($separator, $path);
-        $translations = &$translations[$lang];
-
-        foreach ($keys as $key) {
-            $translations = &$translations[$key];
-        }
-
-        return $translations = $value;
+        data_set($translations, $lang . '.' .$path, $value);
     }
 }
