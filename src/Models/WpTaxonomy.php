@@ -53,22 +53,27 @@ class WpTaxonomy
             }
             echo '</select>';
 
-            $editorial_type_terms = get_terms( array(
-                'taxonomy' => 'editorial_type',
-                'hide_empty' => false,
-            ) );
-            echo "<select name='editorial_type' id='editorial-type' class='postform'>";
-            echo '<option value="">Show All Editorial Types</option>';
-            foreach ( $editorial_type_terms as $term ) {
-                printf(
-                    '<option value="%1$s" %2$s>%3$s (%4$s)</option>',
-                    $term->slug,
-                    ( ( isset( $_GET['editorial_type'] ) && ( $_GET['editorial_type'] == $term->slug ) ) ? ' selected="selected"' : '' ),
-                    $term->name,
-                    $term->count
-                );
+            $customTaxonomies = static::get_custom_taxonomies();
+            $editorialType = $customTaxonomies->firstWhere('machine_name', 'editorial_type');
+            if ($editorialType) {
+                $editorial_type_terms = get_terms(array(
+                    'taxonomy' => 'editorial_type',
+                    'hide_empty' => false,
+                ));
+
+                echo "<select name='editorial_type' id='editorial-type' class='postform'>";
+                echo '<option value="">Show All Editorial Types</option>';
+                foreach ($editorial_type_terms as $term) {
+                    printf(
+                        '<option value="%1$s" %2$s>%3$s (%4$s)</option>',
+                        $term->slug,
+                        ((isset($_GET['editorial_type']) && ($_GET['editorial_type'] == $term->slug)) ? ' selected="selected"' : ''),
+                        $term->name,
+                        $term->count
+                    );
+                }
+                echo '</select>';
             }
-            echo '</select>';
         });
     }
 
