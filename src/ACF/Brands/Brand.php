@@ -174,7 +174,7 @@ abstract class Brand implements BrandInterface
     protected static function removeTitleFromAssociatedCompositesWidget()
     {
         $associatedComposites = CompositeFieldGroup::getAssociatedCompositeWidget();
-        add_filter(sprintf('willow/acf/group=%s', $associatedComposites), [__CLASS__, 'removeTitleField']);
+        add_filter(sprintf('willow/acf/group=%s', $associatedComposites->getKey()), [__CLASS__, 'removeTitleField']);
     }
 
 	protected static function removeInventoryWidget()
