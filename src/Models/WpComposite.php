@@ -40,6 +40,8 @@ class WpComposite
     public const POST_TWITTER_TITLE = 'tw_teaser_title';
     public const POST_TWITTER_DESCRIPTION = 'tw_teaser_description';
     public const POST_TWITTER_IMAGE = 'tw_teaser_image';
+    public const POST_AUTHOR_DESCRIPTION = 'author_description';
+    public const POST_OTHER_AUTHORS = 'other_authors';
     public const SLUG_CHANGE_HOOK = 'contenthub_composite_slug_change';
 
     /**
