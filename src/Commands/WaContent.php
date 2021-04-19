@@ -97,7 +97,6 @@ class WaContent extends BaseCmd
     public function fixHeadings($args, $assocArgs)
     {
         $this->setHost($assocArgs);
-
         WpComposite::mapAll(function (WP_Post $post) {
             // Get all widgets from composite
             $brokenHeadings = collect(get_field('composite_content', $post->ID))
@@ -281,6 +280,7 @@ class WaContent extends BaseCmd
                 ->pluck('widgets')
                 ->flatten(1)
                 ->push($storyItems ? (object) ['type' => 'Custom:StoryItems'] : null)
+                ->rejectNullValues()
                 ->map(function ($waWidget) use ($relatedContents, $storyItems) {
                     return collect([
                         'type' => collect([ // Map the type
@@ -316,7 +316,6 @@ class WaContent extends BaseCmd
                     return $this->fixFaultyImageFormats($content);
                 });
 
-//            ddHtml($compositeContentsCollection);
             return $compositeContentsCollection;
         }
 
@@ -354,16 +353,15 @@ class WaContent extends BaseCmd
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
-
                 if ($compositeContent->type === 'file') {
-                    $id                             = $compositeContent->uploaded_file_id ?? "";
-                    $fileUrl                        = (empty($compositeContent->path)) ? "" : $this->waFilesUrl.$compositeContent->path;
-                    $title                          = $compositeContent->title ?? "";
-                    $fileObj                        = new \stdClass();
-                    $fileObj->id                    = $id;
-                    $fileObj->url                   = $fileUrl;
-                    $fileObj->title                 = $title;
-                    $fileId                         = WpAttachment::upload_attachment($postId, $fileObj);
+                    $id             = $compositeContent->uploaded_file_id ?? "";
+                    $fileUrl        = (empty($compositeContent->path)) ? "" : $this->waFilesUrl.$compositeContent->path;
+                    $title          = $compositeContent->title ?? "";
+                    $fileObj        = new \stdClass();
+                    $fileObj->id    = $id;
+                    $fileObj->url   = $fileUrl;
+                    $fileObj->title = $title;
+                    $fileId         = WpAttachment::upload_attachment($postId, $fileObj);
 
                     return [
                         # will not migrate file title from wa
@@ -373,7 +371,6 @@ class WaContent extends BaseCmd
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
-
                 if ($compositeContent->type === 'inserted_code') {
                     $insertCode = $compositeContent->code ?? "";
                     if ( ! empty($insertCode) && $this->site->product_code === "IFO") {
@@ -388,7 +385,6 @@ class WaContent extends BaseCmd
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
-
                 if ($compositeContent->type === 'gallery') {
                     return [
                         'images'         => $compositeContent->images->map(function ($waImage) use ($postId) {
@@ -409,7 +405,6 @@ class WaContent extends BaseCmd
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
-
                 if ($compositeContent->type === 'video') {
                     return [
                         'embed_url'      => $this->getVideoEmbed(
@@ -420,7 +415,6 @@ class WaContent extends BaseCmd
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
-
                 if ($compositeContent->type === 'associated_composites') {
                     $relatedContentIds = $compositeContent->{self::RELATED_CONTENT_ID_NAME} ?? [];
                     $associateArticles = new Collection();
@@ -433,35 +427,35 @@ class WaContent extends BaseCmd
                                 $id));
                         }
                     }
-
                     return [
+                        'title'          => $compositeContent->title ?? '',
                         'composites'     => $associateArticles->toArray(),
                         'locked_content' => false,
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
-
-//                if ($compositeContent->type === 'associated_composites_story') {
-//                    $relatedContentIds = $compositeContent->{self::STORY_ITEMS_ID_NAME} ?? [];
-//                    $associateArticles = new Collection();
-//                    foreach ($relatedContentIds as $id) {
-//                        $post = get_post(WpComposite::postIDFromWhiteAlbumID($id));
-//                        if (isset($post->ID)) {
-//                            $associateArticles->push($post->ID);
-//                        } else {
-//                            WP_CLI::warning(sprintf('Associated composites cannot find wp post with wa id: %s. Please import it first.',
-//                                $id));
-//                        }
-//                    }
-//
-//                    return [
-//                        'composites'     => $associateArticles->toArray(),
-//                        'display_hint'   => "food-plan",
-//                        'locked_content' => true,
-//                        'acf_fc_layout'  => 'associated_composites',
-//                    ];
-//                }
-
+                // associated_composites_story is not a widget, it is associated composites alias
+                if ($compositeContent->type === 'associated_composites_story') {
+                    $relatedContentIds = $compositeContent->{self::STORY_ITEMS_ID_NAME} ?? [];
+                    $associateArticles = new Collection();
+                    foreach ($relatedContentIds as $id) {
+                        $post = get_post(WpComposite::postIDFromWhiteAlbumID($id));
+                        if (isset($post->ID)) {
+                            $associateArticles->push($post->ID);
+                        } else {
+                            WP_CLI::warning(sprintf('Story associated composites cannot find wp post with wa id: %s. Please import it first.',
+                                $id));
+                        }
+                    }
+                    // need to change content to Story, if there has associated_composites_story
+                    update_post_meta($postId, 'kind', 'Story');
+                    return [
+                        'composites'     => $associateArticles->toArray(),
+                        'display_hint'   => 'story-list',
+                        'locked_content' => true,
+                        'acf_fc_layout'  => 'associated_composites',
+                    ];
+                }
                 if ($compositeContent->type === 'recipe') {
                     if ( ! isset($compositeContent->active) || $compositeContent->active !== "true") {
                         return [];
@@ -565,10 +559,8 @@ class WaContent extends BaseCmd
                     $data                   = $recipe->toArray();
                     $data['acf_fc_layout']  = $compositeContent->type;
                     $data['locked_content'] = false;
-
                     // if the article contains recipe widget, so it is a recipe template
                     update_post_meta($postId, '_wp_page_template', 'recipe');
-
                     return $data;
                 }
 
@@ -815,7 +807,7 @@ class WaContent extends BaseCmd
     private function saveOtherAuthors($postId, $waContent)
     {
         $otherAuthors = $this->getOtherAuthors($waContent);
-        if (!empty($otherAuthors)) {
+        if ( ! empty($otherAuthors)) {
             update_post_meta($postId, WpComposite::POST_OTHER_AUTHORS, $otherAuthors);
         }
     }
@@ -827,6 +819,7 @@ class WaContent extends BaseCmd
 
     /**
      * Deletes attachments that would have otherwise become orphaned after import
+     *
      * @param $postId
      * @param  Collection|null  $compositeContents
      */
@@ -837,7 +830,7 @@ class WaContent extends BaseCmd
         }
 
         $currentFileIds = collect(get_field('composite_content', $postId))
-            ->map(function ($content) use ($postId) {
+            ->map(function ($content){
                 if ($content['acf_fc_layout'] === 'image') {
                     return WpAttachment::contenthub_id($content['file'] ?? null);
                 }
