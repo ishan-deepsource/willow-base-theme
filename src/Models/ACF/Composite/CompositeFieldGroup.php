@@ -45,6 +45,7 @@ class CompositeFieldGroup
     public const SHOW_NUMBERS_FIELD_NAME = 'show_numbers';
     public const IMAGE_FIELD = 'image';
     public const TITLE_FIELD = 'title';
+    public const DISPLAY_HINT_FIELD = 'display_hint';
 
     private const AUTHOR_FIELD = 'field_5af9888b4b7a1';
     private const LOCKED_CONTENT_FIELD = 'field_5921f0c676974';
@@ -942,6 +943,7 @@ class CompositeFieldGroup
         $displayHint->setLabel('Display Format')
             ->setName('display_hint')
             ->setChoice('default', 'Default')
+            ->setChoice('food-plan', 'Food plan')
             ->setChoice('story-list', 'Story list')
             ->setDefaultValue('default')
             ->setLayout('vertical')

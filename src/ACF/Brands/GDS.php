@@ -22,6 +22,7 @@ class GDS extends Brand
         self::removeChapterItemsFromVideoWidget();
         self::removeThemeFromTeaserListPageWidget();
         self::removeTitleFromAssociatedCompositesWidget();
+        self::removeDisplayHintFromAssociatedCompositesWidget();
 
         self::removeRecipeWidget();
         self::removeInventoryWidget();
