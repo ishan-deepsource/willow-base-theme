@@ -151,6 +151,7 @@ class IFO extends Brand
             ->setName('display_hint')
             ->setChoice('default', 'Default')
             ->setChoice('food-plan', 'Food plan')
+            ->setChoice('story-list', 'Story list')
             ->setDefaultValue('default')
             ->setLayout('vertical')
             ->setReturnFormat(ACFField::RETURN_VALUE);

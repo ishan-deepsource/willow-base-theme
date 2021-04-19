@@ -341,13 +341,10 @@ class WpAttachment
         }
 
         // Attachment meta data
-        $notGenerateMetadata = $file->not_generate_metadata ?? false;
-        if ( ! $notGenerateMetadata) {
-            require_once(ABSPATH."wp-admin".'/includes/image.php');
-            $attachmentData = wp_generate_attachment_metadata($attachmentId, $uploadedFile['file']);
-            if ( ! wp_update_attachment_metadata($attachmentId, $attachmentData)) {
-                return null;
-            }
+        require_once(ABSPATH."wp-admin".'/includes/image.php');
+        $attachmentData = wp_generate_attachment_metadata($attachmentId, $uploadedFile['file']);
+        if ( ! wp_update_attachment_metadata($attachmentId, $attachmentData)) {
+            return null;
         }
 
         if ($language = LanguageProvider::getPostLanguage($postId)) {

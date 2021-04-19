@@ -44,6 +44,7 @@ class CompositeFieldGroup
     public const COLLAPSIBLE_FIELD_NAME = 'collapsible';
     public const SHOW_NUMBERS_FIELD_NAME = 'show_numbers';
     public const IMAGE_FIELD = 'image';
+    public const TITLE_FIELD = 'title';
 
     private const AUTHOR_FIELD = 'field_5af9888b4b7a1';
     private const LOCKED_CONTENT_FIELD = 'field_5921f0c676974';
@@ -909,6 +910,12 @@ class CompositeFieldGroup
         $associatedCompositeWidget = new ACFLayout('58e393a7128b3');
         $associatedCompositeWidget->setName('associated_composites')
             ->setLabel('Associated Composites');
+
+        $title = new TextField('field_6078023029282');
+        $title->setLabel('Title')
+            ->setName('title');
+
+        $associatedCompositeWidget->addSubField($title);
 
         $content = new RelationshipField('field_58e393e0128b4');
         $content->setLabel('Content')

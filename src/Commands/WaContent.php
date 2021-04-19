@@ -211,6 +211,7 @@ class WaContent extends BaseCmd
         $this->saveCategories($postId, $waContent);
         $this->saveTags($postId, $waContent);
         $this->saveOtherAuthors($postId, $waContent);
+        $this->saveAuthorDescription($postId, $waContent);
         $this->calculateReadingTime($postId);
 
         WP_CLI::success('imported: '.$waContent->widget_content->title.' id: '.$postId);
@@ -355,7 +356,6 @@ class WaContent extends BaseCmd
                 }
 
                 if ($compositeContent->type === 'file') {
-<<<<<<< Updated upstream
                     $id                             = $compositeContent->uploaded_file_id ?? "";
                     $fileUrl                        = (empty($compositeContent->path)) ? "" : $this->waFilesUrl.$compositeContent->path;
                     $title                          = $compositeContent->title ?? "";
@@ -363,18 +363,7 @@ class WaContent extends BaseCmd
                     $fileObj->id                    = $id;
                     $fileObj->url                   = $fileUrl;
                     $fileObj->title                 = $title;
-                    $fileObj->not_generate_metadata = true;
                     $fileId                         = WpAttachment::upload_attachment($postId, $fileObj);
-=======
-                    $id             = $compositeContent->uploaded_file_id ?? "";
-                    $fileUrl        = (empty($compositeContent->path)) ? "" : $this->waFilesUrl.$compositeContent->path;
-                    $title          = $compositeContent->title ?? "";
-                    $fileObj        = new \stdClass();
-                    $fileObj->id    = $id;
-                    $fileObj->url   = $fileUrl;
-                    $fileObj->title = $title;
-                    $fileId         = WpAttachment::upload_attachment($postId, $fileObj);
->>>>>>> Stashed changes
 
                     return [
                         # will not migrate file title from wa
@@ -585,8 +574,6 @@ class WaContent extends BaseCmd
 
                 return null;
             })->rejectNullValues();
-
-//        ddHtml($content->toArray());
         update_field('composite_content', $content->toArray(), $postId);
     }
 
@@ -828,12 +815,18 @@ class WaContent extends BaseCmd
     private function saveOtherAuthors($postId, $waContent)
     {
         $otherAuthors = $this->getOtherAuthors($waContent);
-        if ( ! empty($otherAuthors)) {
-            update_post_meta($postId, 'other_authors', $otherAuthors);
+        if (!empty($otherAuthors)) {
+            update_post_meta($postId, WpComposite::POST_OTHER_AUTHORS, $otherAuthors);
         }
     }
 
+    private function saveAuthorDescription($postId, $waContent)
+    {
+        update_field(WpComposite::POST_AUTHOR_DESCRIPTION, $waContent->widget_content->authors_appendix, $postId);
+    }
+
     /**
+     * Deletes attachments that would have otherwise become orphaned after import
      * @param $postId
      * @param  Collection|null  $compositeContents
      */

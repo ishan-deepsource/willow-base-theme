@@ -97,6 +97,14 @@ abstract class Brand implements BrandInterface
         return $layout->setSubFields($fields);
     }
 
+    public static function removeTitleField(ACFLayout $layout)
+    {
+        $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
+            return $field->getName() !== CompositeFieldGroup::TITLE_FIELD;
+        });
+        return $layout->setSubFields($fields);
+    }
+
     protected static function removeVideoUrlFromImageWidget()
     {
         $imageWidget = CompositeFieldGroup::getImageWidget();
@@ -161,6 +169,12 @@ abstract class Brand implements BrandInterface
     {
         $teaserListLayout = PageFieldGroup::getTeaserListLayout();
         add_filter(sprintf('willow/acf/layout=%s', $teaserListLayout->getKey()), [__CLASS__, 'removeSortByEditorialTypeField']);
+    }
+
+    protected static function removeTitleFromAssociatedCompositesWidget()
+    {
+        $associatedComposites = CompositeFieldGroup::getAssociatedCompositeWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $associatedComposites->getKey()), [__CLASS__, 'removeTitleField']);
     }
 
 	protected static function removeInventoryWidget()

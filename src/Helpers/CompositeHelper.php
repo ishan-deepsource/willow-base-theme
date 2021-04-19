@@ -23,7 +23,7 @@ class CompositeHelper
                 return $field instanceof RelationshipField;
             }
         );
-        if (!empty($contents) && $content = $contents[0]) {
+        if (is_array($contents) && isset($contents[0]) && $content = $contents[0]) {
             add_filter(
                 sprintf('acf/validate_value/key=%s', $content->getKey()),
                 [$this, 'validateArticleNotPartOfMultipleStories'],
