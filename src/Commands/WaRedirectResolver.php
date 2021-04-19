@@ -99,6 +99,7 @@ class WaRedirectResolver extends BaseCmd
         $result = $wpdb->get_results(
             "SELECT post_id, meta_value FROM {$wpdb->prefix}postmeta WHERE meta_key = 'white_album_id'"
         );
+
         return collect($result)->mapWithKeys(function ($row) {
             return [$row->post_id => $row->meta_value];
         });
@@ -106,32 +107,34 @@ class WaRedirectResolver extends BaseCmd
 
     private function resolveRedirect(int $whiteAlbumID, int $compositeID)
     {
-        if (!$compositePath = parse_url(get_permalink($compositeID), PHP_URL_PATH)) {
+        if ( ! $compositePath = parse_url(get_permalink($compositeID), PHP_URL_PATH)) {
             $this->failedRedirects[] = [
                 sprintf('Could not get path for composite id %s', $compositeID),
             ];
+
             return;
         }
 
-        if (!$whiteAlbumPath = $this->getWhiteAlbumPath($whiteAlbumID)) {
+        if ( ! $whiteAlbumPath = $this->getWhiteAlbumPath($whiteAlbumID)) {
             $this->failedRedirects[] = [
                 sprintf(
                     'Could not get path for white album id %s - composite id %s',
                     $whiteAlbumID,
                     $compositeID
-                )
+                ),
             ];
+
             return;
         }
 
         if ($compositePath !== $whiteAlbumPath) {
-            $locale = LanguageProvider::getPostLanguage($compositeID);
+            $locale   = LanguageProvider::getPostLanguage($compositeID);
             $redirect = new Redirect();
             $redirect->setFrom($whiteAlbumPath)
-                ->setTo($compositePath)
-                ->setLocale($locale)
-                ->setType('WA-WILLOW:REDIRECTS')
-                ->setWpID($compositeID);
+                     ->setTo($compositePath)
+                     ->setLocale($locale)
+                     ->setType('WA-WILLOW:REDIRECTS')
+                     ->setWpID($compositeID);
 
             try {
                 WpBonnierRedirect::instance()->getRedirectRepository()->save($redirect);
@@ -142,19 +145,22 @@ class WaRedirectResolver extends BaseCmd
                         $compositeID,
                         $whiteAlbumPath,
                         $compositePath
-                    )
+                    ),
                 ];
             }
         }
+
         return;
     }
 
     private function getWhiteAlbumPath(int $whiteAlbumID)
     {
-        if ($article = $this->repository->findById($whiteAlbumID, ContentRepository::ARTICLE_RESOURCE)) {
-            return $article->widget_content->path ?? null;
-        } elseif ($gallery = $this->repository->findById($whiteAlbumID, ContentRepository::GALLERY_RESOURCE)) {
-            return $gallery->widget_content->path ?? null;
+        $resources = ContentRepository::getWaResources();
+        foreach ($resources as $resource) {
+            if (($waContent = $this->repository->findById($whiteAlbumID,
+                    $resource)) && ($path = $waContent->widget_content->path)) {
+                return $path;
+            }
         }
 
         return null;
