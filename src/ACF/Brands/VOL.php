@@ -27,6 +27,7 @@ class VOL extends Brand
         self::removeThemeFromTeaserListPageWidget();
         self::removeSortByEditorialTypeFromTeaserListPageWidget();
         self::removeTitleFromAssociatedCompositesWidget();
+        self::removeDisplayHintFromAssociatedCompositesWidget();
 
         self::removeInventoryWidget();
         self::removeAudioWidget();
@@ -116,7 +117,6 @@ class VOL extends Brand
             return $field;
         });
     }
-
 
     public static function removeParagraphListCollapsible(ACFLayout $layout)
     {
