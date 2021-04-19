@@ -938,6 +938,17 @@ class CompositeFieldGroup
 
         $associatedCompositeWidget->addSubField($lockedContent);
 
+        $displayHint = new RadioField('field_603f7f06ddaac');
+        $displayHint->setLabel('Display Format')
+            ->setName('display_hint')
+            ->setChoice('default', 'Default')
+            ->setChoice('story-list', 'Story list')
+            ->setDefaultValue('default')
+            ->setLayout('vertical')
+            ->setReturnFormat(ACFField::RETURN_VALUE);
+
+        $associatedCompositeWidget->addSubField($displayHint);
+
         return apply_filters(
             sprintf('willow/acf/layout=%s', $associatedCompositeWidget->getKey()),
             $associatedCompositeWidget
