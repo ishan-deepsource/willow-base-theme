@@ -259,6 +259,7 @@ class WaContent extends BaseCmd
         $this->saveCategories($postId, $waContent);
         $this->saveTags($postId, $waContent);
         $this->saveOtherAuthors($postId, $waContent);
+        $this->saveAuthorDescription($postId, $waContent);
         $this->calculateReadingTime($postId);
 
         WP_CLI::success('imported: '.$waContent->widget_content->title.' id: '.$postId);
@@ -682,8 +683,13 @@ class WaContent extends BaseCmd
     {
         $otherAuthors = $this->getOtherAuthors($waContent);
         if (!empty($otherAuthors)) {
-            update_post_meta($postId, 'other_authors', $otherAuthors);
+            update_post_meta($postId, WpComposite::POST_OTHER_AUTHORS, $otherAuthors);
         }
+    }
+
+    private function saveAuthorDescription($postId, $waContent)
+    {
+        update_field(WpComposite::POST_AUTHOR_DESCRIPTION, $waContent->widget_content->authors_appendix, $postId);
     }
 
     /**
