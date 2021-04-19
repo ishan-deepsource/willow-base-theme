@@ -37,6 +37,8 @@ class WaContent extends BaseCmd
     private $isRefreshing = false;
     private $site = null;
     private $waFilesUrl = 'https://files.interactives.dk/';
+    private const RELATED_CONTENT_ID_NAME = "related_content_Ids";
+    private const STORY_ITEMS_ID_NAME = "story_items_id_name";
 
     public static function register()
     {
@@ -45,6 +47,7 @@ class WaContent extends BaseCmd
 
     /**
      * Prunes imported composites from WhiteAlbum by removing those that are deleted on WhiteAlbum
+     * It is normal that print some warnings if there cannot find WA articles, stories, galleries on WA.
      *
      * ## OPTIONS
      *
@@ -52,7 +55,7 @@ class WaContent extends BaseCmd
      * : Set host name for proper loading of envs
      *
      * ## EXAMPLES
-     * wp contenthub editor wa content prune
+     * wp contenthub editor wa content prune --host=iform.dk --allow-root
      *
      * @param $args
      * @param $assocArgs
@@ -63,9 +66,7 @@ class WaContent extends BaseCmd
     {
         WpComposite::mapAll(function (WP_Post $post) {
             if ($waId = WpComposite::whiteAlbumIDFromPostID($post->ID)) {
-                $repository = new ContentRepository(LanguageProvider::getPostLanguage($post->ID));
-                $content    = $repository->findById($waId, ContentRepository::ARTICLE_RESOURCE) ?:
-                    $repository->findById($waId, ContentRepository::GALLERY_RESOURCE);
+                $content = $this->getWaContentByWpPostId($post->ID);
                 if ( ! $content) {
                     wp_trash_post($post->ID);
                     WP_CLI::success(sprintf(
@@ -111,13 +112,9 @@ class WaContent extends BaseCmd
 
                     return true;
                 });
-            if ($brokenHeadings->isNotEmpty() && $waId = WpComposite::whiteAlbumIDFromPostID($post->ID)) {
+            if ($brokenHeadings->isNotEmpty()) {
+                $waContent = $this->getWaContentByWpPostId($post->ID);
                 WP_CLI::warning(sprintf('Will reimport post: %s, id: %d', $post->post_title, $post->ID));
-
-                $repository = new ContentRepository(LanguageProvider::getPostLanguage($post->ID));
-                $waContent  = $repository->findById($waId, ContentRepository::ARTICLE_RESOURCE) ?:
-                    $repository->findById($waId, ContentRepository::GALLERY_RESOURCE);
-
                 $this->importComposite($waContent);
             } else {
                 WP_CLI::line(sprintf('Skipping post: %s', $post->post_title));
@@ -126,19 +123,20 @@ class WaContent extends BaseCmd
         WP_CLI::success('Done fixing headings!');
     }
 
+
     /**
      * Imports composites from WhiteAlbum
      *
      * ## OPTIONS
      *
      * [--id=<id>]
-     * : The id of a single composite to import.
+     * : The id of a single composite to import. It is id under widget_content (not id in the top) from wa api output.
      *
      * [--type=<type>]
-     * : The type of the single composite used together with id, can be article|gallery.
+     * : The type of the single composite used together with id, can be article|gallery|story.
      *
      * [--locale=<locale>]
-     * : The locale to fetch from used in conjunction with --id
+     * : The locale to fetch from used in conjunction with --id, can be da|nb|sv|fi
      *
      * [--page=<page>]
      * : The page to start importing from
@@ -147,14 +145,14 @@ class WaContent extends BaseCmd
      * : Set host name for proper loading of envs
      *
      * [--skip-existing]
-     * : wether to skip alredy imported articles
+     * : weather to skip already imported articles
      *
      * [--failed-import-file=<failed-import-file>]
      * : The .csv file to save failed imports to
      *
      *
      * ## EXAMPLES
-     * wp contenthub editor wa content import
+     *  wp contenthub editor wa content import --allow-root --host=iform.dk --id=1000266579 --locale=da
      *
      * @param $args
      * @param $assocArgs
@@ -171,65 +169,20 @@ class WaContent extends BaseCmd
 
         $this->failedImportFile = $assocArgs['failed-import-file'] ?? null;
         $this->repository       = new ContentRepository($assocArgs['locale'] ?? null, $this->failedImportFile);
+
         if ($contentId = $assocArgs['id'] ?? null) {
-            $resource = collect([
-                'article' => ContentRepository::ARTICLE_RESOURCE,
-                'gallery' => ContentRepository::GALLERY_RESOURCE,
-            ])->get($assocArgs['type'] ?? 'article');
+            $resource = collect(ContentRepository::getWaResources())->get(ucfirst($assocArgs['type'] ?? 'article'));
+            // import one content
             $this->importComposite($this->repository->findById($contentId, $resource));
         } else {
-            $this->repository->mapAll(function ($waContent) {
-                $this->importComposite($waContent);
-            }, $assocArgs['page'] ?? 1, $assocArgs['skip-existing'] ?? false);
+            // import all contents
+            $this->repository->mapAll(
+                function ($waContent) {
+                    $this->importComposite($waContent);
+                },
+                $assocArgs['page'] ?? 1,
+                $assocArgs['skip-existing'] ?? false);
         }
-    }
-
-    /**
-     * Reruns the import but only refreshes articles from the local
-     *
-     * ## OPTIONS
-     *
-     * [--host=<host>]
-     * : Set host name for proper loading of envs
-     *
-     * ## OPTIONS
-     *
-     * [--id=<id>]
-     * : The id of a single composite to import.
-     *
-     *
-     * ## EXAMPLES
-     * wp contenthub editor wa content refresh
-     *
-     * @param $args
-     * @param $assocArgs
-     *
-     * @throws \Exception
-     */
-    public function refresh($args, $assocArgs)
-    {
-        $this->setHost($assocArgs);
-
-        $this->isRefreshing = true;
-        if ($contentId = $assocArgs['id'] ?? null) {
-            if ($post = get_post(WpComposite::postIDFromWhiteAlbumID($contentId))) {
-                $this->importComposite($this->getWaContent($post));
-            }
-        } else {
-            WpComposite::mapAll(function (WP_Post $post) {
-                $this->importComposite($this->getWaContent($post));
-            });
-        }
-    }
-
-    private function getWaContent(WP_Post $post)
-    {
-        $waContentJson = get_post_meta($post->ID, WpComposite::POST_META_WHITE_ALBUM_SOURCE, true);
-        if ($waContentJson && ($waContent = unserialize($waContentJson))) {
-            return $waContent;
-        }
-
-        return null;
     }
 
     private function importComposite($waContent)
@@ -250,7 +203,6 @@ class WaContent extends BaseCmd
 
         $postId            = $this->createPost($waContent);
         $compositeContents = $this->formatCompositeContents($waContent);
-
         $this->handleTranslation($postId, $waContent);
         $this->setMeta($postId, $waContent);
         $this->deleteOrphanedFiles($postId, $compositeContents);
@@ -293,128 +245,10 @@ class WaContent extends BaseCmd
         ]);
     }
 
-    private function handleTranslation($postId, $waContent)
-    {
-        LanguageProvider::setPostLanguage($postId, $waContent->widget_content->site->locale);
-
-        //if this is not the master translation, just return
-        if ( ! isset($waContent->translation)) {
-            return;
-        }
-
-        $translationPostIds = collect($waContent->translation->translation_ids)->map(
-            function ($translationId, $locale) use ($waContent) {
-                $translatedPostId = WpComposite::postIDFromWhiteAlbumID($translationId);
-                if ( ! $translatedPostId) {
-                    $translatedPostId = $this->importTranslation($translationId, $locale);
-                }
-
-                return $translatedPostId;
-            }
-        )->merge([
-            // always push current locale
-            $waContent->widget_content->site->locale => $postId,
-        ])->rejectNullValues();
-        LanguageProvider::savePostTranslations($translationPostIds->toArray());
-        if ( ! $translationPostIds->isEmpty()) {
-            WP_CLI::success(
-                sprintf(
-                    'attached the following translations %s to: %s',
-                    $translationPostIds,
-                    $waContent->widget_content->title
-                )
-            );
-        }
-    }
-
-    private function findMatchingTranslation($whiteAlbumId, $locale)
-    {
-        if ($this->isRefreshing && $post = get_post(WpComposite::postIDFromWhiteAlbumID($whiteAlbumId))) {
-            return $this->getWaContent($post);
-        }
-
-        $repository = new ContentRepository($locale, $this->failedImportFile);
-
-        return $repository->findById($whiteAlbumId, ContentRepository::ARTICLE_RESOURCE) ?:
-            $repository->findById($whiteAlbumId, ContentRepository::GALLERY_RESOURCE);
-    }
-
-    private function importTranslation($translationId, $locale)
-    {
-        if ($translation = $this->findMatchingTranslation($translationId, $locale)) {
-            WP_CLI::line(sprintf('found translation: %s in locale: %s', $translation->widget_content->title, $locale));
-            $this->importComposite($translation);
-
-            return WpComposite::postIDFromWhiteAlbumID($translationId);
-        }
-        WP_CLI::warning(sprintf('no translations for %s found.', $translationId));
-
-        return null;
-    }
-
-    private function setMeta($postId, $waContent)
-    {
-        $isShellArticle = isset($waContent->external_link) && ! empty($waContent->external_link);
-
-        update_field('kind', $isShellArticle ? 'Shell' : 'Article', $postId);
-        update_field('description', trim($waContent->widget_content->description), $postId);
-
-        update_field('magazine_year', $waContent->magazine_year ?? null, $postId);
-        update_field('magazine_issue', $waContent->magazine_number ?? null, $postId);
-
-        update_field('canonical_url', $waContent->widget_content->canonical_link, $postId);
-        update_field('internal_comment', $waContent->widget_content->social_media_text, $postId);
-
-        if ($isShellArticle) {
-            update_field(CompositeFieldGroup::SHELL_LINK_FIELD, $waContent->external_link, $postId);
-        }
-
-        if ($waContent->widget_content->advertorial_label) {
-            update_field('commercial', true, $postId);
-            $type = join('', array_map(function ($part) {
-                return ucfirst($part);
-            }, explode(' ', $waContent->widget_content->advertorial_label)));
-            update_field('commercial_type', $type ?? null, $postId);
-        }
-    }
-
     private function formatCompositeContents($waContent): ?Collection
     {
-        if (isset($waContent->body->widget_groups)) {
-            return collect($waContent->body->widget_groups)
-                ->pluck('widgets')
-                ->flatten(1)
-                ->map(function ($waWidget) {
-                    return collect([
-                        'type' => collect([ // Map the type
-                            'Widgets::Text'         => 'text_item',
-                            'Widgets::Image'        => 'image',
-                            'Widgets::InsertedCode' => 'inserted_code',
-                            'Widgets::Media'        => 'inserted_code',
-                            'Widgets::Info'         => 'infobox',
-                            'Widgets::Video'        => 'video',
-                            'Widgets::Recipe'       => 'recipe',
-                            'Widgets::UploadedFile' => 'file',
-                        ])
-                            ->get($waWidget->type, null),
-                    ])
-                        ->merge($waWidget->properties)// merge properties
-                        ->merge($waWidget->uploaded_file ?? null)// merge uploaded file
-                        ->merge($waWidget->image ?? null); // merge image
-                })
-                ->prepend(
-                    $waContent->widget_content->lead_image ? // prepend lead image
-                        collect([
-                            'type'       => 'image',
-                            'lead_image' => true,
-                        ])
-                            ->merge($waContent->widget_content->lead_image)
-                        : null
-                )->itemsToObject()->map(function ($content) {
-                    return $this->fixFaultyImageFormats($content);
-                });
-        }
-        if (isset($waContent->gallery_images)) {
+        // format gallery type
+        if ($this->getWaContentType($waContent) === 'Gallery') {
             return collect([
                 (object) [
                     'type'         => 'gallery',
@@ -430,11 +264,70 @@ class WaContent extends BaseCmd
             ]);
         }
 
+        // format story and article type
+        // story type don't have body attribute
+        $storyItems = false;
+        if ($this->getWaContentType($waContent) === 'Story') {
+            $widgetGroups = $waContent->widget_groups;
+            $storyItems   = $waContent->story_items;
+        } else {
+            $widgetGroups = $waContent->body->widget_groups;
+        }
+
+        $relatedContents = $waContent->widget_content->related_widget_contents ?? false;
+        if (isset($widgetGroups)) {
+            $compositeContentsCollection = collect($widgetGroups)
+                ->pluck('widgets')
+                ->flatten(1)
+                ->push($storyItems ? (object) ['type' => 'Custom:StoryItems'] : null)
+                ->map(function ($waWidget) use ($relatedContents, $storyItems) {
+                    return collect([
+                        'type' => collect([ // Map the type
+                            'Widgets::Text'           => 'text_item',
+                            'Widgets::Image'          => 'image',
+                            'Widgets::InsertedCode'   => 'inserted_code',
+                            'Widgets::Media'          => 'inserted_code',
+                            'Widgets::Info'           => 'infobox',
+                            'Widgets::Video'          => 'video',
+                            'Widgets::Recipe'         => 'recipe',
+                            'Widgets::UploadedFile'   => 'file',
+                            'Widgets::RelatedContent' => 'associated_composites',
+                            // Custom:StoryItems is not exist in WA
+                            'Custom:StoryItems'       => 'associated_composites_story',
+                        ])
+                            ->get($waWidget->type ?? null, null),
+                    ])
+                        ->merge($waWidget->properties ?? null)// merge properties
+                        ->merge($waWidget->uploaded_file ?? null)// merge uploaded file
+                        ->merge($waWidget->image ?? null)
+                        ->merge($storyItems && $waWidget->type === 'Custom:StoryItems' ? [self::STORY_ITEMS_ID_NAME => collect($storyItems)->pluck('widget_content_id')] : null)
+                        ->merge($relatedContents && $waWidget->type === 'Widgets::RelatedContent' ? [self::RELATED_CONTENT_ID_NAME => collect($relatedContents)->pluck('id')] : null); // merge related content ids
+                })
+                ->prepend(
+                    $waContent->widget_content->lead_image ? // prepend lead image
+                        collect([
+                            'type'       => 'image',
+                            'lead_image' => true,
+                        ])
+                            ->merge($waContent->widget_content->lead_image)
+                        : null
+                )->itemsToObject()->map(function ($content) {
+                    return $this->fixFaultyImageFormats($content);
+                });
+
+//            ddHtml($compositeContentsCollection);
+            return $compositeContentsCollection;
+        }
+
         return null;
     }
 
-    private function saveCompositeContents($postId, Collection $compositeContents)
+    private function saveCompositeContents($postId, ?Collection $compositeContents)
     {
+        if ($compositeContents === null) {
+            return;
+        }
+
         $content = $compositeContents
             ->map(function ($compositeContent) use ($postId) {
                 if ($compositeContent->type === 'text_item') {
@@ -462,6 +355,7 @@ class WaContent extends BaseCmd
                 }
 
                 if ($compositeContent->type === 'file') {
+<<<<<<< Updated upstream
                     $id                             = $compositeContent->uploaded_file_id ?? "";
                     $fileUrl                        = (empty($compositeContent->path)) ? "" : $this->waFilesUrl.$compositeContent->path;
                     $title                          = $compositeContent->title ?? "";
@@ -471,14 +365,26 @@ class WaContent extends BaseCmd
                     $fileObj->title                 = $title;
                     $fileObj->not_generate_metadata = true;
                     $fileId                         = WpAttachment::upload_attachment($postId, $fileObj);
+=======
+                    $id             = $compositeContent->uploaded_file_id ?? "";
+                    $fileUrl        = (empty($compositeContent->path)) ? "" : $this->waFilesUrl.$compositeContent->path;
+                    $title          = $compositeContent->title ?? "";
+                    $fileObj        = new \stdClass();
+                    $fileObj->id    = $id;
+                    $fileObj->url   = $fileUrl;
+                    $fileObj->title = $title;
+                    $fileId         = WpAttachment::upload_attachment($postId, $fileObj);
+>>>>>>> Stashed changes
 
                     return [
-                        'title'          => $title,
+                        # will not migrate file title from wa
+                        'title'          => '',
                         'file'           => $fileId,
                         'locked_content' => false,
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
+
                 if ($compositeContent->type === 'inserted_code') {
                     $insertCode = $compositeContent->code ?? "";
                     if ( ! empty($insertCode) && $this->site->product_code === "IFO") {
@@ -493,6 +399,7 @@ class WaContent extends BaseCmd
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
+
                 if ($compositeContent->type === 'gallery') {
                     return [
                         'images'         => $compositeContent->images->map(function ($waImage) use ($postId) {
@@ -513,6 +420,7 @@ class WaContent extends BaseCmd
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
+
                 if ($compositeContent->type === 'video') {
                     return [
                         'embed_url'      => $this->getVideoEmbed(
@@ -523,6 +431,48 @@ class WaContent extends BaseCmd
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
+
+                if ($compositeContent->type === 'associated_composites') {
+                    $relatedContentIds = $compositeContent->{self::RELATED_CONTENT_ID_NAME} ?? [];
+                    $associateArticles = new Collection();
+                    foreach ($relatedContentIds as $id) {
+                        $post = get_post(WpComposite::postIDFromWhiteAlbumID($id));
+                        if (isset($post->ID)) {
+                            $associateArticles->push($post->ID);
+                        } else {
+                            WP_CLI::warning(sprintf('Associated composites cannot find wp post with wa id: %s. Please import it first.',
+                                $id));
+                        }
+                    }
+
+                    return [
+                        'composites'     => $associateArticles->toArray(),
+                        'locked_content' => false,
+                        'acf_fc_layout'  => $compositeContent->type,
+                    ];
+                }
+
+//                if ($compositeContent->type === 'associated_composites_story') {
+//                    $relatedContentIds = $compositeContent->{self::STORY_ITEMS_ID_NAME} ?? [];
+//                    $associateArticles = new Collection();
+//                    foreach ($relatedContentIds as $id) {
+//                        $post = get_post(WpComposite::postIDFromWhiteAlbumID($id));
+//                        if (isset($post->ID)) {
+//                            $associateArticles->push($post->ID);
+//                        } else {
+//                            WP_CLI::warning(sprintf('Associated composites cannot find wp post with wa id: %s. Please import it first.',
+//                                $id));
+//                        }
+//                    }
+//
+//                    return [
+//                        'composites'     => $associateArticles->toArray(),
+//                        'display_hint'   => "food-plan",
+//                        'locked_content' => true,
+//                        'acf_fc_layout'  => 'associated_composites',
+//                    ];
+//                }
+
                 if ($compositeContent->type === 'recipe') {
                     if ( ! isset($compositeContent->active) || $compositeContent->active !== "true") {
                         return [];
@@ -623,7 +573,6 @@ class WaContent extends BaseCmd
                     }
 
                     $recipe->setTags($compositeContent->tags ?? "");
-
                     $data                   = $recipe->toArray();
                     $data['acf_fc_layout']  = $compositeContent->type;
                     $data['locked_content'] = false;
@@ -636,7 +585,204 @@ class WaContent extends BaseCmd
 
                 return null;
             })->rejectNullValues();
+
+//        ddHtml($content->toArray());
         update_field('composite_content', $content->toArray(), $postId);
+    }
+
+    private function handleTranslation($postId, $waContent)
+    {
+        LanguageProvider::setPostLanguage($postId, $waContent->widget_content->site->locale);
+
+        //if this is not the master translation, just return
+        if ( ! isset($waContent->translation)) {
+            return;
+        }
+
+        $waContentType = $this->getWaContentType($waContent);
+
+        $translationPostIds = collect($waContent->translation->translation_ids)->map(
+            function ($translationId, $locale) use ($waContentType) {
+                $translatedPostId = WpComposite::postIDFromWhiteAlbumID($translationId);
+                if ( ! $translatedPostId) {
+                    $translatedPostId = $this->importTranslation($translationId, $locale, $waContentType);
+                }
+
+                return $translatedPostId;
+            }
+        )->merge([
+            // always push current locale
+            $waContent->widget_content->site->locale => $postId,
+        ])->rejectNullValues();
+
+        LanguageProvider::savePostTranslations($translationPostIds->toArray());
+        if ( ! $translationPostIds->isEmpty()) {
+            WP_CLI::success(
+                sprintf(
+                    'attached the following translations %s to: %s',
+                    $translationPostIds,
+                    $waContent->widget_content->title
+                )
+            );
+        }
+    }
+
+    /**
+     * Get wa content by wp post id
+     * It will loop all wa content types, if it cannot get wa content by a wa content type, it will print out warning
+     * message, which it is normal.
+     *
+     * @param $postId
+     *
+     * @return array|false|mixed|object
+     * @throws \Exception
+     */
+    private function getWaContentByWpPostId($postId)
+    {
+        $waResourceTypes = ContentRepository::getWaResources();
+        $waId            = WpComposite::whiteAlbumIDFromPostID($postId);
+        if ( ! $waId) {
+            return false;
+        }
+        foreach ($waResourceTypes as $type) {
+            $repository = new ContentRepository(LanguageProvider::getPostLanguage($postId));
+            $content    = $repository->findById($waId, $type) ?? false;
+            if ($content) {
+                return $content;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Reruns the import but only refreshes articles from the local
+     *
+     * ## OPTIONS
+     *
+     * [--host=<host>]
+     * : Set host name for proper loading of envs
+     *
+     * ## OPTIONS
+     *
+     * [--id=<id>]
+     * : The id of a single composite to import.
+     *
+     *
+     * ## EXAMPLES
+     * wp contenthub editor wa content refresh
+     *
+     * @param $args
+     * @param $assocArgs
+     *
+     * @throws \Exception
+     */
+    public function refresh($args, $assocArgs)
+    {
+        $this->setHost($assocArgs);
+
+        $this->isRefreshing = true;
+        if ($contentId = $assocArgs['id'] ?? null) {
+            if ($post = get_post(WpComposite::postIDFromWhiteAlbumID($contentId))) {
+                $this->importComposite($this->getWaContent($post));
+            }
+        } else {
+            WpComposite::mapAll(function (WP_Post $post) {
+                $this->importComposite($this->getWaContent($post));
+            });
+        }
+    }
+
+    private function getWaContent(WP_Post $post)
+    {
+        $waContentJson = get_post_meta($post->ID, WpComposite::POST_META_WHITE_ALBUM_SOURCE, true);
+        if ($waContentJson && ($waContent = unserialize($waContentJson))) {
+            return $waContent;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get wa content type
+     *
+     * @param $waContent
+     *
+     * @return string
+     */
+    private function getWaContentType($waContent)
+    {
+        $waContentMappings = ContentRepository::getWaContentTypeMapping();
+
+        foreach ($waContentMappings as $contentType => $waContentMapping) {
+            if (property_exists($waContent, $waContentMapping)) {
+                return $contentType;
+            }
+        }
+
+        return '';
+    }
+
+    private function importTranslation($translationId, $locale, $contentType)
+    {
+        if ($translation = $this->findMatchingTranslation($translationId, $locale, $contentType)) {
+            WP_CLI::line(sprintf('found translation: %s in locale: %s', $translation->widget_content->title, $locale));
+            $this->importComposite($translation);
+
+            return WpComposite::postIDFromWhiteAlbumID($translationId);
+        }
+        WP_CLI::warning(sprintf('no translations for %s found.', $translationId));
+
+        return null;
+    }
+
+    private function findMatchingTranslation($whiteAlbumId, $locale, $waContentType)
+    {
+        if ($this->isRefreshing && $post = get_post(WpComposite::postIDFromWhiteAlbumID($whiteAlbumId))) {
+            return $this->getWaContent($post);
+        }
+
+        $repository      = new ContentRepository($locale, $this->failedImportFile);
+        $waResourceTypes = ContentRepository::getWaResources();
+
+        // if there has a resource type
+        if (array_key_exists($waContentType, $waResourceTypes) && $waContent = $repository->findById($whiteAlbumId,
+                $waResourceTypes[$waContentType])) {
+            return $waContent;
+        }
+
+        // if don't have wa content type, tries to loop all resource types, for getting wa content
+        foreach ($waResourceTypes as $waResourceType) {
+            if ($waContent = $repository->findById($whiteAlbumId, $waResourceType)) {
+                return $waContent;
+            }
+        }
+
+        return false;
+    }
+
+    private function setMeta($postId, $waContent)
+    {
+        $isShellArticle = isset($waContent->external_link) && ! empty($waContent->external_link);
+
+        update_field('kind', $isShellArticle ? 'Shell' : 'Article', $postId);
+        update_field('description', trim($waContent->widget_content->description), $postId);
+        update_field('magazine_year', $waContent->magazine_year ?? null, $postId);
+        update_field('magazine_issue', $waContent->magazine_number ?? null, $postId);
+        update_field('canonical_url', $waContent->widget_content->canonical_link, $postId);
+        update_field('internal_comment', $waContent->widget_content->social_media_text, $postId);
+
+        if ($isShellArticle) {
+            update_field(CompositeFieldGroup::SHELL_LINK_FIELD, $waContent->external_link, $postId);
+        }
+
+        if ($waContent->widget_content->advertorial_label) {
+            update_field('commercial', true, $postId);
+            $type = join('', array_map(function ($part) {
+                return ucfirst($part);
+            }, explode(' ', $waContent->widget_content->advertorial_label)));
+            update_field('commercial_type', $type ?? null, $postId);
+        }
     }
 
     private function saveTags($postId, $waContent)
@@ -682,19 +828,21 @@ class WaContent extends BaseCmd
     private function saveOtherAuthors($postId, $waContent)
     {
         $otherAuthors = $this->getOtherAuthors($waContent);
-        if (!empty($otherAuthors)) {
+        if ( ! empty($otherAuthors)) {
             update_post_meta($postId, 'other_authors', $otherAuthors);
         }
     }
 
     /**
-     * @param                                $postId
-     * @param  Collection  $compositeContents
-     *
-     * Deletes attachments that would have otherwise become orphaned after import
+     * @param $postId
+     * @param  Collection|null  $compositeContents
      */
-    private function deleteOrphanedFiles($postId, Collection $compositeContents)
+    private function deleteOrphanedFiles($postId, ?Collection $compositeContents)
     {
+        if ($compositeContents == null) {
+            return;
+        }
+
         $currentFileIds = collect(get_field('composite_content', $postId))
             ->map(function ($content) use ($postId) {
                 if ($content['acf_fc_layout'] === 'image') {
@@ -759,7 +907,7 @@ class WaContent extends BaseCmd
 
     private function getAuthor($waContent, $authorName): WP_User
     {
-        if (!empty($authorName)) {
+        if ( ! empty($authorName)) {
             $author = WpAuthor::findOrCreate($authorName);
             if ($author instanceof WP_User) {
                 return $author;
@@ -772,7 +920,7 @@ class WaContent extends BaseCmd
     private function getFirstAuthor($waContent)
     {
         $authors = $waContent->widget_content->authors;
-        if (!empty($authors)) {
+        if ( ! empty($authors)) {
             return $this->getAuthor($waContent, $authors[0]->name);
         }
 
@@ -781,9 +929,9 @@ class WaContent extends BaseCmd
 
     private function getOtherAuthors($waContent)
     {
-        $output = [];
+        $output  = [];
         $authors = $waContent->widget_content->authors;
-        if (!empty($authors) && count($authors) > 1) {
+        if ( ! empty($authors) && count($authors) > 1) {
             array_shift($authors);
             foreach ($authors as $authorKey => $authorValue) {
                 $output[] = $this->getAuthor($waContent, $authorValue->name)->ID;
