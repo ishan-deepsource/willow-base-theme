@@ -238,6 +238,11 @@ class SortByFields
 
     private static function getMaxTeasers()
     {
+        switch (PageFieldGroup::$brand) {
+            case 'IFO' :
+                return 50;
+        }
+
         return array_get(self::$config, 'minTeasers', 12);
     }
 

@@ -24,6 +24,7 @@ abstract class Brand implements BrandInterface
     public static $infoboxWidget;
 
     public static function init() {
+        PageFieldGroup::setBrand(class_basename(static::class));
         self::$pageWidgetsField = PageFieldGroup::getPageWidgetsField();
         self::$compositeContentsField = CompositeFieldGroup::getContentField();
         self::$paragraphListWidget = CompositeFieldGroup::getParagraphListWidget();
