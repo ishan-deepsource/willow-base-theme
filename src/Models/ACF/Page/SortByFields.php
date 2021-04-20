@@ -158,13 +158,13 @@ class SortByFields
             ->setConditionalLogic($condition)
             ->setWrapper((new ACFWrapper())->setWidth('50'))
             ->setTaxonomy(TaxonomyField::TAXONOMY_CATEGORY)
-            ->setFieldType('select')
+            ->setFieldType(TaxonomyField::TYPE_MULTI)
             ->setAllowNull(true)
             ->setAddTerm(false)
             ->setSaveTerms(false)
             ->setLoadTerms(false)
             ->setReturnFormat(ACFField::RETURN_OBJECT)
-            ->setMultiple(false);
+            ->setMultiple(true);
 
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
@@ -181,13 +181,13 @@ class SortByFields
             ->setConditionalLogic($condition)
             ->setWrapper((new ACFWrapper())->setWidth('50'))
             ->setTaxonomy(TaxonomyField::TAXONOMY_TAG)
-            ->setFieldType('select')
+            ->setFieldType(TaxonomyField::TYPE_MULTI)
             ->setAllowNull(true)
             ->setAddTerm(false)
             ->setSaveTerms(false)
             ->setLoadTerms(false)
             ->setReturnFormat(ACFField::RETURN_OBJECT)
-            ->setMultiple(false);
+            ->setMultiple(true);
 
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
@@ -203,7 +203,7 @@ class SortByFields
             ->setName(AcfName::FIELD_EDITORIAL_TYPE)
             ->setConditionalLogic($condition)
             ->setTaxonomy(TaxonomyField::TAXONOMY_EDITORIAL_TYPE)
-            ->setFieldType('select')
+            ->setFieldType(TaxonomyField::TYPE_SELECT)
             ->setAllowNull(true)
             ->setAddTerm(false)
             ->setSaveTerms(true)
@@ -212,8 +212,6 @@ class SortByFields
             ->setMultiple(false);
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
-
-
 
     public static function getUserField(): ACFField
     {
