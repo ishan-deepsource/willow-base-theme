@@ -193,7 +193,7 @@ class WaContent extends BaseCmd
         }
 
         WP_CLI::line(sprintf(
-            'Beginning import of: %s id: %s',
+            'Beginning import of: %s widget_content id: %s',
             $waContent->widget_content->title,
             $waContent->widget_content->id
         ));
@@ -330,22 +330,27 @@ class WaContent extends BaseCmd
 
         $content = $compositeContents
             ->map(function ($compositeContent) use ($postId) {
-                if ($compositeContent->type === 'text_item') {
+                if ($compositeContent->type === 'text_item' && ! empty($compositeContent->text ?? null)) {
+                var_dump($compositeContent);
                     return [
                         'body'           => HtmlToMarkdown::parseHtml($compositeContent->text),
                         'locked_content' => false,
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
-                if ($compositeContent->type === 'image') {
+                if ($compositeContent->type === 'image' && ! empty($compositeContent->url ?? null)) {
+                    $leadImage = $compositeContent->lead_image ?? false;
+                    ( ! $leadImage && $this->site->product_code === "IFO") ? $displayHint = 'sm' : $displayHint = "default";
+
                     return [
                         'lead_image'     => $compositeContent->lead_image ?? false,
                         'file'           => WpAttachment::upload_attachment($postId, $compositeContent),
                         'locked_content' => false,
+                        'display_hint'   => $displayHint,
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
-                if ($compositeContent->type === 'infobox') {
+                if ($compositeContent->type === 'infobox' && ! empty($compositeContent->text ?? null)) {
                     return [
                         'title'          => $compositeContent->title ?? null,
                         'body'           => HtmlToMarkdown::parseHtml($compositeContent->text),
@@ -353,9 +358,9 @@ class WaContent extends BaseCmd
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
-                if ($compositeContent->type === 'file') {
+                if ($compositeContent->type === 'file' && ! empty($compositeContent->path ?? null)) {
                     $id             = $compositeContent->uploaded_file_id ?? "";
-                    $fileUrl        = (empty($compositeContent->path)) ? "" : $this->waFilesUrl.$compositeContent->path;
+                    $fileUrl        = $this->waFilesUrl.$compositeContent->path;
                     $title          = $compositeContent->title ?? "";
                     $fileObj        = new \stdClass();
                     $fileObj->id    = $id;
@@ -371,9 +376,8 @@ class WaContent extends BaseCmd
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
-                if ($compositeContent->type === 'inserted_code') {
-                    $insertCode = $compositeContent->code ?? "";
-                    if ( ! empty($insertCode) && $this->site->product_code === "IFO") {
+                if ($compositeContent->type === 'inserted_code' && ! empty($insertCode = $compositeContent->code ?? null)) {
+                    if ($this->site->product_code === "IFO") {
                         // only replace in iform
                         $insertCode = ImportHelper::removeInsertCodeEmptyLines($insertCode);
                         $insertCode = ImportHelper::insertCodeWrappingTableClass($insertCode);
@@ -385,7 +389,7 @@ class WaContent extends BaseCmd
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
-                if ($compositeContent->type === 'gallery') {
+                if ($compositeContent->type === 'gallery' && ! empty($compositeContent->images ?? null)) {
                     return [
                         'images'         => $compositeContent->images->map(function ($waImage) use ($postId) {
                             $description = HtmlToMarkdown::parseHtml(
@@ -415,8 +419,7 @@ class WaContent extends BaseCmd
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
-                if ($compositeContent->type === 'associated_composites') {
-                    $relatedContentIds = $compositeContent->{self::RELATED_CONTENT_ID_NAME} ?? [];
+                if ($compositeContent->type === 'associated_composites' && ! empty($relatedContentIds = $compositeContent->{self::RELATED_CONTENT_ID_NAME} ?? null)) {
                     $associateArticles = new Collection();
                     foreach ($relatedContentIds as $id) {
                         $post = get_post(WpComposite::postIDFromWhiteAlbumID($id));
@@ -427,6 +430,7 @@ class WaContent extends BaseCmd
                                 $id));
                         }
                     }
+
                     return [
                         'title'          => $compositeContent->title ?? '',
                         'composites'     => $associateArticles->toArray(),
@@ -435,8 +439,7 @@ class WaContent extends BaseCmd
                     ];
                 }
                 // associated_composites_story is not a widget, it is associated composites alias
-                if ($compositeContent->type === 'associated_composites_story') {
-                    $relatedContentIds = $compositeContent->{self::STORY_ITEMS_ID_NAME} ?? [];
+                if ($compositeContent->type === 'associated_composites_story' && ! empty($relatedContentIds = $compositeContent->{self::STORY_ITEMS_ID_NAME} ?? null)) {
                     $associateArticles = new Collection();
                     foreach ($relatedContentIds as $id) {
                         $post = get_post(WpComposite::postIDFromWhiteAlbumID($id));
@@ -449,6 +452,7 @@ class WaContent extends BaseCmd
                     }
                     // need to change content to Story, if there has associated_composites_story
                     update_post_meta($postId, 'kind', 'Story');
+
                     return [
                         'composites'     => $associateArticles->toArray(),
                         'display_hint'   => 'story-list',
@@ -561,6 +565,7 @@ class WaContent extends BaseCmd
                     $data['locked_content'] = false;
                     // if the article contains recipe widget, so it is a recipe template
                     update_post_meta($postId, '_wp_page_template', 'recipe');
+
                     return $data;
                 }
 
@@ -830,7 +835,7 @@ class WaContent extends BaseCmd
         }
 
         $currentFileIds = collect(get_field('composite_content', $postId))
-            ->map(function ($content){
+            ->map(function ($content) {
                 if ($content['acf_fc_layout'] === 'image') {
                     return WpAttachment::contenthub_id($content['file'] ?? null);
                 }

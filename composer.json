@@ -28,7 +28,7 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.2",
         "junaidbhura/advanced-custom-fields-pro": "*",
         "league/fractal": "^0.17.0",
         "wpackagist-plugin/amazon-s3-and-cloudfront": "^1.4",
@@ -47,7 +47,7 @@
         "illuminate/support": "^5.6",
         "illuminate/database": "^5.7",
         "phpmailer/phpmailer": "^6.1",
-        "league/html-to-markdown": "^4.9",
+        "league/html-to-markdown": "^5.0",
         "guzzlehttp/guzzle": "^6.3",
         "bonnier/php-video-helper": "1.0.*"
     },
