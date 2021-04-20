@@ -10,6 +10,7 @@ use Bonnier\Willow\Base\Models\ACF\Fields\RadioField;
 use Bonnier\Willow\Base\Models\ACF\Fields\RepeaterField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TrueFalseField;
 use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
+use Bonnier\Willow\Base\Models\ACF\Page\SortByFields;
 
 class IFO extends Brand
 {
@@ -33,6 +34,7 @@ class IFO extends Brand
 
         $teaserListWidget =  PageFieldGroup::getTeaserListLayout();
         add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListDisplayHints']);
+        add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListMultiTagField']);
 
         $galleryField = CompositeFieldGroup::getGalleryWidget();
         add_filter(sprintf('willow/acf/layout=%s', $galleryField->getKey()), [__CLASS__, 'setGalleryDisplayHints']);
@@ -77,6 +79,20 @@ class IFO extends Brand
             ->setReturnFormat(ACFField::RETURN_VALUE);
 
         return $teaserList->addSubField($displayHint);
+    }
+
+    public static function setTeaserListMultiCategoryField(ACFLayout $teaserList)
+    {
+        $categoryField = SortByFields::getCategoryField(true);
+
+        return $teaserList->addSubField($categoryField);
+    }
+
+    public static function setTeaserListMultiTagField(ACFLayout $teaserList)
+    {
+        $tagField = SortByFields::getTagField(true);
+
+        return $teaserList->addSubField($tagField);
     }
 
     public static function setGalleryDisplayHints(ACFLayout $gallery): ACFLayout
