@@ -331,7 +331,6 @@ class WaContent extends BaseCmd
         $content = $compositeContents
             ->map(function ($compositeContent) use ($postId) {
                 if ($compositeContent->type === 'text_item' && ! empty($compositeContent->text ?? null)) {
-                var_dump($compositeContent);
                     return [
                         'body'           => HtmlToMarkdown::parseHtml($compositeContent->text),
                         'locked_content' => false,
