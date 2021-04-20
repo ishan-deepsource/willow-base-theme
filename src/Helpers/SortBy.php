@@ -114,11 +114,17 @@ class SortBy
             'lang' => $currentLanguage,
         ];
 
+        /** @var Array $taxonomiesArr */
+        $taxonomiesArr = [];
+        foreach (self::$acfWidget[AcfName::FIELD_CATEGORY] as $key => $value) {
+            $taxonomiesArr[] = self::isWpTerm($value) ? $value : null;
+        }
+        foreach (self::$acfWidget[AcfName::FIELD_TAG] as $key => $value) {
+            $taxonomiesArr[] = self::isWpTerm($value) ? $value : null;
+        }
+
         /** @var Collection $taxonomies */
-        $taxonomies = collect([
-            self::isWpTerm(self::$acfWidget[AcfName::FIELD_CATEGORY]) ? self::$acfWidget[AcfName::FIELD_CATEGORY] : null,
-            self::isWpTerm(self::$acfWidget[AcfName::FIELD_TAG]) ? self::$acfWidget[AcfName::FIELD_TAG] : null,
-        ])->rejectNullValues();
+        $taxonomies = collect($taxonomiesArr)->rejectNullValues();
 
         $customTaxonomies = WpTaxonomy::get_custom_taxonomies()->map(function ($taxonomy) {
             if (($term = self::$acfWidget[$taxonomy->machine_name] ?? null) && self::isWpTerm($term)) {
