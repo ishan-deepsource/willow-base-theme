@@ -34,7 +34,6 @@ class IFO extends Brand
 
         $teaserListWidget =  PageFieldGroup::getTeaserListLayout();
         add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListDisplayHints']);
-        add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListMultiCategoryField']);
         add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListMultiTagField']);
 
         $galleryField = CompositeFieldGroup::getGalleryWidget();
