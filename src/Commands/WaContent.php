@@ -339,7 +339,8 @@ class WaContent extends BaseCmd
                 }
                 if ($compositeContent->type === 'image' && ! empty($compositeContent->url ?? null)) {
                     $leadImage = $compositeContent->lead_image ?? false;
-                    ( ! $leadImage && $this->site->product_code === "IFO") ? $displayHint = 'sm' : $displayHint = "default";
+                    //ifo will have small image (sm), if it is not lead image
+                    $displayHint = ( ! $leadImage && $this->site->product_code === "IFO") ? 'sm' : 'default';
 
                     return [
                         'lead_image'     => $compositeContent->lead_image ?? false,
