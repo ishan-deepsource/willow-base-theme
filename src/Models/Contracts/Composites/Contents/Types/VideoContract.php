@@ -12,6 +12,8 @@ interface VideoContract extends ContentContract
 
     public function getIncludeIntroVideo(): bool;
 
+    public function getDuration(): ?string;
+
     public function getCaption(): ?string;
 
     public function getChapterItems(): Collection;
