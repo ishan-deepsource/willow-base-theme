@@ -29,8 +29,8 @@ class ImportHelper
     {
         //find text without any tag around and wrap it in a <p> tag.
         $text = preg_replace(
-            '#(</[h2|h3|h4]>)([^<]+)(<[p|h2|h3|h4][^>]*>)#m',
-            '$1<p>$2</p>$3',
+            '#(</(h2|h3|h4)>)(.*)(<(h2|h3|h4|p)>)#mU',
+            '$1<p>$3</p>$4',
             $text);
 
         return preg_replace('#<p></p>#m', '', $text);
