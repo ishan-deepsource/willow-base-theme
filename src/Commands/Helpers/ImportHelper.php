@@ -7,13 +7,30 @@ class ImportHelper
     public static function removeInsertCodeEmptyLines($rawInsertCode)
     {
         // replace empty lines
-        $patterns = ['#<p>(&nbsp;)*</p>#', '#<h2></h2>#', '#<p class="">(<br>)*</p>#'];
+        $patterns = [
+            '#<p>(&nbsp;)*</p>#',
+            '#<h2></h2>#',
+            '#<p class="">(<br>)*</p>#',
+            '#<[h1|h2|h3|h4|p]>(<br>)*</[h1|h2|h3|h4|p]>#',
+        ];
         return preg_replace($patterns, "", $rawInsertCode);
     }
 
     public static function insertCodeWrappingTableClass($rawInsertCode)
     {
         //replace <table…</table> with <div class=“table-container”><table…</table><div>
-        return preg_replace('#<table(.*)</table>#s', '<div class=“table-container”><table${1}</table></div>', $rawInsertCode);
+        return preg_replace(
+            '#<table(.*)</table>#s',
+            '<div class=“table-container”><table${1}</table></div>',
+            $rawInsertCode);
+    }
+
+    public static function fixFloatingTextsWithoutParagraphTag($rawInsertCode)
+    {
+        //find text without any tag around and wrap it in a <p> tag.
+        return preg_replace(
+            '#(</[h1|h2|h3|h4|p]>)([^<]*)(<[h1|h2|h3|h4|p]>)#im',
+            '$1<p>$2</p>$3',
+            $rawInsertCode);
     }
 }

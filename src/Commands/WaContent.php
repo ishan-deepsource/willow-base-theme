@@ -379,6 +379,7 @@ class WaContent extends BaseCmd
                 if ($compositeContent->type === 'inserted_code' && ! empty($insertCode = $compositeContent->code ?? null)) {
                     if ($this->site->product_code === "IFO") {
                         // only replace in iform
+                        $insertCode = ImportHelper::fixFloatingTextsWithoutParagraphTag($insertCode);
                         $insertCode = ImportHelper::removeInsertCodeEmptyLines($insertCode);
                         $insertCode = ImportHelper::insertCodeWrappingTableClass($insertCode);
                     }
