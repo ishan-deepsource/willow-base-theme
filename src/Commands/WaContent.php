@@ -331,8 +331,14 @@ class WaContent extends BaseCmd
         $content = $compositeContents
             ->map(function ($compositeContent) use ($postId) {
                 if ($compositeContent->type === 'text_item' && ! empty($compositeContent->text ?? null)) {
+                    $text = $compositeContent->text;
+                    if ($this->site->product_code === "IFO") {
+                        // only replace in iform
+                        $text = ImportHelper::fixFloatingTextsWithoutParagraphTag($text);
+                    }
+
                     return [
-                        'body'           => HtmlToMarkdown::parseHtml($compositeContent->text),
+                        'body'           => HtmlToMarkdown::parseHtml($text),
                         'locked_content' => false,
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
@@ -379,7 +385,6 @@ class WaContent extends BaseCmd
                 if ($compositeContent->type === 'inserted_code' && ! empty($insertCode = $compositeContent->code ?? null)) {
                     if ($this->site->product_code === "IFO") {
                         // only replace in iform
-                        $insertCode = ImportHelper::fixFloatingTextsWithoutParagraphTag($insertCode);
                         $insertCode = ImportHelper::removeInsertCodeEmptyLines($insertCode);
                         $insertCode = ImportHelper::insertCodeWrappingTableClass($insertCode);
                     }
