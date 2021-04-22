@@ -25,11 +25,11 @@ class ImportHelper
             $rawInsertCode);
     }
 
-    public static function fixFloatingTextsWithoutParagraphTag($text, $after = '</[h2|h3|h4]>', $before = '<p>')
+    public static function fixFloatingTextsWithoutParagraphTag($text)
     {
         //find text without any tag around and wrap it in a <p> tag.
         $text = preg_replace(
-            '#('.$after.')([^<]*)('.$before.')#m',
+            '#(</[h2|h3|h4]>)([^<]*)(<p>)#m',
             '$1<p>$2</p>$3',
             $text);
 
