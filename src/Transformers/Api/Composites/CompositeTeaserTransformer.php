@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
 use Bonnier\Willow\Base\Helpers\RecipeMetaHelper;
+use Bonnier\Willow\Base\Helpers\VideoMetaHelper;
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\Base\Traits\UrlTrait;
@@ -59,6 +60,7 @@ class CompositeTeaserTransformer extends TransformerAbstract
         ];
 
         (new RecipeMetaHelper())->addToOutput($composite, $out);
+        (new VideoMetaHelper())->addToOutput($composite, $out);
 
         return $out;
     }

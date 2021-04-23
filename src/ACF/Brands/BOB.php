@@ -23,6 +23,7 @@ class BOB extends Brand
         self::removeSortByEditorialTypeFromTeaserListPageWidget();
         self::removeTitleFromAssociatedCompositesWidget();
         self::removeDisplayHintFromAssociatedCompositesWidget();
+        self::removeDurationFromVideoWidget();
 
         self::removeInventoryWidget();
         self::removeMultimediaWidget();
