@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
 use Bonnier\Willow\Base\Helpers\FoodPlanHelper;
 use Bonnier\Willow\Base\Helpers\RecipeMetaHelper;
+use Bonnier\Willow\Base\Helpers\VideoMetaHelper;
 use Bonnier\Willow\Base\Models\Contracts\Root\TranslationContract;
 use Bonnier\Willow\Base\Models\WpComposite;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
@@ -95,6 +96,7 @@ class CompositeTransformer extends TransformerAbstract
 
         (new RecipeMetaHelper())->addToOutput($composite, $out);
         (new FoodPlanHelper())->addToOutput($composite, $out);
+        (new VideoMetaHelper())->addToOutput($composite, $out);
 
         return $out;
     }
