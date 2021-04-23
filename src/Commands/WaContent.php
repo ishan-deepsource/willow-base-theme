@@ -267,9 +267,11 @@ class WaContent extends BaseCmd
         // format story and article type
         // story type don't have body attribute
         $storyItems = false;
+        $theme      = '';
         if ($this->getWaContentType($waContent) === 'Story') {
             $widgetGroups = $waContent->widget_groups;
-            $storyItems   = $waContent->story_items;
+            $storyItems   = $waContent->story_items ?? false;
+            $theme        = $waContent->theme ?? '';
         } else {
             $widgetGroups = $waContent->body->widget_groups;
         }
@@ -281,7 +283,7 @@ class WaContent extends BaseCmd
                 ->flatten(1)
                 ->push($storyItems ? (object) ['type' => 'Custom:StoryItems'] : null)
                 ->rejectNullValues()
-                ->map(function ($waWidget) use ($relatedContents, $storyItems) {
+                ->map(function ($waWidget) use ($relatedContents, $storyItems, $theme) {
                     return collect([
                         'type' => collect([ // Map the type
                             'Widgets::Text'           => 'text_item',
@@ -301,7 +303,11 @@ class WaContent extends BaseCmd
                         ->merge($waWidget->properties ?? null)// merge properties
                         ->merge($waWidget->uploaded_file ?? null)// merge uploaded file
                         ->merge($waWidget->image ?? null)
-                        ->merge($storyItems && $waWidget->type === 'Custom:StoryItems' ? [self::STORY_ITEMS_ID_NAME => collect($storyItems)->pluck('widget_content_id')] : null)
+                        // build story widget
+                        ->merge($storyItems && $waWidget->type === 'Custom:StoryItems' ? [
+                            self::STORY_ITEMS_ID_NAME => collect($storyItems)->pluck('widget_content_id'),
+                            'title'                   => $theme,
+                        ] : null)
                         ->merge($relatedContents && $waWidget->type === 'Widgets::RelatedContent' ? [self::RELATED_CONTENT_ID_NAME => collect($relatedContents)->pluck('id')] : null); // merge related content ids
                 })
                 ->prepend(
@@ -316,24 +322,42 @@ class WaContent extends BaseCmd
                     return $this->fixFaultyImageFormats($content);
                 });
 
+            // Related content need to be only one and at the end of articles/story/gallery
+            // Keep only first related content (associated_composites widget) and move it to end of array
+            $isFirstRelatedContent       = true;
+            $compositeContentsCollection = $compositeContentsCollection->reject(
+                function ($widgetObj) use (&$relatedContentWidget, &$isFirstRelatedContent) {
+                    if ($widgetObj->type == 'associated_composites') {
+                        if ($isFirstRelatedContent) {
+                            $relatedContentWidget = $widgetObj;
+                        }
+                        $isFirstRelatedContent = false;
+
+                        return true;
+                    }
+
+                    return false;
+                })->push($relatedContentWidget ?? null)->rejectNullValues();
+
             return $compositeContentsCollection;
         }
 
         return null;
     }
 
-    private function saveCompositeContents($postId, ?Collection $compositeContents)
+    private function saveCompositeContents($postId, ?Collection $compositeContents): void
     {
         if ($compositeContents === null) {
             return;
         }
 
-        $content = $compositeContents
+        $content               = $compositeContents
             ->map(function ($compositeContent) use ($postId) {
                 if ($compositeContent->type === 'text_item' && ! empty($compositeContent->text ?? null)) {
                     $text = $compositeContent->text;
+                    // only replace in iform
                     if ($this->site->product_code === "IFO") {
-                        // only replace in iform
+                        $text = ImportHelper::removeEmptyLines($text);
                         $text = ImportHelper::fixFloatingTextsWithoutParagraphTag($text);
                     }
 
@@ -385,7 +409,7 @@ class WaContent extends BaseCmd
                 if ($compositeContent->type === 'inserted_code' && ! empty($insertCode = $compositeContent->code ?? null)) {
                     if ($this->site->product_code === "IFO") {
                         // only replace in iform
-                        $insertCode = ImportHelper::removeInsertCodeEmptyLines($insertCode);
+                        $insertCode = ImportHelper::removeEmptyLines($insertCode);
                         $insertCode = ImportHelper::insertCodeWrappingTableClass($insertCode);
                     }
 
@@ -425,8 +449,10 @@ class WaContent extends BaseCmd
                         'acf_fc_layout'  => $compositeContent->type,
                     ];
                 }
-                if ($compositeContent->type === 'associated_composites' && ! empty($relatedContentIds = $compositeContent->{self::RELATED_CONTENT_ID_NAME} ?? null)) {
-                    $associateArticles = new Collection();
+
+                //related content widget
+                if ($compositeContent->type === 'associated_composites'  && ! empty($relatedContentIds = $compositeContent->{self::RELATED_CONTENT_ID_NAME} ?? null)) {
+                    $associateArticles     = new Collection();
                     foreach ($relatedContentIds as $id) {
                         $post = get_post(WpComposite::postIDFromWhiteAlbumID($id));
                         if (isset($post->ID)) {
@@ -460,17 +486,14 @@ class WaContent extends BaseCmd
                     update_post_meta($postId, 'kind', 'Story');
 
                     return [
+                        'title'          => $compositeContent->title ?? '',
                         'composites'     => $associateArticles->toArray(),
                         'display_hint'   => 'story-list',
                         'locked_content' => true,
                         'acf_fc_layout'  => 'associated_composites',
                     ];
                 }
-                if ($compositeContent->type === 'recipe') {
-                    if ( ! isset($compositeContent->active) || $compositeContent->active !== "true") {
-                        return [];
-                    }
-
+                if ($compositeContent->type === 'recipe' && isset($compositeContent->active) && $compositeContent->active === "true") {
                     $recipe = new Recipe();
                     $recipe->setTitle($compositeContent->title ?? "")
                            ->setDescription('')
@@ -501,14 +524,14 @@ class WaContent extends BaseCmd
                         $newBlock           = null;
                         foreach ($ingredientsRows as $ingredientsRow) {
                             $items = explode("]];[[", $ingredientsRow);
-                            if (count($items) == 1) {
+                            if (count($items) === 1) {
                                 $headLine = $items[0];
                                 if ( ! $firstBlock) {
                                     $ingredientBlocks[] = $newBlock;
                                 }
                                 $newBlock = new RecipeIngredientBlockItem($headLine, []);
                             } else {
-                                if ($newBlock == null) {
+                                if ($newBlock === null) {
                                     $newBlock = new RecipeIngredientBlockItem();
                                 }
                                 $newBlock->addIngredientItem(new RecipeIngredientItem($items[0] ?? "",
@@ -537,7 +560,7 @@ class WaContent extends BaseCmd
                     if ( ! empty($instructionTextRaw)) {
                         foreach ($delimiters as $delimiter) {
                             $instructionArr = preg_split("/\*\*".$delimiter."/i", $instructionTextRaw, 2);
-                            if (count($instructionArr) == 2) {
+                            if (count($instructionArr) === 2) {
                                 $instructionText = $instructionArr[0];
                                 $instructionTip  = "**".strtoupper($delimiter).$instructionArr[1];
                                 break;
