@@ -33,6 +33,11 @@ class VideoAdapter extends AbstractContentAdapter implements VideoContract
         return array_get($this->acfArray, 'include_intro_video') ?: false;
     }
 
+    public function getDuration(): ?string
+    {
+        return array_get($this->acfArray, 'duration') ?: null;
+    }
+
     public function getCaption(): ?string
     {
         return array_get($this->acfArray, 'caption') ?: null;
