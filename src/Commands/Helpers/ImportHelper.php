@@ -10,8 +10,8 @@ class ImportHelper
         $patterns = [
             '#<p\s*(class="")?\s*>(\s|<br>|&nbsp;)*</p>#',
             '#<h([1-6])>(<br>)*</h\1>#',
-            '#<h([1-6])><span.*></span></h\1>#',
-            '#<h([1-6])><strong.*></strong></h\1>#',
+            '#<h([1-6])><span[^>]*></span></h\1>#',
+            '#<h([1-6])><strong[^>]*></strong></h\1>#',
         ];
         return preg_replace($patterns, "", $rawInsertCode);
     }
