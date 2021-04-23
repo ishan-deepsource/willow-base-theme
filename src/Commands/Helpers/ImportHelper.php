@@ -4,14 +4,14 @@ namespace Bonnier\Willow\Base\Commands\Helpers;
 
 class ImportHelper
 {
-    public static function removeInsertCodeEmptyLines($rawInsertCode)
+    public static function removeEmptyLines($rawInsertCode)
     {
         // replace empty lines
         $patterns = [
-            '#<p>(&nbsp;)*</p>#',
-            '#<h2></h2>#',
-            '#<p class="">(<br>)*</p>#',
-            '#<[h1|h2|h3|h4|p]>(<br>)*</[h1|h2|h3|h4|p]>#',
+            '#<p\s*(class="")?\s*>(\s|<br>|&nbsp;)*</p>#',
+            '#<h([1-6])>(<br>)*</h\1>#',
+            '#<h([1-6])><span.*></span></h\1>#',
+            '#<h([1-6])><strong.*></strong></h\1>#',
         ];
         return preg_replace($patterns, "", $rawInsertCode);
     }
