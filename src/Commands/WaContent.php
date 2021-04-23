@@ -357,8 +357,9 @@ class WaContent extends BaseCmd
                     $text = $compositeContent->text;
                     // only replace in iform
                     if ($this->site->product_code === "IFO") {
-                        $text = ImportHelper::removeEmptyLines($text);
                         $text = ImportHelper::fixFloatingTextsWithoutParagraphTag($text);
+                        //removeEmptyLines function must under fixFloatingTextsWithoutParagraphTag
+                        $text = ImportHelper::removeEmptyLines($text);
                     }
 
                     return [
