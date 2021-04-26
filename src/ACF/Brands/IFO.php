@@ -5,9 +5,12 @@ namespace Bonnier\Willow\Base\ACF\Brands;
 use Bonnier\Willow\Base\Models\ACF\ACFField;
 use Bonnier\Willow\Base\Models\ACF\ACFLayout;
 use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
+use Bonnier\Willow\Base\Models\ACF\Fields\ImageField;
 use Bonnier\Willow\Base\Models\ACF\Fields\RadioField;
+use Bonnier\Willow\Base\Models\ACF\Fields\RepeaterField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TrueFalseField;
 use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
+use Bonnier\Willow\Base\Models\ACF\Page\SortByFields;
 
 class IFO extends Brand
 {
@@ -31,6 +34,7 @@ class IFO extends Brand
 
         $teaserListWidget =  PageFieldGroup::getTeaserListLayout();
         add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListDisplayHints']);
+        add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListMultiTagField']);
 
         $galleryField = CompositeFieldGroup::getGalleryWidget();
         add_filter(sprintf('willow/acf/layout=%s', $galleryField->getKey()), [__CLASS__, 'setGalleryDisplayHints']);
@@ -45,11 +49,11 @@ class IFO extends Brand
         $infoBoxWidget = parent::$infoboxWidget;
         add_filter(sprintf('willow/acf/layout=%s', $infoBoxWidget->getKey()), [__CLASS__, 'setInfoBoxDisplayHints']);
 
-        $associatedCompositeWidget = CompositeFieldGroup::getAssociatedCompositeWidget();
-        add_filter(sprintf('willow/acf/layout=%s', $associatedCompositeWidget->getKey()), [__CLASS__, 'setAssociatedCompositeDisplayHints']);
-
         $videoWidget = CompositeFieldGroup::getVideoWidget();
         add_filter(sprintf('willow/acf/layout=%s', $videoWidget->getKey()), [__CLASS__, 'setIncludeIntroVideoDefaultTrue']);
+
+        $fileWidget = CompositeFieldGroup::getFileWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $fileWidget->getKey()), [__CLASS__, 'removeRequiredFromFileWidgetImages']);
     }
 
     public static function setTeaserListDisplayHints(ACFLayout $teaserList)
@@ -75,6 +79,20 @@ class IFO extends Brand
             ->setReturnFormat(ACFField::RETURN_VALUE);
 
         return $teaserList->addSubField($displayHint);
+    }
+
+    public static function setTeaserListMultiCategoryField(ACFLayout $teaserList)
+    {
+        $categoryField = SortByFields::getCategoryField(true);
+
+        return $teaserList->addSubField($categoryField);
+    }
+
+    public static function setTeaserListMultiTagField(ACFLayout $teaserList)
+    {
+        $tagField = SortByFields::getTagField(true);
+
+        return $teaserList->addSubField($tagField);
     }
 
     public static function setGalleryDisplayHints(ACFLayout $gallery): ACFLayout
@@ -139,18 +157,25 @@ class IFO extends Brand
         });
     }
 
-    public static function setAssociatedCompositeDisplayHints(ACFLayout $associatedComposite)
+    public static function removeRequiredFromFileWidgetImages(ACFLayout $fileWidget)
     {
-        $displayHint = new RadioField('field_603f7f06ddaac');
-        $displayHint->setLabel('Display Format')
-            ->setName('display_hint')
-            ->setChoice('default', 'Default')
-            ->setChoice('food-plan', 'Food plan')
-            ->setDefaultValue('default')
-            ->setLayout('vertical')
-            ->setReturnFormat(ACFField::RETURN_VALUE);
+        $images = new RepeaterField('field_5921e5a83f4ea');
+        $images->setLabel('Images')
+            ->setName('images')
+            ->setRequired(false)
+            ->setLayout('table')
+            ->setButtonLabel('Add Image');
 
-        return $associatedComposite->addSubField($displayHint);
+        $image = new ImageField('field_5921e94c3f4eb');
+        $image->setLabel('File')
+            ->setName('file')
+            ->setRequired(false)
+            ->setReturnFormat(ACFField::RETURN_ARRAY)
+            ->setPreviewSize(ImageField::PREVIEW_MEDIUM);
+
+        $images->addSubField($image);
+
+        return $fileWidget->addSubField($images);
     }
 
     public static function removeParagraphListCollapsible(ACFLayout $layout)

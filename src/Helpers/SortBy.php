@@ -114,11 +114,25 @@ class SortBy
             'lang' => $currentLanguage,
         ];
 
-        /** @var Collection $taxonomies */
-        $taxonomies = collect([
-            self::isWpTerm(self::$acfWidget[AcfName::FIELD_CATEGORY]) ? self::$acfWidget[AcfName::FIELD_CATEGORY] : null,
-            self::isWpTerm(self::$acfWidget[AcfName::FIELD_TAG]) ? self::$acfWidget[AcfName::FIELD_TAG] : null,
-        ])->rejectNullValues();
+        $taxonomiesArr = [];
+        if (self::isWpTerm(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
+            $taxonomiesArr[] = self::$acfWidget[AcfName::FIELD_CATEGORY];
+        }
+        else if (is_array(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
+            foreach (self::$acfWidget[AcfName::FIELD_CATEGORY] as $key => $value) {
+                $taxonomiesArr[] = self::isWpTerm($value) ? $value : null;
+            }
+        }
+
+        if (self::isWpTerm(self::$acfWidget[AcfName::FIELD_TAG])) {
+            $taxonomiesArr[] = self::$acfWidget[AcfName::FIELD_TAG];
+        }
+        else if (self::$acfWidget[AcfName::FIELD_TAG]) {
+            foreach (self::$acfWidget[AcfName::FIELD_TAG] as $key => $value) {
+                $taxonomiesArr[] = self::isWpTerm($value) ? $value : null;
+            }
+        }
+        $taxonomies = collect($taxonomiesArr)->rejectNullValues();
 
         $customTaxonomies = WpTaxonomy::get_custom_taxonomies()->map(function ($taxonomy) {
             if (($term = self::$acfWidget[$taxonomy->machine_name] ?? null) && self::isWpTerm($term)) {

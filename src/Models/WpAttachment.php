@@ -341,9 +341,9 @@ class WpAttachment
         }
 
         // Attachment meta data
-        require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+        require_once(ABSPATH."wp-admin".'/includes/image.php');
         $attachmentData = wp_generate_attachment_metadata($attachmentId, $uploadedFile['file']);
-        if (!wp_update_attachment_metadata($attachmentId, $attachmentData)) {
+        if ( ! wp_update_attachment_metadata($attachmentId, $attachmentData)) {
             return null;
         }
 

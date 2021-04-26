@@ -146,7 +146,7 @@ class SortByFields
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
 
-    public static function getCategoryField(): ACFField
+    public static function getCategoryField($multiSelect = false): ACFField
     {
         $condition = new ACFConditionalLogic();
         $condition->add(self::$sortByField, ACFConditionalLogic::OPERATOR_EQUALS, SortBy::CUSTOM)
@@ -158,18 +158,18 @@ class SortByFields
             ->setConditionalLogic($condition)
             ->setWrapper((new ACFWrapper())->setWidth('50'))
             ->setTaxonomy(TaxonomyField::TAXONOMY_CATEGORY)
-            ->setFieldType('select')
+            ->setFieldType($multiSelect ? TaxonomyField::TYPE_MULTI : TaxonomyField::TYPE_SELECT)
             ->setAllowNull(true)
             ->setAddTerm(false)
             ->setSaveTerms(false)
             ->setLoadTerms(false)
             ->setReturnFormat(ACFField::RETURN_OBJECT)
-            ->setMultiple(false);
+            ->setMultiple($multiSelect);
 
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
 
-    public static function getTagField(): ACFField
+    public static function getTagField($multiSelect = false): ACFField
     {
         $condition = new ACFConditionalLogic();
         $condition->add(self::$sortByField, ACFConditionalLogic::OPERATOR_EQUALS, SortBy::CUSTOM)
@@ -181,13 +181,13 @@ class SortByFields
             ->setConditionalLogic($condition)
             ->setWrapper((new ACFWrapper())->setWidth('50'))
             ->setTaxonomy(TaxonomyField::TAXONOMY_TAG)
-            ->setFieldType('select')
+            ->setFieldType($multiSelect ? TaxonomyField::TYPE_MULTI : TaxonomyField::TYPE_SELECT)
             ->setAllowNull(true)
             ->setAddTerm(false)
             ->setSaveTerms(false)
             ->setLoadTerms(false)
             ->setReturnFormat(ACFField::RETURN_OBJECT)
-            ->setMultiple(false);
+            ->setMultiple($multiSelect);
 
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
@@ -203,7 +203,7 @@ class SortByFields
             ->setName(AcfName::FIELD_EDITORIAL_TYPE)
             ->setConditionalLogic($condition)
             ->setTaxonomy(TaxonomyField::TAXONOMY_EDITORIAL_TYPE)
-            ->setFieldType('select')
+            ->setFieldType(TaxonomyField::TYPE_SELECT)
             ->setAllowNull(true)
             ->setAddTerm(false)
             ->setSaveTerms(true)
@@ -212,8 +212,6 @@ class SortByFields
             ->setMultiple(false);
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
-
-
 
     public static function getUserField(): ACFField
     {
@@ -240,6 +238,11 @@ class SortByFields
 
     private static function getMaxTeasers()
     {
+        switch (PageFieldGroup::$brand) {
+            case 'IFO' :
+                return 50;
+        }
+
         return array_get(self::$config, 'minTeasers', 12);
     }
 

@@ -39,6 +39,7 @@ class PageFieldGroup
     private const LINK_TYPE_FIELD = 'field_5e68a31bbe22d';
 
     public const THEME_FIELD_NAME = 'theme';
+    public static $brand;
 
     public static function register()
     {
@@ -158,7 +159,7 @@ class PageFieldGroup
 
         $layout->addSubFields(SortByFields::getFields(AcfName::WIDGET_FEATURED_CONTENT, [
             'minTeasers' => 1,
-            'maxTeasers' => 1,
+            'maxTeasers' => 12,
             'teaserCountDefault' => 1
         ]));
 
@@ -640,5 +641,10 @@ class PageFieldGroup
 
             return $valid;
         }, 10, 4);
+    }
+
+    public static function setBrand(string $brand)
+    {
+        static::$brand = $brand;
     }
 }

@@ -24,6 +24,7 @@ abstract class Brand implements BrandInterface
     public static $infoboxWidget;
 
     public static function init() {
+        PageFieldGroup::setBrand(class_basename(static::class));
         self::$pageWidgetsField = PageFieldGroup::getPageWidgetsField();
         self::$compositeContentsField = CompositeFieldGroup::getContentField();
         self::$paragraphListWidget = CompositeFieldGroup::getParagraphListWidget();
@@ -65,6 +66,14 @@ abstract class Brand implements BrandInterface
         return $layout->setSubFields($fields);
     }
 
+    public static function removeDurationField(ACFLayout $layout)
+    {
+        $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
+            return $field->getName() !== CompositeFieldGroup::VIDEO_DURATION_FIELD;
+        });
+        return $layout->setSubFields($fields);
+    }
+
     public static function removeIncludeIntroVideoField(ACFLayout $layout)
     {
         $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
@@ -97,10 +106,32 @@ abstract class Brand implements BrandInterface
         return $layout->setSubFields($fields);
     }
 
+    public static function removeTitleField(ACFLayout $layout)
+    {
+        $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
+            return $field->getName() !== CompositeFieldGroup::TITLE_FIELD;
+        });
+        return $layout->setSubFields($fields);
+    }
+
+    public static function removeDisplayHintField(ACFLayout $layout)
+    {
+        $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
+            return $field->getName() !== CompositeFieldGroup::DISPLAY_HINT_FIELD;
+        });
+        return $layout->setSubFields($fields);
+    }
+
     protected static function removeVideoUrlFromImageWidget()
     {
         $imageWidget = CompositeFieldGroup::getImageWidget();
         add_filter(sprintf('willow/acf/layout=%s', $imageWidget->getKey()), [__CLASS__, 'removeVideoUrlField']);
+    }
+
+    protected static function removeDurationFromVideoWidget(): void
+    {
+        $videoWidget = CompositeFieldGroup::getVideoWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $videoWidget->getKey()), [__CLASS__, 'removeDurationField']);
     }
 
     protected static function removeIncludeIntroVideoFromVideoWidget(): void
@@ -161,6 +192,18 @@ abstract class Brand implements BrandInterface
     {
         $teaserListLayout = PageFieldGroup::getTeaserListLayout();
         add_filter(sprintf('willow/acf/layout=%s', $teaserListLayout->getKey()), [__CLASS__, 'removeSortByEditorialTypeField']);
+    }
+
+    protected static function removeTitleFromAssociatedCompositesWidget()
+    {
+        $associatedComposites = CompositeFieldGroup::getAssociatedCompositeWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $associatedComposites->getKey()), [__CLASS__, 'removeTitleField']);
+    }
+
+    protected static function removeDisplayHintFromAssociatedCompositesWidget()
+    {
+        $associatedComposites = CompositeFieldGroup::getAssociatedCompositeWidget();
+        add_filter(sprintf('willow/acf/layout=%s', $associatedComposites->getKey()), [__CLASS__, 'removeDisplayHintField']);
     }
 
 	protected static function removeInventoryWidget()

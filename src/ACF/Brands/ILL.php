@@ -18,6 +18,9 @@ class ILL extends Brand
         self::removeChapterItemsFromVideoWidget();
         self::removeThemeFromTeaserListPageWidget();
         self::removeSortByEditorialTypeFromTeaserListPageWidget();
+        self::removeTitleFromAssociatedCompositesWidget();
+        self::removeDisplayHintFromAssociatedCompositesWidget();
+        self::removeDurationFromVideoWidget();
 
         self::removeInventoryWidget();
         self::removeMultimediaWidget();
