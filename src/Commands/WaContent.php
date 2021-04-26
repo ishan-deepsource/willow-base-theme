@@ -929,7 +929,7 @@ class WaContent extends BaseCmd
     private function getAuthor($waContent, $authorName): WP_User
     {
         if ( ! empty($authorName)) {
-            $author = WpAuthor::findOrCreate($authorName);
+            $author = WpAuthor::findOrCreate($authorName, $authorName);
             if ($author instanceof WP_User) {
                 return $author;
             }
