@@ -25,12 +25,15 @@ class TranslationManagerService
         $this->brandId = $brandId;
     }
 
-    public function getTranslations()
+    public function getTranslations($locale = null)
     {
         $cacheKey = $this->getCacheKey();
         $result = get_transient($cacheKey);
         if (false === $result || empty($result['data']) || $this->shouldUpdateCache($result)) {
-            $endpoint = sprintf('/api/v1/translations/service/%s/brand/%s', $this->serviceId, $this->brandId);
+            if ($locale == null)
+                $endpoint = sprintf('/api/v1/translations/service/%s/brand/%s', $this->serviceId, $this->brandId);
+            else
+                $endpoint = sprintf('/api/v1/translations/service/%s/brand/%s/locale/%s', $this->serviceId, $this->brandId, $locale);
             try {
                 $response = $this->client->get($endpoint);
                 $decodedResponse = $this->decodeResponse($response);

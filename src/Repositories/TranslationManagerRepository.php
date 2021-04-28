@@ -25,7 +25,7 @@ class TranslationManagerRepository implements TranslationRepositoryContract
      */
     public function getTranslations(string $locale = null): ?array
     {
-        if ($translationsResponse = $this->translationService->getTranslations()) {
+        if ($translationsResponse = $this->translationService->getTranslations($locale)) {
             $translations = [];
 
             foreach ($translationsResponse as $trans) {
