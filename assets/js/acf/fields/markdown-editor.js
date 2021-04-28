@@ -285,8 +285,6 @@
       }
       if(jQuery('input[name="simpleMDE-link-nofollow"]:checked').val() === 'on') {
         attributes.rel = 'nofollow';
-      } else {
-        attributes.rel = 'follow';
       }
       if(Object.keys(attributes).length !== 0) {
         output += ' ' + JSON.stringify(attributes);
