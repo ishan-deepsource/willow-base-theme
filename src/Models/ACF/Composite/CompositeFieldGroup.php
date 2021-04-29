@@ -1757,7 +1757,7 @@ class CompositeFieldGroup
     private static function registerHooks()
     {
         add_filter(sprintf('acf/load_value/key=%s', self::AUTHOR_FIELD), function ($value) {
-            return get_post()->post_author ?: wp_get_current_user()->ID;
+            return (get_post()->post_author ?? null) ?: wp_get_current_user()->ID;
         }, 10, 1);
         add_filter(sprintf('acf/update_value/key=%s', self::AUTHOR_FIELD), function ($newAuthor) {
             $post = get_post();
