@@ -22,9 +22,11 @@ class AuthorOverviewAdapter extends AbstractContentAdapter implements AuthorOver
 
     public function getAuthors(): Collection
     {
+        $authors = array_get($this->acfArray, 'authors') ?: [];
+
          $authorIds = array_map(function (array $author) {
             return $author['ID'];
-         }, $this->acfArray['authors']);
+         }, $authors);
 
          $args = [
              'meta_query' => [
