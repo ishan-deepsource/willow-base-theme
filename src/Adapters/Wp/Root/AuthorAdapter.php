@@ -75,12 +75,12 @@ class AuthorAdapter implements AuthorContract
 
     public function getEmail(): ?string
     {
-        return $this->user->user_email ?: null;
+        return data_get($this->user, 'user_email') ?: null;
     }
 
     public function getWebsite(): ?string
     {
-        return $this->user->user_url ?: null;
+        return data_get($this->user, 'user_url') ?: null;
     }
 
     public function getTitle(): ?string
