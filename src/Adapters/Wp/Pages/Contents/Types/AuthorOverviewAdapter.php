@@ -24,7 +24,7 @@ class AuthorOverviewAdapter extends AbstractContentAdapter implements AuthorOver
     {
         $authors = array_get($this->acfArray, 'authors', []);
 
-        if (count($authors) == 0) {
+        if (empty($authors)) {
             return new Collection([]);
         }
 
