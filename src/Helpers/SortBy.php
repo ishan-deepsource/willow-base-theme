@@ -120,7 +120,12 @@ class SortBy
         }
         else if (is_array(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
             foreach (self::$acfWidget[AcfName::FIELD_CATEGORY] as $key => $value) {
-                $taxonomiesArr[] = self::isWpTerm($value) ? $value : null;
+                if (self::isWpTerm($value)) {
+                    if (!isset($args['category__in'])) {
+                        $args['category__in'] = [];
+                    }
+                    $args['category__in'][] = $value->term_id;
+                }
             }
         }
 
@@ -129,9 +134,13 @@ class SortBy
         }
         else if (self::$acfWidget[AcfName::FIELD_TAG]) {
             foreach (self::$acfWidget[AcfName::FIELD_TAG] as $key => $value) {
-                $taxonomiesArr[] = self::isWpTerm($value) ? $value : null;
+                if (!isset($args['tags__in'])) {
+                    $args['tags__in'] = [];
+                }
+                $args['tags__in'][] = $value->term_id;
             }
         }
+
         $taxonomies = collect($taxonomiesArr)->rejectNullValues();
 
         $customTaxonomies = WpTaxonomy::get_custom_taxonomies()->map(function ($taxonomy) {
