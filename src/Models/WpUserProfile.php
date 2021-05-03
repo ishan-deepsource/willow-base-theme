@@ -14,6 +14,12 @@ class WpUserProfile
         }
         
         add_action('admin_enqueue_scripts', [__CLASS__, 'loadAuthorDescriptionAsMarkdownScript']);
+
+        add_action('user_profile_update_errors' , [__CLASS__, 'myUserProfileUpdateErrors'], 10, 3);
+
+        add_action('user_new_form', [__CLASS__, 'myUserNewForm'], 10, 1);
+        add_action('show_user_profile', [__CLASS__, 'myUserNewForm'], 10, 1);
+        add_action('edit_user_profile', [__CLASS__, 'myUserNewForm'], 10, 1);
     }
 
     public static function getAvatarFromUser($userId): ?\WP_Post
@@ -74,5 +80,19 @@ class WpUserProfile
                 filemtime(get_theme_file_path('/assets/js/author-description-as-markdown.js'))
             );
         };
+    }
+
+    public static function myUserProfileUpdateErrors($errors, $update, $user)
+    {
+        $errors->remove('empty_email');
+    }
+
+    public static function myUserNewForm($formType)
+    {
+        ?>
+        <script>
+            jQuery('#email').closest('tr').find('span.description').remove();
+        </script>
+        <?php
     }
 }
