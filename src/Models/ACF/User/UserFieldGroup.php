@@ -19,9 +19,8 @@ class UserFieldGroup
     const PUBLIC_FIELD = 'public';
     const TITLE_FIELD_ID = 'field_5af17b5df8440';
     const TITLE_FIELD = 'user_title';
-    const OPTION_LANGUAGE_TITLES = 'language_titles';
 
-    public static function register(array $options = []): void
+    public static function register(): void
     {
         if (!function_exists('acf_add_local_field_group')) {
             return;
@@ -38,11 +37,9 @@ class UserFieldGroup
 
         $group->addField(self::getAvatarField());
         $group->addField(self::getTitleField());
-        //if (isset($options[self::OPTION_LANGUAGE_TITLES])) {
-            collect(LanguageProvider::getLanguageList())->each(function($language) use ($group) {
-                $group->addField(self::getTitleField($language->slug, $language->name));
-            });
-        //}
+        collect(LanguageProvider::getLanguageList())->each(function($language) use ($group) {
+            $group->addField(self::getTitleField($language->slug, $language->name));
+        });
         $group->addField(self::getBirthdayField());
         $group->addField(self::getPublicField());
 
