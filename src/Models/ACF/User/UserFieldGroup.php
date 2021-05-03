@@ -8,19 +8,24 @@ use Bonnier\Willow\Base\Models\ACF\Fields\DatePickerField;
 use Bonnier\Willow\Base\Models\ACF\Fields\ImageField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TextField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TrueFalseField;
+use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Properties\ACFLocation;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 
 class UserFieldGroup
 {
+    const GROUP_ID = 'group_5ad5e82740549';
     const PUBLIC_FIELD_ID = 'field_5e6e0cdd219b5';
     const PUBLIC_FIELD = 'public';
+    const TITLE_FIELD_ID = 'field_5af17b5df8440';
+    const TITLE_FIELD = 'user_title';
 
     public static function register(): void
     {
         if (!function_exists('acf_add_local_field_group')) {
             return;
         }
-        $group = new ACFGroup('group_5ad5e82740549');
+        $group = new ACFGroup(self::GROUP_ID);
         $group->setTitle('Willow User Profile')
             ->setLocation(new ACFLocation('user_form', ACFLocation::OPERATOR_EQUALS, 'edit'))
             ->setMenuOrder(0)
@@ -32,6 +37,9 @@ class UserFieldGroup
 
         $group->addField(self::getAvatarField());
         $group->addField(self::getTitleField());
+        collect(LanguageProvider::getLanguageList())->each(function($language) use ($group) {
+            $group->addField(self::getTitleField($language->slug, $language->name));
+        });
         $group->addField(self::getBirthdayField());
         $group->addField(self::getPublicField());
 
@@ -51,11 +59,18 @@ class UserFieldGroup
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
 
-    public static function getTitleField(): ACFField
+    public static function getTitleField($slug = '', $name = ''): ACFField
     {
-        $field = new TextField('field_5af17b5df8440');
-        $field->setLabel('Title')
-            ->setName('user_title');
+        if (empty($slug)) {
+            $field = new TextField(self::TITLE_FIELD_ID);
+            $field->setLabel('Title')
+                ->setName(self::TITLE_FIELD);
+        }
+        else {
+            $field = new TextField(self::TITLE_FIELD_ID . '_' . $slug);
+            $field->setLabel('Title' . ' ' . $name)
+                ->setName(self::TITLE_FIELD . '_' . $slug);
+        }
 
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }

@@ -15,6 +15,8 @@ use Bonnier\Willow\Base\Models\ACF\Fields\RepeaterField;
 use Bonnier\Willow\Base\Models\ACF\Fields\UrlField;
 use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Page\SortByFields;
+use Bonnier\Willow\Base\Models\ACF\User\UserFieldGroup;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 
 abstract class Brand implements BrandInterface
 {
@@ -29,6 +31,26 @@ abstract class Brand implements BrandInterface
         self::$compositeContentsField = CompositeFieldGroup::getContentField();
         self::$paragraphListWidget = CompositeFieldGroup::getParagraphListWidget();
         self::$infoboxWidget = CompositeFieldGroup::getInfoboxWidget();
+    }
+
+    public static function removeUserLanguageTitleFields(ACFGroup $group)
+    {
+        $langKeys = [];
+        foreach (LanguageProvider::getLanguageList() as $key => $lang) {
+            $langKeys[] = UserFieldGroup::TITLE_FIELD_ID . '_' . $lang->slug;
+        }
+        $fields = array_filter($group->getFields(), function (ACFField $field) use ($langKeys) {
+            return !in_array($field->getKey(), $langKeys);
+        });
+        return $group->setFields($fields);
+    }
+
+    public static function removeUserTitleField(ACFGroup $group)
+    {
+        $fields = array_filter($group->getFields(), function (ACFField $field) {
+            return $field->getKey() !== UserFieldGroup::TITLE_FIELD_ID;
+        });
+        return $group->setFields($fields);
     }
 
     public static function removeTeaserVideoUrlField(ACFGroup $group)
@@ -204,6 +226,16 @@ abstract class Brand implements BrandInterface
     {
         $associatedComposites = CompositeFieldGroup::getAssociatedCompositeWidget();
         add_filter(sprintf('willow/acf/layout=%s', $associatedComposites->getKey()), [__CLASS__, 'removeDisplayHintField']);
+    }
+
+    protected static function removeLanguageTitlesFromUserFieldGroup()
+    {
+        add_filter(sprintf('willow/acf/group=%s', UserFieldGroup::GROUP_ID), [__CLASS__, 'removeUserLanguageTitleFields']);
+    }
+
+    protected static function removeTitleFromUserFieldGroup()
+    {
+        add_filter(sprintf('willow/acf/group=%s', UserFieldGroup::GROUP_ID), [__CLASS__, 'removeUserTitleField']);
     }
 
 	protected static function removeInventoryWidget()
