@@ -31,10 +31,10 @@ class WpUserProfile
 
     public static function getTitle($userId): ?string
     {
-        $currentLanguage = LanguageProvider::getCurrentLanguage('slug');
-        $title = get_field('user_title_' . $currentLanguage, sprintf('user_%s', $userId));
+        $fieldName = UserFieldGroup::TITLE_FIELD . '_' .LanguageProvider::getCurrentLanguage('slug');
+        $title = get_field($fieldName, sprintf('user_%s', $userId));
         if (empty($title)) {
-            return get_field('user_title', sprintf('user_%s', $userId));
+            return get_field(UserFieldGroup::TITLE_FIELD, sprintf('user_%s', $userId));
         }
         return $title;
     }
