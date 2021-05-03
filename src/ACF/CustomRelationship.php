@@ -463,13 +463,12 @@ class CustomRelationship extends \acf_field
                 $taxonomies = empty($taxonomies) ? false : $taxonomies;
             }
 
+            $taxonomies = array_values(array_filter($taxonomies, function (string $value)  {return $value !== 'post_translations';}));
 
             // terms
             if ($taxonomies !== false) {
                 $groups = acf_get_taxonomy_terms($taxonomies);
             }
-
-
 
             // append
             $choices = $choices + $groups;

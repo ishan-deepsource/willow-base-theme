@@ -11,15 +11,17 @@
   }
 
   function addCountersAndEventListeners(el) {
-    const initialCharacterCount = el.value ? characterCount(el.value) : 0;
-    // PREVENT COUNTER TO BE ADDED DOUBLE TO TEXTAREAS FOR SOME WEIRD REASON
-    if (!jQuery(el).next().hasClass('composite-character-counters')) {
-      jQuery('<div class="composite-character-counters" style="text-align: right;">Initial Characters: <span class="composite-initial-character-counter" style="margin-right: 5px;">' + initialCharacterCount + '</span>Characters: <span class="composite-character-counter">' + initialCharacterCount + '</span></div>').insertAfter(el);
+    if (el) {
+      const initialCharacterCount = el.value ? characterCount(el.value) : 0;
+      // PREVENT COUNTER TO BE ADDED DOUBLE TO TEXTAREAS FOR SOME WEIRD REASON
+      if (!jQuery(el).next().hasClass('composite-character-counters')) {
+        jQuery('<div class="composite-character-counters" style="text-align: right;">Initial Characters: <span class="composite-initial-character-counter" style="margin-right: 5px;">' + initialCharacterCount + '</span>Characters: <span class="composite-character-counter">' + initialCharacterCount + '</span></div>').insertAfter(el);
+      }
+      el.addEventListener('keyup', countCharacters);
+      // TODO Attach eventListener for keyup on the specfic input on focus and remove on blur to save resources
+      // el.addEventListener('focus', addKeyUpListener)
+      // el.addEventListener('blur', addKeyUpListener)
     }
-    el.addEventListener('keyup', countCharacters);
-    // TODO Attach eventListener for keyup on the specfic input on focus and remove on blur to save resources
-    // el.addEventListener('focus', addKeyUpListener)
-    // el.addEventListener('blur', addKeyUpListener)
   }
 
   function initCounters() {
