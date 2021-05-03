@@ -134,10 +134,12 @@ class SortBy
         }
         else if (self::$acfWidget[AcfName::FIELD_TAG]) {
             foreach (self::$acfWidget[AcfName::FIELD_TAG] as $key => $value) {
-                if (!isset($args['tags__in'])) {
-                    $args['tags__in'] = [];
+                if (self::isWpTerm($value)) {
+                    if (!isset($args['tags__in'])) {
+                        $args['tags__in'] = [];
+                    }
+                    $args['tags__in'][] = $value->term_id;
                 }
-                $args['tags__in'][] = $value->term_id;
             }
         }
 
