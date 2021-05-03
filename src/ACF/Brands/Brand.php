@@ -47,7 +47,7 @@ abstract class Brand implements BrandInterface
 
     public static function removeUserTitleField(ACFGroup $group)
     {
-        $fields = array_filter($group->getFields(), function (ACFField $field) use ($langKeys) {
+        $fields = array_filter($group->getFields(), function (ACFField $field) {
             return $field->getKey() !== UserFieldGroup::TITLE_FIELD_ID;
         });
         return $group->setFields($fields);
