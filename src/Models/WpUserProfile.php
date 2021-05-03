@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Models;
 
 use Bonnier\Willow\Base\Models\ACF\User\UserFieldGroup;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 
 class WpUserProfile
 {
@@ -30,7 +31,12 @@ class WpUserProfile
 
     public static function getTitle($userId): ?string
     {
-        return get_field('user_title', sprintf('user_%s', $userId));
+        $currentLanguage = LanguageProvider::getCurrentLanguage('slug');
+        $title = get_field('user_title_' . $currentLanguage, sprintf('user_%s', $userId));
+        if (empty($title)) {
+            return get_field('user_title', sprintf('user_%s', $userId));
+        }
+        return $title;
     }
 
     private static function modifyAvatarFilter()

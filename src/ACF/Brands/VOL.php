@@ -40,6 +40,8 @@ class VOL extends Brand
         self::removeRecipeWidget();
         self::removeCalculatorWidget();
 
+        self::removeLanguageTitlesFromUserFieldGroup();
+
         $teaserListWidget =  PageFieldGroup::getTeaserListLayout();
         add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListDisplayHints']);
 

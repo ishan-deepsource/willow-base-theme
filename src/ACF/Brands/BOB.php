@@ -31,6 +31,8 @@ class BOB extends Brand
         self::removeRecipeWidget();
         self::removeCalculatorWidget();
 
+        self::removeLanguageTitlesFromUserFieldGroup();
+
         $paragraphListWidget = parent::$paragraphListWidget;
         add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'removeParagraphListShowNumbers']);
     }

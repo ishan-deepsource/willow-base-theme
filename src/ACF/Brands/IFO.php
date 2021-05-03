@@ -11,6 +11,7 @@ use Bonnier\Willow\Base\Models\ACF\Fields\RepeaterField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TrueFalseField;
 use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Page\SortByFields;
+use Bonnier\Willow\Base\Models\ACF\User\UserFieldGroup;
 
 class IFO extends Brand
 {
@@ -31,6 +32,8 @@ class IFO extends Brand
 
         self::removeQuotePageWidget();
         self::removeFeaturedContentPageWidget();
+
+        self::removeTitleFromUserFieldGroup();
 
         $teaserListWidget =  PageFieldGroup::getTeaserListLayout();
         add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListDisplayHints']);
