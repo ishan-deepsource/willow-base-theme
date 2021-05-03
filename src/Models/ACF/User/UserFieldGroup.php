@@ -61,9 +61,16 @@ class UserFieldGroup
 
     public static function getTitleField($slug = '', $name = ''): ACFField
     {
-        $field = new TextField(self::TITLE_FIELD_ID . (!empty($slug) ? '_' : '') . $slug);
-        $field->setLabel('Title' . (!empty($name) ? ' ' : '') . $name)
-            ->setName(self::TITLE_FIELD . (!empty($slug) ? '_' : '') . $slug);
+        if (empty($slug)) {
+            $field = new TextField(self::TITLE_FIELD_ID);
+            $field->setLabel('Title')
+                ->setName(self::TITLE_FIELD);
+        }
+        else {
+            $field = new TextField(self::TITLE_FIELD_ID . '_' . $slug);
+            $field->setLabel('Title' . ' ' . $name)
+                ->setName(self::TITLE_FIELD . '_' . $slug);
+        }
 
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
