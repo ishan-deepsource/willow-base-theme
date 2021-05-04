@@ -14,6 +14,7 @@ use Bonnier\Willow\Base\Repositories\WhiteAlbum\ContentRepository;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
 use Bonnier\WP\Cache\Models\Post as BonnierCachePost;
 use Bonnier\WP\Cxense\Models\Post as CxensePost;
+use Exception;
 use Illuminate\Support\Collection;
 
 // temperate solution for running command
@@ -60,7 +61,7 @@ class WaContent extends BaseCmd
      * @param $args
      * @param $assocArgs
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function prune($args, $assocArgs)
     {
@@ -77,6 +78,74 @@ class WaContent extends BaseCmd
                 }
             }
         });
+    }
+
+    /**
+     * Delete composite contents
+     * ## OPTIONS
+     *
+     * [--host=<host>]
+     * : Set host name for proper loading of envs
+     *
+     * [--post-id=<post-id>]
+     * : Set host name for proper loading of envs
+     *
+     * ## EXAMPLES
+     * wp contenthub editor wa content deleteContents --host=iform.dk --allow-root --post-id=123
+     *
+     * @param $args
+     * @param $assocArgs
+     *
+     * @throws Exception
+     */
+    public function deleteContents($args, $assocArgs): void
+    {
+        error_reporting(E_ALL); // Enable all error reporting to make sure we catch potential issues
+        $this->disableHooks(); // Disable various hooks and filters during delete
+        $postIdInput = $assocArgs['post-id'] ?? false;
+        if ($postIdInput) {
+            $this->deletePost($postIdInput) ?
+                WP_CLI::line("Delete content $postIdInput  complete") :
+                WP_CLI::line("Cannot delete post id: $postIdInput");
+        } else {
+            $allPostIds = get_posts(array(
+                'post_type' => 'contenthub_composite', 'numberposts' => -1, 'fields' => 'ids',
+            ));
+            $total      = count($allPostIds);
+            WP_CLI::confirm("Are you sure delete all ($total) content articles?", $assocArgs);
+            $progress = WP_CLI\Utils\make_progress_bar('Deleting progress:', $total);
+            $i        = 0;
+            while ($i < $total) {
+                $progress->tick();
+                $this->deletePost($allPostIds[$i]) ?: WP_CLI::line("Cannot delete post id: $allPostIds[$i]");
+                $i++;
+            }
+            $progress->finish();
+            WP_CLI::line('Delete all contents complete');
+        }
+    }
+
+    /**
+     * @param $postIdInput
+     *
+     * @return bool
+     */
+    private function deletePost($postIdInput): bool
+    {
+        if (get_post_type($postIdInput) === 'contenthub_composite') {
+            // delete images first
+            $imageIds = get_posts(array(
+                'post_type' => 'attachment', 'numberposts' => -1, 'fields' => 'ids', 'post_parent' => $postIdInput,
+            ));
+            foreach ($imageIds as $imageId) {
+                wp_delete_post($imageId, true);
+            }
+            wp_delete_post($postIdInput, true);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -156,7 +225,7 @@ class WaContent extends BaseCmd
      * @param $args
      * @param $assocArgs
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function import($args, $assocArgs)
     {
@@ -351,7 +420,7 @@ class WaContent extends BaseCmd
             return;
         }
 
-        $content               = $compositeContents
+        $content = $compositeContents
             ->map(function ($compositeContent) use ($postId) {
                 if ($compositeContent->type === 'text_item' && ! empty($compositeContent->text ?? null)) {
                     $text = $compositeContent->text;
@@ -452,8 +521,8 @@ class WaContent extends BaseCmd
                 }
 
                 //related content widget
-                if ($compositeContent->type === 'associated_composites'  && ! empty($relatedContentIds = $compositeContent->{self::RELATED_CONTENT_ID_NAME} ?? null)) {
-                    $associateArticles     = new Collection();
+                if ($compositeContent->type === 'associated_composites' && ! empty($relatedContentIds = $compositeContent->{self::RELATED_CONTENT_ID_NAME} ?? null)) {
+                    $associateArticles = new Collection();
                     foreach ($relatedContentIds as $id) {
                         $post = get_post(WpComposite::postIDFromWhiteAlbumID($id));
                         if (isset($post->ID)) {
@@ -649,7 +718,7 @@ class WaContent extends BaseCmd
      * @param $postId
      *
      * @return array|false|mixed|object
-     * @throws \Exception
+     * @throws Exception
      */
     private function getWaContentByWpPostId($postId)
     {
@@ -689,7 +758,7 @@ class WaContent extends BaseCmd
      * @param $args
      * @param $assocArgs
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function refresh($args, $assocArgs)
     {
