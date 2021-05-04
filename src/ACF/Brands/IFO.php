@@ -33,8 +33,6 @@ class IFO extends Brand
         self::removeQuotePageWidget();
         self::removeFeaturedContentPageWidget();
 
-        self::removeTitleFromUserFieldGroup();
-
         $teaserListWidget =  PageFieldGroup::getTeaserListLayout();
         add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListDisplayHints']);
         add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListMultiTagField']);
