@@ -91,13 +91,11 @@ class WpComposite
         });
 
         add_action('save_post', [__CLASS__, 'onSave'], 10, 2);
-        add_action('save_post', [__CLASS__, 'onSaveRequiredTitle'], 10, 2);
         add_action('save_post', [__CLASS__, 'onSaveSlugChange'], 5, 2);
         add_action('added_term_relationship', [__CLASS__, 'addedTermRelationship'], 10, 3);
         add_action('acf/save_post', [EstimatedReadingTime::class, 'addEstimatedReadingTime'], 20);
         add_filter('pll_copy_post_metas', [__CLASS__, 'checkIfTermIsTranslated'], 10, 3);
         add_filter('pll_copy_post_metas', [__CLASS__, 'checkIfTermIsTranslated'], 10, 3);
-        add_action('admin_notices', [__CLASS__, 'compositePostErrorAdminMessage']);
     }
 
     /**
@@ -202,7 +200,7 @@ class WpComposite
             update_option('composite_errors', $errors);
             $post->post_status = 'draft';
             wp_update_post($post);
-            add_action('save_post', [__CLASS__, 'onSaveRequiredTitle']);
+            add_action('save_post', [__CLASS__, 'onSaveRequiredTitle'], 10, 2);
             add_filter('redirect_post_location', [__CLASS__, 'compositeRedirectFilter'], 10, 2);
         }
     }
