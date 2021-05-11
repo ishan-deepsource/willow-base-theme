@@ -30,11 +30,12 @@ class CxenseSearchRepository
         $searchQuery = '',
         $page = 1,
         $perPage = 10,
+        $facets = [],
         $customFilters = [],
         $customSorting = []
     ) {
         $searchQuery = $searchQuery ?: '*';
-
+        // var_dump($searchQuery, $customSorting);exit;
         $arguments = [
             'query' => $searchQuery,
             'page' => $page,
@@ -61,7 +62,7 @@ class CxenseSearchRepository
                 ],
             ],
             'sorting' => [
-                'type' => 'score',
+                'type' => 'time',
                 'order' => 'descending'
             ],
         ];
