@@ -59,7 +59,6 @@ class SearchController extends BaseController
                     $filters->page,
                     $filters->per_page,
                     (array)$filters->facets,
-                    (array)$filters->filter,
                     (array)$filters->sorting
                 );
                 $manager = new Manager();
