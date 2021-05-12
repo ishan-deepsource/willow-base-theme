@@ -347,6 +347,7 @@ class SortBy
     private static function getRelationValue(string $fieldName): string
     {
         $relation = self::$acfWidget[$fieldName];
+        if (is_string($relation)) return $relation;
         if (is_array($relation) && is_string($relation[0])) return $relation[0];
         return self::AND;
     }
@@ -354,6 +355,7 @@ class SortBy
     private static function getOperatorValue(string $fieldName): string
     {
         $operation = self::$acfWidget[$fieldName];
+        if (is_string($operation)) return $operation;
         if (is_array($operation) && is_string($operation[0])) return $operation[0];
         return self::IN;
     }
