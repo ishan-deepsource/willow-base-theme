@@ -271,7 +271,6 @@ class SortByFields
             ->setName(AcfName::FIELD_CATEGORY_OPERATOR)
             ->setConditionalLogic(self::getAdvancedCustomCondition())
             ->setWrapper((new ACFWrapper())->setWidth('50'))
-            ->addChoice(SortBy::AND, 'And')
             ->addChoice(SortBy::IN, 'In')
             ->addChoice(SortBy::NOT_IN, 'Not in')
             ->setDefaultValue([SortBy::IN, 'In'])
