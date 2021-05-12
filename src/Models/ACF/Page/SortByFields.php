@@ -40,11 +40,11 @@ class SortByFields
         return array_merge($fields, [
             self::getSkipTeasersAmountField(),
             self::getTeaserListField(),
-            self::getCategoryField(),
-            self::getTagField(),
             self::getIncludeCategoryChildrenField(),
             self::getCategoryTagRelationField(),
             self::getTagRelationField(),
+            self::getCategoryField(),
+            self::getTagField(),
             self::getEditorialTypeField(),
             self::getUserField(),
         ]);

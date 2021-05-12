@@ -4,6 +4,7 @@
 namespace Bonnier\Willow\Base\ACF\Brands;
 
 
+use Bonnier\Willow\Base\Helpers\AcfName;
 use Bonnier\Willow\Base\Models\ACF\ACFField;
 use Bonnier\Willow\Base\Models\ACF\ACFGroup;
 use Bonnier\Willow\Base\Models\ACF\ACFLayout;
@@ -144,6 +145,18 @@ abstract class Brand implements BrandInterface
         return $layout->setSubFields($fields);
     }
 
+    public static function removeAdvancedSortByFields(ACFLayout $layout)
+    {
+        $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
+            return in_array($field->getName(), [
+                AcfName::FIELD_INCLUDE_CATEGORY_CHILDREN,
+                AcfName::FIELD_CATEGORY_TAG_RELATION,
+                AcfName::FIELD_TAG_OPERATION,
+            ]);
+        });
+        return $layout->setSubFields($fields);
+    }
+
     protected static function removeVideoUrlFromImageWidget()
     {
         $imageWidget = CompositeFieldGroup::getImageWidget();
@@ -226,6 +239,12 @@ abstract class Brand implements BrandInterface
     {
         $associatedComposites = CompositeFieldGroup::getAssociatedCompositeWidget();
         add_filter(sprintf('willow/acf/layout=%s', $associatedComposites->getKey()), [__CLASS__, 'removeDisplayHintField']);
+    }
+
+    protected static function removeAdvancedSortByFieldsFromTeaserListPageWidget()
+    {
+        $teaserListWidget =  PageFieldGroup::getTeaserListLayout();
+        add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'removeAdvancedSortByFields']);
     }
 
     protected static function removeLanguageTitlesFromUserFieldGroup()
