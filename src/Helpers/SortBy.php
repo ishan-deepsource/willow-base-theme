@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Helpers;
 
+use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 use Bonnier\Willow\Base\Models\FeatureDate;
 use Bonnier\Willow\Base\Models\WpComposite;
 use Bonnier\Willow\Base\Models\WpTaxonomy;
@@ -22,6 +23,10 @@ class SortBy
     public const CXENSE_TREND = 'trend';
     public const CXENSE_RECENT = 'recent';
     public const AUTHOR = 'author';
+    public const AND = 'AND';
+    public const OR = 'OR';
+    public const IN = 'IN';
+    public const NOT_IN = 'NOT IN';
 
     private static $acfWidget;
     private static $page;
@@ -115,50 +120,63 @@ class SortBy
         ];
 
         $taxonomiesArr = [];
-        if (self::isWpTerm(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
-            $taxonomiesArr[] = self::$acfWidget[AcfName::FIELD_CATEGORY];
+        if (!self::getUsingAdvancedCustomFiltering()) {
+            if (self::isWpTerm(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
+                $taxonomiesArr[] = self::getWpQueryItem(self::$acfWidget[AcfName::FIELD_CATEGORY]);
+            }
+            if (self::isWpTerm(self::$acfWidget[AcfName::FIELD_TAG])) {
+                $taxonomiesArr[] = self::getWpQueryItem(self::$acfWidget[AcfName::FIELD_TAG]);
+            }
         }
-        else if (is_array(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
-            foreach (self::$acfWidget[AcfName::FIELD_CATEGORY] as $key => $value) {
-                if (self::isWpTerm($value)) {
-                    if (!isset($args['category__in'])) {
-                        $args['category__in'] = [];
+        else {
+            $categoryTermIds = [];
+            $tagTermIds = [];
+            if (is_array(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
+                foreach (self::$acfWidget[AcfName::FIELD_CATEGORY] as $key => $value) {
+                    if (self::isWpTerm($value)) {
+                        $categoryTermIds[] = $value->term_id;
                     }
-                    $args['category__in'][] = $value->term_id;
                 }
             }
-        }
-
-        if (self::isWpTerm(self::$acfWidget[AcfName::FIELD_TAG])) {
-            $taxonomiesArr[] = self::$acfWidget[AcfName::FIELD_TAG];
-        }
-        else if (self::$acfWidget[AcfName::FIELD_TAG]) {
-            foreach (self::$acfWidget[AcfName::FIELD_TAG] as $key => $value) {
-                if (self::isWpTerm($value)) {
-                    if (!isset($args['tags__in'])) {
-                        $args['tags__in'] = [];
+            if (is_array(self::$acfWidget[AcfName::FIELD_TAG])) {
+                foreach (self::$acfWidget[AcfName::FIELD_TAG] as $key => $value) {
+                    if (self::isWpTerm($value)) {
+                        $tagTermIds[] = $value->term_id;
                     }
-                    $args['tags__in'][] = $value->term_id;
                 }
             }
-        }
-
-        $taxonomies = collect($taxonomiesArr)->rejectNullValues();
-
-        $customTaxonomies = WpTaxonomy::get_custom_taxonomies()->map(function ($taxonomy) {
-            if (($term = self::$acfWidget[$taxonomy->machine_name] ?? null) && self::isWpTerm($term)) {
-                return $term;
-            }
-            return null;
-        })->rejectNullValues();
-
-        $args['tax_query'] = $taxonomies->merge($customTaxonomies)->map(function (\WP_Term $term) {
-            return [
-                'taxonomy' => $term->taxonomy,
-                'field' => 'term_id',
-                'terms' => $term->term_id,
+            $includeCategoryChildren = is_bool(self::$acfWidget[AcfName::FIELD_INCLUDE_CATEGORY_CHILDREN])
+                ? self::$acfWidget[AcfName::FIELD_INCLUDE_CATEGORY_CHILDREN] : false;
+            $taxonomiesSubArr = [
+                'relation' => self::$acfWidget[AcfName::FIELD_CATEGORY_TAG_RELATION]
             ];
-        })->values()->toArray();
+            if (count($categoryTermIds) > 0 && is_array(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
+                $taxonomiesSubArr[] = [
+                    'taxonomy' => 'category',
+                    'field' => 'term_id',
+                    'terms' => $categoryTermIds,
+                    'include_children' => $includeCategoryChildren,
+                ];
+            }
+            if (count($tagTermIds) > 0 && self::$acfWidget[AcfName::FIELD_TAG]) {
+                $taxonomiesSubArr[] = [
+                    'taxonomy' => 'post_tag',
+                    'field' => 'term_id',
+                    'terms' => $tagTermIds,
+                    'operator' => self::$acfWidget[AcfName::FIELD_TAG_OPERATION],
+                ];
+            }
+            $taxonomiesArr['relation'] = 'AND';
+            $taxonomiesArr[] = $taxonomiesSubArr;
+        }
+
+        WpTaxonomy::get_custom_taxonomies()->map(function ($taxonomy) use ($taxonomiesArr) {
+            if (($term = self::$acfWidget[$taxonomy->machine_name] ?? null) && self::isWpTerm($term)) {
+                $taxonomiesArr[] = self::getWpQueryItem($term);
+            }
+        });
+
+        $args['tax_query'] = $taxonomiesArr;
 
         $teaserQuery = new \WP_Query($args);
 
@@ -300,6 +318,25 @@ class SortBy
             'per_page' => $count,
             'total' => $count,
             'pages' => 1,
+        ];
+    }
+
+    private static function getUsingAdvancedCustomFiltering(): bool
+    {
+        switch (PageFieldGroup::$brand) {
+            case 'IFO' :
+                return true;
+        }
+
+        return false;
+    }
+
+    private static function getWpQueryItem(\WP_Term $term)
+    {
+        return [
+            'taxonomy' => $term->taxonomy,
+            'field' => 'term_id',
+            'terms' => $term->term_id,
         ];
     }
 
