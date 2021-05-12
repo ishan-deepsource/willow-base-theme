@@ -146,15 +146,15 @@ class SortBy
                 }
             }
             $taxonomiesSubArr = [
-                'relation' => self::getRelationValue(AcfName::FIELD_CATEGORY_TAG_RELATION),
+                'relation' => self::getRelationValue(AcfName::FIELD_CATEGORIES_TAGS_RELATION),
             ];
             if (count($categoryTermIds) > 0 && is_array(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
                 $taxonomiesSubArr[] = [
                     'taxonomy' => 'category',
                     'field' => 'term_id',
                     'terms' => $categoryTermIds,
-                    'include_children' => self::getIncludeCategoryChildren(AcfName::FIELD_INCLUDE_CATEGORY_CHILDREN),
-                    'operator' => self::getOperatorValue(AcfName::FIELD_CATEGORY_OPERATOR),
+                    'include_children' => self::getIncludeCategoryChildren(AcfName::FIELD_INCLUDE_CHILDREN),
+                    'operator' => self::getOperatorValue(AcfName::FIELD_CATEGORIES_OPERATOR),
                 ];
             }
             if (count($tagTermIds) > 0 && self::$acfWidget[AcfName::FIELD_TAG]) {
@@ -162,7 +162,7 @@ class SortBy
                     'taxonomy' => 'post_tag',
                     'field' => 'term_id',
                     'terms' => $tagTermIds,
-                    'operator' => self::getOperatorValue(AcfName::FIELD_TAG_OPERATOR),
+                    'operator' => self::getOperatorValue(AcfName::FIELD_TAGS_OPERATOR),
                 ];
             }
             $taxonomiesArr['relation'] = 'AND';

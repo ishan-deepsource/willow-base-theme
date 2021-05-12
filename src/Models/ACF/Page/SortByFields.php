@@ -41,9 +41,9 @@ class SortByFields
             self::getSkipTeasersAmountField(),
             self::getTeaserListField(),
             self::getIncludeCategoryChildrenField(),
-            self::getCategoryTagRelationField(),
-            self::getCategoryOperatorField(),
-            self::getTagOperatorField(),
+            self::getCategoriesTagsRelationField(),
+            self::getCategoriesOperatorField(),
+            self::getTagsOperatorField(),
             self::getCategoryField(),
             self::getTagField(),
             self::getEditorialTypeField(),
@@ -159,7 +159,7 @@ class SortByFields
             ->add(self::$sortByField, ACFConditionalLogic::OPERATOR_EQUALS, SortBy::POPULAR);
 
         $field = new TaxonomyField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_CATEGORY)));
-        $field->setLabel('Category')
+        $field->setLabel($multiSelect ? 'Categories' : 'Category')
             ->setName(AcfName::FIELD_CATEGORY)
             ->setConditionalLogic($condition)
             ->setWrapper((new ACFWrapper())->setWidth('50'))
@@ -182,7 +182,7 @@ class SortByFields
             ->add(self::$sortByField, ACFConditionalLogic::OPERATOR_EQUALS, SortBy::POPULAR);
 
         $field = new TaxonomyField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_TAG)));
-        $field->setLabel('Tag')
+        $field->setLabel($multiSelect ? 'Tags' : 'Tag')
             ->setName(AcfName::FIELD_TAG)
             ->setConditionalLogic($condition)
             ->setWrapper((new ACFWrapper())->setWidth('50'))
@@ -239,9 +239,9 @@ class SortByFields
 
     private static function getIncludeCategoryChildrenField(): ACFField
     {
-        $field = new TrueFalseField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_INCLUDE_CATEGORY_CHILDREN)));
-        $field->setLabel('Include category children')
-            ->setName(AcfName::FIELD_INCLUDE_CATEGORY_CHILDREN)
+        $field = new TrueFalseField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_INCLUDE_CHILDREN)));
+        $field->setLabel('Include children')
+            ->setName(AcfName::FIELD_INCLUDE_CHILDREN)
             ->setConditionalLogic(self::getAdvancedCustomCondition())
             ->setWrapper((new ACFWrapper())->setWidth('50'))
             ->setDefaultValue(true);
@@ -249,11 +249,11 @@ class SortByFields
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
 
-    private static function getCategoryTagRelationField(): ACFField
+    private static function getCategoriesTagsRelationField(): ACFField
     {
-        $field = new SelectField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_CATEGORY_TAG_RELATION)));
-        $field->setLabel('Category/tags relation')
-            ->setName(AcfName::FIELD_CATEGORY_TAG_RELATION)
+        $field = new SelectField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_CATEGORIES_TAGS_RELATION)));
+        $field->setLabel('Categories/tags relation')
+            ->setName(AcfName::FIELD_CATEGORIES_TAGS_RELATION)
             ->setConditionalLogic(self::getAdvancedCustomCondition())
             ->setWrapper((new ACFWrapper())->setWidth('50'))
             ->addChoice(SortBy::AND, 'And')
@@ -264,11 +264,11 @@ class SortByFields
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
 
-    private static function getCategoryOperatorField(): ACFField
+    private static function getCategoriesOperatorField(): ACFField
     {
-        $field = new SelectField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_CATEGORY_OPERATOR)));
-        $field->setLabel('Category operator')
-            ->setName(AcfName::FIELD_CATEGORY_OPERATOR)
+        $field = new SelectField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_CATEGORIES_OPERATOR)));
+        $field->setLabel('Categories operator')
+            ->setName(AcfName::FIELD_CATEGORIES_OPERATOR)
             ->setConditionalLogic(self::getAdvancedCustomCondition())
             ->setWrapper((new ACFWrapper())->setWidth('50'))
             ->addChoice(SortBy::IN, 'In')
@@ -279,11 +279,11 @@ class SortByFields
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
 
-    private static function getTagOperatorField(): ACFField
+    private static function getTagsOperatorField(): ACFField
     {
-        $field = new SelectField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_TAG_OPERATOR)));
-        $field->setLabel('Tag operator')
-            ->setName(AcfName::FIELD_TAG_OPERATOR)
+        $field = new SelectField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_TAGS_OPERATOR)));
+        $field->setLabel('Tags operator')
+            ->setName(AcfName::FIELD_TAGS_OPERATOR)
             ->setConditionalLogic(self::getAdvancedCustomCondition())
             ->setWrapper((new ACFWrapper())->setWidth('50'))
             ->addChoice(SortBy::AND, 'And')

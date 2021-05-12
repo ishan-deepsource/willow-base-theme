@@ -149,10 +149,10 @@ abstract class Brand implements BrandInterface
     {
         $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
             return in_array($field->getName(), [
-                AcfName::FIELD_INCLUDE_CATEGORY_CHILDREN,
-                AcfName::FIELD_CATEGORY_TAG_RELATION,
-                AcfName::FIELD_CATEGORY_OPERATOR,
-                AcfName::FIELD_TAG_OPERATOR,
+                AcfName::FIELD_INCLUDE_CHILDREN,
+                AcfName::FIELD_CATEGORIES_TAGS_RELATION,
+                AcfName::FIELD_CATEGORIES_OPERATOR,
+                AcfName::FIELD_TAGS_OPERATOR,
             ]);
         });
         return $layout->setSubFields($fields);
