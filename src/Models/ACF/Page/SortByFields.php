@@ -40,7 +40,7 @@ class SortByFields
         return array_merge($fields, [
             self::getSkipTeasersAmountField(),
             self::getTeaserListField(),
-            self::getIncludeCategoryChildrenField(),
+            self::getIncludeChildrenField(),
             self::getCategoriesTagsRelationField(),
             self::getCategoriesOperatorField(),
             self::getTagsOperatorField(),
@@ -237,7 +237,7 @@ class SortByFields
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
 
-    private static function getIncludeCategoryChildrenField(): ACFField
+    private static function getIncludeChildrenField(): ACFField
     {
         $field = new TrueFalseField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_INCLUDE_CHILDREN)));
         $field->setLabel('Include children')
