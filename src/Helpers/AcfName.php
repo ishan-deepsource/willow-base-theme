@@ -41,6 +41,10 @@ class AcfName
     const FIELD_AUTHOR = 'author';
     const FIELD_COMPOSITE_CONTENT = 'composite_content';
     const FIELD_USER = 'user';
+    const FIELD_INCLUDE_CHILDREN = 'include_children';
+    const FIELD_CATEGORIES_TAGS_RELATION = 'categories_tags_relation';
+    const FIELD_CATEGORIES_OPERATOR = 'categories_operator';
+    const FIELD_TAGS_OPERATOR = 'tags_operator';
 
     const WIDGET_BANNER_PLACEMENT = 'banner_placement';
     const WIDGET_FEATURED_CONTENT = 'featured_content';
