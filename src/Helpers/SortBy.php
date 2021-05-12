@@ -151,19 +151,24 @@ class SortBy
                 'relation' => self::$acfWidget[AcfName::FIELD_CATEGORY_TAG_RELATION]
             ];
             if (count($categoryTermIds) > 0 && is_array(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
+                $operation = self::$acfWidget[AcfName::FIELD_CATEGORY_OPERATION];
+                if (is_array($operation) && is_string($operation[0])) $operation = $operation[0];
                 $taxonomiesSubArr[] = [
                     'taxonomy' => 'category',
                     'field' => 'term_id',
                     'terms' => $categoryTermIds,
                     'include_children' => $includeCategoryChildren,
+                    'operator' => $operation,
                 ];
             }
             if (count($tagTermIds) > 0 && self::$acfWidget[AcfName::FIELD_TAG]) {
+                $operation = self::$acfWidget[AcfName::FIELD_TAG_OPERATION];
+                if (is_array($operation) && is_string($operation[0])) $operation = $operation[0];
                 $taxonomiesSubArr[] = [
                     'taxonomy' => 'post_tag',
                     'field' => 'term_id',
                     'terms' => $tagTermIds,
-                    'operator' => self::$acfWidget[AcfName::FIELD_TAG_OPERATION],
+                    'operator' => $operation,
                 ];
             }
             $taxonomiesArr['relation'] = 'AND';
