@@ -153,7 +153,7 @@ class SortBy
                     'taxonomy' => 'category',
                     'field' => 'term_id',
                     'terms' => $categoryTermIds,
-                    'include_children' => self::getIncludeCategoryChildren(AcfName::FIELD_INCLUDE_CHILDREN),
+                    'include_children' => self::getIncludeChildren(AcfName::FIELD_INCLUDE_CHILDREN),
                     'operator' => self::getOperatorValue(AcfName::FIELD_CATEGORIES_OPERATOR),
                 ];
             }
@@ -339,7 +339,7 @@ class SortBy
         ];
     }
 
-    private static function getIncludeCategoryChildren(string $fieldName): bool
+    private static function getIncludeChildren(string $fieldName): bool
     {
         return is_bool(self::$acfWidget[$fieldName]) ? self::$acfWidget[$fieldName] : false;
     }

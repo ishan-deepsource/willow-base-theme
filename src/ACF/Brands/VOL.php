@@ -26,7 +26,7 @@ class VOL extends Brand
         self::removeChapterItemsFromVideoWidget();
         self::removeThemeFromTeaserListPageWidget();
         self::removeSortByEditorialTypeFromTeaserListPageWidget();
-        self::removeAdvancedSortByFieldsFromTeaserListPageWidget();
+        self::removeAdvancedCustomSortByFieldsFromTeaserListPageWidget();
         self::removeTitleFromAssociatedCompositesWidget();
         self::removeDisplayHintFromAssociatedCompositesWidget();
         self::removeDurationFromVideoWidget();

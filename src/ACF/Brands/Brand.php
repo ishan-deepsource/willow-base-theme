@@ -145,7 +145,7 @@ abstract class Brand implements BrandInterface
         return $layout->setSubFields($fields);
     }
 
-    public static function removeAdvancedSortByFields(ACFLayout $layout)
+    public static function removeAdvancedCustomSortByFields(ACFLayout $layout)
     {
         $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
             return in_array($field->getName(), [
@@ -242,10 +242,10 @@ abstract class Brand implements BrandInterface
         add_filter(sprintf('willow/acf/layout=%s', $associatedComposites->getKey()), [__CLASS__, 'removeDisplayHintField']);
     }
 
-    protected static function removeAdvancedSortByFieldsFromTeaserListPageWidget()
+    protected static function removeAdvancedCustomSortByFieldsFromTeaserListPageWidget()
     {
         $teaserListWidget =  PageFieldGroup::getTeaserListLayout();
-        add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'removeAdvancedSortByFields']);
+        add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'removeAdvancedCustomSortByFields']);
     }
 
     protected static function removeLanguageTitlesFromUserFieldGroup()
