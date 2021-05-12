@@ -239,13 +239,10 @@ class SortByFields
 
     private static function getIncludeCategoryChildrenField(): ACFField
     {
-        $condition = new ACFConditionalLogic();
-        $condition->add(self::$sortByField, ACFConditionalLogic::OPERATOR_EQUALS, SortBy::CUSTOM);
-
         $field = new TrueFalseField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_INCLUDE_CATEGORY_CHILDREN)));
         $field->setLabel('Include category children')
             ->setName(AcfName::FIELD_INCLUDE_CATEGORY_CHILDREN)
-            ->setConditionalLogic($condition)
+            ->setConditionalLogic(self::getAdvancedCustomCondition())
             ->setWrapper((new ACFWrapper())->setWidth('50'))
             ->setDefaultValue(true);
 
@@ -254,13 +251,10 @@ class SortByFields
 
     private static function getCategoryTagRelationField(): ACFField
     {
-        $condition = new ACFConditionalLogic();
-        $condition->add(self::$sortByField, ACFConditionalLogic::OPERATOR_EQUALS, SortBy::CUSTOM);
-
         $field = new SelectField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_CATEGORY_TAG_RELATION)));
         $field->setLabel('Category/tags relation')
             ->setName(AcfName::FIELD_CATEGORY_TAG_RELATION)
-            ->setConditionalLogic($condition)
+            ->setConditionalLogic(self::getAdvancedCustomCondition())
             ->setWrapper((new ACFWrapper())->setWidth('50'))
             ->addChoice(SortBy::AND, 'And')
             ->addChoice(SortBy::OR, 'Or')
@@ -272,13 +266,10 @@ class SortByFields
 
     private static function getCategoryOperationField(): ACFField
     {
-        $condition = new ACFConditionalLogic();
-        $condition->add(self::$sortByField, ACFConditionalLogic::OPERATOR_EQUALS, SortBy::CUSTOM);
-
-        $field = new SelectField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_CATEGORY_OPERATION)));
-        $field->setLabel('Category operation')
-            ->setName(AcfName::FIELD_CATEGORY_OPERATION)
-            ->setConditionalLogic($condition)
+        $field = new SelectField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_CATEGORY_OPERATOR)));
+        $field->setLabel('Category operator')
+            ->setName(AcfName::FIELD_CATEGORY_OPERATOR)
+            ->setConditionalLogic(self::getAdvancedCustomCondition())
             ->setWrapper((new ACFWrapper())->setWidth('50'))
             ->addChoice(SortBy::AND, 'And')
             ->addChoice(SortBy::IN, 'In')
@@ -291,13 +282,10 @@ class SortByFields
 
     private static function getTagOperationField(): ACFField
     {
-        $condition = new ACFConditionalLogic();
-        $condition->add(self::$sortByField, ACFConditionalLogic::OPERATOR_EQUALS, SortBy::CUSTOM);
-
-        $field = new SelectField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_TAG_OPERATION)));
-        $field->setLabel('Tag operation')
-            ->setName(AcfName::FIELD_TAG_OPERATION)
-            ->setConditionalLogic($condition)
+        $field = new SelectField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_TAG_OPERATOR)));
+        $field->setLabel('Tag operator')
+            ->setName(AcfName::FIELD_TAG_OPERATOR)
+            ->setConditionalLogic(self::getAdvancedCustomCondition())
             ->setWrapper((new ACFWrapper())->setWidth('50'))
             ->addChoice(SortBy::AND, 'And')
             ->addChoice(SortBy::IN, 'In')
@@ -326,5 +314,13 @@ class SortByFields
     private static function getDefaultTeaserAmount()
     {
         return array_get(self::$config, 'teaserCountDefault', 4);
+    }
+
+    private static function getAdvancedCustomCondition()
+    {
+        $condition = new ACFConditionalLogic();
+        $condition->add(self::$sortByField, ACFConditionalLogic::OPERATOR_EQUALS, SortBy::CUSTOM);
+
+        return $condition;
     }
 }

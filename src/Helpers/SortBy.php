@@ -151,24 +151,20 @@ class SortBy
                 'relation' => self::$acfWidget[AcfName::FIELD_CATEGORY_TAG_RELATION]
             ];
             if (count($categoryTermIds) > 0 && is_array(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
-                $operation = self::$acfWidget[AcfName::FIELD_CATEGORY_OPERATION];
-                if (is_array($operation) && is_string($operation[0])) $operation = $operation[0];
                 $taxonomiesSubArr[] = [
                     'taxonomy' => 'category',
                     'field' => 'term_id',
                     'terms' => $categoryTermIds,
                     'include_children' => $includeCategoryChildren,
-                    'operator' => $operation,
+                    'operator' => self::getOperatorValue(AcfName::FIELD_CATEGORY_OPERATOR),
                 ];
             }
             if (count($tagTermIds) > 0 && self::$acfWidget[AcfName::FIELD_TAG]) {
-                $operation = self::$acfWidget[AcfName::FIELD_TAG_OPERATION];
-                if (is_array($operation) && is_string($operation[0])) $operation = $operation[0];
                 $taxonomiesSubArr[] = [
                     'taxonomy' => 'post_tag',
                     'field' => 'term_id',
                     'terms' => $tagTermIds,
-                    'operator' => $operation,
+                    'operator' => self::getOperatorValue(AcfName::FIELD_TAG_OPERATOR),
                 ];
             }
             $taxonomiesArr['relation'] = 'AND';
@@ -343,6 +339,13 @@ class SortBy
             'field' => 'term_id',
             'terms' => $term->term_id,
         ];
+    }
+
+    private static function getOperatorValue(string $fieldName): string
+    {
+        $operation = self::$acfWidget[$fieldName];
+        if (is_array($operation) && is_string($operation[0])) return $operation[0];
+        return self::IN;
     }
 
     /**
