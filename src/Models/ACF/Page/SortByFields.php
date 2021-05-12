@@ -42,8 +42,8 @@ class SortByFields
             self::getTeaserListField(),
             self::getIncludeCategoryChildrenField(),
             self::getCategoryTagRelationField(),
-            self::getCategoryOperationField(),
-            self::getTagOperationField(),
+            self::getCategoryOperatorField(),
+            self::getTagOperatorField(),
             self::getCategoryField(),
             self::getTagField(),
             self::getEditorialTypeField(),
@@ -264,7 +264,7 @@ class SortByFields
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
 
-    private static function getCategoryOperationField(): ACFField
+    private static function getCategoryOperatorField(): ACFField
     {
         $field = new SelectField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_CATEGORY_OPERATOR)));
         $field->setLabel('Category operator')
@@ -279,7 +279,7 @@ class SortByFields
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }
 
-    private static function getTagOperationField(): ACFField
+    private static function getTagOperatorField(): ACFField
     {
         $field = new SelectField(sprintf('field_%s', hash('md5', self::$widgetName . AcfName::FIELD_TAG_OPERATOR)));
         $field->setLabel('Tag operator')
