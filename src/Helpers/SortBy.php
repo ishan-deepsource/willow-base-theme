@@ -120,7 +120,7 @@ class SortBy
         ];
 
         $taxonomiesArr = [];
-        if (!self::getUsingAdvancedCustomFiltering()) {
+        if (!self::getUsingAdvancedCustomSortBy()) {
             if (self::isWpTerm(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
                 $taxonomiesArr[] = self::getWpQueryItem(self::$acfWidget[AcfName::FIELD_CATEGORY]);
             }
@@ -145,17 +145,15 @@ class SortBy
                     }
                 }
             }
-            $includeCategoryChildren = is_bool(self::$acfWidget[AcfName::FIELD_INCLUDE_CATEGORY_CHILDREN])
-                ? self::$acfWidget[AcfName::FIELD_INCLUDE_CATEGORY_CHILDREN] : false;
             $taxonomiesSubArr = [
-                'relation' => self::$acfWidget[AcfName::FIELD_CATEGORY_TAG_RELATION]
+                'relation' => self::getRelationValue(AcfName::FIELD_CATEGORY_TAG_RELATION),
             ];
             if (count($categoryTermIds) > 0 && is_array(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
                 $taxonomiesSubArr[] = [
                     'taxonomy' => 'category',
                     'field' => 'term_id',
                     'terms' => $categoryTermIds,
-                    'include_children' => $includeCategoryChildren,
+                    'include_children' => self::getIncludeCategoryChildren(AcfName::FIELD_INCLUDE_CATEGORY_CHILDREN),
                     'operator' => self::getOperatorValue(AcfName::FIELD_CATEGORY_OPERATOR),
                 ];
             }
@@ -322,7 +320,7 @@ class SortBy
         ];
     }
 
-    private static function getUsingAdvancedCustomFiltering(): bool
+    private static function getUsingAdvancedCustomSortBy(): bool
     {
         switch (PageFieldGroup::$brand) {
             case 'IFO' :
@@ -339,6 +337,18 @@ class SortBy
             'field' => 'term_id',
             'terms' => $term->term_id,
         ];
+    }
+
+    private static function getIncludeCategoryChildren(string $fieldName): bool
+    {
+        return is_bool(self::$acfWidget[$fieldName]) ? self::$acfWidget[$fieldName] : false;
+    }
+
+    private static function getRelationValue(string $fieldName): string
+    {
+        $relation = self::$acfWidget[$fieldName];
+        if (is_array($relation) && is_string($relation[0])) return $relation[0];
+        return self::AND;
     }
 
     private static function getOperatorValue(string $fieldName): string
