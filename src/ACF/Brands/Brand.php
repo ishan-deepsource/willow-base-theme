@@ -148,7 +148,7 @@ abstract class Brand implements BrandInterface
     public static function removeAdvancedCustomSortByFields(ACFLayout $layout)
     {
         $fields = array_filter($layout->getSubFields(), function (ACFField $field) {
-            return in_array($field->getName(), [
+            return !in_array($field->getName(), [
                 AcfName::FIELD_INCLUDE_CHILDREN,
                 AcfName::FIELD_CATEGORIES_TAGS_RELATION,
                 AcfName::FIELD_CATEGORIES_OPERATOR,
