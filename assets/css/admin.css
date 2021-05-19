@@ -66,3 +66,9 @@ div.image-focalpoint-actions .dashicons-no {
 #authordiv.postbox {
     display:none !important;
 }
+
+#postbox-container-1 #side-sortables {
+  position: fixed;
+  overflow-y: scroll;
+  max-height: 70%;
+}
