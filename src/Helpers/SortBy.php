@@ -216,7 +216,6 @@ class SortBy
 
             return null;
         } else {
-            //var_dump(data_get($site, 'brand.brand_code') === 'GDS');exit;
             $currentLanguage = LanguageProvider::getCurrentLanguage();
             $featuredPostIdTimestamps = FeatureDate::where('timestamp', '<', Carbon::now())
                 ->orderBy('timestamp', 'desc')
@@ -251,63 +250,26 @@ class SortBy
                 'lang' => $currentLanguage,
             ];
 
-            $taxonomiesArr = [];
-            if (!self::getUsingAdvancedCustomSortBy()) {
-                if (self::isWpTerm(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
-                    $taxonomiesArr[] = self::getWpQueryItem(self::$acfWidget[AcfName::FIELD_CATEGORY]);
-                }
-                if (self::isWpTerm(self::$acfWidget[AcfName::FIELD_TAG])) {
-                    $taxonomiesArr[] = self::getWpQueryItem(self::$acfWidget[AcfName::FIELD_TAG]);
-                }
-            }
-            else {
-                $categoryTermIds = [];
-                $tagTermIds = [];
-                if (is_array(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
-                    foreach (self::$acfWidget[AcfName::FIELD_CATEGORY] as $key => $value) {
-                        if (self::isWpTerm($value)) {
-                            $categoryTermIds[] = $value->term_id;
-                        }
-                    }
-                }
-                if (is_array(self::$acfWidget[AcfName::FIELD_TAG])) {
-                    foreach (self::$acfWidget[AcfName::FIELD_TAG] as $key => $value) {
-                        if (self::isWpTerm($value)) {
-                            $tagTermIds[] = $value->term_id;
-                        }
-                    }
-                }
-                $taxonomiesSubArr = [
-                    'relation' => self::getRelationValue(AcfName::FIELD_CATEGORIES_TAGS_RELATION),
-                ];
-                if (count($categoryTermIds) > 0 && is_array(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
-                    $taxonomiesSubArr[] = [
-                        'taxonomy' => 'category',
-                        'field' => 'term_id',
-                        'terms' => $categoryTermIds,
-                        'include_children' => self::getIncludeChildren(AcfName::FIELD_INCLUDE_CHILDREN),
-                        'operator' => self::getOperatorValue(AcfName::FIELD_CATEGORIES_OPERATOR),
-                    ];
-                }
-                if (count($tagTermIds) > 0 && self::$acfWidget[AcfName::FIELD_TAG]) {
-                    $taxonomiesSubArr[] = [
-                        'taxonomy' => 'post_tag',
-                        'field' => 'term_id',
-                        'terms' => $tagTermIds,
-                        'operator' => self::getOperatorValue(AcfName::FIELD_TAGS_OPERATOR),
-                    ];
-                }
-                $taxonomiesArr['relation'] = 'AND';
-                $taxonomiesArr[] = $taxonomiesSubArr;
-            }
+            /** @var Collection $taxonomies */
+            $taxonomies = collect([
+                self::isWpTerm(self::$acfWidget[AcfName::FIELD_CATEGORY]) ? self::$acfWidget[AcfName::FIELD_CATEGORY] : null,
+                self::isWpTerm(self::$acfWidget[AcfName::FIELD_TAG]) ? self::$acfWidget[AcfName::FIELD_TAG] : null,
+            ])->rejectNullValues();
 
-            WpTaxonomy::get_custom_taxonomies()->map(function ($taxonomy) use ($taxonomiesArr) {
+            $customTaxonomies = WpTaxonomy::get_custom_taxonomies()->map(function ($taxonomy) {
                 if (($term = self::$acfWidget[$taxonomy->machine_name] ?? null) && self::isWpTerm($term)) {
-                    $taxonomiesArr[] = self::getWpQueryItem($term);
+                    return $term;
                 }
-            });
+                return null;
+            })->rejectNullValues();
 
-            $args['tax_query'] = $taxonomiesArr;
+            $args['tax_query'] = $taxonomies->merge($customTaxonomies)->map(function (\WP_Term $term) {
+                return [
+                    'taxonomy' => $term->taxonomy,
+                    'field' => 'term_id',
+                    'terms' => $term->term_id,
+                ];
+            })->values()->toArray();
 
             $teaserQuery = new \WP_Query($args);
 
