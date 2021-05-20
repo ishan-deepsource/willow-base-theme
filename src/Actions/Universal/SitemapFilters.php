@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Actions\Universal;
 
 use Bonnier\Willow\Base\Helpers\Utils;
+use Bonnier\Willow\Base\Models\WpComposite;
 use Bonnier\WP\Sitemap\WpBonnierSitemap;
 use Illuminate\Support\Str;
 
@@ -36,6 +37,10 @@ class SitemapFilters
         }
         $excludedPlatforms = get_field('exclude_platforms', $post->ID);
         if ($excludedPlatforms && in_array('web', $excludedPlatforms)) {
+            $allowed = false;
+        }
+
+        if (get_field(WpComposite::POST_CANONICAL_URL, $post->ID)) {
             $allowed = false;
         }
 
