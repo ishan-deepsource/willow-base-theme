@@ -87,169 +87,41 @@ class SortBy
      */
     protected static function getCompositesByTaxonomy(): ?array
     {
-        $site = WpSiteManager::instance()->settings()->getSite();
-        // var_dump(data_get($site, 'brand.brand_code') =);exit;
-        if (data_get($site, 'brand.brand_code') === 'IFO') {
-            $currentLanguage = LanguageProvider::getCurrentLanguage();
-            $featuredPostIdTimestamps = FeatureDate::where('timestamp', '<', Carbon::now())
-                ->orderBy('timestamp', 'desc')
-                ->get()
-                ->pluck('timestamp', 'post_id')
-                ->filter(function ($value, $postID) use ($currentLanguage) {
-                    return LanguageProvider::getPostLanguage($postID) == $currentLanguage;
-                })
-                ->toArray();
+        $currentLanguage = LanguageProvider::getCurrentLanguage();
+        $featuredPostIdTimestamps = FeatureDate::where('timestamp', '<', Carbon::now())
+            ->orderBy('timestamp', 'desc')
+            ->get()
+            ->pluck('timestamp', 'post_id')
+            ->filter(function ($value, $postID) use ($currentLanguage) {
+                return LanguageProvider::getPostLanguage($postID) == $currentLanguage;
+            })
+            ->toArray();
 
-            $featuredPostIds =  array_keys($featuredPostIdTimestamps);
+        $featuredPostIds =  array_keys($featuredPostIdTimestamps);
 
-            global $wpdb;
-            $excludedFromWebIds = $wpdb->get_col("SELECT post_id FROM wp_postmeta WHERE meta_key='exclude_platforms' and meta_value like '%web%'");
+        global $wpdb;
+        $excludedFromWebIds = $wpdb->get_col("SELECT post_id FROM wp_postmeta WHERE meta_key='exclude_platforms' and meta_value like '%web%'");
 
-            $postsPerPage = Arr::get(self::$acfWidget, AcfName::FIELD_TEASER_AMOUNT) ?: 4;
-            $offset = Arr::get(self::$acfWidget, AcfName::FIELD_SKIP_TEASERS_AMOUNT) ?: 0;
-            // Calculate offset factoring in pagination;
-            $paginatedOffset = $offset + ((self::$page -1) * $postsPerPage);
+        $postsPerPage = Arr::get(self::$acfWidget, AcfName::FIELD_TEASER_AMOUNT) ?: 4;
+        $offset = Arr::get(self::$acfWidget, AcfName::FIELD_SKIP_TEASERS_AMOUNT) ?: 0;
+        // Calculate offset factoring in pagination;
+        $paginatedOffset = $offset + ((self::$page -1) * $postsPerPage);
 
-            $args = [
-                'posts_per_page' => $postsPerPage,
-                'offset' => $paginatedOffset,
-                'order' => 'DESC',
-                'orderby' => 'post_date',
-                'post__not_in' => array_merge($featuredPostIds, $excludedFromWebIds),
-                'post_type' =>  WpComposite::POST_TYPE,
-                'post_status' => 'publish',
-                'suppress_filters' => true,
-                'update_post_term_cache' => false, // disable fetching of terms, and a write query to the database
-                'cache_results' => false,
-                'lang' => $currentLanguage,
-            ];
+        $args = [
+            'posts_per_page' => $postsPerPage,
+            'offset' => $paginatedOffset,
+            'order' => 'DESC',
+            'orderby' => 'post_date',
+            'post__not_in' => array_merge($featuredPostIds, $excludedFromWebIds),
+            'post_type' =>  WpComposite::POST_TYPE,
+            'post_status' => 'publish',
+            'suppress_filters' => true,
+            'update_post_term_cache' => false, // disable fetching of terms, and a write query to the database
+            'cache_results' => false,
+            'lang' => $currentLanguage,
+        ];
 
-            $taxonomiesArr = [];
-            if (!self::getUsingAdvancedCustomSortBy()) {
-                if (self::isWpTerm(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
-                    $taxonomiesArr[] = self::getWpQueryItem(self::$acfWidget[AcfName::FIELD_CATEGORY]);
-                }
-                if (self::isWpTerm(self::$acfWidget[AcfName::FIELD_TAG])) {
-                    $taxonomiesArr[] = self::getWpQueryItem(self::$acfWidget[AcfName::FIELD_TAG]);
-                }
-            }
-            else {
-                $categoryTermIds = [];
-                $tagTermIds = [];
-                if (is_array(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
-                    foreach (self::$acfWidget[AcfName::FIELD_CATEGORY] as $key => $value) {
-                        if (self::isWpTerm($value)) {
-                            $categoryTermIds[] = $value->term_id;
-                        }
-                    }
-                }
-                if (is_array(self::$acfWidget[AcfName::FIELD_TAG])) {
-                    foreach (self::$acfWidget[AcfName::FIELD_TAG] as $key => $value) {
-                        if (self::isWpTerm($value)) {
-                            $tagTermIds[] = $value->term_id;
-                        }
-                    }
-                }
-                $taxonomiesSubArr = [
-                    'relation' => self::getRelationValue(AcfName::FIELD_CATEGORIES_TAGS_RELATION),
-                ];
-                if (count($categoryTermIds) > 0 && is_array(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
-                    $taxonomiesSubArr[] = [
-                        'taxonomy' => 'category',
-                        'field' => 'term_id',
-                        'terms' => $categoryTermIds,
-                        'include_children' => self::getIncludeChildren(AcfName::FIELD_INCLUDE_CHILDREN),
-                        'operator' => self::getOperatorValue(AcfName::FIELD_CATEGORIES_OPERATOR),
-                    ];
-                }
-                if (count($tagTermIds) > 0 && self::$acfWidget[AcfName::FIELD_TAG]) {
-                    $taxonomiesSubArr[] = [
-                        'taxonomy' => 'post_tag',
-                        'field' => 'term_id',
-                        'terms' => $tagTermIds,
-                        'operator' => self::getOperatorValue(AcfName::FIELD_TAGS_OPERATOR),
-                    ];
-                }
-                $taxonomiesArr['relation'] = 'AND';
-                $taxonomiesArr[] = $taxonomiesSubArr;
-            }
-
-            WpTaxonomy::get_custom_taxonomies()->map(function ($taxonomy) use ($taxonomiesArr) {
-                if (($term = self::$acfWidget[$taxonomy->machine_name] ?? null) && self::isWpTerm($term)) {
-                    $taxonomiesArr[] = self::getWpQueryItem($term);
-                }
-            });
-
-            $args['tax_query'] = $taxonomiesArr;
-
-            $teaserQuery = new \WP_Query($args);
-
-            $posts = collect($teaserQuery->posts);
-
-            if (self::$page === 1 && $offset === 0) {
-                $featuredPosts = collect(get_posts([
-                    'posts_per_page' => $args['posts_per_page'],
-                    'post_type' => WpComposite::POST_TYPE,
-                    'post__in' => $featuredPostIds,
-                    'orderby' => 'post__in',
-                    'tax_query' => $args['tax_query']
-                ]));
-                $posts->merge($featuredPosts)
-                    ->sortByDesc(function ($post) use ($featuredPostIdTimestamps) {
-                        $featuredPost = $featuredPostIdTimestamps[$post->ID] ?? false;
-                        return $featuredPost ? $featuredPost->getTimestamp() : strtotime($post->post_date);
-                    })->take($args['posts_per_page']);
-            } else {
-                // If we are paginating, we'll ignore the featured posts.
-                $featuredPosts = collect();
-            }
-
-            if ($teaserQuery->have_posts()) {
-                return [
-                    'composites' => $posts,
-                    'page' => self::$page,
-                    'per_page' => intval($args['posts_per_page']),
-                    'total' => intval($teaserQuery->found_posts),
-                    'pages' => intval($teaserQuery->max_num_pages),
-                ];
-            }
-
-            return null;
-        } else {
-            $currentLanguage = LanguageProvider::getCurrentLanguage();
-            $featuredPostIdTimestamps = FeatureDate::where('timestamp', '<', Carbon::now())
-                ->orderBy('timestamp', 'desc')
-                ->get()
-                ->pluck('timestamp', 'post_id')
-                ->filter(function ($value, $postID) use ($currentLanguage) {
-                    return LanguageProvider::getPostLanguage($postID) == $currentLanguage;
-                })
-                ->toArray();
-
-            $featuredPostIds =  array_keys($featuredPostIdTimestamps);
-
-            global $wpdb;
-            $excludedFromWebIds = $wpdb->get_col("SELECT post_id FROM wp_postmeta WHERE meta_key='exclude_platforms' and meta_value like '%web%'");
-
-            $postsPerPage = Arr::get(self::$acfWidget, AcfName::FIELD_TEASER_AMOUNT) ?: 4;
-            $offset = Arr::get(self::$acfWidget, AcfName::FIELD_SKIP_TEASERS_AMOUNT) ?: 0;
-            // Calculate offset factoring in pagination;
-            $paginatedOffset = $offset + ((self::$page -1) * $postsPerPage);
-
-            $args = [
-                'posts_per_page' => $postsPerPage,
-                'offset' => $paginatedOffset,
-                'order' => 'DESC',
-                'orderby' => 'post_date',
-                'post__not_in' => array_merge($featuredPostIds, $excludedFromWebIds),
-                'post_type' =>  WpComposite::POST_TYPE,
-                'post_status' => 'publish',
-                'suppress_filters' => true,
-                'update_post_term_cache' => false, // disable fetching of terms, and a write query to the database
-                'cache_results' => false,
-                'lang' => $currentLanguage,
-            ];
-
+        if (!self::getUsingAdvancedCustomSortBy()) {
             /** @var Collection $taxonomies */
             $taxonomies = collect([
                 self::isWpTerm(self::$acfWidget[AcfName::FIELD_CATEGORY]) ? self::$acfWidget[AcfName::FIELD_CATEGORY] : null,
@@ -270,41 +142,90 @@ class SortBy
                     'terms' => $term->term_id,
                 ];
             })->values()->toArray();
-
-            $teaserQuery = new \WP_Query($args);
-
-            $posts = collect($teaserQuery->posts);
-
-            if (self::$page === 1 && $offset === 0) {
-                $featuredPosts = collect(get_posts([
-                    'posts_per_page' => $args['posts_per_page'],
-                    'post_type' => WpComposite::POST_TYPE,
-                    'post__in' => $featuredPostIds,
-                    'orderby' => 'post__in',
-                    'tax_query' => $args['tax_query']
-                ]));
-                $posts->merge($featuredPosts)
-                    ->sortByDesc(function ($post) use ($featuredPostIdTimestamps) {
-                        $featuredPost = $featuredPostIdTimestamps[$post->ID] ?? false;
-                        return $featuredPost ? $featuredPost->getTimestamp() : strtotime($post->post_date);
-                    })->take($args['posts_per_page']);
-            } else {
-                // If we are paginating, we'll ignore the featured posts.
-                $featuredPosts = collect();
+        }
+        else {
+            $taxonomiesArr = [];
+            $categoryTermIds = [];
+            $tagTermIds = [];
+            if (is_array(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
+                foreach (self::$acfWidget[AcfName::FIELD_CATEGORY] as $key => $value) {
+                    if (self::isWpTerm($value)) {
+                        $categoryTermIds[] = $value->term_id;
+                    }
+                }
             }
-
-            if ($teaserQuery->have_posts()) {
-                return [
-                    'composites' => $posts,
-                    'page' => self::$page,
-                    'per_page' => intval($args['posts_per_page']),
-                    'total' => intval($teaserQuery->found_posts),
-                    'pages' => intval($teaserQuery->max_num_pages),
+            if (is_array(self::$acfWidget[AcfName::FIELD_TAG])) {
+                foreach (self::$acfWidget[AcfName::FIELD_TAG] as $key => $value) {
+                    if (self::isWpTerm($value)) {
+                        $tagTermIds[] = $value->term_id;
+                    }
+                }
+            }
+            $taxonomiesSubArr = [
+                'relation' => self::getRelationValue(AcfName::FIELD_CATEGORIES_TAGS_RELATION),
+            ];
+            if (count($categoryTermIds) > 0 && is_array(self::$acfWidget[AcfName::FIELD_CATEGORY])) {
+                $taxonomiesSubArr[] = [
+                    'taxonomy' => 'category',
+                    'field' => 'term_id',
+                    'terms' => $categoryTermIds,
+                    'include_children' => self::getIncludeChildren(AcfName::FIELD_INCLUDE_CHILDREN),
+                    'operator' => self::getOperatorValue(AcfName::FIELD_CATEGORIES_OPERATOR),
                 ];
             }
+            if (count($tagTermIds) > 0 && self::$acfWidget[AcfName::FIELD_TAG]) {
+                $taxonomiesSubArr[] = [
+                    'taxonomy' => 'post_tag',
+                    'field' => 'term_id',
+                    'terms' => $tagTermIds,
+                    'operator' => self::getOperatorValue(AcfName::FIELD_TAGS_OPERATOR),
+                ];
+            }
+            $taxonomiesArr['relation'] = 'AND';
+            $taxonomiesArr[] = $taxonomiesSubArr;
 
-            return null;
+            WpTaxonomy::get_custom_taxonomies()->map(function ($taxonomy) use ($taxonomiesArr) {
+                if (($term = self::$acfWidget[$taxonomy->machine_name] ?? null) && self::isWpTerm($term)) {
+                    $taxonomiesArr[] = self::getWpQueryItem($term);
+                }
+            });
+
+            $args['tax_query'] = $taxonomiesArr;
         }
+
+        $teaserQuery = new \WP_Query($args);
+
+        $posts = collect($teaserQuery->posts);
+
+        if (self::$page === 1 && $offset === 0) {
+            $featuredPosts = collect(get_posts([
+                'posts_per_page' => $args['posts_per_page'],
+                'post_type' => WpComposite::POST_TYPE,
+                'post__in' => $featuredPostIds,
+                'orderby' => 'post__in',
+                'tax_query' => $args['tax_query']
+            ]));
+            $posts->merge($featuredPosts)
+                ->sortByDesc(function ($post) use ($featuredPostIdTimestamps) {
+                    $featuredPost = $featuredPostIdTimestamps[$post->ID] ?? false;
+                    return $featuredPost ? $featuredPost->getTimestamp() : strtotime($post->post_date);
+                })->take($args['posts_per_page']);
+        } else {
+            // If we are paginating, we'll ignore the featured posts.
+            $featuredPosts = collect();
+        }
+
+        if ($teaserQuery->have_posts()) {
+            return [
+                'composites' => $posts,
+                'page' => self::$page,
+                'per_page' => intval($args['posts_per_page']),
+                'total' => intval($teaserQuery->found_posts),
+                'pages' => intval($teaserQuery->max_num_pages),
+            ];
+        }
+
+        return null;
     }
 
     /**
