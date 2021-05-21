@@ -29,6 +29,8 @@ use Bonnier\WP\Redirect\WpBonnierRedirect;
 use Exception;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
+use League\Fractal\Resource\ResourceAbstract;
+use Symfony\Component\HttpFoundation\Response;
 use WP_Post;
 use WP_Query;
 use WP_REST_Request;
@@ -92,9 +94,18 @@ class RouteController extends BaseController
             $resource = new Item($category, new CategoryTransformer());
             $resource->setMeta(['type' => $content->parent ? 'subcategory' : 'category']);
         } elseif ($content instanceof WP_Term && $content->taxonomy === 'post_tag') {
-            $tag = new Tag(new TagAdapter($content));
-            $resource = new Item($tag, new TagTransformer());
-            $resource->setMeta(['type' => 'tag']);
+            $categoryPath = parse_url(urldecode($path), PHP_URL_PATH);
+            $categoryPath = str_replace('/tags/', '/', $categoryPath);
+
+            if (($category = get_category_by_path($categoryPath)) && $category instanceof WP_Term) {
+                $categoryWrapper = new Category(new CategoryAdapter($category));
+                $resource = new Item($categoryWrapper, new CategoryTransformer());
+                $resource->setMeta(['type' => $content->parent ? 'subcategory' : 'category']);
+            } else {
+                $tag = new Tag(new TagAdapter($content));
+                $resource = new Item($tag, new TagTransformer());
+                $resource->setMeta(['type' => 'tag']);
+            }
         } elseif ($content instanceof \WP_User) {
             $author = new Author(new AuthorAdapter($content));
             $resource = new Item($author, new AuthorTransformer());
