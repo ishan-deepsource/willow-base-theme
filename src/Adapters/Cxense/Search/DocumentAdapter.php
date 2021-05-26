@@ -78,7 +78,15 @@ class DocumentAdapter implements CompositeContract
 
     public function getContents(): ?Collection
     {
-        return null;
+        $arr = [[ 'type' => 'cxense' ]];
+        $this->addFieldNameValuesToArray($arr, [
+            'bod-recipe-meta-energy',
+            'bod-recipe-meta-energy-unit',
+            'bod-recipe-meta-time',
+            'bod-recipe-meta-time-unit',
+            'bod-video-meta-duration',
+        ]);
+        return collect($arr);
     }
 
     public function getCategory(): ?CategoryContract
@@ -178,7 +186,7 @@ class DocumentAdapter implements CompositeContract
 
     public function getTemplate(): ?string
     {
-        return null;
+        return $this->document->getField('bod-template');
     }
 
     public function getEstimatedReadingTime(): ?int
@@ -256,4 +264,14 @@ class DocumentAdapter implements CompositeContract
         return null;
     }
 
+
+    private function addFieldNameValuesToArray(array &$arr, array $fieldNames): void
+    {
+        foreach ($fieldNames as $fieldNameIndex => $fieldNameValue) {
+            $value = $this->document->getField($fieldNameValue);
+            if ($value !== null) {
+                $arr[0][$fieldNameValue] = $value;
+            }
+        }
+    }
 }

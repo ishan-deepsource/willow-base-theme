@@ -4,6 +4,7 @@ namespace Bonnier\Willow\Base\Transformers\Api\Composites;
 
 use Bonnier\Willow\Base\Models\Contracts\Composites\CompositeContract;
 use Bonnier\Willow\Base\Models\Contracts\Composites\Contents\Types\RecipeContract;
+use Illuminate\Support\Collection;
 use League\Fractal\TransformerAbstract;
 
 class CompositeRecipeMetaTransformer extends TransformerAbstract
@@ -19,12 +20,32 @@ class CompositeRecipeMetaTransformer extends TransformerAbstract
     {
         $recipeMeta = [];
 
-        collect($composite->getContents())->each(function($content) use(&$recipeMeta) {
-            if ($content->getType() == 'recipe')
-                return $this->transformRecipeMeta($content, $recipeMeta);
-        });
+        $contents = collect($composite->getContents());
+        $firstContent = $contents->first();
+
+        if (is_array($firstContent) && isset($firstContent['type']) && $firstContent['type'] === 'cxense') {
+            $this->transformCxenseRecipeMeta($firstContent, $recipeMeta);
+        }
+        else {
+            $contents->each(function($content) use(&$recipeMeta) {
+                if ($content->getType() == 'recipe')
+                    return $this->transformRecipeMeta($content, $recipeMeta);
+            });
+        }
 
         return $recipeMeta;
+    }
+
+    private function transformCxenseRecipeMeta(array $content, array &$recipeMeta) : void
+    {
+        if (isset($content['bod-recipe-meta-time']))
+            $recipeMeta['time'] = $content['bod-recipe-meta-time'];
+        if (isset($content['bod-recipe-meta-time-unit']))
+            $recipeMeta['time_unit'] = $content['bod-recipe-meta-time-unit'];
+        if (isset($content['bod-recipe-meta-energy']))
+            $recipeMeta['energy'] = $content['bod-recipe-meta-energy'];
+        if (isset($content['bod-recipe-meta-energy-unit']))
+            $recipeMeta['energy_unit'] = $content['bod-recipe-meta-energy-unit'];
     }
 
     private function transformRecipeMeta(RecipeContract $content, array &$recipeMeta) : bool
