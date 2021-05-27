@@ -37,7 +37,6 @@ class SearchController extends BaseController
      */
     public function getSearchResults(WP_REST_Request $request)
     {
-        $debug = in_array($request->get_param('debug'), ['1', 't', 'true']);
         $filters = json_decode($request->get_body());
 
         if (!$filters) {
@@ -71,7 +70,7 @@ class SearchController extends BaseController
             'facets' => $this->formatFacets($searchResults->facets)
         ]);
 
-        if ($debug) {
+        if (in_array($request->get_param('debug'), ['1', 't', 'true'])) {
             $resource->setMetaValue('xcense-debug', [
                 'payload' => DocumentSearch::get_instance()->get_payload(),
                 'response' => DocumentSearch::get_instance()->get_response()
