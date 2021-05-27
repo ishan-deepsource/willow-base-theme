@@ -36,8 +36,6 @@ class SearchController extends BaseController
      */
     public function getSearchResults(WP_REST_Request $request)
     {
-        $locale = $request->get_param('lang');
-
         $filters = json_decode($request->get_body());
 
         if (!$filters) {
@@ -50,33 +48,28 @@ class SearchController extends BaseController
             ], 422);
         }
 
-        $response = Cache::remember(
-            sprintf('willow_search_%s_%s', $locale, md5($request->get_body())),
-            2 * HOUR_IN_SECONDS,
-            function () use ($locale, $filters) {
-                $searchResults = $this->searchRepository->getSearchResults(
-                    $filters->query,
-                    $filters->page,
-                    $filters->per_page,
-                    (array)$filters->facets,
-                    (array)$filters->sorting
-                );
-                $manager = new Manager();
-                $resource = new Collection(
-                    $this->formatSearchResults($searchResults->matches),
-                    new CompositeTeaserTransformer()
-                );
-                $resource->setPaginator(
-                    new NumberedPagination($filters->page, $filters->per_page, $searchResults->totalCount)
-                );
-
-                $resource->setMeta([
-                    'facets' => $this->formatFacets($searchResults->facets)
-                ]);
-
-                return $manager->createData($resource)->toArray();
-            }
+        $searchResults = $this->searchRepository->getSearchResults(
+            $filters->query,
+            $filters->page,
+            $filters->per_page,
+            (array)$filters->facets,
+            (array)$filters->sorting
         );
+
+        $manager = new Manager();
+        $resource = new Collection(
+            $this->formatSearchResults($searchResults->matches),
+            new CompositeTeaserTransformer()
+        );
+        $resource->setPaginator(
+            new NumberedPagination($filters->page, $filters->per_page, $searchResults->totalCount)
+        );
+
+        $resource->setMeta([
+            'facets' => $this->formatFacets($searchResults->facets)
+        ]);
+
+        $response = $manager->createData($resource)->toArray();
 
         return new WP_REST_Response($response);
     }
