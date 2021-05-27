@@ -3,7 +3,6 @@
 namespace Bonnier\Willow\Base\Repositories;
 
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
-use Bonnier\WP\Cxense\Services\DocumentSearch;
 use Bonnier\WP\Cxense\WpCxense;
 
 class CxenseSearchRepository
