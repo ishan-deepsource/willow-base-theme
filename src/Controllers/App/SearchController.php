@@ -13,6 +13,7 @@ use Bonnier\Willow\Base\Transformers\Pagination\NumberedPagination;
 use Bonnier\WP\Cxense\Services\DocumentSearch;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
+use League\Fractal\Resource\ResourceAbstract;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -57,29 +58,35 @@ class SearchController extends BaseController
             (array)$filters->sorting
         );
 
-        $manager = new Manager();
-        $resource = new Collection(
-            $this->formatSearchResults($searchResults->matches),
-            new CompositeTeaserTransformer()
-        );
-        $resource->setPaginator(
-            new NumberedPagination($filters->page, $filters->per_page, $searchResults->totalCount)
-        );
+        try {
+            $manager = new Manager();
+            $resource = new Collection(
+                $this->formatSearchResults($searchResults->matches),
+                new CompositeTeaserTransformer()
+            );
+            $resource->setPaginator(
+                new NumberedPagination($filters->page, $filters->per_page, $searchResults->totalCount)
+            );
 
-        $resource->setMeta([
-            'facets' => $this->formatFacets($searchResults->facets)
-        ]);
-
-        if (in_array($request->get_param('debug'), ['1', 't', 'true'])) {
-            $resource->setMetaValue('xcense-debug', [
-                'payload' => DocumentSearch::get_instance()->get_payload(),
-                'response' => DocumentSearch::get_instance()->get_response()
+            $resource->setMeta([
+                'facets' => $this->formatFacets($searchResults->facets)
             ]);
+
+            if (in_array($request->get_param('debug'), ['1', 't', 'true'])) {
+                $resource->setMetaValue('xcense_debug', [
+                    'payload' => DocumentSearch::get_instance()->get_payload(),
+                    'response' => DocumentSearch::get_instance()->get_response()
+                ]);
+            }
+
+            $response = $manager->createData($resource)->toArray();
+
+            return new WP_REST_Response($response);
         }
-
-        $response = $manager->createData($resource)->toArray();
-
-        return new WP_REST_Response($response);
+        catch(\Exception $exception){
+            echo 'Error:' . $exception->getMessage() . PHP_EOL;
+            echo $exception->getTraceAsString() . PHP_EOL;
+        }
     }
 
     private function formatSearchResults($matches)
