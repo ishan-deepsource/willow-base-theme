@@ -38,27 +38,27 @@ class SearchController extends BaseController
      */
     public function getSearchResults(WP_REST_Request $request)
     {
-        $filters = json_decode($request->get_body());
-
-        if (!$filters) {
-            return new WP_REST_Response([
-                'code' => 'unprocessable_entity',
-                'message' => 'No request body was submitted',
-                'data' => [
-                    'status' => 422
-                ]
-            ], 422);
-        }
-
-        $searchResults = $this->searchRepository->getSearchResults(
-            $filters->query,
-            $filters->page,
-            $filters->per_page,
-            (array)$filters->facets,
-            (array)$filters->sorting
-        );
-
         try {
+            $filters = json_decode($request->get_body());
+
+            if (!$filters) {
+                return new WP_REST_Response([
+                    'code' => 'unprocessable_entity',
+                    'message' => 'No request body was submitted',
+                    'data' => [
+                        'status' => 422
+                    ]
+                ], 422);
+            }
+
+            $searchResults = $this->searchRepository->getSearchResults(
+                $filters->query,
+                $filters->page,
+                $filters->per_page,
+                (array)$filters->facets,
+                (array)$filters->sorting
+            );
+
             $manager = new Manager();
             $resource = new Collection(
                 $this->formatSearchResults($searchResults->matches),
@@ -86,6 +86,13 @@ class SearchController extends BaseController
         catch(\Exception $exception){
             echo 'Error:' . $exception->getMessage() . PHP_EOL;
             echo $exception->getTraceAsString() . PHP_EOL;
+            return new WP_REST_Response([
+                'code' => $exception->getMessage(),
+                'message' => $exception->getTraceAsString(),
+                'data' => [
+                    'status' => 400
+                ]
+            ], 400);
         }
     }
 
