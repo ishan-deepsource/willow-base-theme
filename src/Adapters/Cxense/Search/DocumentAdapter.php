@@ -19,6 +19,7 @@ use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
 use Bonnier\Willow\Base\Traits\DateTimeZoneTrait;
 use Bonnier\WP\Cxense\Services\WidgetDocumentQuery;
+use Bonnier\WP\Cxense\WpCxense;
 use DateTime;
 use Illuminate\Support\Collection;
 
@@ -32,10 +33,12 @@ class DocumentAdapter implements CompositeContract
     use DateTimeZoneTrait;
 
     protected $document;
+    protected $orgPreFix;
 
     public function __construct(Document $document)
     {
         $this->document = $document;
+        $this->orgPreFix = WpCxense::instance()->settings->getOrganisationPrefix();
     }
 
     public function getId(): int
@@ -80,11 +83,11 @@ class DocumentAdapter implements CompositeContract
     {
         $arr = [[ 'type' => 'cxense' ]];
         $this->addFieldNameValuesToArray($arr, [
-            'bod-recipe-meta-energy',
-            'bod-recipe-meta-energy-unit',
-            'bod-recipe-meta-time',
-            'bod-recipe-meta-time-unit',
-            'bod-video-meta-duration',
+            $this->orgPreFix . '-recipe-meta-energy',
+            $this->orgPreFix . '-recipe-meta-energy-unit',
+            $this->orgPreFix . '-recipe-meta-time',
+            $this->orgPreFix . '-recipe-meta-time-unit',
+            $this->orgPreFix . '-video-meta-duration',
         ]);
         return collect($arr);
     }
@@ -186,7 +189,7 @@ class DocumentAdapter implements CompositeContract
 
     public function getTemplate(): ?string
     {
-        return $this->document->getField('bod-template');
+        return $this->document->getField($this->orgPreFix . '-template');
     }
 
     public function getEstimatedReadingTime(): ?int
