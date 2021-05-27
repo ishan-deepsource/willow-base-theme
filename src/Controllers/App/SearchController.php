@@ -10,6 +10,7 @@ use Bonnier\Willow\Base\Repositories\CxenseSearchRepository;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Search\FacetCollectionTransformer;
 use Bonnier\Willow\Base\Transformers\Pagination\NumberedPagination;
+use Bonnier\WP\Cxense\Services\DocumentSearch;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use WP_REST_Request;
@@ -68,6 +69,13 @@ class SearchController extends BaseController
         $resource->setMeta([
             'facets' => $this->formatFacets($searchResults->facets)
         ]);
+
+        if (in_array($request->get_param('debug'), ['1', 't', 'true'])) {
+            $resource->setMetaValue('xcense-debug', [
+                'payload' => DocumentSearch::get_instance()->get_payload(),
+                'response' => DocumentSearch::get_instance()->get_response()
+            ]);
+        }
 
         $response = $manager->createData($resource)->toArray();
 
