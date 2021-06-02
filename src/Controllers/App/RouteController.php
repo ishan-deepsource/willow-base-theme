@@ -98,9 +98,12 @@ class RouteController extends BaseController
             $categoryPath = str_replace('/tags/', '/', $categoryPath);
 
             if (($category = get_category_by_path($categoryPath)) && $category instanceof WP_Term) {
-                $categoryWrapper = new Category(new CategoryAdapter($category));
-                $resource = new Item($categoryWrapper, new CategoryTransformer());
-                $resource->setMeta(['type' => $content->parent ? 'subcategory' : 'category']);
+                $resource = new Item(null, new NullTransformer());
+                $resource->setMeta([
+                    'type' => 'redirect',
+                    'location' => $categoryPath,
+                    'status' => Response::HTTP_MOVED_PERMANENTLY
+                ]);
             } else {
                 $tag = new Tag(new TagAdapter($content));
                 $resource = new Item($tag, new TagTransformer());
