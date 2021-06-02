@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
-            "version": "3.2.2",
+            "version": "3.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-cxense.git",
-                "reference": "bd9a97ff5e221d8956dbb1abe5bad8b2418ae2f3"
+                "reference": "f07afbba7f30cc220eb6d4bc2fee5d21eb89727c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/bd9a97ff5e221d8956dbb1abe5bad8b2418ae2f3",
-                "reference": "bd9a97ff5e221d8956dbb1abe5bad8b2418ae2f3",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/f07afbba7f30cc220eb6d4bc2fee5d21eb89727c",
+                "reference": "f07afbba7f30cc220eb6d4bc2fee5d21eb89727c",
                 "shasum": ""
             },
             "require": {
@@ -52,7 +52,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2021-05-27T19:34:28+00:00"
+            "time": "2021-06-02T10:28:34+00:00"
         },
         {
             "name": "benjaminmedia/wp-site-manager",
