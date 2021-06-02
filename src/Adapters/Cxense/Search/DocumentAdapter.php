@@ -88,6 +88,8 @@ class DocumentAdapter implements CompositeContract
             $this->orgPreFix . '-recipe-meta-time',
             $this->orgPreFix . '-recipe-meta-time-unit',
             $this->orgPreFix . '-video-meta-duration',
+            $this->orgPreFix . '-video-meta-workout-time',
+            $this->orgPreFix . '-video-meta-workout-level',
         ]);
         return collect($arr);
     }
