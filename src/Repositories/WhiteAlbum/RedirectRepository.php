@@ -180,7 +180,7 @@ class RedirectRepository
         try {
             return $wpdb->query(
                 $wpdb->prepare(
-                    "INSERT INTO `$table` 
+                    "INSERT IGNORE INTO `$table` 
                     (`from`, `from_hash`, `to`, `to_hash`, `locale`, `code`) 
                     VALUES (%s, MD5(%s), %s, MD5(%s), %s, %d)",
                     [
