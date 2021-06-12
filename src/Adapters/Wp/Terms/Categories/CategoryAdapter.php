@@ -138,7 +138,8 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
         $perPage = 10,
         $orderBy = 'date',
         $order = 'DESC',
-        $offset = 0
+        $offset = 0,
+        $includeChildren = 'false'
     ): Collection {
         global $wpdb;
         $excludedFromWebIds = $wpdb->get_col("SELECT post_id FROM wp_postmeta WHERE meta_key='exclude_platforms' and meta_value like '%web%'");
@@ -156,7 +157,7 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
                     'taxonomy' => 'category',
                     'field' => 'term_id',
                     'terms' => $this->getId(),
-                    'include_children' => false,
+                    'include_children' => $includeChildren == 'true',
                 ]
             ]
         ]))->map(function (\WP_Post $post) {

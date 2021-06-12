@@ -10,7 +10,7 @@ class CxenseSearchRepository
     /**
      * @var array Holds the response from cXense in memory
      */
-    protected $queryResults = [];
+    //protected $queryResults = [];
     protected $orgPrefix;
 
     public function __construct()
@@ -24,7 +24,7 @@ class CxenseSearchRepository
      * @param int $perPage
      * @param array $customFilters
      * @param array $customSorting
-     * @return array
+     * @return \stdClass
      */
     public function getSearchResults(
         $searchQuery = '',
@@ -75,16 +75,17 @@ class CxenseSearchRepository
         }
 
         // Return stored result if fetched again with exact same arguments
-        $queryResultsKey = md5(serialize($arguments));
-        if ($stored = $this->queryResults[$queryResultsKey] ?? null) {
-            return $stored;
-        }
+        //$queryResultsKey = md5(serialize($arguments));
+        //if ($stored = $this->queryResults[$queryResultsKey] ?? null) {
+        //    return $stored;
+        //}
 
         $result = WpCxense::instance()->search_documents($arguments);
         $result->facets = $this->formatFacets($result->facets, $arguments);
         $result->matches = $this->formatSearchResults($result->matches);
 
-        return $this->queryResults[$queryResultsKey] = $result;
+        //return $this->queryResults[$queryResultsKey] = $result;
+        return $result;
     }
 
     /**

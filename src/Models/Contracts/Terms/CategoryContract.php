@@ -24,7 +24,7 @@ interface CategoryContract
 
     public function getLanguage(): ?string;
 
-    public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection;
+    public function getContentTeasers($page, $perPage, $orderBy, $order, $offset, $includeChildren): Collection;
 
     public function getCount(): ?int;
 

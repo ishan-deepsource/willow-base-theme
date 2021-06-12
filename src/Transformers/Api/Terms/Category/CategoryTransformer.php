@@ -85,9 +85,10 @@ class CategoryTransformer extends TransformerAbstract
         list($orderby) = $paramBag->get('orderby') ?: ['date'];
         list($order) = $paramBag->get('order') ?: ['DESC'];
         list($offset) = $paramBag->get('offset') ?: ['0'];
+        list($includeChildren) = $paramBag->get('include_children') ?: ['false'];
 
         return $this->collection(
-            $category->getContentTeasers($page, $perPage, $orderby, $order, $offset),
+            $category->getContentTeasers($page, $perPage, $orderby, $order, $offset, $includeChildren),
             new CompositeTeaserTransformer()
         );
     }
