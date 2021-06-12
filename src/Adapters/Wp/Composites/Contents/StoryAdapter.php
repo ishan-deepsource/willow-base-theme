@@ -27,12 +27,12 @@ class StoryAdapter implements StoryContract
 
     public function getArticles(): ?Collection
     {
-        $postMetaData = get_post_meta($this->composite->ID);
         $allArticles = collect(WpModelRepository::instance()->getAcfField($this->composite->ID, 'composite_content') ?? []);
         $associatedComposites = [];
         foreach ($allArticles as $key => $item) {
             if (array_get($item, 'acf_fc_layout') === 'associated_composites') {
-                if ($postMetaData["composite_content_{$key}_display_hint"][0] === 'story-list') {
+                $displayHint = get_post_meta($this->composite->ID, "composite_content_{$key}_display_hint", true);
+                if ($displayHint === 'story-list') {
                     $associatedComposites = [$item];
                     break;
                 }
