@@ -62,10 +62,6 @@ class IFO extends Brand
 
         $fileWidget = CompositeFieldGroup::getFileWidget();
         add_filter(sprintf('willow/acf/layout=%s', $fileWidget->getKey()), [__CLASS__, 'removeRequiredFromFileWidgetImages']);
-
-        /* activate title is required */
-        add_action('save_post', [WpComposite::class, 'onSaveRequiredTitle'], 10, 2);
-        add_action('admin_notices', [WpComposite::class, 'compositeErrorAdminMessage']);
     }
 
     public static function setTeaserListDisplayHints(ACFLayout $teaserList)

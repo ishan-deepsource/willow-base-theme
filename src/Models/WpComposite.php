@@ -11,6 +11,7 @@ use Bonnier\Willow\Base\Models\ACF\Composite\MetaFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Composite\TaxonomyFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Composite\TeaserFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Composite\TranslationStateFieldGroup;
+use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 use Bonnier\Willow\Base\Repositories\SiteManager\SiteRepository;
 use Bonnier\Willow\Base\Services\SiteManagerService;
 use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
@@ -89,6 +90,11 @@ class WpComposite
             static::registerACFFields();
             static::loadTeaserCharacterCounter();
         });
+
+        if (PageFieldGroup::$brand) {
+            add_action('save_post', [__CLASS__, 'onSaveRequiredTitle'], 1, 2);
+            add_action('admin_notices', [__CLASS__, 'compositeErrorAdminMessage'], 10);
+        }
 
         add_action('save_post', [__CLASS__, 'onSave'], 10, 2);
         add_action('save_post', [__CLASS__, 'onSaveSlugChange'], 5, 2);
@@ -196,11 +202,11 @@ class WpComposite
             $errors['title'] = "The title is required";
         }
         if (!empty($errors)) {
-            remove_action('save_post', [__CLASS__, 'onSaveRequiredTitle']);
+            remove_action('save_post', [__CLASS__, 'onSaveRequiredTitle'], 1);
             update_option('composite_errors', $errors);
             $post->post_status = 'draft';
             wp_update_post($post);
-            add_action('save_post', [__CLASS__, 'onSaveRequiredTitle'], 10, 2);
+            add_action('save_post', [__CLASS__, 'onSaveRequiredTitle'], 1, 2);
             add_filter('redirect_post_location', [__CLASS__, 'compositeRedirectFilter'], 10, 2);
         }
     }
