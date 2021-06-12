@@ -91,7 +91,7 @@ class WpComposite
             static::loadTeaserCharacterCounter();
         });
 
-        if (PageFieldGroup::$brand) {
+        if (PageFieldGroup::$brand == 'IFO') {
             add_action('save_post', [__CLASS__, 'onSaveRequiredTitle'], 1, 2);
             add_action('admin_notices', [__CLASS__, 'compositeErrorAdminMessage'], 10);
         }
