@@ -41,6 +41,7 @@ class CompositeTeaserTransformer extends TransformerAbstract
     {
         $out = [
             'id'            => $composite->getId(),
+            'post_title'    => $composite->getTitle(),
             'title'         => $this->getTitle($composite),
             'kind'          => $composite->getKind(),
             'status'        => $composite->getStatus(),
