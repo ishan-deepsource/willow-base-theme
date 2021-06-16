@@ -97,10 +97,12 @@ class RedirectRepository
                 $destination->getHost(),
                 $destination->getPath()
             );
-            if ($destination->getQuery()) {
-                $to = sprintf('%s?%s', $to, $destination->getQuery());
-            }
         }
+
+        if ($destination->getQuery()) {
+            $to = sprintf('%s?%s', $to, $destination->getQuery());
+        }
+
         $this->storeResolvedRedirect(
             $url,
             $to,
