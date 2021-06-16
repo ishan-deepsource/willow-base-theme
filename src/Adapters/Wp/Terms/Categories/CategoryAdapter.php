@@ -2,6 +2,8 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Categories;
 
+use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\AuthorOverview;
+use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\QuoteTeaser;
 use Bonnier\Willow\Base\Factories\CategoryContentFactory;
 use Bonnier\Willow\Base\Helpers\AcfName;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\CommercialSpot;
@@ -52,6 +54,8 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
         AcfName::WIDGET_BANNER_PLACEMENT => BannerPlacement::class,
         AcfName::WIDGET_TAXONOMY_TEASER_LIST => TaxonomyList::class,
         AcfName::WIDGET_COMMERCIAL_SPOT => CommercialSpot::class,
+        AcfName::WIDGET_QUOTE_TEASER => QuoteTeaser::class,
+        AcfName::WIDGET_AUTHOR_OVERVIEW => AuthorOverview::class,
     ];
 
     public function __construct(\WP_Term $wpModel)
