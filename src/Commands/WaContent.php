@@ -319,7 +319,7 @@ class WaContent extends BaseCmd
             'post_type'     => WpComposite::POST_TYPE,
             'post_date'     => $waContent->widget_content->publish_at,
             'post_modified' => $waContent->widget_content->publish_at,
-            'post_author'   => $this->simpleAuthorImport ? $this->getAuthor($waContent)->ID : $this->getFirstAuthor($waContent)->ID,
+            'post_author'   => $this->simpleAuthorImport ? $this->getSimpleAuthor($waContent)->ID : $this->getFirstAuthor($waContent)->ID,
             'post_category' => [WpTerm::id_from_whitealbum_id($waContent->widget_content->category_id) ?? null],
             'meta_input'    => [
                 WpComposite::POST_META_WHITE_ALBUM_ID     => $waContent->widget_content->id,
@@ -1007,6 +1007,17 @@ class WaContent extends BaseCmd
         remove_action('publish_to_publish', [BonnierCachePost::class, 'update_post'], 10);
         remove_action('draft_to_publish', [BonnierCachePost::class, 'publishPost'], 10);
         remove_action('transition_post_status', [CxensePost::class, 'post_status_changed'], 10);
+    }
+
+    private function getSimpleAuthor($waContent): WP_User
+    {
+        if (!empty($waContent->author)) {
+            $author = WpAuthor::findOrCreate($waContent->author);
+            if ($author instanceof WP_User) {
+                return $author;
+            }
+        }
+        return WpAuthor::getDefaultAuthor($waContent->widget_content->site->locale);
     }
 
     private function getAuthor($waContent, $authorName): WP_User
