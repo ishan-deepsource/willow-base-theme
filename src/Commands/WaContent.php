@@ -41,6 +41,9 @@ class WaContent extends BaseCmd
     private const RELATED_CONTENT_ID_NAME = "related_content_Ids";
     private const STORY_ITEMS_ID_NAME = "story_items_id_name";
 
+    /** @var bool Setting to enable importing authors as text field relevant for mhi, shi and phi */
+    private $simpleAuthorImport = false;
+
     public static function register()
     {
         WP_CLI::add_command(CmdManager::CORE_CMD_NAMESPACE.' '.static::CMD_NAMESPACE, __CLASS__);
@@ -212,6 +215,9 @@ class WaContent extends BaseCmd
      * [--host=<host>]
      * : Set host name for proper loading of envs
      *
+     * [--simple-author-import]
+     * : to import simple author from articles present on mhi and similar
+     *
      * [--skip-existing]
      * : weather to skip already imported articles
      *
@@ -234,6 +240,7 @@ class WaContent extends BaseCmd
         $this->disableHooks(); // Disable various hooks and filters during import
 
         $this->setHost($assocArgs);
+        $this->simpleAuthorImport($assocArgs);
 
         $this->failedImportFile = $assocArgs['failed-import-file'] ?? null;
         $this->repository       = new ContentRepository($assocArgs['locale'] ?? null, $this->failedImportFile);
@@ -250,6 +257,13 @@ class WaContent extends BaseCmd
                 },
                 $assocArgs['page'] ?? 1,
                 $assocArgs['skip-existing'] ?? false);
+        }
+    }
+
+    protected function simpleAuthorImport(array $assocArgs)
+    {
+        if ($assocArgs['simple-author-import'] ?? false) {
+            $this->simpleAuthorImport = true;
         }
     }
 
@@ -305,7 +319,7 @@ class WaContent extends BaseCmd
             'post_type'     => WpComposite::POST_TYPE,
             'post_date'     => $waContent->widget_content->publish_at,
             'post_modified' => $waContent->widget_content->publish_at,
-            'post_author'   => $this->getFirstAuthor($waContent)->ID,
+            'post_author'   => $this->simpleAuthorImport ? $this->getSimpleAuthor($waContent)->ID : $this->getFirstAuthor($waContent)->ID,
             'post_category' => [WpTerm::id_from_whitealbum_id($waContent->widget_content->category_id) ?? null],
             'meta_input'    => [
                 WpComposite::POST_META_WHITE_ALBUM_ID     => $waContent->widget_content->id,
@@ -566,22 +580,22 @@ class WaContent extends BaseCmd
                 if ($compositeContent->type === 'recipe' && isset($compositeContent->active) && $compositeContent->active === "true") {
                     $recipe = new Recipe();
                     $recipe->setTitle($compositeContent->title ?? "")
-                           ->setDescription('')
-                           ->setImage(null)
-                           ->setUseAsArticleLeadImage(false)
-                           ->setShowMetaInfoInHeaderAndTeaser(true)
-                           ->setPreparationTime($compositeContent->prep_headline ?? "")
-                           ->setPreparationTimeMin($compositeContent->prep_time ?? "")
-                           ->setPreparationTimeUnit(strtolower($compositeContent->prep_unit ?? ""))
-                           ->setCookingTime($compositeContent->cook_headline ?? "")
-                           ->setCookingTimeMin($compositeContent->cook_time ?? "")
-                           ->setCookingTimeUnit(strtolower($compositeContent->cook_unit ?? ""))
-                           ->setTotalTime($compositeContent->total_headline ?? "")
-                           ->setTotalTimeMin($compositeContent->total_time ?? "")
-                           ->setTotalTimeUnit(strtolower($compositeContent->total_unit ?? ""))
-                           ->setTotalTimeExtraInfo($compositeContent->total_time_extra ?? "")
-                           ->setQuantity($compositeContent->recipe_yield_value ?? "")
-                           ->setQuantityType($compositeContent->recipe_yield_text ?? "");
+                        ->setDescription('')
+                        ->setImage(null)
+                        ->setUseAsArticleLeadImage(false)
+                        ->setShowMetaInfoInHeaderAndTeaser(true)
+                        ->setPreparationTime($compositeContent->prep_headline ?? "")
+                        ->setPreparationTimeMin($compositeContent->prep_time ?? "")
+                        ->setPreparationTimeUnit(strtolower($compositeContent->prep_unit ?? ""))
+                        ->setCookingTime($compositeContent->cook_headline ?? "")
+                        ->setCookingTimeMin($compositeContent->cook_time ?? "")
+                        ->setCookingTimeUnit(strtolower($compositeContent->cook_unit ?? ""))
+                        ->setTotalTime($compositeContent->total_headline ?? "")
+                        ->setTotalTimeMin($compositeContent->total_time ?? "")
+                        ->setTotalTimeUnit(strtolower($compositeContent->total_unit ?? ""))
+                        ->setTotalTimeExtraInfo($compositeContent->total_time_extra ?? "")
+                        ->setQuantity($compositeContent->recipe_yield_value ?? "")
+                        ->setQuantityType($compositeContent->recipe_yield_text ?? "");
 
                     //Convert WA ingredients content: "150]];[[1]];[[laks||;||200]];[[1]];[[fuldkornspasta||;||200]];[[2]];[[grønne asparges||;||1]];[[16]];[[dildspidser||;||2 ]];[[3]];[[jomfruolivenolie||;||2]];[[4]];[[parmesan||;||]];[[]];[[havsalt||;||]];[[]];[[sort peber" to recipe block items
                     //Row separator is "||;||", item separator is "]];[["
@@ -639,9 +653,9 @@ class WaContent extends BaseCmd
                     }
 
                     $recipe->setInstructionsHeadline($compositeContent->instructions_headline ?? "")
-                           ->setInstructions($instructionText)
-                           ->setInstructionsTip($instructionTip)
-                           ->setNutrientsHeadline($compositeContent->nutrients_headline ?? "");
+                        ->setInstructions($instructionText)
+                        ->setInstructionsTip($instructionTip)
+                        ->setNutrientsHeadline($compositeContent->nutrients_headline ?? "");
 
                     //Convert WA nutrients content: 0]];[[589]];[[1||;||1]];[[36,3]];[[2||;||2]];[[17,2]];[[2||;||3]];[[78,1]];[[2||;||4]];[[11,5]];[[2
                     $waIngredientsRows = $compositeContent->nutrients;
@@ -995,6 +1009,17 @@ class WaContent extends BaseCmd
         remove_action('transition_post_status', [CxensePost::class, 'post_status_changed'], 10);
     }
 
+    private function getSimpleAuthor($waContent): WP_User
+    {
+        if (!empty($waContent->author)) {
+            $author = WpAuthor::findOrCreate($waContent->author);
+            if ($author instanceof WP_User) {
+                return $author;
+            }
+        }
+        return WpAuthor::getDefaultAuthor($waContent->widget_content->site->locale);
+    }
+
     private function getAuthor($waContent, $authorName): WP_User
     {
         if ( ! empty($authorName)) {
@@ -1051,8 +1076,8 @@ class WaContent extends BaseCmd
             'youtube' => 'https://www.youtube.com/embed/',
             'vimeo'   => 'https://player.vimeo.com/video/',
             'video23' => 'https://'.
-                         ($this->site->video23_account ?? 'bonnier-publications-danmark').
-                         '.23video.com/v.ihtml/player.html?source=share&photo%5fid=',
+                ($this->site->video23_account ?? 'bonnier-publications-danmark').
+                '.23video.com/v.ihtml/player.html?source=share&photo%5fid=',
         ])->get($provider);
 
         return $vendor ? $vendor.$videoId : null;
