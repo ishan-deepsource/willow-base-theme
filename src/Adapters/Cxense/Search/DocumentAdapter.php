@@ -128,7 +128,11 @@ class DocumentAdapter implements CompositeContract
 
     public function getLabel(): ?string
     {
-        return $this->getCommercial() ? $this->getCommercial()->getLabel() : $this->getCategory()->getName();
+        return $this->getCommercial()
+            && !empty($this->getCommercial()->getLabel())
+            && $this->getCommercial()->getLabel() != 'editorial'
+                ? $this->getCommercial()->getLabel()
+                : $this->getCategory()->getName();
     }
 
     public function getLabelLink(): ?string

@@ -21,9 +21,9 @@ class VideoMetaHelper
                 if (isset($firstContent[$orgPreFix . '-video-meta-duration']))
                     $out['video_meta']['duration'] = $firstContent[$orgPreFix . '-video-meta-duration'];
                 if (isset($firstContent[$orgPreFix . '-video-meta-workout-time']))
-                    $out['video_meta']['duration'] = $firstContent[$orgPreFix . '-video-meta-workout-time'];
+                    $out['video_meta']['workout_time'] = $firstContent[$orgPreFix . '-video-meta-workout-time'];
                 if (isset($firstContent[$orgPreFix . '-video-meta-workout-level']))
-                    $out['video_meta']['duration'] = $firstContent[$orgPreFix . '-video-meta-workout-level'];
+                    $out['video_meta']['workout_level'] = $firstContent[$orgPreFix . '-video-meta-workout-level'];
             }
             else {
                 $contents->each(function($content) use(&$out) {
