@@ -40,6 +40,7 @@ class PageTemplates
                     'bodum-pour-over' => 'Bodum Pour over',
                     'bodum-vacuum' => 'Bodum Vacuum',
                     'gradient' => 'Gradient',
+                    'top-lg' => 'Top LG',
                 ]);
                 break;
             case 'COS':
