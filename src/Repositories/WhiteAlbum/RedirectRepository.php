@@ -107,10 +107,11 @@ class RedirectRepository
             $client = new Client();
             $client->head($secondUrl);
         } catch (RequestException $exception) {
+            // error 600 means not found on from url and to url
             $this->storeResolvedRedirect(
                 $url,
                 $to,
-                500
+                600
             );
 
             return null;
