@@ -42,7 +42,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: composer update -n --prefer-dist
+      - run: php -d memory_limit=1024M /usr/local/bin/composer update
 
       - save_cache:
           paths:
