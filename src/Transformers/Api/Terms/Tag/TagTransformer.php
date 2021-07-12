@@ -9,6 +9,7 @@ use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\ContentTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\TranslationTransformer;
+use Bonnier\Willow\Base\Transformers\Api\Terms\Tag\Partials\TagDetailsTransformer;
 use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 
@@ -19,6 +20,7 @@ class TagTransformer extends TransformerAbstract
     protected $originalResponseData;
 
     protected $availableIncludes = [
+        'details',
         'content-teasers',
         'teasers',
         'contents',
@@ -43,6 +45,11 @@ class TagTransformer extends TransformerAbstract
             'contenthub_id' => $tag->getContenthubId(),
             'internal'      => $tag->getInternal(),
         ];
+    }
+
+    public function includeDetails(TagContract $tag)
+    {
+        return $this->item($tag, new TagDetailsTransformer());
     }
 
     public function includeContentTeasers(TagContract $tag, ParamBag $paramBag)

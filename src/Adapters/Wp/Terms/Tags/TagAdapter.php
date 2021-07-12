@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Tags;
 
+use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\Partials\TagImageAdapter;
 use Bonnier\Willow\Base\Factories\CategoryContentFactory;
 use Bonnier\Willow\Base\Helpers\AcfName;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\BannerPlacement;
@@ -20,6 +21,7 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Contracts\Terms\TagContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\Base\Models\Base\Root\Teaser;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\WP\SiteManager\WpSiteManager;
@@ -81,6 +83,11 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
     public function getDescription(): ?string
     {
         return data_get($this->meta, 'description.' . LanguageProvider::getCurrentLanguage()) ?: null;
+    }
+
+    public function getImage(): ?ImageContract
+    {
+        return new Image(new TagImageAdapter($this->wpMeta));
     }
 
     public function getSlug(): ?string
