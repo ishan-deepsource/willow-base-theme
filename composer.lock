@@ -229,16 +229,16 @@
         },
         {
             "name": "bonnier/wp-bonnier-redirect",
-            "version": "4.13.3",
+            "version": "4.13.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-bonnier-redirect.git",
-                "reference": "db8293141118d39e62fa45b0af9d335203cad5fb"
+                "reference": "587b9fd6f2e5bcaf565b643799875c323a030700"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-redirect/zipball/db8293141118d39e62fa45b0af9d335203cad5fb",
-                "reference": "db8293141118d39e62fa45b0af9d335203cad5fb",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-redirect/zipball/587b9fd6f2e5bcaf565b643799875c323a030700",
+                "reference": "587b9fd6f2e5bcaf565b643799875c323a030700",
                 "shasum": ""
             },
             "require": {
@@ -267,7 +267,7 @@
                 }
             ],
             "description": "Redirect for Bonnier integration with Custom Permalink and Polylang",
-            "time": "2020-12-10T13:29:05+00:00"
+            "time": "2021-07-15T12:30:45+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-sitemap",
@@ -1843,16 +1843,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v4.4.25",
+            "version": "v4.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "0c79d5a65ace4fe66e49702658c024a419d2438b"
+                "reference": "8759ed5c27c2a8a47cb60f367f4be6727f08d58b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/0c79d5a65ace4fe66e49702658c024a419d2438b",
-                "reference": "0c79d5a65ace4fe66e49702658c024a419d2438b",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/8759ed5c27c2a8a47cb60f367f4be6727f08d58b",
+                "reference": "8759ed5c27c2a8a47cb60f367f4be6727f08d58b",
                 "shasum": ""
             },
             "require": {
@@ -1904,7 +1904,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-26T11:20:16+00:00"
+            "time": "2021-06-26T21:56:04+00:00"
         },
         {
             "name": "symfony/mime",
