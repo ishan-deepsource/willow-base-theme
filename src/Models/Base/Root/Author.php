@@ -56,6 +56,11 @@ class Author implements AuthorContract
         return $this->author->getTitle();
     }
 
+    public function getEducation(): ?string
+    {
+        return $this->author->getEducation();
+    }
+
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection
     {
         return $this->author->getContentTeasers($page, $perPage, $orderBy, $order, $offset);
