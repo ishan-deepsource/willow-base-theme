@@ -88,11 +88,6 @@ class AuthorAdapter implements AuthorContract
         return WpUserProfile::getTitle($this->getId()) ?: null;
     }
 
-    public function getEducation(): ?string
-    {
-        return WpUserProfile::getEducation($this->getId()) ?: null;
-    }
-
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection
     {
         $offset = $offset ?: ($perPage * ($page - 1));

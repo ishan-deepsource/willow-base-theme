@@ -15,8 +15,6 @@ interface AuthorContract
 
     public function getBiography(): ?string;
 
-    public function getEducation(): ?string;
-
     public function getAvatar(): ?ImageContract;
 
     public function getEmail(): ?string;

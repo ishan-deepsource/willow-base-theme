@@ -16,6 +16,7 @@ class VOL extends Brand
     public static function register(): void
     {
         self::init();
+        self::removeOtherAuthors();
         self::removeVideoUrlFromImageWidget();
         self::removeVideoUrlFromGalleryItems();
         self::removeVideoUrlFromParagraphListWidget();
@@ -39,6 +40,8 @@ class VOL extends Brand
         self::removeFeaturedContentPageWidget();
         self::removeRecipeWidget();
         self::removeCalculatorWidget();
+
+        self::removeLanguageTitlesFromUserFieldGroup();
 
         $teaserListWidget =  PageFieldGroup::getTeaserListLayout();
         add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListDisplayHints']);
