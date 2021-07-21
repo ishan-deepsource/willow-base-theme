@@ -48,7 +48,7 @@ class AuthorAdapter implements AuthorContract
 
     public function getEducation(): ?string
     {
-        return $this->author->getEducation();
+        return null;
     }
 
     public function getUrl(): ?string
