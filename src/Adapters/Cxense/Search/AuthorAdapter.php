@@ -46,6 +46,11 @@ class AuthorAdapter implements AuthorContract
         return null;
     }
 
+    public function getEducation(): ?string
+    {
+        return $this->author->getEducation();
+    }
+
     public function getUrl(): ?string
     {
         return null;
@@ -75,7 +80,7 @@ class AuthorAdapter implements AuthorContract
     {
         return false;
     }
-    
+
     public function getCount(): int
     {
         return 0;
