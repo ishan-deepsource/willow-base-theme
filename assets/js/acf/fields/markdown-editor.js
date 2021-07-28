@@ -190,6 +190,7 @@
       }
     }
     var modalContainer = jQuery(document.createElement('div'));
+    modalContainer.attr('id','insert-link');
     modalContainer.css({
       'position': 'fixed',
       'top': 0,
@@ -214,6 +215,7 @@
       'padding': '10px 20px'
     });
     modal.append(`
+    <button onClick="jQuery('#insert-link').remove()" type="button" class="media-modal-close"><span class="media-modal-icon"><span class="screen-reader-text">Close media panel</span></span></button>  
     <h3 style="text-center">Insert link</h3>
     <hr />
     <table class="form-table">
