@@ -37,8 +37,3 @@ function ddHtml(...$args)
 
     die(1);
 }
-
-function close_modal_js()
-{ 
- wp_enqueue_script( 'mce-modal-close', get_template_directory_uri() . '/js/mce-modal-close.js', array ( 'jquery' ), 1.1, true);  
-}
