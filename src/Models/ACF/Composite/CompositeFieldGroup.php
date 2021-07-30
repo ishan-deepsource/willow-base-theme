@@ -28,6 +28,8 @@ use Bonnier\Willow\Base\Models\ACF\Properties\ACFConditionalLogic;
 use Bonnier\Willow\Base\Models\ACF\Properties\ACFLocation;
 use Bonnier\Willow\Base\Models\ACF\Properties\ACFWrapper;
 use Bonnier\Willow\Base\Models\WpComposite;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
+use Illuminate\Support\Str;
 
 class CompositeFieldGroup
 {
@@ -1784,5 +1786,60 @@ class CompositeFieldGroup
             }
             return $valid;
         }, 10, 4);
+        add_filter(sprintf('acf/validate_value'), function ($valid, $value) {
+            if( $valid !== true ) {
+                return $valid;
+            }
+
+            $languages = LanguageProvider::getLanguageList();
+
+            foreach($languages as $language) {
+                $homeUrl = mb_substr(LanguageProvider::getHomeUrl('', $language->slug), 0, -1);
+
+                if (static::recursiveAcfContains($value, "$homeUrl")) {
+                    $valid = 'Internal urls can not be without https';
+
+                    return $valid;
+                }
+            }
+
+            return $valid;
+        }, 10, 4);
+    }
+
+    /**
+     * Acf values can be arrays or strings, function to loop through acf and check if string contains
+     *
+     * @param $value
+     * @param $search
+     * @return bool
+     */
+    static function recursiveAcfContains($value, $search)
+    {
+        // If acf is array, loop through it and check each items properties
+        if (is_array($value)) {
+            foreach($value as $acfFieldGroup) {
+                if (! is_array($acfFieldGroup)) {
+                    if (is_string($acfFieldGroup) && Str::contains($acfFieldGroup, $search)) {
+                        return true;
+                    }
+
+                    continue ;
+                }
+
+                foreach($acfFieldGroup as $key => $acfField) {
+                    if (is_string($acfField) && Str::contains($acfField, $search)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        // simply type, just check the string
+        if (is_string($value) && Str::contains($value, $search)) {
+            return true;
+        }
+
+        return false;
     }
 }
