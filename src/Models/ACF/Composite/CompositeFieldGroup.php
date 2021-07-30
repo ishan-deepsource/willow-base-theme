@@ -1795,8 +1795,9 @@ class CompositeFieldGroup
 
             foreach($languages as $language) {
                 $homeUrl = mb_substr(LanguageProvider::getHomeUrl('', $language->slug), 0, -1);
+                $badHomeUrl = Str::replaceFirst('https://', 'http://', $homeUrl);
 
-                if (static::recursiveAcfContains($value, "$homeUrl")) {
+                if (static::recursiveAcfContains($value, $badHomeUrl)) {
                     $valid = 'Internal urls can not be without https';
 
                     return $valid;
