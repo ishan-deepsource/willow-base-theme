@@ -125,6 +125,10 @@ class AuthorAdapter implements AuthorContract
 
     public function getCount(): int
     {
-        return count_user_posts($this->getId(), WpComposite::POST_TYPE, true) ?: 0;
+        $args = array(
+            'post_type' => WpComposite::POST_TYPE,
+            'author' => $this->getId(),
+        );
+        return LanguageProvider::countPosts(LanguageProvider::getCurrentLanguage(), $args);
     }
 }
