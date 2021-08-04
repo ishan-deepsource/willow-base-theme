@@ -28,6 +28,8 @@ use Bonnier\Willow\Base\Models\ACF\Properties\ACFConditionalLogic;
 use Bonnier\Willow\Base\Models\ACF\Properties\ACFLocation;
 use Bonnier\Willow\Base\Models\ACF\Properties\ACFWrapper;
 use Bonnier\Willow\Base\Models\WpComposite;
+use Bonnier\Willow\MuPlugins\Helpers\LanguageProvider;
+use Illuminate\Support\Str;
 
 class CompositeFieldGroup
 {
@@ -1720,31 +1722,31 @@ class CompositeFieldGroup
             ->setChoices([
                 // TODO: Out comment elements exits in White Album and should be enabled later.
                 '' => 'Select a calculator...',
-                'bmi' => 'BMI calculator',
+                'bmi' => 'BMI calculator', //round #1
                 // 'reward' => 'Calculates how much you can reward yourself',
                 // 'calories_burn' => 'Calories burn time based on activity',
                 // 'christmas_sin_burner' => 'Calories burn time based on christmas intake and activity',
                 // 'sin_burn' => 'Calories burn time based on intake and activity',
-                // 'kcal_burn' => 'Calories burning based on activity',
-                'kcal_burn_v2' => 'Calories burning based on activity (new version)',
+                'kcal_burn' => 'Calories burning based on activity', //round #2
+                'kcal_burn_v2' => 'Calories burning based on activity (new version)', //round #1
                 // 'christmas_kcal' => 'Calories burning based on christmas activity',
-                'cooper_test' => 'Cooper test',
+                'cooper_test' => 'Cooper test', //round #1
                 // 'calories_needed' => 'Daily calories need',
-                'calories_needed_with_weight_loss' => 'Daily calories need with weight loss',
-                'protein' => 'Daily protein need',
+                'calories_needed_with_weight_loss' => 'Daily calories need with weight loss', //round #1
+                'protein' => 'Daily protein need', //round #1
                 // 'due_date' => 'Due date',
                 // 'due_date_reverse' => 'Due date (reverse)',
                 // 'fertility' => 'Fertility days',
                 // 'weight_gain' => 'Intake-based weight gain calculator',
-                'fitness_value' => 'Physical fitness value',
-                // 'end_time' => 'Predicts 10k and half marathon run times based on 5k run time',
-                // 'pulse_rate' => 'Recommended training pulse rate',
-                // 'calories_while_resting' => 'Resting metabolic rate',
-                // 'speed_with_different_weight' => 'Run time after weight gain or loss',
-                // 'speed_with_different_age' => 'Run time prediction when getting older',
-                // 'speed' => 'Suggests running paces based on 5k run time',
+                'fitness_value' => 'Physical fitness value', //round #1
+                'end_time' => 'Predicts 10k and half marathon run times based on 5k run time', //round #2
+                'pulse_rate' => 'Recommended training pulse rate', //round #2
+                'calories_while_resting' => 'Resting metabolic rate', //round #2
+                'speed_with_different_weight' => 'Run time after weight gain or loss', //round #2
+                'speed_with_different_age' => 'Run time prediction when getting older', //round #2
+                'speed' => 'Suggests running paces based on 5k run time', //round #2
                 // 'mars_bar' => 'Time it will take to burn a Mars bar',
-                'fat_percentage' => 'Waist-to-hip ratio',
+                'fat_percentage' => 'Waist-to-hip ratio', //round #1
             ])
             ->setDefaultValue([''])
             ->setReturnFormat(ACFField::RETURN_VALUE);
@@ -1784,5 +1786,61 @@ class CompositeFieldGroup
             }
             return $valid;
         }, 10, 4);
+        add_filter(sprintf('acf/validate_value'), function ($valid, $value) {
+            if( $valid !== true ) {
+                return $valid;
+            }
+
+            $languages = LanguageProvider::getLanguageList();
+
+            foreach($languages as $language) {
+                $homeUrl = mb_substr(LanguageProvider::getHomeUrl('', $language->slug), 0, -1);
+                $badHomeUrl = Str::replaceFirst('https://', 'http://', $homeUrl);
+
+                if (static::recursiveAcfContains($value, $badHomeUrl)) {
+                    $valid = 'Internal urls can not be without https';
+
+                    return $valid;
+                }
+            }
+
+            return $valid;
+        }, 10, 4);
+    }
+
+    /**
+     * Acf values can be arrays or strings, function to loop through acf and check if string contains
+     *
+     * @param $value
+     * @param $search
+     * @return bool
+     */
+    static function recursiveAcfContains($value, $search)
+    {
+        // If acf is array, loop through it and check each items properties
+        if (is_array($value)) {
+            foreach($value as $acfFieldGroup) {
+                if (! is_array($acfFieldGroup)) {
+                    if (is_string($acfFieldGroup) && Str::contains($acfFieldGroup, $search)) {
+                        return true;
+                    }
+
+                    continue ;
+                }
+
+                foreach($acfFieldGroup as $key => $acfField) {
+                    if (is_string($acfField) && Str::contains($acfField, $search)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        // simply type, just check the string
+        if (is_string($value) && Str::contains($value, $search)) {
+            return true;
+        }
+
+        return false;
     }
 }

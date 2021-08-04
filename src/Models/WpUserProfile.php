@@ -13,7 +13,7 @@ class WpUserProfile
         if (is_admin()) {
             self::modifyAvatarFilter();
         }
-        
+
         add_action('admin_enqueue_scripts', [__CLASS__, 'loadAuthorDescriptionAsMarkdownScript']);
 
         add_action('user_profile_update_errors' , [__CLASS__, 'myUserProfileUpdateErrors'], 10, 3);
@@ -37,6 +37,16 @@ class WpUserProfile
             return get_field(UserFieldGroup::TITLE_FIELD, sprintf('user_%s', $userId));
         }
         return $title;
+    }
+
+    public static function getEducation($userId): ?string
+    {
+        $fieldName = UserFieldGroup::EDUCATION_FIELD . '_' .LanguageProvider::getCurrentLanguage('slug');
+        $education = get_field($fieldName, sprintf('user_%s', $userId));
+        if (empty($education)) {
+            return get_field(UserFieldGroup::EDUCATION_FIELD, sprintf('user_%s', $userId));
+        }
+        return $education;
     }
 
     private static function modifyAvatarFilter()

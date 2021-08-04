@@ -260,7 +260,12 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
     public function getUpdatedAt(): ?DateTime
     {
         if ($date = data_get($this->wpModel, 'post_modified')) {
-            return $this->toDateTime($date);
+            $updatedAt = $this->toDateTime($date);
+            $publishedAt = $this->getPublishedAt();
+            if ($publishedAt && $publishedAt > $updatedAt) {
+                return $publishedAt;
+            }
+            return $updatedAt;
         }
         return null;
     }

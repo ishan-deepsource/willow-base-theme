@@ -88,6 +88,11 @@ class AuthorAdapter implements AuthorContract
         return WpUserProfile::getTitle($this->getId()) ?: null;
     }
 
+    public function getEducation(): ?string
+    {
+        return WpUserProfile::getEducation($this->getId()) ?: null;
+    }
+
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection
     {
         $offset = $offset ?: ($perPage * ($page - 1));
@@ -120,6 +125,14 @@ class AuthorAdapter implements AuthorContract
 
     public function getCount(): int
     {
-        return count_user_posts($this->getId(), WpComposite::POST_TYPE, true) ?: 0;
+        if (class_exists('LanguageProvider', true)) {
+            $args = array(
+                'post_type' => WpComposite::POST_TYPE,
+                'author' => $this->getId(),
+            );
+            $lang = LanguageProvider::getCurrentLanguage();
+            return LanguageProvider::countPosts($lang, $args) ?: 0;
+        }
+        return 0;
     }
 }

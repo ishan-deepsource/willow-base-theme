@@ -40,6 +40,7 @@ class PageTemplates
                     'bodum-pour-over' => 'Bodum Pour over',
                     'bodum-vacuum' => 'Bodum Vacuum',
                     'gradient' => 'Gradient',
+                    'top-lg' => 'Top LG',
                 ]);
                 break;
             case 'COS':
@@ -213,7 +214,7 @@ class PageTemplates
                 // This returns vol (voldemort) as a wrapping brand for all brandcodes contained.
                 // Once a brand is removed from voldemort (Getting more love and custom design and feel), it should be removed from here.
                 // And from class BrandFactory.php as well!
-                $voldemortBrands = ['ATR', 'BIM', 'BOL', 'DIF', 'KOM', 'LIV', 'MHI', 'PHI', 'SHI', 'TAR', 'WOM'];
+                $voldemortBrands = ['ATR', 'BIM', 'BOL', 'DIF', 'KOM', 'LIV', 'MHI', 'PHI', 'SHI', 'TAR', 'WOM', 'BOM', 'BIL'];
                 if (in_array(data_get($site, 'brand.brand_code'), $voldemortBrands)) {
                     return 'VOL';
                 }

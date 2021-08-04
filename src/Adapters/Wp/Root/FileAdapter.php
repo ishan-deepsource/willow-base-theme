@@ -33,7 +33,7 @@ class FileAdapter implements FileContract
 
     public function getUrl(): ?string
     {
-        return as3cf_get_secure_attachment_url($this->getId(), HOUR_IN_SECONDS);
+        return as3cf_get_secure_attachment_url($this->getId(), 6 * HOUR_IN_SECONDS);
     }
 
     public function getTitle(): ?string
