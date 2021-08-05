@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1a9a1ae595df5761fab3946487cff5a",
+    "content-hash": "bc60a022849d072b5ef5356278cac817",
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
-            "version": "3.2.5",
+            "version": "3.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-cxense.git",
-                "reference": "dec6989e6d8f6d72a346a54929ddd3b15effda1c"
+                "reference": "cfc3633b37421834cdd6d5b98068cd662dc39286"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/dec6989e6d8f6d72a346a54929ddd3b15effda1c",
-                "reference": "dec6989e6d8f6d72a346a54929ddd3b15effda1c",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/cfc3633b37421834cdd6d5b98068cd662dc39286",
+                "reference": "cfc3633b37421834cdd6d5b98068cd662dc39286",
                 "shasum": ""
             },
             "require": {
@@ -39,6 +39,9 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
             "authors": [
                 {
                     "name": "Bonnier Publications",
@@ -52,7 +55,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2021-08-05T08:11:35+00:00"
+            "time": "2021-08-05T17:38:13+00:00"
         },
         {
             "name": "benjaminmedia/wp-site-manager",
