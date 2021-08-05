@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de93ed3d82ce2a89b216190cfb0f61f1",
+    "content-hash": "c1a9a1ae595df5761fab3946487cff5a",
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
