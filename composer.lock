@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
-            "version": "3.2.4",
+            "version": "3.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-cxense.git",
-                "reference": "f07afbba7f30cc220eb6d4bc2fee5d21eb89727c"
+                "reference": "dec6989e6d8f6d72a346a54929ddd3b15effda1c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/f07afbba7f30cc220eb6d4bc2fee5d21eb89727c",
-                "reference": "f07afbba7f30cc220eb6d4bc2fee5d21eb89727c",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/dec6989e6d8f6d72a346a54929ddd3b15effda1c",
+                "reference": "dec6989e6d8f6d72a346a54929ddd3b15effda1c",
                 "shasum": ""
             },
             "require": {
@@ -52,7 +52,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2021-06-02T10:28:34+00:00"
+            "time": "2021-08-05T08:11:35+00:00"
         },
         {
             "name": "benjaminmedia/wp-site-manager",
@@ -2632,11 +2632,11 @@
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/user-role-editor/",
-                "reference": "trunk"
+                "reference": "tags/4.60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/user-role-editor.zip?timestamp=1624507388"
+                "url": "https://downloads.wordpress.org/plugin/user-role-editor.4.60.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
