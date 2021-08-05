@@ -121,7 +121,7 @@ class DocumentAdapter implements CompositeContract
 
     public function getCommercial(): ?CommercialContract
     {
-        return !empty($this->document->getField('bod-commercial-label')) ?
+        return !empty($this->document->getField($this->orgPreFix . '-commercial-label')) ?
             new Commercial(new CommercialAdapter($this->document)) :
             null;
     }
