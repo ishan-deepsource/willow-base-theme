@@ -31,5 +31,7 @@ interface AuthorContract
 
     public function isPublic(): bool;
 
+    public function isAuthor(): bool;
+
     public function getCount(): int;
 }
