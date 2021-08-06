@@ -66,6 +66,9 @@ class AuthorAdapter implements AuthorContract
     {
         if ($url = get_author_posts_url($this->getId())) {
             $path =  parse_url($url, PHP_URL_PATH);
+            if ($this->isAuthor()) {
+                $path = '/author';
+            }
             if ($path) {
                 return LanguageProvider::getHomeUrl($path);
             }
@@ -121,6 +124,11 @@ class AuthorAdapter implements AuthorContract
     public function isPublic(): bool
     {
         return array_get($this->meta, 'public.0') === '1';
+    }
+
+    public function isAuthor(): bool
+    {
+        return array_get($this->meta, 'author.0') === '1';
     }
 
     public function getCount(): int
