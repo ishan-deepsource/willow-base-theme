@@ -34,7 +34,7 @@
         "wpackagist-plugin/amazon-s3-and-cloudfront": "^1.4",
         "wpackagist-plugin/user-role-editor": "^4.44",
         "bonnier/willow-mu-plugins": "^2.0",
-        "benjaminmedia/wp-cxense": "^3.0",
+        "benjaminmedia/wp-cxense": "3.2.6",
         "benjaminmedia/wp-site-manager": "^2.0",
         "bonnier/wp-bonnier-cache": "^5.0",
         "bonnier/wp-bonnier-redirect": "^4.10",
