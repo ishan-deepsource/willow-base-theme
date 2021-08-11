@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Models\Base\Terms;
 
+use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\TagContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Illuminate\Support\Collection;
@@ -28,6 +29,16 @@ class Tag implements TagContract
     public function getUrl(): ?string
     {
         return $this->tag->getUrl();
+    }
+
+    public function getImage(): ?ImageContract
+    {
+        return $this->tag->getImage();
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->tag->getDescription();
     }
 
     public function getLanguage(): ?string

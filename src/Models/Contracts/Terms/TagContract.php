@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Models\Contracts\Terms;
 
+use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
 use Illuminate\Support\Collection;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 
@@ -14,6 +15,10 @@ interface TagContract
     public function getSlug(): ?string;
 
     public function getUrl(): ?string;
+
+    public function getImage(): ?ImageContract;
+
+    public function getDescription(): ?string;
 
     public function getLanguage(): ?string;
 
