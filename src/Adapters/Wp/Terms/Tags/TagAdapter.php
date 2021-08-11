@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Tags;
 
 use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\Partials\TagImageAdapter;
+use Bonnier\Willow\Base\Factories\AbstractModelFactory;
 use Bonnier\Willow\Base\Factories\CategoryContentFactory;
 use Bonnier\Willow\Base\Helpers\AcfName;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\BannerPlacement;
@@ -22,6 +23,7 @@ use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Contracts\Terms\TagContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
+use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Base\Root\Teaser;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\WP\SiteManager\WpSiteManager;
