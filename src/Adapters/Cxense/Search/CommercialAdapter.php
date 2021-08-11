@@ -5,6 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Cxense\Search;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
+use Bonnier\WP\Cxense\WpCxense;
 
 /**
  * Class DocumentAdapter
@@ -13,13 +14,15 @@ use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
  */
 class CommercialAdapter implements CommercialContract
 {
+    protected $orgPreFix;
     protected $label;
     protected $type;
 
     public function __construct(Document $document)
     {
-        $this->type = $document->getField('bod-commercial-format');
-        $this->label = $document->getField('bod-commercial-label');
+        $this->orgPreFix = WpCxense::instance()->settings->getOrganisationPrefix();
+        $this->type = $document->getField($this->orgPreFix . '-commercial-format');
+        $this->label = $document->getField($this->orgPreFix . '-commercial-label');
     }
 
     public function getType(): ?string

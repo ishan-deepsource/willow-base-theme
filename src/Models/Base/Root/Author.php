@@ -56,6 +56,11 @@ class Author implements AuthorContract
         return $this->author->getTitle();
     }
 
+    public function getEducation(): ?string
+    {
+        return $this->author->getEducation();
+    }
+
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection
     {
         return $this->author->getContentTeasers($page, $perPage, $orderBy, $order, $offset);
@@ -69,6 +74,11 @@ class Author implements AuthorContract
     public function isPublic(): bool
     {
         return $this->author->isPublic();
+    }
+
+    public function isAuthor(): bool
+    {
+        return $this->author->isAuthor();
     }
 
     public function getCount(): int

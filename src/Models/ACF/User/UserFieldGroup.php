@@ -19,6 +19,10 @@ class UserFieldGroup
     const PUBLIC_FIELD = 'public';
     const TITLE_FIELD_ID = 'field_5af17b5df8440';
     const TITLE_FIELD = 'user_title';
+    const EDUCATION_FIELD_ID = 'field_60f7fa9f4a5e1';
+    const EDUCATION_FIELD = 'user_education';
+    const AUTHOR_FIELD_ID = 'field_610b7fd838346';
+    const AUTHOR_FIELD = 'author';
 
     public static function register(): void
     {
@@ -40,8 +44,13 @@ class UserFieldGroup
         collect(LanguageProvider::getLanguageList())->each(function($language) use ($group) {
             $group->addField(self::getTitleField($language->slug, $language->name));
         });
+        $group->addField(self::getEducationField());
+        collect(LanguageProvider::getLanguageList())->each(function($language) use ($group) {
+            $group->addField(self::getEducationField($language->slug, $language->name));
+        });
         $group->addField(self::getBirthdayField());
         $group->addField(self::getPublicField());
+        $group->addField(self::getAuthorField());
 
         $filteredGroup = apply_filters(sprintf('willow/acf/group=%s', $group->getKey()), $group);
 
@@ -93,6 +102,32 @@ class UserFieldGroup
         $field->setName(static::PUBLIC_FIELD)
             ->setLabel('public')
             ->setInstructions('Should this author have an author page and be on sitemaps in the frontend?');
+
+        return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
+    }
+
+    public static function getAuthorField(): ACFField
+    {
+        $field = new TrueFalseField(static::AUTHOR_FIELD_ID);
+        $field->setName(static::AUTHOR_FIELD)
+            ->setLabel('Author')
+            ->setInstructions('This should only be checked for users like "Redaktionen", as it will replace the user url with "/author" thus link to the Author Overview page in the frontend.');
+
+        return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
+    }
+
+    public static function getEducationField($slug = '', $name = ''): ACFField
+    {
+        if (empty($slug)) {
+            $field = new TextField(self::EDUCATION_FIELD_ID);
+            $field->setLabel('Eduaction')
+                ->setName(self::EDUCATION_FIELD);
+        }
+        else {
+            $field = new TextField(self::EDUCATION_FIELD_ID . '_' . $slug);
+            $field->setLabel('Education' . ' ' . $name)
+                ->setName(self::EDUCATION_FIELD . '_' . $slug);
+        }
 
         return apply_filters(sprintf('willow/acf/field=%s', $field->getKey()), $field);
     }

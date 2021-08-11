@@ -3,11 +3,14 @@
 namespace Bonnier\Willow\Base\ACF\Brands;
 
 use Bonnier\Willow\Base\Models\ACF\ACFField;
+use Bonnier\Willow\Base\Models\ACF\ACFGroup;
 use Bonnier\Willow\Base\Models\ACF\ACFLayout;
 use Bonnier\Willow\Base\Models\ACF\Composite\CompositeFieldGroup;
+use Bonnier\Willow\Base\Models\ACF\Composite\TeaserFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Fields\ImageField;
 use Bonnier\Willow\Base\Models\ACF\Fields\RadioField;
 use Bonnier\Willow\Base\Models\ACF\Fields\RepeaterField;
+use Bonnier\Willow\Base\Models\ACF\Fields\TextField;
 use Bonnier\Willow\Base\Models\ACF\Fields\TrueFalseField;
 use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 use Bonnier\Willow\Base\Models\ACF\Page\SortByFields;
@@ -36,6 +39,8 @@ class IFO extends Brand
 
         self::removeTitleFromUserFieldGroup();
 
+        add_filter(sprintf('willow/acf/group=%s', TeaserFieldGroup::TEASER_FIELD_GROUP_ID), [__CLASS__, 'setTeaserTitleInstructions']);
+
         $teaserListWidget =  PageFieldGroup::getTeaserListLayout();
         add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListDisplayHints']);
         add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListMultiCategoryField']);
@@ -62,6 +67,17 @@ class IFO extends Brand
 
         $fileWidget = CompositeFieldGroup::getFileWidget();
         add_filter(sprintf('willow/acf/layout=%s', $fileWidget->getKey()), [__CLASS__, 'removeRequiredFromFileWidgetImages']);
+    }
+
+    public static function setTeaserTitleInstructions(ACFGroup $group)
+    {
+        $fields = array_filter($group->getFields(), function (ACFField $field) {
+            if ($field instanceof TextField && $field->getName() === 'teaser_title') {
+                $field->setInstructions('If post title is empty, this title will be copied to the post title');
+            }
+            return $field;
+        });
+        return $group->setFields($fields);
     }
 
     public static function setTeaserListDisplayHints(ACFLayout $teaserList)

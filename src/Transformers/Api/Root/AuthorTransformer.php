@@ -27,10 +27,12 @@ class AuthorTransformer extends TransformerAbstract
             'name' => $author->getName(),
             'email' => $author->getEmail(),
             'title' => $author->getTitle(),
+            'education' => $author->getEducation(),
             'biography' => $author->getBiography(),
             'avatar' => $this->getAvatar($author),
             'url' => $author->getUrl(),
             'public' => $author->isPublic(),
+            'author' => $author->isAuthor(),
             'count' => $author->getCount(),
         ];
     }

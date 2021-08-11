@@ -94,14 +94,14 @@ class RouteController extends BaseController
             $resource = new Item($category, new CategoryTransformer());
             $resource->setMeta(['type' => $content->parent ? 'subcategory' : 'category']);
         } elseif ($content instanceof WP_Term && $content->taxonomy === 'post_tag') {
-            $categoryPath = parse_url(urldecode($path), PHP_URL_PATH);
-            $categoryPath = str_replace('/tags/', '/', $categoryPath);
+            $category = get_term_by('slug', $content->slug, 'category');
 
-            if (($category = get_category_by_path($categoryPath)) && $category instanceof WP_Term) {
+            // If tag has the same slug as category, redirect to category instead
+            if ($category && pll_get_term_language($category->term_id) === $locale) {
                 $resource = new Item(null, new NullTransformer());
                 $resource->setMeta([
                     'type' => 'redirect',
-                    'location' => $categoryPath,
+                    'location' => parse_url(get_category_link($category), PHP_URL_PATH),
                     'status' => Response::HTTP_MOVED_PERMANENTLY
                 ]);
             } else {

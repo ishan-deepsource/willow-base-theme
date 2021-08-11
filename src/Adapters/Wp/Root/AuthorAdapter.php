@@ -66,6 +66,9 @@ class AuthorAdapter implements AuthorContract
     {
         if ($url = get_author_posts_url($this->getId())) {
             $path =  parse_url($url, PHP_URL_PATH);
+            if ($this->isAuthor()) {
+                $path = '/author';
+            }
             if ($path) {
                 return LanguageProvider::getHomeUrl($path);
             }
@@ -86,6 +89,11 @@ class AuthorAdapter implements AuthorContract
     public function getTitle(): ?string
     {
         return WpUserProfile::getTitle($this->getId()) ?: null;
+    }
+
+    public function getEducation(): ?string
+    {
+        return WpUserProfile::getEducation($this->getId()) ?: null;
     }
 
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection
@@ -118,8 +126,19 @@ class AuthorAdapter implements AuthorContract
         return array_get($this->meta, 'public.0') === '1';
     }
 
+    public function isAuthor(): bool
+    {
+        return array_get($this->meta, 'author.0') === '1';
+    }
+
     public function getCount(): int
     {
-        return count_user_posts($this->getId(), WpComposite::POST_TYPE, true) ?: 0;
+        $args = array(
+            'post_type' => WpComposite::POST_TYPE,
+            'author' => $this->getId(),
+            'lang' => LanguageProvider::getCurrentLanguage(),
+        );
+        $authorQuery = new \WP_Query($args);
+        return $authorQuery->found_posts ?: 0;
     }
 }

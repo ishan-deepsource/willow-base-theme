@@ -15,6 +15,8 @@ interface AuthorContract
 
     public function getBiography(): ?string;
 
+    public function getEducation(): ?string;
+
     public function getAvatar(): ?ImageContract;
 
     public function getEmail(): ?string;
@@ -28,6 +30,8 @@ interface AuthorContract
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection;
 
     public function isPublic(): bool;
+
+    public function isAuthor(): bool;
 
     public function getCount(): int;
 }
