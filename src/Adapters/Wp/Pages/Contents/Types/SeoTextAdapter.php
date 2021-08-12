@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\Types;
 
 use Bonnier\Willow\Base\Adapters\Wp\Pages\Contents\AbstractContentAdapter;
+use Bonnier\Willow\Base\Adapters\Wp\Root\FileAdapter;
 use Bonnier\Willow\Base\Adapters\Wp\Root\ImageAdapter;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Models\Base\Root\Image;
@@ -34,5 +35,20 @@ class SeoTextAdapter extends AbstractContentAdapter implements SeoTextContract
     public function getImagePosition(): ?string
     {
         return array_get($this->acfArray, 'image_position') ?: null;
+    }
+
+    public function getLink(): ?string
+    {
+        return array_get($this->acfArray, 'link') ?: null;
+    }
+
+    public function getLinkTarget(): ?string
+    {
+        return array_get($this->acfArray, 'link_target') ?: null;
+    }
+
+    public function getLinkRel(): ?string
+    {
+        return array_get($this->acfArray, 'link_rel') ?: null;
     }
 }
