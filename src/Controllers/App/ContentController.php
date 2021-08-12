@@ -56,7 +56,7 @@ class ContentController extends BaseController
             $query_args = array(
                 'post_type' => 'contenthub_composite',
                 'post_status' => 'publish',
-                'posts_per_page' => '100',
+                'posts_per_page' => '1000',
                 'paged' => $currentPage,
                 'orderby' => 'ID'
             );
