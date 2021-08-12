@@ -11,4 +11,7 @@ interface SeoTextContract extends ContentContract
     public function getDescription(): ?string;
     public function getImage(): ?ImageContract;
     public function getImagePosition(): ?string;
+    public function getLink(): ?string;
+    public function getLinkTarget(): ?string;
+    public function getLinkRel(): ?string;
 }

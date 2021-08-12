@@ -37,6 +37,7 @@ class PageFieldGroup
     private const SOURCE_CODE_FIELD = 'field_5e144f59a2ac8';
     private const COMMERCIAL_SPOT_URL_FIELD = 'field_5c0fa2fcea1a6';
     private const LINK_TYPE_FIELD = 'field_5e68a31bbe22d';
+    private const SEOTEXT_LINK_URL_FIELD = 'field_6114e3c3e9072';
 
     public const THEME_FIELD_NAME = 'theme';
     public static $brand;
@@ -323,6 +324,42 @@ class PageFieldGroup
             ->setReturnFormat(ACFField::RETURN_VALUE);
 
         $layout->addSubField($position);
+
+        $link = new TextField(self::SEOTEXT_LINK_URL_FIELD);
+        $link->setLabel('Link URL')
+            ->setName('link');
+
+        $layout->addSubField($link);
+
+        $linkTarget = new RadioField('field_6114e3dbe9073');
+        $linkTarget->setLabel('Open in')
+            ->setName('link_target')
+            ->setChoice('_self', 'Same window')
+            ->setChoice('_blank', 'New window')
+            ->setDefaultValue('_self')
+            ->setLayout('horizontal')
+            ->setReturnFormat(ACFField::RETURN_VALUE)
+            ->setConditionalLogic(new ACFConditionalLogic(
+                self::SEOTEXT_LINK_URL_FIELD,
+                ACFConditionalLogic::OPERATOR_NOT_EMPTY
+            ));
+
+        $layout->addSubField($linkTarget);
+
+        $linkTarget = new RadioField('field_6114e3f3e9074');
+        $linkTarget->setLabel('Relationship (Follow/No Follow)')
+            ->setName('link_rel')
+            ->setChoice('follow', 'Follow')
+            ->setChoice('nofollow', 'No Follow')
+            ->setDefaultValue('follow')
+            ->setLayout('horizontal')
+            ->setReturnFormat(ACFField::RETURN_VALUE)
+            ->setConditionalLogic(new ACFConditionalLogic(
+                self::SEOTEXT_LINK_URL_FIELD,
+                ACFConditionalLogic::OPERATOR_NOT_EMPTY
+            ));
+
+        $layout->addSubField($linkTarget);
 
         return apply_filters(sprintf('willow/acf/layout=%s', $layout->getKey()), $layout);
     }
