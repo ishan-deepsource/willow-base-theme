@@ -57,6 +57,16 @@ class Category implements CategoryContract
         return $this->category->getDescription();
     }
 
+    public function getColor(): ?string
+    {
+        return $this->category->getColor();
+    }
+
+    public function getSortOrder(): ?string
+    {
+        return $this->category->getSortOrder();
+    }
+
     public function getLanguage(): ?string
     {
         return $this->category->getLanguage();
