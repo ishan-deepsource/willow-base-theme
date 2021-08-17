@@ -60,6 +60,8 @@ class TermImportHelper
             'meta_description' => $externalTerm->meta_description->{$languageCode} ?? null,
             'body' => $externalTerm->body->{$languageCode} ?? null,
             'image_url' => $externalTerm->image_url->{$languageCode} ?? null,
+            'sortorder' => $externalTerm->sortorder->{$languageCode} ?? null,
+            'color' => $externalTerm->color->{$languageCode} ?? null,
             'internal' => $externalTerm->internal ?? false,
             'whitealbum_id' => $externalTerm->whitealbum_id->{$languageCode} ?? null,
         ];
