@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bc60a022849d072b5ef5356278cac817",
+    "content-hash": "d6302f20fe8b7181ddf4da67401912f6",
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
-            "version": "3.2.6",
+            "version": "3.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-cxense.git",
-                "reference": "cfc3633b37421834cdd6d5b98068cd662dc39286"
+                "reference": "83d17c89a079ac552c1aa6648c9e98e58751a1e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/cfc3633b37421834cdd6d5b98068cd662dc39286",
-                "reference": "cfc3633b37421834cdd6d5b98068cd662dc39286",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/83d17c89a079ac552c1aa6648c9e98e58751a1e5",
+                "reference": "83d17c89a079ac552c1aa6648c9e98e58751a1e5",
                 "shasum": ""
             },
             "require": {
@@ -55,7 +55,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2021-08-05T17:38:13+00:00"
+            "time": "2021-08-17T05:29:47+00:00"
         },
         {
             "name": "benjaminmedia/wp-site-manager",
@@ -1129,22 +1129,22 @@
         },
         {
             "name": "league/csv",
-            "version": "9.7.1",
+            "version": "9.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/csv.git",
-                "reference": "0ec57e8264ec92565974ead0d1724cf1026e10c1"
+                "reference": "f28da6e483bf979bac10e2add384c90ae9983e4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/csv/zipball/0ec57e8264ec92565974ead0d1724cf1026e10c1",
-                "reference": "0ec57e8264ec92565974ead0d1724cf1026e10c1",
+                "url": "https://api.github.com/repos/thephpleague/csv/zipball/f28da6e483bf979bac10e2add384c90ae9983e4e",
+                "reference": "f28da6e483bf979bac10e2add384c90ae9983e4e",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-mbstring": "*",
-                "php": "^7.3 || ^8.0"
+                "php": ">=7.2.5"
             },
             "require-dev": {
                 "ext-curl": "*",
@@ -1153,7 +1153,7 @@
                 "phpstan/phpstan": "^0.12.0",
                 "phpstan/phpstan-phpunit": "^0.12.0",
                 "phpstan/phpstan-strict-rules": "^0.12.0",
-                "phpunit/phpunit": "^9.5"
+                "phpunit/phpunit": "^8.5"
             },
             "suggest": {
                 "ext-dom": "Required to use the XMLConverter and or the HTMLConverter classes",
@@ -1203,7 +1203,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-04-17T16:32:08+00:00"
+            "time": "2020-12-10T19:40:30+00:00"
         },
         {
             "name": "league/fractal",
