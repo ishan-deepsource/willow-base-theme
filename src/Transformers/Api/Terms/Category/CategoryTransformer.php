@@ -54,6 +54,8 @@ class CategoryTransformer extends TransformerAbstract
         return [
             'id'            => $category->getId(),
             'name'          => $category->getName(),
+            'color'         => $category->getColor(),
+            'sortorder'     => $category->getSortorder(),
             'url'           => $this->getPath($category->getUrl()),
             'language'      => $category->getLanguage(),
             'count'         => $category->getCount(),
