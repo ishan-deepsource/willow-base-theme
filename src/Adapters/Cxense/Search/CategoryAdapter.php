@@ -56,6 +56,16 @@ class CategoryAdapter implements CategoryContract
         return null;
     }
 
+    public function getColor(): ?string
+    {
+        return null;
+    }
+
+    public function getSortOrder(): ?string
+    {
+        return null;
+    }
+
     public function getLanguage(): ?string
     {
         return null;
