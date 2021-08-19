@@ -1727,7 +1727,7 @@ class CompositeFieldGroup
                 // 'calories_burn' => 'Calories burn time based on activity',
                 // 'christmas_sin_burner' => 'Calories burn time based on christmas intake and activity',
                 // 'sin_burn' => 'Calories burn time based on intake and activity',
-                'kcal_burn' => 'Calories burning based on activity', //round #2
+                'kcal_burn' => 'Calories burn time based on activity', //round #2
                 'kcal_burn_v2' => 'Calories burning based on activity (new version)', //round #1
                 // 'christmas_kcal' => 'Calories burning based on christmas activity',
                 'cooper_test' => 'Cooper test', //round #1
