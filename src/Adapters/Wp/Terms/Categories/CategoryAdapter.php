@@ -106,13 +106,13 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
 
     public function getSortorder(): ?string
     {
-        return data_get($this->wpModel, 'sortorder') ?: null;
-    }   
-    
+        return data_get($this->wpMeta, 'sortorder.0') ?: null;
+    }
+
     public function getColor(): ?string
     {
-        return data_get($this->wpModel, 'color') ?: null;
-    }      
+        return data_get($this->wpMeta, 'color.0') ?: null;
+    }
 
     public function getBody(): ?string
     {

@@ -30,9 +30,13 @@ class ContentController extends BaseController
         ]);
     }
 
-    public function popular()
+    public function popular(?\WP_REST_Request $request)
     {
-        $result = SortBy::getPopularComposites();
+        $categories = null;
+        if (isset($request['categories'])) {
+            $categories = explode(',', $request['categories']);
+        }
+        $result = SortBy::getPopularComposites($categories);
 
         if (($composites = $result['composites'] ?? null) && $composites->isNotEmpty()) {
             $composites = $composites->map(function (\WP_Post $post) {
