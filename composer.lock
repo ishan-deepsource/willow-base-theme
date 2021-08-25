@@ -232,16 +232,16 @@
         },
         {
             "name": "bonnier/wp-bonnier-redirect",
-            "version": "4.13.4",
+            "version": "4.13.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-bonnier-redirect.git",
-                "reference": "587b9fd6f2e5bcaf565b643799875c323a030700"
+                "reference": "08cdfe24b204246fd161117bbb6f0d1d3e9120f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-redirect/zipball/587b9fd6f2e5bcaf565b643799875c323a030700",
-                "reference": "587b9fd6f2e5bcaf565b643799875c323a030700",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-bonnier-redirect/zipball/08cdfe24b204246fd161117bbb6f0d1d3e9120f7",
+                "reference": "08cdfe24b204246fd161117bbb6f0d1d3e9120f7",
                 "shasum": ""
             },
             "require": {
@@ -270,7 +270,7 @@
                 }
             ],
             "description": "Redirect for Bonnier integration with Custom Permalink and Polylang",
-            "time": "2021-07-15T12:30:45+00:00"
+            "time": "2021-08-25T12:10:10+00:00"
         },
         {
             "name": "bonnier/wp-bonnier-sitemap",
@@ -2635,11 +2635,11 @@
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/user-role-editor/",
-                "reference": "tags/4.60"
+                "reference": "trunk"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/user-role-editor.4.60.zip"
+                "url": "https://downloads.wordpress.org/plugin/user-role-editor.zip?timestamp=1624507388"
             },
             "require": {
                 "composer/installers": "~1.0"
