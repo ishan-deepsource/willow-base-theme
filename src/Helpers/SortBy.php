@@ -234,11 +234,14 @@ class SortBy
      *
      * @return array|null A collection of composites
      */
-    public static function getPopularComposites(): ?array
+    public static function getPopularComposites(?Array $categories = null): ?array
     {
         $query = WidgetDocumentQuery::make()->byPopular();
         if (self::isWpTerm(self::$acfWidget[AcfName::FIELD_CATEGORY] ?? null)) {
             $query->setCategories([self::$acfWidget[AcfName::FIELD_CATEGORY]]);
+        }
+        else if ($categories != null) {
+            $query->setCategories($categories);
         }
 
         if (self::isWpTerm(self::$acfWidget[AcfName::FIELD_TAG] ?? null)) {
