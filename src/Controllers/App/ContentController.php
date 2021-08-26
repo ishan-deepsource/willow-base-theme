@@ -60,7 +60,7 @@ class ContentController extends BaseController
             $query_args = array(
                 'post_type' => 'contenthub_composite',
                 'post_status' => 'publish',
-                'posts_per_page' => '500',
+                'posts_per_page' => '1000',
                 'paged' => $currentPage,
                 'orderby' => 'ID'
             );
@@ -76,14 +76,6 @@ class ContentController extends BaseController
                     'total' => intval($query->found_posts),
                     'page' => intval($currentPage),
                     'pages' => $query->max_num_pages,
-                    'site_url' => get_site_url(),
-                    'home_url' => home_url(),
-                    'wpurl' => get_bloginfo('wpurl'),
-                    'url' => get_bloginfo('url'),
-                    'http_host' => $_SERVER['HTTP_HOST'],
-                    'gethostname' => gethostname(),
-                    'php_uname_n' => php_uname('n'),
-                    'network_site_url' => network_site_url(),
                     'data' => $response
                 ]
             );
