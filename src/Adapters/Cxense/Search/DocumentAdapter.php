@@ -207,7 +207,7 @@ class DocumentAdapter implements CompositeContract
     public function getKind(): ?string
     {
         // todo find the right field
-        return null;
+        return $this->document->getField('kind');
     }
 
     public function getParent(): ?int
