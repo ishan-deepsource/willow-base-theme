@@ -71,8 +71,8 @@ class SortBy
                 'composites' => collect($teasers),
                 'page' => 1,
                 'per_page' => $count,
-                'total' => $count,
-                'pages' => 1,
+                'total' => self::$acfWidget[AcfName::FIELD_TEASER_AMOUNT],
+                'pages' => round((self::$acfWidget[AcfName::FIELD_TEASER_AMOUNT]/$count), 0, PHP_ROUND_HALF_UP),
             ];
         }
 
