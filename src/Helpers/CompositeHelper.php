@@ -102,7 +102,8 @@ class CompositeHelper
             $associatedComposites = 0;
             collect(get_field('composite_content', $postId))->each(
                 function ($content) use ($postId, $wpdb, &$associatedComposites) {
-                    if ($content['acf_fc_layout'] === 'associated_composites' && ++$associatedComposites === 1) {
+                    if ($content['acf_fc_layout'] === 'associated_composites' && $associatedComposites == 0) {
+                        ++$associatedComposites;
                         collect(array_get($content, 'composites', []))->each(function (\WP_Post $composite) use ($postId) {
                             add_post_meta($composite->ID, 'story_parent', $postId);
                         });
