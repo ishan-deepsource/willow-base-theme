@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Categories;
 
+use Bonnier\Willow\Base\Factories\AbstractModelFactory;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\AuthorOverview;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\QuoteTeaser;
 use Bonnier\Willow\Base\Factories\CategoryContentFactory;
@@ -178,6 +179,26 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
             $composite = WpModelRepository::instance()->getPost($post);
             return new Composite(new CompositeAdapter($composite));
         });
+    }
+
+    public function getContentTeasersCount($includeChildren): ?int
+    {
+        global $wpdb;
+        $excludedFromWebIds = $wpdb->get_col("SELECT post_id FROM wp_postmeta WHERE meta_key='exclude_platforms' and meta_value like '%web%'");
+        return collect(get_posts([
+            'post_type' => WpComposite::POST_TYPE,
+            'post__not_in' => $excludedFromWebIds,
+            'post_status' => 'publish',
+            'posts_per_page' => 10000,
+            'tax_query' => [
+                [
+                    'taxonomy' => 'category',
+                    'field' => 'term_id',
+                    'terms' => $this->getId(),
+                    'include_children' => $includeChildren == 'true',
+                ]
+            ]
+        ]))->count();
     }
 
     public function getCount(): ?int
