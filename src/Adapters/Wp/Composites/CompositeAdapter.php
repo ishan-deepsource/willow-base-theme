@@ -158,7 +158,8 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getStatus(): ?string
     {
-        return data_get($this->wpModel, 'post_status') ?: null;
+        $excludePlatforms = data_get($this->wpModel, 'exclude_platforms');
+        return ((isset(collect($excludePlatforms)[0]) && collect($excludePlatforms)[0] ==='web')?'pending':data_get($this->wpModel, 'post_status')) ?: null;
     }
 
     public function getLocale(): ?string
