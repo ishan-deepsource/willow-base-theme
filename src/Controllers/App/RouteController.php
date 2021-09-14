@@ -226,7 +226,13 @@ class RouteController extends BaseController
                 $posts = get_posts([
                     'post_type' => 'page',
                     'include' => $queryParams['page_id'],
-                    'post_status' => self::STATUS_DRAFT
+                    'post_status' => self::STATUS_DRAFT,
+                ]);
+            } else if ($queryParams['preview_id'] ?? false) {
+                $posts = get_posts([
+                    'post_type' => 'contenthub_composite',
+                    'include' => $queryParams['preview_id'],
+                    'post_status' => self::STATUS_DRAFT,
                 ]);
             }
             if (count($posts)) {
