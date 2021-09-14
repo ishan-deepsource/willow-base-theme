@@ -12,7 +12,6 @@ class ILL extends Brand
     public static function register(): void
     {
         self::init();
-        self::removeOtherAuthors();
         self::removeImageFromInfoboxWidget();
         self::removeIncludeIntroVideoFromVideoWidget();
         self::removeChapterItemsFromVideoWidget();
@@ -28,8 +27,6 @@ class ILL extends Brand
         self::removeProductWidget();
         self::removeRecipeWidget();
         self::removeCalculatorWidget();
-
-        self::removeLanguageTitlesFromUserFieldGroup();
 
         $paragraphListWidget = parent::$paragraphListWidget;
         add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'removeParagraphListShowNumbers']);
