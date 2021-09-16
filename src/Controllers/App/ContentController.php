@@ -49,44 +49,66 @@ class ContentController extends BaseController
         return new \WP_REST_Response(['data' => $composites->toArray()]);
     }
 
-    public function published($request = null)
+    public function published(?\WP_REST_Request $request)
     {
-        $currentPage = 1;
-        if ($request && $request->get_param('page')) {
-            $currentPage = $request->get_param('page');
+        if (!$request) {
+            return false;
         }
 
-        return Cache::remember('published_page_' . $currentPage, 600, function() use ($currentPage) {
-            $query_args = array(
-                'post_type' => 'contenthub_composite',
-                'post_status' => 'publish',
-                'posts_per_page' => '500',
-                'paged' => $currentPage,
-                'orderby' => 'ID'
-            );
+        $status = 'publish';
+        $statusParam = $request->get_param('status');
+        if (in_array($statusParam, ['any', 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash'])) {
+            $status = $statusParam;
+        }
 
-            $response = [];
-            $query = new \WP_Query($query_args);
-            foreach ($query->posts as $post) {
-                $response[] = get_permalink($post);
-            }
-            return new \WP_REST_Response(
-                [
-                    'count' => sizeof($query->posts),
-                    'total' => intval($query->found_posts),
-                    'page' => intval($currentPage),
-                    'pages' => $query->max_num_pages,
-                    'site_url' => get_site_url(),
-                    'home_url' => home_url(),
-                    'wpurl' => get_bloginfo('wpurl'),
-                    'url' => get_bloginfo('url'),
-                    'http_host' => $_SERVER['HTTP_HOST'],
-                    'gethostname' => gethostname(),
-                    'php_uname_n' => php_uname('n'),
-                    'network_site_url' => network_site_url(),
-                    'data' => $response
-                ]
-            );
-        });
+        $perPage = 500;
+        $perPageParam = $request->get_param('per_page');
+        if (is_numeric($perPageParam)) {
+            $perPage = $perPageParam;
+        }
+
+        $currentPage = 1;
+        $pageParam = $request->get_param('page');
+        if (is_numeric($pageParam)) {
+            $currentPage = $pageParam;
+        }
+
+        return Cache::remember('page_' . $status . '_' . $perPage . '_' . $currentPage,
+            600,
+            function () use ($status, $perPage, $currentPage) {
+                $query_args = [
+                    'post_type' => 'contenthub_composite',
+                    'post_status' => $status,
+                    'posts_per_page' => $perPage,
+                    'paged' => $currentPage,
+                    'orderby' => 'modified',
+                    'order' => 'desc',
+                ];
+
+                $data = [];
+                $query = new \WP_Query($query_args);
+                foreach ($query->posts as $post) {
+                    $data[] = [
+                        'id' => $post->ID,
+                        'canonical_url' => get_field('canonical_url', $post->ID),
+                        'exclude_platforms' => get_field('exclude_platforms', $post->ID),
+                        'hide_from_sitemap' => get_field('sitemap', $post->ID),
+                        'modified' => $post->post_modified_gmt,
+                        'status' => $post->post_status,
+                        'url' => parse_url(get_permalink($post), PHP_URL_PATH),
+                    ];
+                }
+
+                return new \WP_REST_Response(
+                    [
+                        'count' => sizeof($query->posts),
+                        'total' => intval($query->found_posts),
+                        'page' => intval($currentPage),
+                        'pages' => $query->max_num_pages,
+                        'home_url' => rtrim(pll_home_url(), '/'),
+                        'data' => $data
+                    ]
+                );
+            });
     }
 }
