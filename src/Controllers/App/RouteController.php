@@ -375,7 +375,7 @@ class RouteController extends BaseController
             return null;
         }
         try {
-            if ($bonnierRedirect = WpBonnierRedirect::instance()->getRedirectRepository()->findRedirectByPath($path)) {
+            if ($bonnierRedirect = WpBonnierRedirect::instance()->getRedirectRepository()->findRedirectByPath($path, null, true)) {
                 return $bonnierRedirect;
             }
         } catch (Exception $exception) {
