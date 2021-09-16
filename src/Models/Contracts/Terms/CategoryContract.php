@@ -30,6 +30,8 @@ interface CategoryContract
 
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset, $includeChildren): Collection;
 
+    public function getContentTeasersCount($includeChildren): ?int;
+
     public function getCount(): ?int;
 
     public function getTeaser(string $type): ?TeaserContract;

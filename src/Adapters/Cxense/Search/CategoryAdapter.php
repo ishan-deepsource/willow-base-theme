@@ -76,6 +76,11 @@ class CategoryAdapter implements CategoryContract
         return collect();
     }
 
+    public function getContentTeasersCount($includeChildren): ?int
+    {
+        return null;
+    }
+
     public function getCount(): ?int
     {
         return null;
