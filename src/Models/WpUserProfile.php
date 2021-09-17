@@ -21,6 +21,7 @@ class WpUserProfile
         add_action('user_new_form', [__CLASS__, 'myUserNewForm'], 10, 1);
         add_action('show_user_profile', [__CLASS__, 'myUserNewForm'], 10, 1);
         add_action('edit_user_profile', [__CLASS__, 'myUserNewForm'], 10, 1);
+        add_action('edit_user_profile_update', [__CLASS__, 'setUserNicename'], 10, 2 );
     }
 
     public static function getAvatarFromUser($userId): ?\WP_Post
@@ -78,6 +79,14 @@ class WpUserProfile
 
             return $url;
         }, 10, 3);
+    }
+
+    public static function setUserNicename($userId)
+    {
+        wp_update_user([
+            'ID'            => $userId,
+            'user_nicename' => sanitize_title(get_userdata($userId)->display_name)
+        ]);
     }
 
     public static function loadAuthorDescriptionAsMarkdownScript($admin_page)
