@@ -64,14 +64,13 @@ class AuthorAdapter implements AuthorContract
 
     public function getUrl(): ?string
     {
-        if ($url = get_author_posts_url($this->getId())) {
-            $path =  parse_url($url, PHP_URL_PATH);
-            if ($this->isAuthor()) {
-                $path = '/author';
-            }
-            if ($path) {
-                return LanguageProvider::getHomeUrl($path);
-            }
+        $displayNameAsSlug = sanitize_title(get_userdata($this->getId())->display_name);
+        $path = '/author/' . $displayNameAsSlug;
+        if ($this->isAuthor()) {
+            $path = '/author';
+        }
+        if ($path) {
+            return LanguageProvider::getHomeUrl($path);
         }
         return null;
     }
