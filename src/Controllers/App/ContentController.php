@@ -53,8 +53,8 @@ class ContentController extends BaseController
         }
 
         global $as3cf;
-        $as3Client = $as3cf->get_s3client('eu-west-1');
-        $signedUrl = $as3Client->get_object_url('files.bonnier.cloud', $key, $expires, []);
+        $as3Client = $as3cf->get_s3client(env('AWS_S3_REGION'));
+        $signedUrl = $as3Client->get_object_url(env('AWS_S3_BUCKET'), $key, $expires, []);
 
         return new \WP_REST_Response(['data' => [
             'signed_url' => $signedUrl,
