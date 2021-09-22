@@ -3,11 +3,13 @@
 namespace Bonnier\Willow\Base\Transformers\Api\Terms\Category;
 
 use Bonnier\Willow\Base\Exceptions\Controllers\Api\OverrideModelMissingContractException;
+use Bonnier\Willow\Base\Factories\AbstractModelFactory;
 use Bonnier\Willow\Base\Factories\WPModelFactory;
 use Bonnier\Willow\Base\Helpers\Cache;
 use Bonnier\Willow\Base\Models\Base\Terms\Category;
 use Bonnier\Willow\Base\Models\Contracts\Root\TranslationContract;
 use Bonnier\Willow\Base\Models\Contracts\Terms\CategoryContract;
+use Bonnier\Willow\Base\Models\WpComposite;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
 use Bonnier\Willow\Base\Transformers\Api\Root\Contents\ContentTransformer;
@@ -33,6 +35,7 @@ class CategoryTransformer extends TransformerAbstract
         'children',
         'teasers',
         'content-teasers',
+        'content-teasers-count',
         'siblings',
         'parent',
         'contents',
@@ -91,6 +94,13 @@ class CategoryTransformer extends TransformerAbstract
             $category->getContentTeasers($page, $perPage, $orderby, $order, $offset, $includeChildren),
             new CompositeTeaserTransformer()
         );
+    }
+
+    public function includeContentTeasersCount(CategoryContract $category, ParamBag $paramBag)
+    {
+        list($includeChildren) = $paramBag->get('include_children') ?: ['false'];
+
+        return $this->primitive($category->getContentTeasersCount($includeChildren));
     }
 
     public function includeParent(CategoryContract $category)

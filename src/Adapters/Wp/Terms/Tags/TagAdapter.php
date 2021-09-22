@@ -2,6 +2,8 @@
 
 namespace Bonnier\Willow\Base\Adapters\Wp\Terms\Tags;
 
+use Bonnier\Willow\Base\Adapters\Wp\Terms\Tags\Partials\TagImageAdapter;
+use Bonnier\Willow\Base\Factories\AbstractModelFactory;
 use Bonnier\Willow\Base\Factories\CategoryContentFactory;
 use Bonnier\Willow\Base\Helpers\AcfName;
 use Bonnier\Willow\Base\Models\Base\Pages\Contents\Types\BannerPlacement;
@@ -20,6 +22,8 @@ use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Models\Contracts\Terms\TagContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\TeaserContract;
+use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
+use Bonnier\Willow\Base\Models\Base\Root\Image;
 use Bonnier\Willow\Base\Models\Base\Root\Teaser;
 use Bonnier\Willow\Base\Traits\UrlTrait;
 use Bonnier\WP\SiteManager\WpSiteManager;
@@ -83,6 +87,11 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
         return data_get($this->meta, 'description.' . LanguageProvider::getCurrentLanguage()) ?: null;
     }
 
+    public function getImage(): ?ImageContract
+    {
+        return new Image(new TagImageAdapter($this->wpMeta));
+    }
+
     public function getSlug(): ?string
     {
         return data_get($this->wpModel, 'slug') ?: null;
@@ -108,10 +117,13 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
 
     public function getContentTeasers($page, $perPage, $orderBy, $order): Collection
     {
+        global $wpdb;
+        $excludedFromWebIds = $wpdb->get_col("SELECT post_id FROM wp_postmeta WHERE meta_key='exclude_platforms' and meta_value like '%web%'");              
         $offset = $perPage * ($page - 1);
         return collect(get_posts([
             'post_type' => WpComposite::POST_TYPE,
             'post_status' => 'publish',
+            'post__not_in' => $excludedFromWebIds,
             'posts_per_page' => $perPage,
             'offset' => $offset,
             'orderby' => $orderBy,

@@ -56,6 +56,16 @@ class CategoryAdapter implements CategoryContract
         return null;
     }
 
+    public function getColor(): ?string
+    {
+        return null;
+    }
+
+    public function getSortOrder(): ?string
+    {
+        return null;
+    }
+
     public function getLanguage(): ?string
     {
         return null;
@@ -64,6 +74,11 @@ class CategoryAdapter implements CategoryContract
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset, $includeChildren): Collection
     {
         return collect();
+    }
+
+    public function getContentTeasersCount($includeChildren): ?int
+    {
+        return null;
     }
 
     public function getCount(): ?int

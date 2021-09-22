@@ -3,6 +3,7 @@
 namespace Bonnier\Willow\Base\Controllers\App;
 
 use Bonnier\Willow\Base\Adapters\Wp\Composites\CompositeAdapter;
+use Bonnier\Willow\Base\Helpers\Cache;
 use Bonnier\Willow\Base\Helpers\SortBy;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
@@ -23,24 +24,17 @@ class ContentController extends BaseController
             'methods' => \WP_REST_Server::READABLE,
             'callback' => [$this, 'download']
         ]);
-    }
 
-    /**
-     * @return WP_REST_Response
-     */
-    public function popular()
-    {
-        $result = SortBy::getPopularComposites();
+        register_rest_route('app/content', '/published', [
+            'methods' => \WP_REST_Server::READABLE,
+            'callback' => [$this, 'published']
+        ]);
 
-        if (($composites = $result['composites'] ?? null) && $composites->isNotEmpty()) {
-            $composites = $composites->map(function (\WP_Post $post) {
-                $compositePost = WpModelRepository::instance()->getPost($post);
-                $composite = new Composite(new CompositeAdapter($compositePost));
-                return with(new CompositeTeaserTransformer)->transform($composite);
-            })->values();
-        }
-
-        return new \WP_REST_Response(['data' => $composites->toArray()]);
+        register_rest_route('app/content', '/published/(?P<page>[0-9]+)', [
+            'methods' => \WP_REST_Server::READABLE,
+            'callback' => [$this, 'published'],
+            'args' => ['page']
+        ]);
     }
 
     /**
@@ -54,8 +48,7 @@ class ContentController extends BaseController
         $expires = $request->get_param('expires');
         if (is_numeric($expires)) {
             $expires = time() + $expires;
-        }
-        else {
+        } else {
             $expires = time() + HOUR_IN_SECONDS;
         }
 
@@ -66,5 +59,90 @@ class ContentController extends BaseController
         return new \WP_REST_Response(['data' => [
             'signed_url' => $signedUrl,
         ]]);
+    }
+
+    /**
+     * @return WP_REST_Response
+     */
+    public function popular(?\WP_REST_Request $request)
+    {
+        $categories = null;
+        if (isset($request['categories'])) {
+            $categories = explode(',', $request['categories']);
+        }
+        $result = SortBy::getPopularComposites($categories);
+
+        if (($composites = $result['composites'] ?? null) && $composites->isNotEmpty()) {
+            $composites = $composites->map(function (\WP_Post $post) {
+                $compositePost = WpModelRepository::instance()->getPost($post);
+                $composite = new Composite(new CompositeAdapter($compositePost));
+                return with(new CompositeTeaserTransformer)->transform($composite);
+            })->values();
+        }
+
+        return new \WP_REST_Response(['data' => $composites->toArray()]);
+    }
+
+    public function published(?\WP_REST_Request $request)
+    {
+        if (!$request) {
+            return false;
+        }
+
+        $status = 'publish';
+        $statusParam = $request->get_param('status');
+        if (in_array($statusParam, ['any', 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash'])) {
+            $status = $statusParam;
+        }
+
+        $perPage = 500;
+        $perPageParam = $request->get_param('per_page');
+        if (is_numeric($perPageParam)) {
+            $perPage = $perPageParam;
+        }
+
+        $currentPage = 1;
+        $pageParam = $request->get_param('page');
+        if (is_numeric($pageParam)) {
+            $currentPage = $pageParam;
+        }
+
+        return Cache::remember('page_' . $status . '_' . $perPage . '_' . $currentPage,
+            600,
+            function () use ($status, $perPage, $currentPage) {
+                $query_args = [
+                    'post_type' => 'contenthub_composite',
+                    'post_status' => $status,
+                    'posts_per_page' => $perPage,
+                    'paged' => $currentPage,
+                    'orderby' => 'modified',
+                    'order' => 'desc',
+                ];
+
+                $data = [];
+                $query = new \WP_Query($query_args);
+                foreach ($query->posts as $post) {
+                    $data[] = [
+                        'id' => $post->ID,
+                        'canonical_url' => get_field('canonical_url', $post->ID),
+                        'exclude_platforms' => get_field('exclude_platforms', $post->ID),
+                        'hide_from_sitemap' => get_field('sitemap', $post->ID),
+                        'modified' => $post->post_modified_gmt,
+                        'status' => $post->post_status,
+                        'url' => parse_url(get_permalink($post), PHP_URL_PATH),
+                    ];
+                }
+
+                return new \WP_REST_Response(
+                    [
+                        'count' => sizeof($query->posts),
+                        'total' => intval($query->found_posts),
+                        'page' => intval($currentPage),
+                        'pages' => $query->max_num_pages,
+                        'home_url' => rtrim(pll_home_url(), '/'),
+                        'data' => $data
+                    ]
+                );
+            });
     }
 }

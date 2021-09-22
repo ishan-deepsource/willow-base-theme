@@ -37,6 +37,16 @@ class Category implements CategoryContract
         return $this->category->getName();
     }
 
+    public function getSortorder(): ?string
+    {
+        return $this->category->getSortorder();
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->category->getColor();
+    }
+
     public function getUrl(): ?string
     {
         return $this->category->getUrl();
@@ -65,6 +75,11 @@ class Category implements CategoryContract
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset, $includeChildren): Collection
     {
         return $this->category->getContentTeasers($page, $perPage, $orderBy, $order, $offset, $includeChildren);
+    }
+
+    public function getContentTeasersCount($includeChildren): ?int
+    {
+        return $this->category->getContentTeasersCount($includeChildren);
     }
 
     public function getCount(): ?int

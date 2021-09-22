@@ -97,15 +97,21 @@ class CompositeHelper
         }
 
         // Then run through all associated_composites and add a postmeta field, defining the story parent
-        collect(get_field('composite_content', $postId))->each(function ($content) use ($postId, $wpdb) {
-            if ($content['acf_fc_layout'] === 'associated_composites') {
-                collect(array_get($content, 'composites', []))->each(function (\WP_Post $composite) use ($postId) {
-                    if (get_field('kind', $postId) === 'Story') {
-                        add_post_meta($composite->ID, 'story_parent', $postId);
+        // Only take from the first 'composite_content' widget.
+        if (get_field('kind', $postId) === 'Story') {
+            $associatedComposites = 0;
+            collect(get_field('composite_content', $postId))->each(
+                function ($content) use ($postId, $wpdb, &$associatedComposites) {
+                    if ($content['acf_fc_layout'] === 'associated_composites' && $associatedComposites == 0) {
+                        ++$associatedComposites;
+                        collect(array_get($content, 'composites', []))->each(function (\WP_Post $composite) use ($postId) {
+                            add_post_meta($composite->ID, 'story_parent', $postId);
+                        });
                     }
-                });
-            }
-        });
+                }
+            );
+        }
+
     }
 
     private function validStoryComposite($postId)

@@ -64,11 +64,13 @@ class AuthorAdapter implements AuthorContract
 
     public function getUrl(): ?string
     {
-        if ($url = get_author_posts_url($this->getId())) {
-            $path =  parse_url($url, PHP_URL_PATH);
-            if ($path) {
-                return LanguageProvider::getHomeUrl($path);
-            }
+        $displayNameAsSlug = sanitize_title(get_userdata($this->getId())->display_name);
+        $path = '/author/' . $displayNameAsSlug;
+        if ($this->isAuthor()) {
+            $path = '/author';
+        }
+        if ($path) {
+            return LanguageProvider::getHomeUrl($path);
         }
         return null;
     }
@@ -95,10 +97,13 @@ class AuthorAdapter implements AuthorContract
 
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset): Collection
     {
+        global $wpdb;
+        $excludedFromWebIds = $wpdb->get_col("SELECT post_id FROM wp_postmeta WHERE meta_key='exclude_platforms' and meta_value like '%web%'");        
         $offset = $offset ?: ($perPage * ($page - 1));
         return collect(get_posts([
             'post_type' => WpComposite::POST_TYPE,
             'post_status' => 'publish',
+            'post__not_in' => $excludedFromWebIds,
             'author' => $this->getId(),
             'posts_per_page' => $perPage,
             'offset' => $offset,
@@ -121,6 +126,11 @@ class AuthorAdapter implements AuthorContract
     public function isPublic(): bool
     {
         return array_get($this->meta, 'public.0') === '1';
+    }
+
+    public function isAuthor(): bool
+    {
+        return array_get($this->meta, 'author.0') === '1';
     }
 
     public function getCount(): int

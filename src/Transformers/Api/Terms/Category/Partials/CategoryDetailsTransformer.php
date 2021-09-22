@@ -14,6 +14,8 @@ class CategoryDetailsTransformer extends TransformerAbstract
             'description' => $category->getDescription() ?? '',
             'image' => with(new ImageTransformer())->transform($category->getImage()),
             'body' => $category->getBody() ?? '',
+            'sortorder' => $category->getSortorder() ?? '',
+            'color' => $category->getColor() ?? '',
         ];
     }
 }

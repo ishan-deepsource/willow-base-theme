@@ -66,9 +66,13 @@ class SortBy
     protected static function getManualComposites(): ?array
     {
         if ($teasers = self::$acfWidget['teaser_list'] ?? null) {
+            global $wpdb;
+            $excludedFromWebIds = $wpdb->get_col("SELECT post_id FROM wp_postmeta WHERE meta_key='exclude_platforms' and meta_value like '%web%'");
+
             $count = count($teasers);
             return [
                 'composites' => collect($teasers),
+                'post__not_in' => $excludedFromWebIds,
                 'page' => 1,
                 'per_page' => $count,
                 'total' => $count,
@@ -234,11 +238,14 @@ class SortBy
      *
      * @return array|null A collection of composites
      */
-    public static function getPopularComposites(): ?array
+    public static function getPopularComposites(?Array $categories = null): ?array
     {
         $query = WidgetDocumentQuery::make()->byPopular();
         if (self::isWpTerm(self::$acfWidget[AcfName::FIELD_CATEGORY] ?? null)) {
             $query->setCategories([self::$acfWidget[AcfName::FIELD_CATEGORY]]);
+        }
+        else if ($categories != null) {
+            $query->setCategories($categories);
         }
 
         if (self::isWpTerm(self::$acfWidget[AcfName::FIELD_TAG] ?? null)) {
@@ -383,10 +390,13 @@ class SortBy
      */
     protected static function getCompositesByAuthor(): ?array
     {
+        global $wpdb;
+        $excludedFromWebIds = $wpdb->get_col("SELECT post_id FROM wp_postmeta WHERE meta_key='exclude_platforms' and meta_value like '%web%'");
         $authorId = self::$acfWidget['user']['ID'];
         $count = self::$acfWidget['teaser_amount'];
         $posts = collect(get_posts([
             'posts_per_page' => $count,
+            'post__not_in' => $excludedFromWebIds,
             'post_type' => WpComposite::POST_TYPE,
             'orderby' => 'post_date',
             'order' => 'DESC',

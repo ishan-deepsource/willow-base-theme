@@ -21,7 +21,7 @@ jobs:
       - checkout
       - run:
           name: Update package repository
-          command: sudo apt-get update
+          command: sudo apt-get update --allow-releaseinfo-change
       - run:
          name: Install PHP libzip-dev
          command: sudo apt-get install -y libzip-dev libpng-dev

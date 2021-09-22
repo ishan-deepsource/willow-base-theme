@@ -20,6 +20,8 @@ class WpAttachment
     private static $postAttachments = null;
     private static $client = null;
 
+    private static $forceDownloadMedia = false;
+
     public static function register()
     {
         // Add custom copyright field to image attachments
@@ -31,6 +33,10 @@ class WpAttachment
         add_action('init', function () {
             static::register_acf_fields();
         });
+    }
+
+    public static function setForceDownloadMedia($force) {
+        static::$forceDownloadMedia = $force;
     }
 
     public static function mapAll($callback)
@@ -263,7 +269,7 @@ class WpAttachment
         } else {
             $existingId = static::id_from_contenthub_id($file->id);
         }
-        if ($existingId) {
+        if (!static::$forceDownloadMedia && $existingId) {
             static::updateAttachment($existingId, $file);
             return $existingId;
         }

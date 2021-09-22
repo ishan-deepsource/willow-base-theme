@@ -22,9 +22,15 @@ interface CategoryContract
 
     public function getDescription(): ?string;
 
+    public function getColor(): ?string;
+
+    public function getSortorder(): ?string;
+
     public function getLanguage(): ?string;
 
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset, $includeChildren): Collection;
+
+    public function getContentTeasersCount($includeChildren): ?int;
 
     public function getCount(): ?int;
 

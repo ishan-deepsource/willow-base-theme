@@ -5,6 +5,7 @@ namespace Bonnier\Willow\Base\Adapters\Cxense\Search;
 use Bonnier\WP\Cxense\Parsers\Document;
 use Bonnier\Willow\Base\Models\Contracts\Root\CommercialContract;
 use Bonnier\Willow\Base\Models\Contracts\Root\ImageContract;
+use Bonnier\WP\Cxense\WpCxense;
 
 /**
  * Class DocumentAdapter
