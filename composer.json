@@ -12,6 +12,10 @@
             "url":"https://github.com/junaidbhura/composer-wp-pro-plugins"
         },
         {
+            "type": "vcs",
+            "url": "git@github.com:BenjaminMedia/phpass.git"
+        },
+        {
             "type": "package",
             "package": {
                 "name": "junaidbhura/advanced-custom-fields-pro",
@@ -34,6 +38,7 @@
         "wpackagist-plugin/amazon-s3-and-cloudfront": "^1.4",
         "wpackagist-plugin/user-role-editor": "^4.44",
         "bonnier/willow-mu-plugins": "^2.0",
+        "bonnier/phpass": "^0.3",
         "benjaminmedia/wp-cxense": "^3.2.6",
         "benjaminmedia/wp-site-manager": "^2.0",
         "bonnier/wp-bonnier-cache": "^5.0",
@@ -49,8 +54,7 @@
         "phpmailer/phpmailer": "^6.1",
         "league/html-to-markdown": "^5.0",
         "guzzlehttp/guzzle": "^6.3",
-        "bonnier/php-video-helper": "1.0.*",
-        "hautelook/phpass": "0.3.5"
+        "bonnier/php-video-helper": "1.0.*"
     },
     "autoload": {
         "psr-4": {
