@@ -824,6 +824,12 @@
                 "reference": "b4cbd9b67ed3ef5672ec79d8e0c46d24bd844abd",
                 "shasum": ""
             },
+            "mirrors": [
+                {
+                    "url": "https://repo.packagist.com/benjaminmedia/dists/%package%/%version%/r%reference%.%type%",
+                    "preferred": true
+                }
+            ],
             "require": {
                 "php": ">=5.3.3"
             },
