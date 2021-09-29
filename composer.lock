@@ -3687,7 +3687,7 @@
                 "shasum": "",
                 "mirrors": [
                     {
-                        "url": "https://repo.packagist.com/benjaminmedia/dists/%package%/%version%/r%reference%.%type%",
+                        "url": "https://github.com/BenjaminMedia/phpass/archive/refs/tags/0.3.5.zip",
                         "preferred": true
                     }
                 ]
