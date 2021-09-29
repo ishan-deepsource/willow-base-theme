@@ -3674,6 +3674,7 @@
         },
         {
             "name": "hautelook/phpass",
+            "abandoned": "bonnier/phpass",
             "version": "0.3.5",
             "source": {
                 "type": "git",
