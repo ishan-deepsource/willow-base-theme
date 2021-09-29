@@ -12,8 +12,15 @@
             "url":"https://github.com/junaidbhura/composer-wp-pro-plugins"
         },
         {
-            "type":"vcs",
-            "url":"https://github.com/BenjaminMedia/phpass.git"
+            "type": "package",
+            "package": {
+                "name": "hautelook/phpass",
+                "version": "0.3.5",
+                "dist": {
+                    "type": "zip",
+                    "url": "https://github.com/BenjaminMedia/phpass/archive/refs/tags/0.3.5.zip"
+                }
+            }
         },
         {
             "type": "package",
