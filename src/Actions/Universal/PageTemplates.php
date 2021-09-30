@@ -41,6 +41,7 @@ class PageTemplates
                     'bodum-vacuum' => 'Bodum Vacuum',
                     'gradient' => 'Gradient',
                     'top-lg' => 'Top LG',
+                    'recipe' => 'Recipe',
                 ]);
                 break;
             case 'COS':
