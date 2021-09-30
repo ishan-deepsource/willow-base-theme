@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7e7e544d10fa2bc93f2f13ef0c794b06",
+    "content-hash": "9518021d752d19be97432aadf52d7af1",
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
@@ -149,53 +149,6 @@
                 "youtube"
             ],
             "time": "2018-06-21T11:43:43+00:00"
-        },
-        {
-            "name": "bonnier/phpass",
-            "version": "0.3.5.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/BenjaminMedia/phpass.git",
-                "reference": "7d13820965b4c48f8d175f9d990e987cd08b281f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/phpass/zipball/7d13820965b4c48f8d175f9d990e987cd08b281f",
-                "reference": "7d13820965b4c48f8d175f9d990e987cd08b281f",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Hautelook": "src/"
-                }
-            },
-            "license": [
-                "Public Domain"
-            ],
-            "authors": [
-                {
-                    "name": "Solar Designer",
-                    "email": "solar@openwall.com",
-                    "homepage": "http://openwall.com/phpass/"
-                }
-            ],
-            "description": "Portable PHP password hashing framework",
-            "homepage": "https://github.com/BenjaminMedia/phpass/",
-            "keywords": [
-                "Blowfish",
-                "crypt",
-                "password",
-                "security"
-            ],
-            "support": {
-                "source": "https://github.com/BenjaminMedia/phpass/tree/0.3.5.2",
-                "issues": "https://github.com/BenjaminMedia/phpass/issues"
-            },
-            "time": "2012-08-31T00:00:00+00:00"
         },
         {
             "name": "bonnier/willow-mu-plugins",
@@ -428,6 +381,58 @@
             ],
             "description": "A plugin for marking articles as favourites.",
             "time": "2020-06-29T13:16:33+00:00"
+        },
+        {
+            "name": "bordoni/phpass",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bordoni/phpass.git",
+                "reference": "fd57c109213e95150b7de1dc8908c55605cd8e55"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bordoni/phpass/zipball/fd57c109213e95150b7de1dc8908c55605cd8e55",
+                "reference": "fd57c109213e95150b7de1dc8908c55605cd8e55",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "replace": {
+                "hautelook/phpass": "0.3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Hautelook": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Public Domain"
+            ],
+            "authors": [
+                {
+                    "name": "Solar Designer",
+                    "email": "solar@openwall.com",
+                    "homepage": "http://openwall.com/phpass/"
+                },
+                {
+                    "name": "Gustavo Bordoni",
+                    "email": "gustavo@bordoni.me",
+                    "homepage": "https://bordoni.me"
+                }
+            ],
+            "description": "Portable PHP password hashing framework",
+            "homepage": "http://github.com/hautelook/phpass/",
+            "keywords": [
+                "blowfish",
+                "crypt",
+                "password",
+                "security"
+            ],
+            "time": "2012-08-31T00:00:00+00:00"
         },
         {
             "name": "composer/installers",
@@ -2875,6 +2880,53 @@
             "time": "2021-02-04T12:44:21+00:00"
         },
         {
+            "name": "bonnier/phpass",
+            "version": "0.3.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BenjaminMedia/phpass.git",
+                "reference": "7d13820965b4c48f8d175f9d990e987cd08b281f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/BenjaminMedia/phpass/zipball/7d13820965b4c48f8d175f9d990e987cd08b281f",
+                "reference": "7d13820965b4c48f8d175f9d990e987cd08b281f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Hautelook": "src/"
+                }
+            },
+            "license": [
+                "Public Domain"
+            ],
+            "authors": [
+                {
+                    "name": "Solar Designer",
+                    "email": "solar@openwall.com",
+                    "homepage": "http://openwall.com/phpass/"
+                }
+            ],
+            "description": "Portable PHP password hashing framework",
+            "homepage": "https://github.com/BenjaminMedia/phpass/",
+            "keywords": [
+                "Blowfish",
+                "crypt",
+                "password",
+                "security"
+            ],
+            "support": {
+                "source": "https://github.com/BenjaminMedia/phpass/tree/0.3.5.2",
+                "issues": "https://github.com/BenjaminMedia/phpass/issues"
+            },
+            "time": "2012-08-31T00:00:00+00:00"
+        },
+        {
             "name": "codeception/codeception",
             "version": "2.4.5",
             "source": {
@@ -3671,57 +3723,6 @@
                 "scale"
             ],
             "time": "2019-01-01T13:53:00+00:00"
-        },
-        {
-            "name": "hautelook/phpass",
-            "abandoned": "bonnier/phpass",
-            "version": "0.3.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/hautelook/phpass.git",
-                "reference": "b4cbd9b67ed3ef5672ec79d8e0c46d24bd844abd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hautelook/phpass/zipball/b4cbd9b67ed3ef5672ec79d8e0c46d24bd844abd",
-                "reference": "b4cbd9b67ed3ef5672ec79d8e0c46d24bd844abd",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://github.com/BenjaminMedia/phpass/archive/refs/tags/0.3.5.zip",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Hautelook": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Public Domain"
-            ],
-            "authors": [
-                {
-                    "name": "Solar Designer",
-                    "email": "solar@openwall.com",
-                    "homepage": "http://openwall.com/phpass/"
-                }
-            ],
-            "description": "Portable PHP password hashing framework",
-            "homepage": "http://github.com/hautelook/phpass/",
-            "keywords": [
-                "blowfish",
-                "crypt",
-                "password",
-                "security"
-            ],
-            "time": "2012-08-31T00:00:00+00:00"
         },
         {
             "name": "johnpbloch/wordpress",
@@ -8670,7 +8671,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "bordoni/phpass": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
