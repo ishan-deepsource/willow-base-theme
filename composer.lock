@@ -8,20 +8,21 @@
     "packages": [
         {
             "name": "benjaminmedia/wp-cxense",
-            "version": "3.2.7",
+            "version": "3.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenjaminMedia/wp-cxense.git",
-                "reference": "83d17c89a079ac552c1aa6648c9e98e58751a1e5"
+                "reference": "a010d57365e83b4075b8db20c3bb3f4e7d29d65b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/83d17c89a079ac552c1aa6648c9e98e58751a1e5",
-                "reference": "83d17c89a079ac552c1aa6648c9e98e58751a1e5",
+                "url": "https://api.github.com/repos/BenjaminMedia/wp-cxense/zipball/a010d57365e83b4075b8db20c3bb3f4e7d29d65b",
+                "reference": "a010d57365e83b4075b8db20c3bb3f4e7d29d65b",
                 "shasum": ""
             },
             "require": {
                 "bonnier/willow-mu-plugins": "^2.0",
+                "bordoni/phpass": "dev-main",
                 "illuminate/support": "^5.6",
                 "php": "~7.1"
             },
@@ -38,7 +39,7 @@
                     "Bonnier\\WP\\Cxense\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "notification-url": "https://repo.packagist.com/benjaminmedia/downloads/",
             "license": [
                 "MIT"
             ],
@@ -55,7 +56,11 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2021-08-17T05:29:47+00:00"
+            "support": {
+                "issues": "https://github.com/BenjaminMedia/wp-cxense/issues",
+                "source": "https://github.com/BenjaminMedia/wp-cxense/tree/3.2.8"
+            },
+            "time": "2021-10-01T11:52:10+00:00"
         },
         {
             "name": "benjaminmedia/wp-site-manager",
@@ -408,7 +413,7 @@
                     "Hautelook": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "notification-url": "https://repo.packagist.com/benjaminmedia/downloads/",
             "license": [
                 "Public Domain"
             ],
@@ -432,7 +437,11 @@
                 "password",
                 "security"
             ],
-            "time": "2012-08-31T00:00:00+00:00"
+            "support": {
+                "issues": "https://github.com/bordoni/phpass/issues",
+                "source": "https://github.com/bordoni/phpass/tree/0.3.5"
+            },
+            "time": "2021-09-10T03:41:45+00:00"
         },
         {
             "name": "composer/installers",
@@ -2891,7 +2900,13 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/BenjaminMedia/phpass/zipball/7d13820965b4c48f8d175f9d990e987cd08b281f",
                 "reference": "7d13820965b4c48f8d175f9d990e987cd08b281f",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://repo.packagist.com/benjaminmedia/dists/%package%/%version%/r%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3.3"
