@@ -107,9 +107,15 @@ class ContentController extends BaseController
             $currentPage = $pageParam;
         }
 
+        $postId = null;
+        $postIdParam = $request->get_param('id');
+        if (is_numeric($postIdParam)) {
+            $postId = $postIdParam;
+        }
+
         return Cache::remember('page_' . $status . '_' . $perPage . '_' . $currentPage,
             600,
-            function () use ($status, $perPage, $currentPage) {
+            function () use ($status, $perPage, $currentPage, $postId) {
                 $query_args = [
                     'post_type' => 'contenthub_composite',
                     'post_status' => $status,
@@ -118,6 +124,10 @@ class ContentController extends BaseController
                     'orderby' => 'modified',
                     'order' => 'desc',
                 ];
+
+                if ($postId) {
+                    $query_args['post__in'] = [$postId];
+                }
 
                 $data = [];
                 $query = new \WP_Query($query_args);
@@ -139,7 +149,11 @@ class ContentController extends BaseController
                         'total' => intval($query->found_posts),
                         'page' => intval($currentPage),
                         'pages' => $query->max_num_pages,
+                        'pll_language' => pll_current_language(),
+                        'bloginfo_language' => get_bloginfo("language"),
+                        'locale' => get_locale(),
                         'home_url' => rtrim(pll_home_url(), '/'),
+                        'version' => '3',
                         'data' => $data
                     ]
                 );
