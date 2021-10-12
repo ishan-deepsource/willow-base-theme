@@ -215,6 +215,9 @@ class WaContent extends BaseCmd
      * [--host=<host>]
      * : Set host name for proper loading of envs
      *
+     * [--download-images]
+     * : Redownload the images to composites already existing
+     *
      * [--simple-author-import]
      * : to import simple author from articles present on mhi and similar
      *
@@ -241,6 +244,10 @@ class WaContent extends BaseCmd
 
         $this->setHost($assocArgs);
         $this->simpleAuthorImport($assocArgs);
+
+        if ($assocArgs['download-images'] ?? false) {
+            WpAttachment::setForceDownloadMedia(true);
+        }
 
         $this->failedImportFile = $assocArgs['failed-import-file'] ?? null;
         $this->repository       = new ContentRepository($assocArgs['locale'] ?? null, $this->failedImportFile);
