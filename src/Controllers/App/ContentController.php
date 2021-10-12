@@ -157,7 +157,7 @@ class ContentController extends BaseController
                         'bloginfo_language' => get_bloginfo("language"),
                         'locale' => get_locale(),
                         'home_url' => rtrim(pll_home_url(), '/'),
-                        'version' => '3',
+                        'version' => '4',
                         'data' => $data
                     ]
                 );
