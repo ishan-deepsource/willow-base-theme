@@ -137,8 +137,12 @@ class ContentController extends BaseController
                         'canonical_url' => get_field('canonical_url', $post->ID),
                         'exclude_platforms' => get_field('exclude_platforms', $post->ID),
                         'hide_from_sitemap' => get_field('sitemap', $post->ID),
-                        'modified' => $post->post_modified_gmt,
+                        'post_date' => $post->post_date,
+                        'post_date_gmt' => $post->post_date_gmt,
+                        'modified' => $post->post_modified,
+                        'modified_gmt' => $post->post_modified_gmt,
                         'status' => $post->post_status,
+                        'title' => $post->post_title,
                         'url' => parse_url(get_permalink($post), PHP_URL_PATH),
                     ];
                 }
@@ -153,7 +157,7 @@ class ContentController extends BaseController
                         'bloginfo_language' => get_bloginfo("language"),
                         'locale' => get_locale(),
                         'home_url' => rtrim(pll_home_url(), '/'),
-                        'version' => '3',
+                        'version' => '4',
                         'data' => $data
                     ]
                 );
