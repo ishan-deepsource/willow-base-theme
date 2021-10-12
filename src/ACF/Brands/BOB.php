@@ -29,7 +29,6 @@ class BOB extends Brand
         self::removeInventoryWidget();
         self::removeMultimediaWidget();
         self::removeProductWidget();
-        self::removeRecipeWidget();
         self::removeCalculatorWidget();
 
         self::removeLanguageTitlesFromUserFieldGroup();
