@@ -107,9 +107,15 @@ class ContentController extends BaseController
             $currentPage = $pageParam;
         }
 
+        $postId = null;
+        $postIdParam = $request->get_param('id');
+        if (is_numeric($postIdParam)) {
+            $postId = $postIdParam;
+        }
+
         return Cache::remember('page_' . $status . '_' . $perPage . '_' . $currentPage,
             600,
-            function () use ($status, $perPage, $currentPage) {
+            function () use ($status, $perPage, $currentPage, $postId) {
                 $query_args = [
                     'post_type' => 'contenthub_composite',
                     'post_status' => $status,
@@ -119,6 +125,10 @@ class ContentController extends BaseController
                     'order' => 'desc',
                 ];
 
+                if ($postId) {
+                    $query_args['post__in'] = [$postId];
+                }
+
                 $data = [];
                 $query = new \WP_Query($query_args);
                 foreach ($query->posts as $post) {
@@ -127,8 +137,12 @@ class ContentController extends BaseController
                         'canonical_url' => get_field('canonical_url', $post->ID),
                         'exclude_platforms' => get_field('exclude_platforms', $post->ID),
                         'hide_from_sitemap' => get_field('sitemap', $post->ID),
-                        'modified' => $post->post_modified_gmt,
+                        'post_date' => $post->post_date,
+                        'post_date_gmt' => $post->post_date_gmt,
+                        'modified' => $post->post_modified,
+                        'modified_gmt' => $post->post_modified_gmt,
                         'status' => $post->post_status,
+                        'title' => $post->post_title,
                         'url' => parse_url(get_permalink($post), PHP_URL_PATH),
                     ];
                 }
@@ -139,7 +153,11 @@ class ContentController extends BaseController
                         'total' => intval($query->found_posts),
                         'page' => intval($currentPage),
                         'pages' => $query->max_num_pages,
+                        'pll_language' => pll_current_language(),
+                        'bloginfo_language' => get_bloginfo("language"),
+                        'locale' => get_locale(),
                         'home_url' => rtrim(pll_home_url(), '/'),
+                        'version' => '4',
                         'data' => $data
                     ]
                 );

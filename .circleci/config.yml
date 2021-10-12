@@ -36,18 +36,19 @@ jobs:
       - run: sudo composer self-update --1
 
       # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "composer.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
+#      - restore_cache:
+#          keys:
+#          - v1-dependencies-{{ checksum "composer.json" }}
+#          # fallback to using the latest cache if no exact match is found
+#          - v1-dependencies-
+      - run: composer clearcache
+      - run: composer config --global --auth http-basic.repo.packagist.com interactive 74ca79b1f66c8b04539f247c3b00c85839550ca24ba0f6517d29d7ae34f6
       - run: php -d memory_limit=4096M /usr/local/bin/composer update
 
-      - save_cache:
-          paths:
-          - ./vendor
-          key: v1-dependencies-{{ checksum "composer.json" }}
+#      - save_cache:
+#          paths:
+#          - ./vendor
+#          key: v1-dependencies-{{ checksum "composer.json" }}
 
       # run tests!
       - run: composer unit
