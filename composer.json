@@ -2,16 +2,16 @@
     "name": "bonnier/willow-base-theme",
     "description": "Base Willow theme for WordPress",
     "type": "wordpress-theme",
-    "repositories": [
-        {
+    "repositories": {
+        "0": {
             "type": "composer",
             "url": "https://wpackagist.org"
         },
-        {
+        "1": {
             "type":"vcs",
             "url":"https://github.com/junaidbhura/composer-wp-pro-plugins"
         },
-        {
+        "2": {
             "type": "package",
             "package": {
                 "name": "junaidbhura/advanced-custom-fields-pro",
@@ -25,8 +25,13 @@
                     "junaidbhura/composer-wp-pro-plugins": "*"
                 }
             }
-        }
-    ],
+        },
+        "private-packagist": {
+            "type": "composer",
+            "url": "https://repo.packagist.com/benjaminmedia/"
+        },
+        "packagist.org": false
+    },
     "require": {
         "php": ">=7.2",
         "junaidbhura/advanced-custom-fields-pro": "*",
@@ -49,7 +54,8 @@
         "phpmailer/phpmailer": "^6.1",
         "league/html-to-markdown": "^5.0",
         "guzzlehttp/guzzle": "^6.3",
-        "bonnier/php-video-helper": "1.0.*"
+        "bonnier/php-video-helper": "1.0.*",
+        "bordoni/phpass": "dev-main"
     },
     "autoload": {
         "psr-4": {

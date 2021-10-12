@@ -64,7 +64,7 @@ class AuthorAdapter implements AuthorContract
 
     public function getUrl(): ?string
     {
-        $displayNameAsSlug = sanitize_title(get_userdata($this->getId())->display_name);
+        $displayNameAsSlug = sanitize_title(data_get($this->user, 'display_name') ?: null);
         $path = '/author/' . $displayNameAsSlug;
         if ($this->isAuthor()) {
             $path = '/author';

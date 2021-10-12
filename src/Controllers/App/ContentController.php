@@ -8,6 +8,8 @@ use Bonnier\Willow\Base\Helpers\SortBy;
 use Bonnier\Willow\Base\Models\Base\Composites\Composite;
 use Bonnier\Willow\Base\Repositories\WpModelRepository;
 use Bonnier\Willow\Base\Transformers\Api\Composites\CompositeTeaserTransformer;
+use WP_REST_Request;
+use WP_REST_Response;
 
 class ContentController extends BaseController
 {
@@ -16,6 +18,11 @@ class ContentController extends BaseController
         register_rest_route('app/content', '/popular', [
             'methods' => \WP_REST_Server::READABLE,
             'callback' => [$this, 'popular']
+        ]);
+
+        register_rest_route('app/content', '/download', [
+            'methods' => \WP_REST_Server::READABLE,
+            'callback' => [$this, 'download']
         ]);
 
         register_rest_route('app/content', '/published', [
@@ -30,6 +37,33 @@ class ContentController extends BaseController
         ]);
     }
 
+    /**
+     * @param \WP_REST_Request $request
+     *
+     * @return WP_REST_Response
+     */
+    public function download(WP_REST_Request $request)
+    {
+        $key = $request->get_param('key');
+        $expires = $request->get_param('expires');
+        if (is_numeric($expires)) {
+            $expires = time() + $expires;
+        } else {
+            $expires = time() + HOUR_IN_SECONDS;
+        }
+
+        global $as3cf;
+        $as3Client = $as3cf->get_s3client(env('AWS_S3_REGION'));
+        $signedUrl = $as3Client->get_object_url(env('AWS_S3_BUCKET'), $key, $expires, []);
+
+        return new \WP_REST_Response(['data' => [
+            'signed_url' => $signedUrl,
+        ]]);
+    }
+
+    /**
+     * @return WP_REST_Response
+     */
     public function popular(?\WP_REST_Request $request)
     {
         $categories = null;
@@ -73,9 +107,15 @@ class ContentController extends BaseController
             $currentPage = $pageParam;
         }
 
+        $postId = null;
+        $postIdParam = $request->get_param('id');
+        if (is_numeric($postIdParam)) {
+            $postId = $postIdParam;
+        }
+
         return Cache::remember('page_' . $status . '_' . $perPage . '_' . $currentPage,
             600,
-            function () use ($status, $perPage, $currentPage) {
+            function () use ($status, $perPage, $currentPage, $postId) {
                 $query_args = [
                     'post_type' => 'contenthub_composite',
                     'post_status' => $status,
@@ -85,6 +125,10 @@ class ContentController extends BaseController
                     'order' => 'desc',
                 ];
 
+                if ($postId) {
+                    $query_args['post__in'] = [$postId];
+                }
+
                 $data = [];
                 $query = new \WP_Query($query_args);
                 foreach ($query->posts as $post) {
@@ -93,8 +137,12 @@ class ContentController extends BaseController
                         'canonical_url' => get_field('canonical_url', $post->ID),
                         'exclude_platforms' => get_field('exclude_platforms', $post->ID),
                         'hide_from_sitemap' => get_field('sitemap', $post->ID),
-                        'modified' => $post->post_modified_gmt,
+                        'post_date' => $post->post_date,
+                        'post_date_gmt' => $post->post_date_gmt,
+                        'modified' => $post->post_modified,
+                        'modified_gmt' => $post->post_modified_gmt,
                         'status' => $post->post_status,
+                        'title' => $post->post_title,
                         'url' => parse_url(get_permalink($post), PHP_URL_PATH),
                     ];
                 }
@@ -105,7 +153,11 @@ class ContentController extends BaseController
                         'total' => intval($query->found_posts),
                         'page' => intval($currentPage),
                         'pages' => $query->max_num_pages,
+                        'pll_language' => pll_current_language(),
+                        'bloginfo_language' => get_bloginfo("language"),
+                        'locale' => get_locale(),
                         'home_url' => rtrim(pll_home_url(), '/'),
+                        'version' => '4',
                         'data' => $data
                     ]
                 );

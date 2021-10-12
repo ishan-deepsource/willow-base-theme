@@ -37,3 +37,8 @@ function ddHtml(...$args)
 
     die(1);
 }
+
+function video_api_scripts() {
+    wp_enqueue_script( 'video-id', get_template_directory_uri() . '/assets/js/acf/fields/video-api.js', array ( 'jquery' ), 1.1, true);
+}
+add_action( 'acf/input/form_data', 'video_api_scripts' );
