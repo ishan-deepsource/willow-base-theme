@@ -584,7 +584,7 @@ class CompositeFieldGroup
                 'The title of the video'
             );
 
-        $videoWidget->addSubField($name); 
+        $videoWidget->addSubField($name);
 
         $description = new TextAreaField('field_58aaeb26b12d42');
         $description->setLabel('Description')
@@ -612,7 +612,7 @@ class CompositeFieldGroup
             );
 
         $videoWidget->addSubField($uploadDate);
-        
+
         $contentUrl = new TextField('field_5938fe71ed0b5');
         $contentUrl->setLabel('content Url')
             ->setName('contentUrl')
@@ -622,15 +622,6 @@ class CompositeFieldGroup
 
         $videoWidget->addSubField($contentUrl);
 
-        $durationVideo = new TextField('field_5938fe71ed0b6');
-        $durationVideo->setLabel('Duration')
-            ->setName('durationVideo')
-            ->setInstructions(
-                'The duration of the video in ISO 8601 format. For example, PT00H30M5S represents a duration of "thirty minutes and five seconds".'
-            );
-
-        $videoWidget->addSubField($durationVideo); 
-        
         return apply_filters(sprintf('willow/acf/layout=%s', $videoWidget->getKey()), $videoWidget);
     }
 
