@@ -597,7 +597,7 @@ class CompositeFieldGroup
 
         $thumbnailUrl = new TextField('field_5938fe71ed0b3');
         $thumbnailUrl->setLabel('Thumbnail url')
-            ->setName('thumbnailUrl')
+            ->setName('thumbnail_url')
             ->setInstructions(
                 'A URL pointing to the video thumbnail image file. that has to be in one of these formats BMP, GIF, JPEG, PNG, WebP, and SVG, larger than 60x30px and accessible to Google'
             );
@@ -606,7 +606,7 @@ class CompositeFieldGroup
 
         $uploadDate = new TextField('field_5938fe71ed0b4');
         $uploadDate->setLabel('upload Date')
-            ->setName('uploadDate')
+            ->setName('upload_date')
             ->setInstructions(
                 'The date the video was first published, in ISO 8601 format.'
             );
@@ -615,7 +615,7 @@ class CompositeFieldGroup
 
         $contentUrl = new TextField('field_5938fe71ed0b5');
         $contentUrl->setLabel('content Url')
-            ->setName('contentUrl')
+            ->setName('content_url')
             ->setInstructions(
                 'A URL pointing to the actual video media file, in one of the supported encoding formats. Don\'t link to the page where the video lives; this must be the URL of the video media file itself.'
             );

@@ -6,9 +6,9 @@ function getApiData(){
             var container = $this.closest('[data-layout=video]')
             var nameField = container.find('.acf-field[data-name=name]');
             var descField = container.find('.acf-field[data-name=description]');
-            var thumbsField = container.find('.acf-field[data-name=thumbnailUrl]');
-            var dateField = container.find('.acf-field[data-name=uploadDate]');
-            var cUrlField = container.find('.acf-field[data-name=contentUrl]');
+            var thumbsField = container.find('.acf-field[data-name=thumbnail_url]');
+            var dateField = container.find('.acf-field[data-name=upload_date]');
+            var cUrlField = container.find('.acf-field[data-name=content_url]');
             var durationVideoField = container.find('.acf-field[data-name=duration]');
             var strich = '';
 
