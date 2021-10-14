@@ -10,6 +10,16 @@ interface VideoContract extends ContentContract
 {
     public function getEmbedUrl(): ?string;
 
+    public function getName(): ?string;
+
+    public function getDescription(): ?string;
+
+    public function getThumbnailUrl(): ?string;
+
+    public function getUploadDate(): ?string;
+
+    public function getContentUrl(): ?string;
+
     public function getIncludeIntroVideo(): bool;
 
     public function getDuration(): ?string;
@@ -17,6 +27,4 @@ interface VideoContract extends ContentContract
     public function getCaption(): ?string;
 
     public function getChapterItems(): Collection;
-
-    // todo: maybe implement getThumbnail?
 }

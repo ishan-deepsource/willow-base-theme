@@ -584,7 +584,7 @@ class CompositeFieldGroup
                 'The title of the video'
             );
 
-        $videoWidget->addSubField($name); 
+        $videoWidget->addSubField($name);
 
         $description = new TextAreaField('field_58aaeb26b12d42');
         $description->setLabel('Description')
@@ -597,7 +597,7 @@ class CompositeFieldGroup
 
         $thumbnailUrl = new TextField('field_5938fe71ed0b3');
         $thumbnailUrl->setLabel('Thumbnail url')
-            ->setName('thumbnailUrl')
+            ->setName('thumbnail_url')
             ->setInstructions(
                 'A URL pointing to the video thumbnail image file. that has to be in one of these formats BMP, GIF, JPEG, PNG, WebP, and SVG, larger than 60x30px and accessible to Google'
             );
@@ -606,31 +606,22 @@ class CompositeFieldGroup
 
         $uploadDate = new TextField('field_5938fe71ed0b4');
         $uploadDate->setLabel('upload Date')
-            ->setName('uploadDate')
+            ->setName('upload_date')
             ->setInstructions(
                 'The date the video was first published, in ISO 8601 format.'
             );
 
         $videoWidget->addSubField($uploadDate);
-        
+
         $contentUrl = new TextField('field_5938fe71ed0b5');
         $contentUrl->setLabel('content Url')
-            ->setName('contentUrl')
+            ->setName('content_url')
             ->setInstructions(
                 'A URL pointing to the actual video media file, in one of the supported encoding formats. Don\'t link to the page where the video lives; this must be the URL of the video media file itself.'
             );
 
         $videoWidget->addSubField($contentUrl);
 
-        $durationVideo = new TextField('field_5938fe71ed0b6');
-        $durationVideo->setLabel('Duration')
-            ->setName('durationVideo')
-            ->setInstructions(
-                'The duration of the video in ISO 8601 format. For example, PT00H30M5S represents a duration of "thirty minutes and five seconds".'
-            );
-
-        $videoWidget->addSubField($durationVideo); 
-        
         return apply_filters(sprintf('willow/acf/layout=%s', $videoWidget->getKey()), $videoWidget);
     }
 
