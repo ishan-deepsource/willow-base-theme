@@ -24,6 +24,7 @@ class COS extends Brand
         self::removeAdvancedCustomSortByFieldsFromTeaserListPageWidget();
         self::removeTitleFromAssociatedCompositesWidget();
         self::removeDisplayHintFromAssociatedCompositesWidget();
+        self::removeUseAsArticleLeadImageFromRecipeWidget();
 
         self::removeInventoryWidget();
         self::removeMultimediaWidget();
