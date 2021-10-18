@@ -37,6 +37,7 @@ class CompositeFieldGroup
     public const VIDEO_TEASER_IMAGE_FIELD = 'field_5a8d7ae021e44';
     public const SHELL_LINK_FIELD = 'field_5d66623efb36e';
     public const KIND_FIELD = 'field_58e388862daa8';
+    public const RECIPE_USE_AS_ARTICLE_LEAD_IMAGE_FIELD_NAME = 'use_as_article_lead_image';
     public const COMPOSITE_FIELD_GROUP = 'group_58abfd3931f2f';
     public const OTHER_AUTHERS_FIELD_NAME = 'other_authors';
     public const SHELL_VALUE = 'Shell';
@@ -884,12 +885,12 @@ class CompositeFieldGroup
 
         $paragraphListWidget->addSubField($image);
 
-	    $videoUrl = new UrlField('field_5f214904627a6');
-	    $videoUrl->setLabel('Video Url')
-	             ->setName(self::VIDEO_URL_FIELD_NAME)
-	             ->setInstructions('The embed url for the video.');
+        $videoUrl = new UrlField('field_5f214904627a6');
+        $videoUrl->setLabel('Video Url')
+            ->setName(self::VIDEO_URL_FIELD_NAME)
+            ->setInstructions('The embed url for the video.');
 
-	    $paragraphListWidget->addSubField($videoUrl);
+        $paragraphListWidget->addSubField($videoUrl);
 
         $collapsible = new TrueFalseField('field_5bd30f723cdcc');
         $collapsible->setLabel('Collapsible')
@@ -1482,10 +1483,11 @@ class CompositeFieldGroup
             ->setPreviewSize(ImageField::PREVIEW_MEDIUM);
         $recipeWidget->addSubField($image);
 
-        $useAdArticleLeadImage = new TrueFalseField('field_601a977ef88d4');
-        $useAdArticleLeadImage->setLabel('Use as article lead-image')
-            ->setName('use_as_article_lead_image');
-        $recipeWidget->addSubField($useAdArticleLeadImage);
+        //Only for iForm!
+        $useAsArticleLeadImage = new TrueFalseField('field_601a977ef88d4');
+        $useAsArticleLeadImage->setLabel('Use as article lead-image')
+            ->setName(self::RECIPE_USE_AS_ARTICLE_LEAD_IMAGE_FIELD_NAME);
+        $recipeWidget->addSubField($useAsArticleLeadImage);
 
         //Duration data
         $durationGroup = new GroupField('field_6017fd2d456b0');
@@ -1660,27 +1662,27 @@ class CompositeFieldGroup
      * @return string[]
      */
     public static function getRecipeIngredientChoices(){
-       return [
-           '-' => '-',
-           'gram' => 'gram',
-           'dl' => 'dl',
-           'teaspoon' => 'teaspoon',
-           'tablespoon' => 'tablespoon',
-           'ml' => 'ml',
-           'cl' => 'cl',
-           'liter' => 'liter',
-           'kg' => 'kg',
-           'piece' => 'piece',
-           'pinch' => 'pinch',
-           'nip' => 'nip',
-           'sprinkle' => 'sprinkle',
-           'bundle' => 'bundle',
-           'cloves' => 'cloves',
-           'slice' => 'slice',
-           'handful' => 'handful',
-           'can' => 'can',
-           'packet' => 'packet',
-       ];
+        return [
+            '-' => '-',
+            'gram' => 'gram',
+            'dl' => 'dl',
+            'teaspoon' => 'teaspoon',
+            'tablespoon' => 'tablespoon',
+            'ml' => 'ml',
+            'cl' => 'cl',
+            'liter' => 'liter',
+            'kg' => 'kg',
+            'piece' => 'piece',
+            'pinch' => 'pinch',
+            'nip' => 'nip',
+            'sprinkle' => 'sprinkle',
+            'bundle' => 'bundle',
+            'cloves' => 'cloves',
+            'slice' => 'slice',
+            'handful' => 'handful',
+            'can' => 'can',
+            'packet' => 'packet',
+        ];
     }
 
     private static function setRecipeIngredientItemsSubFields(&$ingredientItems)
@@ -1710,13 +1712,13 @@ class CompositeFieldGroup
      */
     public static function getRecipeNutrientItemsChoices()
     {
-       return [
-           'Energy' => 'Energy',
-           'Protein' => 'Protein',
-           'Fat' => 'Fat',
-           'Carbohydrate' => 'Carbohydrate',
-           'Fiber' => 'Fiber',
-       ];
+        return [
+            'Energy' => 'Energy',
+            'Protein' => 'Protein',
+            'Fat' => 'Fat',
+            'Carbohydrate' => 'Carbohydrate',
+            'Fiber' => 'Fiber',
+        ];
     }
 
     /**
@@ -1725,11 +1727,11 @@ class CompositeFieldGroup
      */
     public static function getRecipeNutrientItemsUnitChoices()
     {
-       return [
-           '-' => '-',
-           'kcal' => 'kcal',
-           'gram' => 'gram',
-       ];
+        return [
+            '-' => '-',
+            'kcal' => 'kcal',
+            'gram' => 'gram',
+        ];
     }
 
     private static function setRecipeNutrientItemsSubFields(&$nutrientItems)
