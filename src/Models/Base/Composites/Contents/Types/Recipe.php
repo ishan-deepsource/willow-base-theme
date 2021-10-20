@@ -39,6 +39,11 @@ class Recipe extends AbstractContent implements RecipeContract
         return $this->model->getImage();
     }
 
+    public function getCategory(): ?string
+    {
+        return $this->model->getCategory();
+    }
+
     public function getTags(): ?string
     {
         return $this->model->getTags();
