@@ -14,7 +14,7 @@ interface RecipeContract extends ContentContract
 
     public function getImage(): ?ImageContract;
 
-    public function getCategory(): ?string;
+    public function getCategoryLabel(): ?string;
 
     public function getUseAsArticleLeadImage(): ?bool;
 

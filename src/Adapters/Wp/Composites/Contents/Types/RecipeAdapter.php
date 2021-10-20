@@ -36,9 +36,9 @@ class RecipeAdapter extends AbstractContentAdapter implements RecipeContract
         return null;
     }
 
-    public function getCategory(): ?string
+    public function getCategoryLabel(): ?string
     {
-        return array_get($this->acfArray, 'category') ?: null;
+        return array_get($this->acfArray, 'category_label') ?: null;
     }
 
     public function getTags(): ?string
