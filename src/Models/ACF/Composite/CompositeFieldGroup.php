@@ -1483,6 +1483,12 @@ class CompositeFieldGroup
             ->setPreviewSize(ImageField::PREVIEW_MEDIUM);
         $recipeWidget->addSubField($image);
 
+        $category = new TextField('field_616ff00988da3');
+        $category->setLabel('Category (override for schema)')
+            ->setName('category')
+            ->setPlaceholder('Default the articles category');
+        $recipeWidget->addSubField($category);
+
         //Only for iForm!
         $useAsArticleLeadImage = new TrueFalseField('field_601a977ef88d4');
         $useAsArticleLeadImage->setLabel('Use as article lead-image')
