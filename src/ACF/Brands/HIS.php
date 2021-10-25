@@ -24,7 +24,7 @@ class HIS extends Brand
         self::removeAdvancedCustomSortByFieldsFromTeaserListPageWidget();
         self::removeTitleFromAssociatedCompositesWidget();
         self::removeDisplayHintFromAssociatedCompositesWidget();
-        self::removeDurationFromVideoWidget();
+        self::removeUseAsArticleLeadImageFromRecipeWidget();
 
         self::removeInventoryWidget();
         self::removeMultimediaWidget();

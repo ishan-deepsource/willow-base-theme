@@ -54,4 +54,29 @@ class Video extends AbstractContent implements VideoContract
     {
         return $this->model->getStickToNext();
     }
+
+    public function getName(): ?string
+    {
+        return $this->model->getName();
+    }
+
+    public function getThumbnailUrl(): ?string
+    {
+        return $this->model->getThumbnailUrl();
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->model->getDescription();
+    }
+
+    public function getUploadDate(): ?string
+    {
+        return $this->model->getUploadDate();
+    }
+
+    public function getContentUrl(): ?string
+    {
+        return $this->model->getContentUrl();
+    }
 }

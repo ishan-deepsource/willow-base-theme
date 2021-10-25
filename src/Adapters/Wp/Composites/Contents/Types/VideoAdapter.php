@@ -43,6 +43,31 @@ class VideoAdapter extends AbstractContentAdapter implements VideoContract
         return array_get($this->acfArray, 'caption') ?: null;
     }
 
+    public function getName(): ?string
+    {
+        return array_get($this->acfArray, 'name') ?: null;
+    }
+
+    public function getDescription(): ?string
+    {
+        return array_get($this->acfArray, 'description') ?: null;
+    }
+
+    public function getThumbnailUrl(): ?string
+    {
+        return array_get($this->acfArray, 'thumbnail_url') ?: null;
+    }
+
+    public function getUploadDate(): ?string
+    {
+        return array_get($this->acfArray, 'upload_date') ?: null;
+    }
+
+    public function getContentUrl(): ?string
+    {
+        return array_get($this->acfArray, 'content_url') ?: null;
+    }
+
     public function getChapterItems(): Collection
     {
         $arr = array_get($this->acfArray, 'chapter_items', []);
