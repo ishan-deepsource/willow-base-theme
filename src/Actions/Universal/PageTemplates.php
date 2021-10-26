@@ -90,6 +90,7 @@ class PageTemplates
                     'signup' => 'Signup Page',
                     'login' => 'Login Page',
                     'piano-offer-page' => 'Piano Offer Page',
+                    'author-overview' => 'Author Overview',
                 ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'guide' => 'Guide',
