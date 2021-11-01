@@ -370,7 +370,7 @@ class CompositeFieldGroup
         $imageWidget->addSubField($rel);
 
         $displayFormat = new RadioField('field_5bb4a00b2aa05');
-        $displayFormat->setLayout('Display Format')
+        $displayFormat->setLabel('Display Format')
             ->setName('display_hint')
             ->setChoice('inline', 'Inline')
             ->setChoice('wide', 'Full Width')
