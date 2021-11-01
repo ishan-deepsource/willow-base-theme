@@ -12,9 +12,6 @@ class HIS extends Brand
     public static function register(): void
     {
         self::init();
-        self::removeVideoUrlFromImageWidget();
-        self::removeVideoUrlFromGalleryItems();
-        self::removeVideoUrlFromParagraphListWidget();
         self::removeImageFromInfoboxWidget();
         self::removeIncludeIntroVideoFromVideoWidget();
         self::removeChapterItemsFromVideoWidget();
