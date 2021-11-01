@@ -121,7 +121,7 @@ class RedirectRepository
     private function resolveStatusCode(?ResponseInterface $response): ?int
     {
         if (!$response) {
-            return null;
+            return 500;
         }
 
         $statusCode = $response->getHeaderLine('X-Guzzle-Redirect-Status-History');
