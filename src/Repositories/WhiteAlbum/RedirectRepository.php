@@ -40,7 +40,7 @@ class RedirectRepository
             'allow_redirects' => [
                 'track_redirects' => true,
             ],
-            'base_uri' => sprintf('http://old.%s', $this->domain),
+            'base_uri' => sprintf('https://old.%s', $this->domain),
         ]);
         $this->createRouteResolvesTable();
     }
@@ -72,7 +72,7 @@ class RedirectRepository
     public function resolve($path)
     {
         $redirect = $this->findRelsovedRedirectInDb($path) ?: $this->recursiveRedirectResolve($path);
-        if ($redirect && $redirect->to !== $path && in_array($redirect->code, [301, 302, 200])) {
+        if ($redirect && $redirect->to !== $path && in_array($redirect->code, [301, 302])) {
             return $redirect;
         }
         return null;
