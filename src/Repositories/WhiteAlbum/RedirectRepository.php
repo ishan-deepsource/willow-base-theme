@@ -40,7 +40,7 @@ class RedirectRepository
             'allow_redirects' => [
                 'track_redirects' => true,
             ],
-            'base_uri' => sprintf('http://old.%s', $this->domain),
+            'base_uri' => sprintf('https://old.%s', $this->domain),
         ]);
         $this->createRouteResolvesTable();
     }
