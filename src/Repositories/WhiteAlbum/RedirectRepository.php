@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\TransferStats;
 use Illuminate\Support\Str;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -36,6 +37,9 @@ class RedirectRepository
         $this->domain = $domain;
         $this->locale = $locale;
         $this->client = new Client([
+            'allow_redirects' => [
+                'track_redirects' => true,
+            ],
             'base_uri' => sprintf('http://old.%s', $this->domain),
         ]);
         $this->createRouteResolvesTable();
@@ -109,9 +113,23 @@ class RedirectRepository
         $this->storeResolvedRedirect(
             $url,
             $to,
-            optional($response)->getStatusCode() ?? 500
+            $this->resolveStatusCode($response)
         );
         return $this->findRelsovedRedirectInDb($url);
+    }
+
+    private function resolveStatusCode(?ResponseInterface $response): ?int
+    {
+        if (!$response) {
+            return 500;
+        }
+
+        $statusCode = $response->getHeaderLine('X-Guzzle-Redirect-Status-History');
+        if (Str::contains($statusCode, ['301', '302'])) {
+            return 301;
+        }
+
+        return $response->getStatusCode() ?? 500;
     }
 
     public function createRouteResolvesTable()
