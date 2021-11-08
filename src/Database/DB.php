@@ -2,6 +2,7 @@
 
 namespace Bonnier\Willow\Base\Database;
 
+use Bonnier\Willow\Base\Exceptions\Database\UnknownDatabaseException;
 use Bonnier\WP\Redirect\Database\Exceptions\DuplicateEntryException;
 use Illuminate\Support\Str;
 
@@ -70,7 +71,7 @@ class DB
     /**
      * @param array $data
      * @return int
-     * @throws DuplicateEntryException
+     * @throws DuplicateEntryException|UnknownDatabaseException
      * @throws \Exception
     */
     public function insert(array $data)
@@ -86,7 +87,7 @@ class DB
                 $exception->setData($data);
                 throw $exception;
             } else {
-                throw new \Exception(sprintf('Unable to insert row in `%s`! (%s)', $this->table, $error));
+                throw new UnknownDatabaseException();
             }
         }
         return $this->wpdb->insert_id;
