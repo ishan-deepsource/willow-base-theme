@@ -6,8 +6,10 @@ use Bonnier\Willow\Base\Controllers\Admin\NotFoundSettingsController;
 use Bonnier\Willow\Base\Database\DB;
 use Bonnier\Willow\Base\Database\Migrations\Migrate;
 use Bonnier\Willow\Base\Database\Query;
+use Bonnier\Willow\Base\Exceptions\Database\UnknownDatabaseException;
 use Bonnier\Willow\Base\Models\Admin\NotFound;
 use Bonnier\Willow\Base\Notifications\NotFoundRegistered;
+use Bonnier\WP\Redirect\Database\Exceptions\DuplicateEntryException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -175,7 +177,11 @@ class NotFoundRepository
             if ($updateOnDuplicate) {
                 $notFound->setID($this->database->insertOrUpdate($data));
             } else {
-                $notFound->setID($this->database->insert($data));
+                try {
+                    $notFound->setID($this->database->insert($data));
+                } catch (UnknownDatabaseException | DuplicateEntryException $exception) {
+                    // if we can't insert, we do not care
+                }
             }
         }
 
