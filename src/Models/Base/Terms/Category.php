@@ -72,9 +72,9 @@ class Category implements CategoryContract
         return $this->category->getLanguage();
     }
 
-    public function getContentTeasers($page, $perPage, $orderBy, $order, $offset, $includeChildren): Collection
+    public function getContentTeasers($page, $perPage, $orderBy, $order, $offset, $includeChildren, $notInCategory): Collection
     {
-        return $this->category->getContentTeasers($page, $perPage, $orderBy, $order, $offset, $includeChildren);
+        return $this->category->getContentTeasers($page, $perPage, $orderBy, $order, $offset, $includeChildren, $notInCategory);
     }
 
     public function getContentTeasersCount($includeChildren): ?int
