@@ -169,10 +169,12 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
             'orderby' => $orderBy,
             'order'  => $order,
             'tax_query' => [
-                'taxonomy' => 'category',
-                'field' => 'term_id',
-                'terms' => $this->getId(),
-                'include_children' => $includeChildren == 'true',
+                [
+                    'taxonomy' => 'category',
+                    'field' => 'term_id',
+                    'terms' => $this->getId(),
+                    'include_children' => $includeChildren == 'true',
+                ]
             ],
         ];
         if ($notInCategory) {
