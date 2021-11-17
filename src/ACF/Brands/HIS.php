@@ -12,11 +12,6 @@ class HIS extends Brand
     public static function register(): void
     {
         self::init();
-        self::removeOtherAuthors();
-        self::removeVideoUrlFromImageWidget();
-        self::removeVideoUrlFromGalleryItems();
-        self::removeVideoUrlFromParagraphListWidget();
-        self::removeVideoUrlFromTeaserImages();
         self::removeImageFromInfoboxWidget();
         self::removeIncludeIntroVideoFromVideoWidget();
         self::removeChapterItemsFromVideoWidget();
@@ -25,15 +20,13 @@ class HIS extends Brand
         self::removeAdvancedCustomSortByFieldsFromTeaserListPageWidget();
         self::removeTitleFromAssociatedCompositesWidget();
         self::removeDisplayHintFromAssociatedCompositesWidget();
-        self::removeDurationFromVideoWidget();
+        self::removeUseAsArticleLeadImageFromRecipeWidget();
 
         self::removeInventoryWidget();
         self::removeMultimediaWidget();
         self::removeProductWidget();
         self::removeRecipeWidget();
         self::removeCalculatorWidget();
-
-        self::removeLanguageTitlesFromUserFieldGroup();
 
         $paragraphListWidget = parent::$paragraphListWidget;
         add_filter(sprintf('willow/acf/layout=%s', $paragraphListWidget->getKey()), [__CLASS__, 'removeParagraphListShowNumbers']);

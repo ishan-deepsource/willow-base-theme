@@ -117,10 +117,13 @@ class TagAdapter extends AbstractWpAdapter implements TagContract
 
     public function getContentTeasers($page, $perPage, $orderBy, $order): Collection
     {
+        global $wpdb;
+        $excludedFromWebIds = $wpdb->get_col("SELECT post_id FROM wp_postmeta WHERE meta_key='exclude_platforms' and meta_value like '%web%'");              
         $offset = $perPage * ($page - 1);
         return collect(get_posts([
             'post_type' => WpComposite::POST_TYPE,
             'post_status' => 'publish',
+            'post__not_in' => $excludedFromWebIds,
             'posts_per_page' => $perPage,
             'offset' => $offset,
             'orderby' => $orderBy,

@@ -40,12 +40,12 @@ class Category implements CategoryContract
     public function getSortorder(): ?string
     {
         return $this->category->getSortorder();
-    }  
+    }
 
     public function getColor(): ?string
     {
         return $this->category->getColor();
-    }    
+    }
 
     public function getUrl(): ?string
     {
@@ -75,6 +75,11 @@ class Category implements CategoryContract
     public function getContentTeasers($page, $perPage, $orderBy, $order, $offset, $includeChildren): Collection
     {
         return $this->category->getContentTeasers($page, $perPage, $orderBy, $order, $offset, $includeChildren);
+    }
+
+    public function getContentTeasersCount($includeChildren): ?int
+    {
+        return $this->category->getContentTeasersCount($includeChildren);
     }
 
     public function getCount(): ?int

@@ -37,6 +37,7 @@ class CompositeFieldGroup
     public const VIDEO_TEASER_IMAGE_FIELD = 'field_5a8d7ae021e44';
     public const SHELL_LINK_FIELD = 'field_5d66623efb36e';
     public const KIND_FIELD = 'field_58e388862daa8';
+    public const RECIPE_USE_AS_ARTICLE_LEAD_IMAGE_FIELD_NAME = 'use_as_article_lead_image';
     public const COMPOSITE_FIELD_GROUP = 'group_58abfd3931f2f';
     public const OTHER_AUTHERS_FIELD_NAME = 'other_authors';
     public const SHELL_VALUE = 'Shell';
@@ -369,7 +370,7 @@ class CompositeFieldGroup
         $imageWidget->addSubField($rel);
 
         $displayFormat = new RadioField('field_5bb4a00b2aa05');
-        $displayFormat->setLayout('Display Format')
+        $displayFormat->setLabel('Display Format')
             ->setName('display_hint')
             ->setChoice('inline', 'Inline')
             ->setChoice('wide', 'Full Width')
@@ -576,6 +577,51 @@ class CompositeFieldGroup
             ));
 
         $videoWidget->addSubField($lockedContent);
+
+        $name = new TextField('field_5938fe71ed0b2');
+        $name->setLabel('Name')
+            ->setName('name')
+            ->setInstructions(
+                'The title of the video'
+            );
+
+        $videoWidget->addSubField($name);
+
+        $description = new TextAreaField('field_58aaeb26b12d42');
+        $description->setLabel('Description')
+            ->setName('description')
+            ->setInstructions(
+                'The description of the video. HTML tags are ignored.'
+            );
+
+        $videoWidget->addSubField($description);
+
+        $thumbnailUrl = new TextField('field_5938fe71ed0b3');
+        $thumbnailUrl->setLabel('Thumbnail url')
+            ->setName('thumbnail_url')
+            ->setInstructions(
+                'A URL pointing to the video thumbnail image file. that has to be in one of these formats BMP, GIF, JPEG, PNG, WebP, and SVG, larger than 60x30px and accessible to Google'
+            );
+
+        $videoWidget->addSubField($thumbnailUrl);
+
+        $uploadDate = new TextField('field_5938fe71ed0b4');
+        $uploadDate->setLabel('upload Date')
+            ->setName('upload_date')
+            ->setInstructions(
+                'The date the video was first published, in ISO 8601 format.'
+            );
+
+        $videoWidget->addSubField($uploadDate);
+
+        $contentUrl = new TextField('field_5938fe71ed0b5');
+        $contentUrl->setLabel('content Url')
+            ->setName('content_url')
+            ->setInstructions(
+                'A URL pointing to the actual video media file, in one of the supported encoding formats. Don\'t link to the page where the video lives; this must be the URL of the video media file itself.'
+            );
+
+        $videoWidget->addSubField($contentUrl);
 
         return apply_filters(sprintf('willow/acf/layout=%s', $videoWidget->getKey()), $videoWidget);
     }
@@ -839,12 +885,12 @@ class CompositeFieldGroup
 
         $paragraphListWidget->addSubField($image);
 
-	    $videoUrl = new UrlField('field_5f214904627a6');
-	    $videoUrl->setLabel('Video Url')
-	             ->setName(self::VIDEO_URL_FIELD_NAME)
-	             ->setInstructions('The embed url for the video.');
+        $videoUrl = new UrlField('field_5f214904627a6');
+        $videoUrl->setLabel('Video Url')
+            ->setName(self::VIDEO_URL_FIELD_NAME)
+            ->setInstructions('The embed url for the video.');
 
-	    $paragraphListWidget->addSubField($videoUrl);
+        $paragraphListWidget->addSubField($videoUrl);
 
         $collapsible = new TrueFalseField('field_5bd30f723cdcc');
         $collapsible->setLabel('Collapsible')
@@ -1437,10 +1483,17 @@ class CompositeFieldGroup
             ->setPreviewSize(ImageField::PREVIEW_MEDIUM);
         $recipeWidget->addSubField($image);
 
-        $useAdArticleLeadImage = new TrueFalseField('field_601a977ef88d4');
-        $useAdArticleLeadImage->setLabel('Use as article lead-image')
-            ->setName('use_as_article_lead_image');
-        $recipeWidget->addSubField($useAdArticleLeadImage);
+        $categoryLabel = new TextField('field_616ff00988da3');
+        $categoryLabel->setLabel('Category (override for schema)')
+            ->setName('category_label')
+            ->setPlaceholder('Default the articles category');
+        $recipeWidget->addSubField($categoryLabel);
+
+        //Only for iForm!
+        $useAsArticleLeadImage = new TrueFalseField('field_601a977ef88d4');
+        $useAsArticleLeadImage->setLabel('Use as article lead-image')
+            ->setName(self::RECIPE_USE_AS_ARTICLE_LEAD_IMAGE_FIELD_NAME);
+        $recipeWidget->addSubField($useAsArticleLeadImage);
 
         //Duration data
         $durationGroup = new GroupField('field_6017fd2d456b0');
@@ -1615,27 +1668,27 @@ class CompositeFieldGroup
      * @return string[]
      */
     public static function getRecipeIngredientChoices(){
-       return [
-           '-' => '-',
-           'gram' => 'gram',
-           'dl' => 'dl',
-           'teaspoon' => 'teaspoon',
-           'tablespoon' => 'tablespoon',
-           'ml' => 'ml',
-           'cl' => 'cl',
-           'liter' => 'liter',
-           'kg' => 'kg',
-           'piece' => 'piece',
-           'pinch' => 'pinch',
-           'nip' => 'nip',
-           'sprinkle' => 'sprinkle',
-           'bundle' => 'bundle',
-           'cloves' => 'cloves',
-           'slice' => 'slice',
-           'handful' => 'handful',
-           'can' => 'can',
-           'packet' => 'packet',
-       ];
+        return [
+            '-' => '-',
+            'gram' => 'gram',
+            'dl' => 'dl',
+            'teaspoon' => 'teaspoon',
+            'tablespoon' => 'tablespoon',
+            'ml' => 'ml',
+            'cl' => 'cl',
+            'liter' => 'liter',
+            'kg' => 'kg',
+            'piece' => 'piece',
+            'pinch' => 'pinch',
+            'nip' => 'nip',
+            'sprinkle' => 'sprinkle',
+            'bundle' => 'bundle',
+            'cloves' => 'cloves',
+            'slice' => 'slice',
+            'handful' => 'handful',
+            'can' => 'can',
+            'packet' => 'packet',
+        ];
     }
 
     private static function setRecipeIngredientItemsSubFields(&$ingredientItems)
@@ -1665,13 +1718,13 @@ class CompositeFieldGroup
      */
     public static function getRecipeNutrientItemsChoices()
     {
-       return [
-           'Energy' => 'Energy',
-           'Protein' => 'Protein',
-           'Fat' => 'Fat',
-           'Carbohydrate' => 'Carbohydrate',
-           'Fiber' => 'Fiber',
-       ];
+        return [
+            'Energy' => 'Energy',
+            'Protein' => 'Protein',
+            'Fat' => 'Fat',
+            'Carbohydrate' => 'Carbohydrate',
+            'Fiber' => 'Fiber',
+        ];
     }
 
     /**
@@ -1680,11 +1733,11 @@ class CompositeFieldGroup
      */
     public static function getRecipeNutrientItemsUnitChoices()
     {
-       return [
-           '-' => '-',
-           'kcal' => 'kcal',
-           'gram' => 'gram',
-       ];
+        return [
+            '-' => '-',
+            'kcal' => 'kcal',
+            'gram' => 'gram',
+        ];
     }
 
     private static function setRecipeNutrientItemsSubFields(&$nutrientItems)

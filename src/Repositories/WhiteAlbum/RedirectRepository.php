@@ -5,6 +5,8 @@ namespace Bonnier\Willow\Base\Repositories\WhiteAlbum;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\TransferStats;
+use Illuminate\Support\Str;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -17,6 +19,8 @@ class RedirectRepository
     const WA_ROUTE_RESOLVES_TABLE = 'whitealbum_route_resolves';
     const WA_ROUTE_RESOLVES_TABLE_CREATED = 'whitealbum_route_resolves_created';
     const WA_ROUTE_RESOLVES_TABLE_VERSION = '1';
+
+    const BLOCKED_SCRAPING_TERMS = ['.env', 'xrpc', '.php', '.xsd', '.xml'];
 
     protected $domain;
     protected $client;
@@ -33,7 +37,10 @@ class RedirectRepository
         $this->domain = $domain;
         $this->locale = $locale;
         $this->client = new Client([
-            'base_uri' => sprintf('http://old.%s', $this->domain),
+            'allow_redirects' => [
+                'track_redirects' => true,
+            ],
+            'base_uri' => sprintf('https://old.%s', $this->domain),
         ]);
         $this->createRouteResolvesTable();
     }
@@ -65,7 +72,7 @@ class RedirectRepository
     public function resolve($path)
     {
         $redirect = $this->findRelsovedRedirectInDb($path) ?: $this->recursiveRedirectResolve($path);
-        if ($redirect && $redirect->to !== $path && in_array($redirect->code, [301, 302, 200])) {
+        if ($redirect && $redirect->to !== $path && in_array($redirect->code, [301, 302])) {
             return $redirect;
         }
         return null;
@@ -106,9 +113,23 @@ class RedirectRepository
         $this->storeResolvedRedirect(
             $url,
             $to,
-            optional($response)->getStatusCode() ?? 301
+            $this->resolveStatusCode($response)
         );
         return $this->findRelsovedRedirectInDb($url);
+    }
+
+    private function resolveStatusCode(?ResponseInterface $response): ?int
+    {
+        if (!$response) {
+            return 500;
+        }
+
+        $statusCode = $response->getHeaderLine('X-Guzzle-Redirect-Status-History');
+        if (Str::contains($statusCode, ['301', '302'])) {
+            return 301;
+        }
+
+        return $response->getStatusCode() ?? 500;
     }
 
     public function createRouteResolvesTable()
@@ -152,6 +173,7 @@ class RedirectRepository
         global $wpdb;
         $table = $wpdb->prefix . static::WA_ROUTE_RESOLVES_TABLE;
         $fromUrl = parse_url($path, PHP_URL_PATH);
+
         try {
             return $wpdb->get_row(
                 $wpdb->prepare(
@@ -179,6 +201,12 @@ class RedirectRepository
         global $wpdb;
         $fromUrl = parse_url($fromUrl, PHP_URL_PATH);
         $table = $wpdb->prefix . static::WA_ROUTE_RESOLVES_TABLE;
+
+        // Bug that empty from url was saved, avoid saving scraping terms
+        if (! $fromUrl || Str::contains($toUrl, static::BLOCKED_SCRAPING_TERMS)) {
+            return null;
+        }
+
         try {
             return $wpdb->query(
                 $wpdb->prepare(

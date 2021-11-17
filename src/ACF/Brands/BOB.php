@@ -24,12 +24,11 @@ class BOB extends Brand
         self::removeAdvancedCustomSortByFieldsFromTeaserListPageWidget();
         self::removeTitleFromAssociatedCompositesWidget();
         self::removeDisplayHintFromAssociatedCompositesWidget();
-        self::removeDurationFromVideoWidget();
+        self::removeUseAsArticleLeadImageFromRecipeWidget();
 
         self::removeInventoryWidget();
         self::removeMultimediaWidget();
         self::removeProductWidget();
-        self::removeRecipeWidget();
         self::removeCalculatorWidget();
 
         self::removeLanguageTitlesFromUserFieldGroup();
