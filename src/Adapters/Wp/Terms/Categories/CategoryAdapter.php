@@ -154,12 +154,13 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
         $orderBy = 'date',
         $order = 'DESC',
         $offset = 0,
-        $includeChildren = 'false'
+        $includeChildren = 'false',
+        $notInCategory = []
     ): Collection {
         global $wpdb;
         $excludedFromWebIds = $wpdb->get_col("SELECT post_id FROM wp_postmeta WHERE meta_key='exclude_platforms' and meta_value like '%web%'");
         $offset = $offset ?: ($perPage * ($page - 1));
-        return collect(get_posts([
+        $getPostsArgs = [
             'post_type' => WpComposite::POST_TYPE,
             'post_status' => 'publish',
             'post__not_in' => $excludedFromWebIds,
@@ -168,14 +169,16 @@ class CategoryAdapter extends AbstractWpAdapter implements CategoryContract
             'orderby' => $orderBy,
             'order'  => $order,
             'tax_query' => [
-                [
-                    'taxonomy' => 'category',
-                    'field' => 'term_id',
-                    'terms' => $this->getId(),
-                    'include_children' => $includeChildren == 'true',
-                ]
-            ]
-        ]))->map(function (\WP_Post $post) {
+                'taxonomy' => 'category',
+                'field' => 'term_id',
+                'terms' => $this->getId(),
+                'include_children' => $includeChildren == 'true',
+            ],
+        ];
+        if ($notInCategory) {
+            $getPostsArgs['category__not_in'] = $notInCategory;
+        }
+        return collect(get_posts($getPostsArgs))->map(function (\WP_Post $post) {
             $composite = WpModelRepository::instance()->getPost($post);
             return new Composite(new CompositeAdapter($composite));
         });

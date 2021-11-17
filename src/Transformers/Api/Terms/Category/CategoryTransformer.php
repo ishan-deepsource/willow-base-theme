@@ -89,9 +89,10 @@ class CategoryTransformer extends TransformerAbstract
         list($order) = $paramBag->get('order') ?: ['DESC'];
         list($offset) = $paramBag->get('offset') ?: ['0'];
         list($includeChildren) = $paramBag->get('include_children') ?: ['false'];
+        $notInCategory = implode(',', $paramBag->get('not_in_category') ?: []);
 
         return $this->collection(
-            $category->getContentTeasers($page, $perPage, $orderby, $order, $offset, $includeChildren),
+            $category->getContentTeasers($page, $perPage, $orderby, $order, $offset, $includeChildren, $notInCategory),
             new CompositeTeaserTransformer()
         );
     }
