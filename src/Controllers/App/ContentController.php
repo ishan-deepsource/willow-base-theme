@@ -89,32 +89,28 @@ class ContentController extends BaseController
             return false;
         }
 
-        $status = 'publish';
-        $statusParam = $request->get_param('status');
-        if (in_array($statusParam, ['any', 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash'])) {
-            $status = $statusParam;
+        $status = $request->get_param('status');
+        if (!in_array($status, ['pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash', 'publish'])) {
+            $status = 'any';
         }
 
-        $perPage = 500;
-        $perPageParam = $request->get_param('per_page');
-        if (is_numeric($perPageParam)) {
-            $perPage = $perPageParam;
+        $perPage = $request->get_param('per_page');
+        if (!is_numeric($perPage)) {
+            $perPage = 500;
         }
 
-        $currentPage = 1;
-        $pageParam = $request->get_param('page');
-        if (is_numeric($pageParam)) {
-            $currentPage = $pageParam;
+        $currentPage = $request->get_param('page');
+        if (!is_numeric($currentPage)) {
+            $currentPage = 1;
         }
 
-        $postId = null;
-        $postIdParam = $request->get_param('id');
-        if (is_numeric($postIdParam)) {
-            $postId = $postIdParam;
+        $postId = $request->get_param('id');
+        if (!is_numeric($postId)) {
+            $postId = null;
         }
 
         return Cache::remember('page_' . $status . '_' . $perPage . '_' . $currentPage,
-            600,
+            60,
             function () use ($status, $perPage, $currentPage, $postId) {
                 $query_args = [
                     'post_type' => 'contenthub_composite',
@@ -157,7 +153,7 @@ class ContentController extends BaseController
                         'bloginfo_language' => get_bloginfo("language"),
                         'locale' => get_locale(),
                         'home_url' => rtrim(pll_home_url(), '/'),
-                        'version' => '4',
+                        'version' => '5',
                         'data' => $data
                     ]
                 );
