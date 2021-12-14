@@ -745,6 +745,7 @@ class CompositeFieldGroup
             ->setChoice('default', 'Default')
             ->setChoice('inline', 'Inline')
             ->setChoice('parallax', 'Parallax')
+            ->setChoice('collage', 'Collage')
             ->setDefaultValue('default')
             ->setLayout('vertical')
             ->setReturnFormat(ACFField::RETURN_VALUE);
