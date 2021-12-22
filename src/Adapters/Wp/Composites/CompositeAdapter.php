@@ -380,7 +380,7 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         // on iform it happens articles in other languages have story_parent
         // relations, therefore we loop them and test locale. Maybe because of
         // multiple story list on same article.
-        $storyParents = array_get($this->wpMeta, 'story_parent');
+        $storyParents = array_get($this->wpMeta, 'story_parent', []);
         foreach ($storyParents as $storyParentIdStr) {
             $storyParentId = intval($storyParentIdStr);
             if ($this->getLocale() === pll_get_post_language($storyParentId)
