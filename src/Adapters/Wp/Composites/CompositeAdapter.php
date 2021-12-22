@@ -376,10 +376,17 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
 
     public function getStory(): ?StoryContract
     {
-        if (($storyCompositeId = intval(array_get($this->wpMeta, 'story_parent.0'))) &&
-            $storyComposite = WpModelRepository::instance()->getPost($storyCompositeId)
-        ) {
-            return new Story(new StoryAdapter($storyComposite));
+        // original looking for 'story_parent.0'
+        // on iform it happens articles in other languages have story_parent
+        // relations, therefore we loop them and test locale. Maybe because of
+        // multiple story list on same article.
+        $storyParents = array_get($this->wpMeta, 'story_parent');
+        foreach ($storyParents as $storyParentIdStr) {
+            $storyParentId = intval($storyParentIdStr);
+            if ($this->getLocale() === pll_get_post_language($storyParentId)
+                && $storyComposite = WpModelRepository::instance()->getPost($storyParentId)) {
+                return new Story(new StoryAdapter($storyComposite));
+            }
         }
         return null;
     }
