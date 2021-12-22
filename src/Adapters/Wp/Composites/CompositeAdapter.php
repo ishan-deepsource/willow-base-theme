@@ -381,9 +381,10 @@ class CompositeAdapter extends AbstractWpAdapter implements CompositeContract
         // relations, therefore we loop them and test locale. Maybe because of
         // multiple story list on same article.
         $storyParents = array_get($this->wpMeta, 'story_parent', []);
+        $isUnitTestComposite = $this->getLocale() === '';
         foreach ($storyParents as $storyParentIdStr) {
             $storyParentId = intval($storyParentIdStr);
-            if ($this->getLocale() === pll_get_post_language($storyParentId)
+            if (($isUnitTestComposite || $this->getLocale() === pll_get_post_language($storyParentId))
                 && $storyComposite = WpModelRepository::instance()->getPost($storyParentId)) {
                 return new Story(new StoryAdapter($storyComposite));
             }
