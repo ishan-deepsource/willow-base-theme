@@ -29,6 +29,10 @@ class UpdateEndpointController extends \WP_REST_Controller
 
     public function updateCallback(\WP_REST_Request $request): \WP_REST_Response
     {
+        global $wpdb;
+
+        $wpdb->query('START TRANSACTION');
+
         $this->initPolylangShareTermSlug(); // Make sure that category slugs are sharable across languages
 
         $resource = $this->formatResource($request->get_param('data'));
@@ -45,8 +49,11 @@ class UpdateEndpointController extends \WP_REST_Controller
                 $termImporter->deleteTermAndTranslations($resource);
             }
 
+            $wpdb->query('COMMIT');
             return new \WP_REST_Response(['status' => 'OK']);
         }
+
+        $wpdb->query('ROLLBACK');
 
         return new \WP_REST_Response(['error' => 'unknown type'], 400);
     }
