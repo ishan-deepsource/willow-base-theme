@@ -122,6 +122,16 @@ class PageTemplates
                     'author-overview' => 'Author Overview',
                 ]);
                 break;
+            case 'ALL':
+            case 'WYP':
+                $this->pageTemplates = array_merge($this->pageTemplates, [
+                    'explore-page' => 'Explore page',
+                    'landing-page' => 'Landing page',
+                ]);
+                $this->compositeTemplates = array_merge($this->compositeTemplates, [
+                    'test' => 'Test',
+                ]);
+                break;
             default:
                 $this->pageTemplates = array_merge($this->pageTemplates, [
                     'author-overview' => 'Author Overview',
@@ -134,6 +144,8 @@ class PageTemplates
                     'signup' => 'Signup Page',
                     'login' => 'Login Page',
                     'piano-offer-page' => 'Piano Offer Page',
+                    'explore-page' => 'Explore page',
+                    'landing-page' => 'Landing page',
                 ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
                     'bodum-stempel' => 'Bodum Stempel',
@@ -218,11 +230,12 @@ class PageTemplates
                 // Once a brand is removed from voldemort (Getting more love and custom design and feel), it should be removed from here.
                 // And from class BrandFactory.php as well!
                 $voldemortBrands = ['ATR', 'BIM', 'BOL', 'DIF', 'KOM', 'LIV', 'MHI', 'PHI', 'SHI', 'TAR', 'WOM', 'BOM', 'BIL', 'SCL'];
-                if (in_array(data_get($site, 'brand.brand_code'), $voldemortBrands)) {
+                $brandCode = data_get($site, 'brand.brand_code');
+                if (in_array($brandCode, $voldemortBrands)) {
                     return 'VOL';
                 }
 
-                return data_get($site, 'brand.brand_code');
+                return $brandCode;
             }
         } catch (SiteNotFoundException $exception) {
             return null;

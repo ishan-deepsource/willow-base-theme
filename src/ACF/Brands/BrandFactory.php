@@ -14,6 +14,8 @@ class BrandFactory
         'ifo' => IFO::class,
         'ill' => ILL::class,
         'vol' => VOL::class,
+        'all' => ALL::class, // more generic naming for old wype name.
+        'wyp' => ALL::class, // wype name out facing
     ];
 
     public static function register(?string $brandCode = null)
