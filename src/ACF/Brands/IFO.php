@@ -19,7 +19,7 @@ use Bonnier\Willow\Base\Models\WpComposite;
 
 class IFO extends Brand
 {
-    public static function register(): void
+    public static function register(?string $brandCode = null): void
     {
         self::init();
         self::removeVideoUrlFromImageWidget();

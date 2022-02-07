@@ -13,7 +13,7 @@ use Bonnier\Willow\Base\Models\ACF\Page\PageFieldGroup;
 class VOL extends Brand
 {
 
-    public static function register(): void
+    public static function register(?string $brandCode = null): void
     {
         self::init();
         self::removeVideoUrlFromImageWidget();
@@ -36,8 +36,12 @@ class VOL extends Brand
 
         self::removeQuotePageWidget();
         self::removeFeaturedContentPageWidget();
-        self::removeRecipeWidget();
         self::removeCalculatorWidget();
+
+        $recipeWidgetsBrands = ['bom', 'bol'];
+        if (is_null($brandCode) || !in_array($brandCode, $recipeWidgetsBrands)) {
+            self::removeRecipeWidget();
+        }
 
         $teaserListWidget =  PageFieldGroup::getTeaserListLayout();
         add_filter(sprintf('willow/acf/layout=%s', $teaserListWidget->getKey()), [__CLASS__, 'setTeaserListDisplayHints']);
