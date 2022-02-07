@@ -39,7 +39,7 @@ class VOL extends Brand
         self::removeCalculatorWidget();
 
         $recipeWidgetsBrands = ['bom', 'bol'];
-        if ($brandCode == null || !in_array($brandCode, $recipeWidgetsBrands)) {
+        if (is_null($brandCode) || !in_array($brandCode, $recipeWidgetsBrands)) {
             self::removeRecipeWidget();
         }
 
