@@ -24,14 +24,22 @@ class TermImportHelper
 
     public function importTermAndLinkTranslations($externalTerm)
     {
+        //var_dump($externalTerm);
         $termIdsByLocale = collect($externalTerm->name)->map(function ($name, $languageCode) use ($externalTerm) {
+            //var_dump('LANGUAGE CODE', $languageCode);
+            //var_dump('LANGUAGE PROVIDER LIST', collect(LanguageProvider::getSimpleLanguageList()));
+            //var_dump('ASSOC', [$languageCode, $this->importTerm($name, $languageCode, $externalTerm)]);
             if (!collect(LanguageProvider::getSimpleLanguageList())->contains($languageCode)) {
+                //var_dump('EARLY RETURN ->');
+                error_log('EARLY RETURN ->');
                 return null;
             }
+            error_log('INSIDE BUILDING ASSOC ARRAY: ' . implode(',', [$languageCode, $this->importTerm($name, $languageCode, $externalTerm)]), 0);
             return [$languageCode, $this->importTerm($name, $languageCode, $externalTerm)];
             // Creates an associative array with language code as key and term id as value
         })->toAssoc()->rejectNullValues()->toArray();
         LanguageProvider::saveTermTranslations($termIdsByLocale);
+        //var_dump('TERM IDS BY LOCALE', $termIdsByLocale);
         return $termIdsByLocale;
     }
 
@@ -46,6 +54,8 @@ class TermImportHelper
 
     protected function importTerm($name, $languageCode, $externalTerm)
     {
+        //error_log('NAME FROM TERM IMPORT HELPER: ' . )
+        //var_dump('importTerm');
         $contentHubId = $externalTerm->content_hub_ids->{$languageCode};
         $parentTermId = $this->getParentTermId($languageCode, $externalTerm->parent ?? null);
         $taxonomy = isset($externalTerm->vocabulary) ?
@@ -54,7 +64,11 @@ class TermImportHelper
         $this->setLocaleFilter($languageCode);
         $description = $externalTerm->description->{$languageCode} ?? null;
         $slug = object_get($externalTerm, 'slug.'.$languageCode) ?: $name;
-
+        //var_dump('CONTENTHUB ID', $contentHubId);
+        /*var_dump('PARENT TERM ID', $parentTermId);
+        var_dump('TAXONOMY', $taxonomy);
+        var_dump('DESCRIPTION', $description);
+        var_dump('SLUG', $slug);*/
         $meta = [
             'meta_title' => $externalTerm->meta_title->{$languageCode} ?? null,
             'meta_description' => $externalTerm->meta_description->{$languageCode} ?? null,
@@ -65,8 +79,28 @@ class TermImportHelper
             'internal' => $externalTerm->internal ?? false,
             'whitealbum_id' => $externalTerm->whitealbum_id->{$languageCode} ?? null,
         ];
-
+//        var_dump('META', $meta);
+        //die;
+        error_log(PHP_EOL . ' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -' . PHP_EOL);
         if ($existingTermId = WpTerm::id_from_contenthub_id($contentHubId)) {
+            error_log('UPDATING EXISTING TERM ID: ' . implode(',', [
+                    'existingTermId' => $existingTermId,
+                    'name' => $name,
+                    'slug' => $slug,
+                    'languageCode' => $languageCode,
+                    'contentHubId' => $contentHubId,
+                    'taxonomy' => $taxonomy,
+                    'parentTermId' => $parentTermId
+                ]), 0);//die;
+            /*Log::info('CREATING...', [
+                'existingTermId' => $existingTermId,
+                'name' => $name,
+                'slug' => $slug,
+                'languageCode' => $languageCode,
+                'contentHubId' => $contentHubId,
+                'taxonomy' => $taxonomy,
+                'parentTermId' => $parentTermId
+            ]);*/
             // Term exists so we update it
             return WpTerm::update(
                 $existingTermId,
@@ -80,6 +114,23 @@ class TermImportHelper
                 $meta
             );
         }
+        error_log('CREATING...' . implode(',', [
+                'name' => $name,
+                'slug' => $slug,
+                'languageCode' => $languageCode,
+                'contentHubId' => $contentHubId,
+                'taxonomy' => $taxonomy,
+                'parentTermId' => $parentTermId
+            ]), 0);
+        /*error_log('CREATING...', [
+            'name' => $name,
+            'slug' => $slug,
+            'languageCode' => $languageCode,
+            'contentHubId' => $contentHubId,
+            'taxonomy' => $taxonomy,
+            'parentTermId' => $parentTermId
+        ]);*///die;
+
         // Create new term
         return WpTerm::create(
             $name,

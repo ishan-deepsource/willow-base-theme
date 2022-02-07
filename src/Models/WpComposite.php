@@ -240,6 +240,7 @@ class WpComposite
 
     public static function checkIfTermIsTranslated($metas, $sync, $fromPostId)
     {
+        var_dump('CHECK IF TERM IS TRANSLATED');die;
         if (isset($_GET['new_lang'])) {
             $fromTerms = array(get_field('category', $fromPostId));
             $fromTags = get_field('tags', $fromPostId);
