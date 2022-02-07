@@ -27,7 +27,7 @@ class BrandFactory
 
         /** @var BrandInterface | null $class */
         if ($class = Arr::get(self::$mapping, $formattedBrandCode)) {
-            $class::register();
+            $class::register($brandCode);
         }
     }
 
