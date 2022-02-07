@@ -36,12 +36,8 @@ class PageTemplates
                     'architonic' => 'Architonic iFrame',
                 ]);
                 $this->compositeTemplates = array_merge($this->compositeTemplates, [
-                    'bodum-stempel' => 'Bodum Stempel',
-                    'bodum-pour-over' => 'Bodum Pour over',
-                    'bodum-vacuum' => 'Bodum Vacuum',
                     'gradient' => 'Gradient',
-                    'top-lg' => 'Top LG',
-                    'recipe' => 'Recipe',
+                    'colorblock' => 'Farveblok',
                 ]);
                 break;
             case 'COS':

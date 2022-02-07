@@ -36,15 +36,20 @@ class UpdateEndpointController extends \WP_REST_Controller
         $entityType = $meta['entity_type'];
         $actionType = $meta['action_type'];
 
+        //error_log('RESOURCE FROM UpdateEndpointController: ' . $resource, 0);
+        error_log('ENTITY TYPE FROM UpdateEndpointController: ' . $entityType, 0);
+        error_log('ACTION TYPE FROM UpdateEndpointController: ' . $actionType, 0);
+
         if ($resource && $entityType) {
             $termImporter = $this->getTermImporter($entityType);
             if (in_array($actionType, ['create', 'update'])) {
-                $termImporter->importTermAndLinkTranslations($resource);
+                $result = $termImporter->importTermAndLinkTranslations($resource);
+                error_log('RESULT FROM UpdateEndpointController: ' . implode(',', $result), 0);
             }
             if ($actionType === 'delete') {
                 $termImporter->deleteTermAndTranslations($resource);
             }
-
+            error_log(PHP_EOL . '####################################################################' . PHP_EOL);
             return new \WP_REST_Response(['status' => 'OK']);
         }
 
