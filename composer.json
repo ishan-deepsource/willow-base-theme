@@ -25,12 +25,7 @@
                     "junaidbhura/composer-wp-pro-plugins": "*"
                 }
             }
-        },
-        "private-packagist": {
-            "type": "composer",
-            "url": "https://repo.packagist.com/benjaminmedia/"
-        },
-        "packagist.org": false
+        }
     },
     "require": {
         "php": ">=7.2",
@@ -66,7 +61,8 @@
     "require-dev": {
         "phpunit/phpunit": "7.1.*",
         "lucatume/wp-browser": "2.1.*",
-        "johnpbloch/wordpress": "^4.9"
+        "johnpbloch/wordpress": "^4.9",
+        "szepeviktor/phpstan-wordpress": "^1.0"
     },
     "scripts": {
         "unit": "vendor/bin/codecept run Unit"
